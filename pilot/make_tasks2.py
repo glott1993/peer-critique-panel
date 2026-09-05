@@ -193,21 +193,26 @@ def gen_math(rng, n_target, level):
 
 
 # --------------------------------------------------------------- multi ----
-MULTI_RULE = ("Answer all three parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C> "
-              "with the three answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). "
-              "For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.")
+WORDS = {3: "three", 4: "four", 5: "five"}
 
 
-def gen_multi(rng, n_target, level):
+def multi_rule(n):
+    letters = "; ".join(f"<{'ABCDE'[i]}>" for i in range(n))
+    return (f"Answer all {WORDS[n]} parts. Show brief working, then end your reply with exactly one line of the form FINAL: {letters} "
+            f"with the {WORDS[n]} answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). "
+            "For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.")
+
+
+def gen_multi(rng, n_target, level, parts_n=3, prefix="multi2", ttype="multi"):
     gens = gen_math(rng, "generators", level)
     tasks = []
     for k in range(n_target):
-        picks = rng.sample(gens, 3)
+        picks = rng.sample(gens, parts_n)
         parts = [g() for g in picks]
-        body = "\n\n".join(f"Part {'ABC'[i]}: " + p["prompt"].split("\n\n")[0] for i, p in enumerate(parts))
+        body = "\n\n".join(f"Part {'ABCDE'[i]}: " + p["prompt"].split("\n\n")[0] for i, p in enumerate(parts))
         exp = [{"answer_type": p["answer_type"], "expected": p["expected"], "precision": p.get("precision", 0)} for p in parts]
-        tasks.append({"id": f"multi2-{k + 1:02d}", "type": "multi", "prompt": "This task has three independent parts.\n\n" + body + "\n\n" + MULTI_RULE,
-                      "answer_type": "multi", "expected": exp, "tags": ["multi"] + [t for p in parts for t in p["tags"]]})
+        tasks.append({"id": f"{prefix}-{k + 1:02d}", "type": ttype, "prompt": f"This task has {WORDS[parts_n]} independent parts.\n\n" + body + "\n\n" + multi_rule(parts_n),
+                      "answer_type": "multi", "expected": exp, "tags": [ttype] + [t for p in parts for t in p["tags"]]})
     return tasks
 
 
@@ -551,11 +556,13 @@ def main():
     ap.add_argument("--out", default="tasks/pilot2_tasks.json")
     a = ap.parse_args()
     if a.level >= 3 and a.counts == "math=60,data=60,code=30,logic=50":
-        a.counts = "math=40,multi=40,data=50,code=30,logic=40"
+        a.counts = "math=40,multi=40,data=50,code=30,logic=40,multi4=40"
     counts = {kv.split("=")[0]: int(kv.split("=")[1]) for kv in a.counts.split(",")}
     rng = random.Random(a.seed)
+    # generation order is fixed so that adding a type at the end never changes the earlier tasks
     tasks = (gen_math(rng, counts.get("math", 0), a.level) + gen_multi(rng, counts.get("multi", 0), a.level) + gen_data(rng, counts.get("data", 0), a.level)
-             + gen_code(counts.get("code", 0)) + gen_logic(rng, counts.get("logic", 0), a.level))
+             + gen_code(counts.get("code", 0)) + gen_logic(rng, counts.get("logic", 0), a.level)
+             + gen_multi(rng, counts.get("multi4", 0), a.level, parts_n=4, prefix="multi4", ttype="multi4"))
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     with open(a.out, "w") as f:
         json.dump({"seed": a.seed, "level": a.level, "count": len(tasks), "tasks": tasks}, f, indent=1)

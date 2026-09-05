@@ -1,7 +1,7 @@
 {
  "seed": 20260906,
  "level": 3,
- "count": 200,
+ "count": 240,
  "tasks": [
   {
    "id": "math2-01",
@@ -3473,6 +3473,1504 @@
    "tags": [
     "logic",
     "exact"
+   ]
+  },
+  {
+   "id": "multi4-01",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A warehouse receives inventory in this order: lot 1: 124 units at $12.34; lot 2: 128 units at $3.67; lot 3: 154 units at $7.10; lot 4: 115 units at $12.11; lot 5: 48 units at $11.51; lot 6: 54 units at $12.27; lot 7: 97 units at $8.10; lot 8: 151 units at $11.98. It then sells, in this order: 72 units, 49 units, 120 units, 76 units, 63 units, 33 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart B: What is the sum of all integers from 362 to 6,506 inclusive that are divisible by 13 but not by 4?\n\nPart C: Compute 22027 x 1894 x 664 x 2791 and give the sum of the decimal digits of the result.\n\nPart D: In the country of Veld, income tax is 10% on the first $12,500, 22% from $12,500 up to $52,000, and 32% above $52,000. A tax credit of $2,400 is then subtracted, but the credit is reduced by 8% of any income above $60,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $57,400? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 3178.09,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 1214928,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 58,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 9268.0,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "fifo",
+    "accounting",
+    "series",
+    "exact",
+    "arithmetic",
+    "exact",
+    "percent"
+   ]
+  },
+  {
+   "id": "multi4-02",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A $18,500 loan at 5.4% APR is repaid with the standard monthly payment for a 3-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 6 an extra $500 of principal and in month 17 an extra $300 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart B: Counting only Mondays through Fridays and skipping these holidays (2026-06-02, 2026-07-20, 2026-08-25, 2026-08-27, 2026-09-02), what is the date that is 80 business days after 2026-05-05? Give the date as YYYY-MM-DD.\n\nPart C: A supplier charges $6.40 per unit for the first 100 units, $5.44 per unit for the next 200, and $4.48 per unit beyond 300. If the subtotal exceeds $2,500, a 8% discount applies to the whole subtotal. Sales tax of 7.25% is then added. What is the total for an order of 525 units, in dollars to the nearest cent?\n\nPart D: What is the sum of all integers from 659 to 13,092 inclusive that are divisible by 7 but not by 9?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 8794.55,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "2026-08-31",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 2699.61,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 10861641,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "loan",
+    "simulation",
+    "calendar",
+    "exact",
+    "pricing",
+    "series",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-03",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An account starts with $2,500.00. Each month, in this order: one transaction is applied (deposit of $450, withdrawal of $400, withdrawal of $400, withdrawal of $650, deposit of $700, deposit of $450, withdrawal of $650, deposit of $1100, deposit of $700, deposit of $1100, deposit of $1100, deposit of $700, withdrawal of $900, withdrawal of $650, withdrawal of $900, for months 1 through 15); then, if the balance is below $1,500, a $8 fee is charged; then interest of 0.25% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart B: An hourly worker is paid $22.00 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 12.5, 13, 0, 0, 9.5, 8, 12.5, 6, 10, 13, 9.5, 8, 8, 0. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart C: A bag holds 3 red, 2 green, and 2 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nPart D: What is the sum of all integers from 365 to 14,115 inclusive that are divisible by 7 but not by 6?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 4391.2,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2717.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "23/35",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 11845946,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "simulation",
+    "payroll",
+    "probability",
+    "exact",
+    "series",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-04",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A supplier charges $4.25 per unit for the first 100 units, $3.61 per unit for the next 200, and $2.97 per unit beyond 300. If the subtotal exceeds $2,500, a 5% discount applies to the whole subtotal. Sales tax of 6.5% is then added. What is the total for an order of 723 units, in dollars to the nearest cent?\n\nPart B: What is the sum of all integers from 395 to 11,383 inclusive that are divisible by 13 but not by 4?\n\nPart C: An hourly worker is paid $22.00 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 9.5, 0, 12.5, 10, 8, 9.5, 13, 11, 11, 0, 8, 8, 8, 11. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart D: Counting only Mondays through Fridays and skipping these holidays (2026-10-12, 2026-11-25, 2026-12-03, 2026-12-31, 2027-01-19, 2027-01-28), what is the date that is 86 business days after 2026-10-06? Give the date as YYYY-MM-DD.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 2559.53,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 3736369,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 2904.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "2027-02-11",
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "pricing",
+    "series",
+    "exact",
+    "payroll",
+    "calendar",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-05",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A $31,200 loan at 5.4% APR is repaid with the standard monthly payment for a 4-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 4 an extra $750 of principal and in month 8 an extra $600 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart B: Counting only Mondays through Fridays and skipping these holidays (2026-06-25, 2026-06-26, 2026-07-13, 2026-07-22, 2026-07-23, 2026-07-27), what is the date that is 80 business days after 2026-04-26? Give the date as YYYY-MM-DD.\n\nPart C: In the country of Veld, income tax is 10% on the first $12,500, 22% from $12,500 up to $52,000, and 32% above $52,000. A tax credit of $2,400 is then subtracted, but the credit is reduced by 8% of any income above $50,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $57,400? Give the amount in dollars to the nearest cent.\n\nPart D: An hourly worker is paid $22.00 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 9, 13, 0, 8, 12.5, 8, 6, 0, 9, 8, 6, 0, 9.5, 12.5. What is the gross pay for the period, in dollars to the nearest cent?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 18853.99,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "2026-08-24",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 9860.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2447.5,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "loan",
+    "simulation",
+    "calendar",
+    "exact",
+    "percent",
+    "payroll"
+   ]
+  },
+  {
+   "id": "multi4-06",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: Counting only Mondays through Fridays and skipping these holidays (2026-06-16, 2026-06-25, 2026-08-06, 2026-08-13, 2026-08-14, 2026-08-26), what is the date that is 87 business days after 2026-06-10? Give the date as YYYY-MM-DD.\n\nPart B: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($400, $250, $0, $400, $400, $250, $0, $900, $600, $400, $250, $400); the balance then grows by 2.5%; then a fee of 0.5% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart C: A $31,200 loan at 6.9% APR is repaid with the standard monthly payment for a 3-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 2 an extra $300 of principal and in month 12 an extra $750 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart D: An account starts with $1,200.00. Each month, in this order: one transaction is applied (withdrawal of $900, deposit of $1100, withdrawal of $650, deposit of $1100, withdrawal of $900, deposit of $1100, deposit of $700, deposit of $450, withdrawal of $900, deposit of $700, withdrawal of $650, withdrawal of $250, deposit of $300, withdrawal of $250, deposit of $700, for months 1 through 15); then, if the balance is below $2,000, a $8 fee is charged; then interest of 0.5% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "string",
+     "expected": "2026-10-19",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 11116.02,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 15299.2,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2963.79,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "calendar",
+    "exact",
+    "simulation",
+    "loan",
+    "simulation",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-07",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the remainder when 87^520 is divided by 151?\n\nPart B: Compute 81259 x 3738 x 951 x 8263 and give the sum of the decimal digits of the result.\n\nPart C: An account starts with $1,200.00. Each month, in this order: one transaction is applied (deposit of $300, deposit of $300, deposit of $300, withdrawal of $900, withdrawal of $250, deposit of $300, withdrawal of $400, deposit of $450, deposit of $450, withdrawal of $650, deposit of $700, withdrawal of $900, deposit of $1100, withdrawal of $400, deposit of $300, for months 1 through 15); then, if the balance is below $2,000, a $15 fee is charged; then interest of 0.4% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart D: An investment account starts with $8,000. For each of 12 periods, in this order: a contribution is added ($900, $900, $600, $900, $600, $250, $600, $900, $600, $600, $250, $0); the balance then grows by 2.0%; then a fee of 0.75% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 1,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 63,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 1773.92,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 17072.01,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "arithmetic",
+    "exact",
+    "simulation",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-08",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the remainder when 29^742 is divided by 191?\n\nPart B: A warehouse receives inventory in this order: lot 1: 57 units at $13.55; lot 2: 77 units at $13.89; lot 3: 80 units at $8.02; lot 4: 159 units at $4.91; lot 5: 80 units at $4.91; lot 6: 43 units at $8.75; lot 7: 132 units at $9.21; lot 8: 83 units at $10.50. It then sells, in this order: 97 units, 33 units, 85 units, 104 units, 50 units, 120 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart C: In the country of Veld, income tax is 12% on the first $12,500, 24% from $12,500 up to $52,000, and 35% above $52,000. A tax credit of $1,800 is then subtracted, but the credit is reduced by 5% of any income above $50,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $81,900? Give the amount in dollars to the nearest cent.\n\nPart D: A supplier charges $5.00 per unit for the first 100 units, $4.25 per unit for the next 200, and $3.50 per unit beyond 300. If the subtotal exceeds $2,500, a 3% discount applies to the whole subtotal. Sales tax of 8.0% is then added. What is the total for an order of 633 units, in dollars to the nearest cent?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 15,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 3971.97,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 21240.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2635.24,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "fifo",
+    "accounting",
+    "percent",
+    "pricing"
+   ]
+  },
+  {
+   "id": "multi4-09",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An account starts with $2,500.00. Each month, in this order: one transaction is applied (deposit of $1100, withdrawal of $400, deposit of $450, withdrawal of $250, deposit of $700, deposit of $450, withdrawal of $250, withdrawal of $650, withdrawal of $900, withdrawal of $650, deposit of $450, withdrawal of $400, withdrawal of $400, withdrawal of $900, withdrawal of $650, for months 1 through 15); then, if the balance is below $1,000, a $8 fee is charged; then interest of 0.4% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart B: In the country of Veld, income tax is 8% on the first $14,000, 20% from $14,000 up to $60,000, and 30% above $60,000. A tax credit of $2,400 is then subtracted, but the credit is reduced by 5% of any income above $60,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $96,300? Give the amount in dollars to the nearest cent.\n\nPart C: An hourly worker is paid $22.00 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 10, 12.5, 10, 11, 9, 6, 9.5, 9, 0, 10, 10, 6, 9, 9. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart D: What is the smallest positive integer that leaves a remainder of 9 when divided by 13, a remainder of 2 when divided by 11, and a remainder of 6 when divided by 17?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 369.08,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 20625.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2898.5,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 1179,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "simulation",
+    "percent",
+    "payroll",
+    "number-theory",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-10",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: Compute 84665 x 1919 x 967 x 7493 and give the sum of the decimal digits of the result.\n\nPart B: A warehouse receives inventory in this order: lot 1: 46 units at $11.75; lot 2: 131 units at $8.75; lot 3: 120 units at $5.44; lot 4: 111 units at $13.42; lot 5: 71 units at $9.27; lot 6: 87 units at $9.56; lot 7: 47 units at $12.54; lot 8: 61 units at $6.73. It then sells, in this order: 64 units, 103 units, 107 units, 62 units, 95 units, 59 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart C: A $24,000 loan at 5.4% APR is repaid with the standard monthly payment for a 4-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 5 an extra $750 of principal and in month 11 an extra $300 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart D: A price was raised by 18%, then raised by 20%, then raised by 20%, then raised by 25%, then cut by 10%, ending at $184.32. What was the original price? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 71,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 4592.5,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 14495.49,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 96.42,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "arithmetic",
+    "exact",
+    "fifo",
+    "accounting",
+    "loan",
+    "simulation",
+    "percent"
+   ]
+  },
+  {
+   "id": "multi4-11",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A $12,000 loan at 6.9% APR is repaid with the standard monthly payment for a 5-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 4 an extra $600 of principal and in month 6 an extra $1000 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart B: A supplier charges $6.40 per unit for the first 100 units, $5.44 per unit for the next 200, and $4.48 per unit beyond 300. If the subtotal exceeds $1,500, a 5% discount applies to the whole subtotal. Sales tax of 7.25% is then added. What is the total for an order of 666 units, in dollars to the nearest cent?\n\nPart C: A warehouse receives inventory in this order: lot 1: 70 units at $7.72; lot 2: 84 units at $7.32; lot 3: 87 units at $4.67; lot 4: 87 units at $7.22; lot 5: 158 units at $10.02; lot 6: 130 units at $4.87; lot 7: 145 units at $5.82; lot 8: 66 units at $6.11. It then sells, in this order: 62 units, 58 units, 77 units, 111 units, 92 units, 77 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart D: What is the sum of all integers from 619 to 13,513 inclusive that are divisible by 11 but not by 9?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 7101.28,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 3431.24,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 3682.69,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 7362905,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "loan",
+    "simulation",
+    "pricing",
+    "fifo",
+    "accounting",
+    "series",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-12",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An hourly worker is paid $24.75 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 7.5, 8, 9.5, 0, 12.5, 6, 11, 10, 13, 12.5, 6, 7.5, 9.5, 0. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart B: In the country of Veld, income tax is 8% on the first $12,500, 20% from $12,500 up to $52,000, and 30% above $52,000. A tax credit of $1,200 is then subtracted, but the credit is reduced by 8% of any income above $50,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $57,400? Give the amount in dollars to the nearest cent.\n\nPart C: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($250, $900, $250, $250, $250, $400, $400, $250, $900, $0, $400, $250); the balance then grows by 1.5%; then a fee of 0.5% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart D: What is the smallest positive integer that leaves a remainder of 2 when divided by 11, a remainder of 1 when divided by 5, and a remainder of 12 when divided by 16?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 3093.75,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 9912.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 10446.02,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 156,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "payroll",
+    "percent",
+    "simulation",
+    "number-theory",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-13",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the sum of all integers from 675 to 8,626 inclusive that are divisible by 13 but not by 9?\n\nPart B: What is the smallest positive integer that leaves a remainder of 11 when divided by 19, a remainder of 4 when divided by 13, and a remainder of 11 when divided by 16?\n\nPart C: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($0, $900, $250, $250, $400, $250, $250, $400, $0, $900, $0, $600); the balance then grows by 1.5%; then a fee of 0.75% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart D: An account starts with $4,300.00. Each month, in this order: one transaction is applied (withdrawal of $900, withdrawal of $400, deposit of $300, withdrawal of $900, withdrawal of $900, withdrawal of $900, withdrawal of $250, deposit of $700, withdrawal of $900, deposit of $450, deposit of $450, deposit of $1100, deposit of $300, withdrawal of $400, withdrawal of $400, for months 1 through 15); then, if the balance is below $2,000, a $8 fee is charged; then interest of 0.4% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 2530008,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 2747,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 9862.11,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 1690.29,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "series",
+    "exact",
+    "number-theory",
+    "exact",
+    "simulation",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-14",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A warehouse receives inventory in this order: lot 1: 62 units at $4.30; lot 2: 88 units at $4.09; lot 3: 125 units at $7.68; lot 4: 119 units at $12.33; lot 5: 159 units at $13.31; lot 6: 51 units at $4.38; lot 7: 44 units at $9.30; lot 8: 65 units at $12.07. It then sells, in this order: 80 units, 78 units, 81 units, 49 units, 36 units, 49 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart B: How many integers from 1 to 12,000 inclusive are divisible by at least one of 5, 7, or 11, but not divisible by 13?\n\nPart C: An hourly worker is paid $18.50 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 12.5, 8, 8, 8, 8, 9.5, 9, 11, 9, 12.5, 6, 9.5, 7.5, 9.5. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart D: A bag holds 6 red, 2 green, and 5 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 2794.86,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 4173,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 2548.38,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "113/143",
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "fifo",
+    "accounting",
+    "counting",
+    "exact",
+    "payroll",
+    "probability",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-15",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($900, $900, $0, $250, $400, $0, $400, $600, $600, $900, $400, $400); the balance then grows by 2.5%; then a fee of 0.5% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart B: What is the smallest positive integer that leaves a remainder of 15 when divided by 19, a remainder of 4 when divided by 5, and a remainder of 6 when divided by 9?\n\nPart C: Counting only Mondays through Fridays and skipping these holidays (2026-05-29, 2026-06-25, 2026-07-08, 2026-07-15, 2026-09-10), what is the date that is 88 business days after 2026-05-21? Give the date as YYYY-MM-DD.\n\nPart D: A price was raised by 25%, then raised by 18%, then cut by 15%, then raised by 12%, then raised by 20%, ending at $184.32. What was the original price? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 12895.87,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 699,
+     "precision": 0
+    },
+    {
+     "answer_type": "string",
+     "expected": "2026-09-29",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 109.39,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "simulation",
+    "number-theory",
+    "exact",
+    "calendar",
+    "exact",
+    "percent"
+   ]
+  },
+  {
+   "id": "multi4-16",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A bag holds 5 red, 5 green, and 5 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nPart B: What is the smallest positive integer that leaves a remainder of 0 when divided by 5, a remainder of 11 when divided by 13, and a remainder of 10 when divided by 19?\n\nPart C: What is the remainder when 29^627 is divided by 163?\n\nPart D: In the country of Veld, income tax is 12% on the first $12,500, 24% from $12,500 up to $52,000, and 35% above $52,000. A tax credit of $1,800 is then subtracted, but the credit is reduced by 8% of any income above $60,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $81,900? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "string",
+     "expected": "66/91",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 960,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 157,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 21397.0,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "probability",
+    "exact",
+    "number-theory",
+    "exact",
+    "number-theory",
+    "exact",
+    "percent"
+   ]
+  },
+  {
+   "id": "multi4-17",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: In the country of Veld, income tax is 8% on the first $12,500, 20% from $12,500 up to $52,000, and 30% above $52,000. A tax credit of $1,200 is then subtracted, but the credit is reduced by 5% of any income above $60,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $81,900? Give the amount in dollars to the nearest cent.\n\nPart B: A $18,500 loan at 6.0% APR is repaid with the standard monthly payment for a 3-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 11 an extra $600 of principal and in month 14 an extra $750 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart C: What is the sum of all integers from 311 to 10,613 inclusive that are divisible by 7 but not by 4?\n\nPart D: A price was raised by 18%, then cut by 15%, then raised by 12%, then raised by 20%, then cut by 15%, ending at $259.70. What was the original price? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 17765.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 8278.5,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 6027840,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 226.65,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "percent",
+    "loan",
+    "simulation",
+    "series",
+    "exact",
+    "percent"
+   ]
+  },
+  {
+   "id": "multi4-18",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the smallest positive integer that leaves a remainder of 2 when divided by 7, a remainder of 11 when divided by 13, and a remainder of 6 when divided by 23?\n\nPart B: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($400, $900, $600, $600, $900, $250, $900, $400, $600, $0, $0, $250); the balance then grows by 1.5%; then a fee of 0.75% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart C: How many integers from 1 to 12,000 inclusive are divisible by at least one of 4, 6, or 9, but not divisible by 17?\n\nPart D: Compute 30012 x 1337 x 788 x 9704 and give the sum of the decimal digits of the result.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 765,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 11604.68,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 4393,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 66,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "simulation",
+    "counting",
+    "exact",
+    "arithmetic",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-19",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: Counting only Mondays through Fridays and skipping these holidays (2026-03-31, 2026-04-23, 2026-05-14, 2026-06-23, 2026-07-17), what is the date that is 82 business days after 2026-03-17? Give the date as YYYY-MM-DD.\n\nPart B: An hourly worker is paid $24.75 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 12.5, 9, 9.5, 12.5, 6, 9, 12.5, 8, 11, 11, 9.5, 8, 10, 8. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart C: An account starts with $1,200.00. Each month, in this order: one transaction is applied (withdrawal of $400, withdrawal of $400, deposit of $450, withdrawal of $400, withdrawal of $900, withdrawal of $900, withdrawal of $400, withdrawal of $250, deposit of $300, deposit of $450, deposit of $1100, deposit of $450, deposit of $700, withdrawal of $900, withdrawal of $900, for months 1 through 15); then, if the balance is below $1,000, a $15 fee is charged; then interest of 0.4% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart D: What is the sum of all integers from 661 to 13,452 inclusive that are divisible by 11 but not by 6?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "string",
+     "expected": "2026-07-15",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 3724.88,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": -1054.97,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 6836687,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "calendar",
+    "exact",
+    "payroll",
+    "simulation",
+    "series",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-20",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the sum of all integers from 427 to 14,294 inclusive that are divisible by 11 but not by 4?\n\nPart B: An hourly worker is paid $18.50 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 12.5, 12.5, 8, 7.5, 9.5, 11, 9.5, 7.5, 8, 0, 9.5, 8, 8, 13. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart C: How many integers from 1 to 8,000 inclusive are divisible by at least one of 6, 10, or 15, but not divisible by 19?\n\nPart D: A warehouse receives inventory in this order: lot 1: 56 units at $5.36; lot 2: 114 units at $10.90; lot 3: 89 units at $6.32; lot 4: 107 units at $6.11; lot 5: 82 units at $10.04; lot 6: 93 units at $8.50; lot 7: 106 units at $4.34; lot 8: 158 units at $13.70. It then sells, in this order: 31 units, 40 units, 116 units, 39 units, 84 units, 97 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 6965079,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 2520.62,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2022,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 3170.65,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "series",
+    "exact",
+    "payroll",
+    "counting",
+    "exact",
+    "fifo",
+    "accounting"
+   ]
+  },
+  {
+   "id": "multi4-21",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($0, $900, $900, $400, $900, $400, $250, $250, $900, $900, $900, $0); the balance then grows by 1.5%; then a fee of 0.75% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart B: A $18,500 loan at 6.9% APR is repaid with the standard monthly payment for a 3-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 2 an extra $750 of principal and in month 15 an extra $300 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart C: A price was cut by 10%, then cut by 10%, then raised by 25%, then cut by 10%, then cut by 10%, ending at $412.08. What was the original price? Give the amount in dollars to the nearest cent.\n\nPart D: What is the smallest positive integer that leaves a remainder of 6 when divided by 7, a remainder of 2 when divided by 19, and a remainder of 14 when divided by 16?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 12490.47,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 8599.63,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 502.46,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 1294,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "simulation",
+    "loan",
+    "simulation",
+    "percent",
+    "number-theory",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-22",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: Compute 54060 x 9648 x 577 x 4985 and give the sum of the decimal digits of the result.\n\nPart B: In the country of Veld, income tax is 8% on the first $12,500, 20% from $12,500 up to $52,000, and 30% above $52,000. A tax credit of $1,200 is then subtracted, but the credit is reduced by 8% of any income above $60,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $68,250? Give the amount in dollars to the nearest cent.\n\nPart C: A price was raised by 12%, then raised by 12%, then raised by 12%, then raised by 12%, then raised by 18%, ending at $97.50. What was the original price? Give the amount in dollars to the nearest cent.\n\nPart D: What is the sum of all integers from 582 to 7,694 inclusive that are divisible by 11 but not by 4?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 54,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 13235.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 52.51,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2010096,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "arithmetic",
+    "exact",
+    "percent",
+    "percent",
+    "series",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-23",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the remainder when 16^468 is divided by 191?\n\nPart B: A bag holds 7 red, 6 green, and 5 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nPart C: A price was raised by 18%, then raised by 25%, then cut by 15%, then raised by 12%, then raised by 25%, ending at $184.32. What was the original price? Give the amount in dollars to the nearest cent.\n\nPart D: An investment account starts with $8,000. For each of 12 periods, in this order: a contribution is added ($600, $250, $0, $0, $900, $250, $600, $0, $250, $600, $600, $400); the balance then grows by 2.5%; then a fee of 0.5% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 17,
+     "precision": 0
+    },
+    {
+     "answer_type": "string",
+     "expected": "101/136",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 105.01,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 15155.86,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "probability",
+    "exact",
+    "percent",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-24",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: How many integers from 1 to 5,000 inclusive are divisible by at least one of 6, 10, or 15, but not divisible by 13?\n\nPart B: An hourly worker is paid $22.00 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 8, 13, 10, 9, 0, 11, 9.5, 6, 10, 13, 13, 9.5, 10, 8. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart C: Counting only Mondays through Fridays and skipping these holidays (2026-03-18, 2026-05-18, 2026-05-26, 2026-06-03, 2026-06-30), what is the date that is 86 business days after 2026-03-15? Give the date as YYYY-MM-DD.\n\nPart D: A $31,200 loan at 6.9% APR is repaid with the standard monthly payment for a 4-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 2 an extra $500 of principal and in month 3 an extra $300 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 1231,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 3201.0,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "2026-07-20",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 19618.25,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "counting",
+    "exact",
+    "payroll",
+    "calendar",
+    "exact",
+    "loan",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-25",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the smallest positive integer that leaves a remainder of 4 when divided by 5, a remainder of 3 when divided by 9, and a remainder of 0 when divided by 7?\n\nPart B: An investment account starts with $8,000. For each of 12 periods, in this order: a contribution is added ($600, $0, $400, $600, $400, $400, $900, $0, $0, $400, $250, $250); the balance then grows by 1.5%; then a fee of 0.75% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart C: A $31,200 loan at 7.8% APR is repaid with the standard monthly payment for a 3-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 6 an extra $600 of principal and in month 17 an extra $1000 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart D: What is the sum of all integers from 276 to 13,900 inclusive that are divisible by 13 but not by 9?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 84,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 13166.32,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 14853.61,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 6610786,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "simulation",
+    "loan",
+    "simulation",
+    "series",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-26",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An account starts with $4,300.00. Each month, in this order: one transaction is applied (deposit of $700, withdrawal of $250, deposit of $450, deposit of $1100, withdrawal of $650, deposit of $300, withdrawal of $900, deposit of $300, deposit of $1100, deposit of $300, withdrawal of $650, withdrawal of $650, withdrawal of $250, withdrawal of $900, withdrawal of $250, for months 1 through 15); then, if the balance is below $1,500, a $12 fee is charged; then interest of 0.5% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart B: An hourly worker is paid $31.20 per hour. Daily overtime rules: hours over 8 in a day are paid at 1.5 times the rate, and hours over 12 in a day at 2 times the rate; there is no weekly overtime rule. The hours worked on each of 14 days were: 6, 7.5, 10, 12.5, 12.5, 12.5, 11, 7.5, 0, 11, 8, 13, 12.5, 6. What is the gross pay for the period, in dollars to the nearest cent?\n\nPart C: How many integers from 1 to 12,000 inclusive are divisible by at least one of 4, 6, or 9, but not divisible by 17?\n\nPart D: Compute 81494 x 3591 x 593 x 8661 and give the sum of the decimal digits of the result.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 4472.54,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 4586.4,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 4393,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 45,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "simulation",
+    "payroll",
+    "counting",
+    "exact",
+    "arithmetic",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-27",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A supplier charges $6.40 per unit for the first 100 units, $5.44 per unit for the next 200, and $4.48 per unit beyond 300. If the subtotal exceeds $1,500, a 8% discount applies to the whole subtotal. Sales tax of 7.25% is then added. What is the total for an order of 500 units, in dollars to the nearest cent?\n\nPart B: What is the remainder when 76^487 is divided by 233?\n\nPart C: A $24,000 loan at 6.9% APR is repaid with the standard monthly payment for a 5-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 11 an extra $300 of principal and in month 12 an extra $750 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart D: Counting only Mondays through Fridays and skipping these holidays (2026-01-27, 2026-02-16, 2026-03-26, 2026-04-16), what is the date that is 82 business days after 2026-01-09? Give the date as YYYY-MM-DD.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 2589.1,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 102,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 16556.77,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "2026-05-11",
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "pricing",
+    "number-theory",
+    "exact",
+    "loan",
+    "simulation",
+    "calendar",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-28",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($250, $400, $900, $0, $900, $900, $400, $0, $0, $600, $250, $600); the balance then grows by 1.5%; then a fee of 0.75% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart B: A price was raised by 25%, then raised by 18%, then raised by 18%, then cut by 10%, then raised by 18%, ending at $184.32. What was the original price? Give the amount in dollars to the nearest cent.\n\nPart C: How many integers from 1 to 20,000 inclusive are divisible by at least one of 4, 6, or 9, but not divisible by 17?\n\nPart D: An account starts with $4,300.00. Each month, in this order: one transaction is applied (withdrawal of $900, deposit of $450, deposit of $300, withdrawal of $400, withdrawal of $400, withdrawal of $250, withdrawal of $400, withdrawal of $400, deposit of $450, deposit of $1100, deposit of $450, deposit of $700, withdrawal of $250, withdrawal of $400, deposit of $300, for months 1 through 15); then, if the balance is below $1,000, a $12 fee is charged; then interest of 0.25% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 10929.04,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 99.72,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 7321,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 4792.96,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "simulation",
+    "percent",
+    "counting",
+    "exact",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-29",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the remainder when 33^853 is divided by 211?\n\nPart B: An account starts with $1,200.00. Each month, in this order: one transaction is applied (withdrawal of $250, deposit of $300, withdrawal of $650, withdrawal of $400, deposit of $300, deposit of $300, withdrawal of $400, deposit of $1100, deposit of $700, deposit of $700, deposit of $300, deposit of $700, deposit of $450, withdrawal of $250, deposit of $700, for months 1 through 15); then, if the balance is below $2,000, a $8 fee is charged; then interest of 0.5% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart C: A bag holds 5 red, 2 green, and 5 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nPart D: In the country of Veld, income tax is 8% on the first $11,000, 20% from $11,000 up to $45,000, and 30% above $45,000. A tax credit of $1,800 is then subtracted, but the credit is reduced by 8% of any income above $60,000 (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of $68,250? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 26,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 4893.77,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "17/22",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 13515.0,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "simulation",
+    "probability",
+    "exact",
+    "percent"
+   ]
+  },
+  {
+   "id": "multi4-30",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the remainder when 28^283 is divided by 151?\n\nPart B: What is the sum of all integers from 434 to 6,947 inclusive that are divisible by 7 but not by 9?\n\nPart C: A warehouse receives inventory in this order: lot 1: 122 units at $8.14; lot 2: 114 units at $13.41; lot 3: 83 units at $11.43; lot 4: 138 units at $12.12; lot 5: 72 units at $13.05; lot 6: 156 units at $10.22; lot 7: 133 units at $6.80; lot 8: 47 units at $11.63. It then sells, in this order: 57 units, 101 units, 79 units, 67 units, 70 units, 47 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart D: A supplier charges $6.40 per unit for the first 100 units, $5.44 per unit for the next 200, and $4.48 per unit beyond 300. If the subtotal exceeds $2,500, a 5% discount applies to the whole subtotal. Sales tax of 6.5% is then added. What is the total for an order of 181 units, in dollars to the nearest cent?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 3,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 3051167,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 4706.75,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 1150.88,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "series",
+    "exact",
+    "fifo",
+    "accounting",
+    "pricing"
+   ]
+  },
+  {
+   "id": "multi4-31",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A price was cut by 15%, then raised by 18%, then raised by 12%, then raised by 12%, then raised by 12%, ending at $184.32. What was the original price? Give the amount in dollars to the nearest cent.\n\nPart B: A bag holds 7 red, 2 green, and 2 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nPart C: A $24,000 loan at 6.9% APR is repaid with the standard monthly payment for a 5-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 2 an extra $600 of principal and in month 17 an extra $750 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart D: What is the remainder when 69^606 is divided by 257?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 130.8,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "137/165",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 16233.34,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 118,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "percent",
+    "probability",
+    "exact",
+    "loan",
+    "simulation",
+    "number-theory",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-32",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the remainder when 45^363 is divided by 151?\n\nPart B: A supplier charges $6.40 per unit for the first 100 units, $5.44 per unit for the next 200, and $4.48 per unit beyond 300. If the subtotal exceeds $2,500, a 8% discount applies to the whole subtotal. Sales tax of 6.5% is then added. What is the total for an order of 651 units, in dollars to the nearest cent?\n\nPart C: A warehouse receives inventory in this order: lot 1: 64 units at $4.26; lot 2: 61 units at $9.65; lot 3: 139 units at $4.48; lot 4: 40 units at $5.08; lot 5: 61 units at $10.92; lot 6: 154 units at $8.45; lot 7: 51 units at $9.08; lot 8: 40 units at $4.18. It then sells, in this order: 60 units, 81 units, 65 units, 114 units, 50 units, 66 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart D: A $12,000 loan at 7.8% APR is repaid with the standard monthly payment for a 5-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 2 an extra $600 of principal and in month 13 an extra $750 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 9,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 3233.81,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2953.28,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 7435.65,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "number-theory",
+    "exact",
+    "pricing",
+    "fifo",
+    "accounting",
+    "loan",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-33",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: How many integers from 1 to 5,000 inclusive are divisible by at least one of 6, 10, or 15, but not divisible by 19?\n\nPart B: A warehouse receives inventory in this order: lot 1: 127 units at $10.60; lot 2: 87 units at $5.52; lot 3: 138 units at $6.03; lot 4: 86 units at $5.23; lot 5: 142 units at $5.94; lot 6: 147 units at $4.29; lot 7: 42 units at $10.40; lot 8: 100 units at $5.68. It then sells, in this order: 90 units, 79 units, 92 units, 44 units, 80 units, 50 units. Using FIFO (first in, first out) costing, what is the total cost of goods sold for these sales? Give the amount in dollars to the nearest cent.\n\nPart C: A supplier charges $5.00 per unit for the first 100 units, $4.25 per unit for the next 200, and $3.50 per unit beyond 300. If the subtotal exceeds $1,500, a 8% discount applies to the whole subtotal. Sales tax of 7.25% is then added. What is the total for an order of 617 units, in dollars to the nearest cent?\n\nPart D: A $31,200 loan at 7.8% APR is repaid with the standard monthly payment for a 3-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 6 an extra $300 of principal and in month 10 an extra $750 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 1264,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 3092.67,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 2426.79,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 15394.46,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "counting",
+    "exact",
+    "fifo",
+    "accounting",
+    "pricing",
+    "loan",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-34",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: How many integers from 1 to 5,000 inclusive are divisible by at least one of 3, 5, or 7, but not divisible by 17?\n\nPart B: What is the remainder when 85^542 is divided by 211?\n\nPart C: A price was raised by 25%, then raised by 25%, then cut by 15%, then cut by 10%, then raised by 20%, ending at $97.50. What was the original price? Give the amount in dollars to the nearest cent.\n\nPart D: What is the smallest positive integer that leaves a remainder of 7 when divided by 13, a remainder of 1 when divided by 7, and a remainder of 18 when divided by 19?\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 2555,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 70,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 67.97,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 1177,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "counting",
+    "exact",
+    "number-theory",
+    "exact",
+    "percent",
+    "number-theory",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-35",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: How many integers from 1 to 5,000 inclusive are divisible by at least one of 3, 5, or 7, but not divisible by 13?\n\nPart B: A $24,000 loan at 7.8% APR is repaid with the standard monthly payment for a 4-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 4 an extra $600 of principal and in month 5 an extra $500 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nPart C: Counting only Mondays through Fridays and skipping these holidays (2026-03-17, 2026-03-18, 2026-03-26, 2026-05-20, 2026-07-10), what is the date that is 81 business days after 2026-03-15? Give the date as YYYY-MM-DD.\n\nPart D: Compute 44701 x 6928 x 832 x 8288 and give the sum of the decimal digits of the result.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 2506,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 14660.8,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "2026-07-13",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 74,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "counting",
+    "exact",
+    "loan",
+    "simulation",
+    "calendar",
+    "exact",
+    "arithmetic",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-36",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: What is the sum of all integers from 575 to 14,905 inclusive that are divisible by 11 but not by 9?\n\nPart B: An investment account starts with $8,000. For each of 12 periods, in this order: a contribution is added ($0, $900, $250, $0, $900, $600, $0, $900, $400, $0, $900, $900); the balance then grows by 2.0%; then a fee of 0.5% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart C: What is the smallest positive integer that leaves a remainder of 5 when divided by 9, a remainder of 8 when divided by 16, and a remainder of 8 when divided by 17?\n\nPart D: Counting only Mondays through Fridays and skipping these holidays (2026-03-26, 2026-04-06, 2026-05-12, 2026-05-29, 2026-06-11, 2026-06-15), what is the date that is 80 business days after 2026-03-24? Give the date as YYYY-MM-DD.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 8970742,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 15814.88,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 824,
+     "precision": 0
+    },
+    {
+     "answer_type": "string",
+     "expected": "2026-07-22",
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "series",
+    "exact",
+    "simulation",
+    "number-theory",
+    "exact",
+    "calendar",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-37",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: Counting only Mondays through Fridays and skipping these holidays (2026-04-24, 2026-04-27, 2026-05-15, 2026-07-07, 2026-07-24), what is the date that is 88 business days after 2026-04-02? Give the date as YYYY-MM-DD.\n\nPart B: What is the remainder when 60^423 is divided by 101?\n\nPart C: An account starts with $4,300.00. Each month, in this order: one transaction is applied (withdrawal of $250, deposit of $300, withdrawal of $250, deposit of $700, deposit of $450, withdrawal of $900, deposit of $450, deposit of $300, withdrawal of $650, deposit of $300, deposit of $700, deposit of $1100, deposit of $300, withdrawal of $650, deposit of $300, for months 1 through 15); then, if the balance is below $2,000, a $8 fee is charged; then interest of 0.25% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart D: Compute 79971 x 4700 x 720 x 8627 and give the sum of the decimal digits of the result.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "string",
+     "expected": "2026-08-11",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 62,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 6696.99,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 54,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "calendar",
+    "exact",
+    "number-theory",
+    "exact",
+    "simulation",
+    "arithmetic",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-38",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A bag holds 3 red, 4 green, and 3 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nPart B: What is the sum of all integers from 610 to 9,824 inclusive that are divisible by 7 but not by 6?\n\nPart C: Counting only Mondays through Fridays and skipping these holidays (2026-10-08, 2026-10-12, 2026-10-26, 2026-11-10, 2026-12-07, 2027-01-11), what is the date that is 81 business days after 2026-09-19? Give the date as YYYY-MM-DD.\n\nPart D: Compute 77375 x 5264 x 122 x 6083 and give the sum of the decimal digits of the result.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "string",
+     "expected": "7/10",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 5726994,
+     "precision": 0
+    },
+    {
+     "answer_type": "string",
+     "expected": "2027-01-19",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 37,
+     "precision": 0
+    }
+   ],
+   "tags": [
+    "multi4",
+    "probability",
+    "exact",
+    "series",
+    "exact",
+    "calendar",
+    "exact",
+    "arithmetic",
+    "exact"
+   ]
+  },
+  {
+   "id": "multi4-39",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: A supplier charges $6.40 per unit for the first 100 units, $5.44 per unit for the next 200, and $4.48 per unit beyond 300. If the subtotal exceeds $2,500, a 8% discount applies to the whole subtotal. Sales tax of 7.25% is then added. What is the total for an order of 757 units, in dollars to the nearest cent?\n\nPart B: An account starts with $1,200.00. Each month, in this order: one transaction is applied (withdrawal of $250, withdrawal of $400, withdrawal of $250, deposit of $300, deposit of $450, deposit of $700, deposit of $450, withdrawal of $900, deposit of $450, withdrawal of $400, withdrawal of $250, deposit of $300, withdrawal of $900, deposit of $700, deposit of $700, for months 1 through 15); then, if the balance is below $1,000, a $12 fee is charged; then interest of 0.4% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nPart C: An investment account starts with $8,000. For each of 12 periods, in this order: a contribution is added ($600, $0, $900, $600, $250, $400, $900, $0, $250, $250, $400, $250); the balance then grows by 2.5%; then a fee of 0.75% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart D: A $12,000 loan at 7.8% APR is repaid with the standard monthly payment for a 5-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays in month 3 an extra $300 of principal and in month 16 an extra $1000 of principal. What is the remaining balance immediately after the payment in month 18? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 3725.15,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 1910.61,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 15270.51,
+     "precision": 2
+    },
+    {
+     "answer_type": "number",
+     "expected": 7532.22,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "pricing",
+    "simulation",
+    "simulation",
+    "loan",
+    "simulation"
+   ]
+  },
+  {
+   "id": "multi4-40",
+   "type": "multi4",
+   "prompt": "This task has four independent parts.\n\nPart A: An investment account starts with $5,000. For each of 12 periods, in this order: a contribution is added ($600, $250, $900, $900, $0, $600, $250, $400, $400, $900, $400, $0); the balance then grows by 1.5%; then a fee of 0.5% of the balance is deducted. What is the balance after period 12? Give the amount in dollars to the nearest cent.\n\nPart B: A bag holds 5 red, 3 green, and 5 blue marbles. Three are drawn at random without replacement. What is the probability that at least two of the three share a color? Give the answer as a fraction in lowest terms, written a/b (or a whole number if the denominator is 1).\n\nPart C: Compute 70710 x 9631 x 549 x 7786 and give the sum of the decimal digits of the result.\n\nPart D: An account starts with $4,300.00. Each month, in this order: one transaction is applied (withdrawal of $650, deposit of $300, withdrawal of $250, withdrawal of $400, deposit of $700, deposit of $450, withdrawal of $900, withdrawal of $650, deposit of $1100, deposit of $1100, deposit of $300, withdrawal of $900, withdrawal of $650, deposit of $450, deposit of $450, for months 1 through 15); then, if the balance is below $1,500, a $15 fee is charged; then interest of 0.4% of the balance is added. What is the balance after month 15? Give the amount in dollars to the nearest cent.\n\nAnswer all four parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C>; <D> with the four answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.",
+   "answer_type": "multi",
+   "expected": [
+    {
+     "answer_type": "number",
+     "expected": 11639.99,
+     "precision": 2
+    },
+    {
+     "answer_type": "string",
+     "expected": "211/286",
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 72,
+     "precision": 0
+    },
+    {
+     "answer_type": "number",
+     "expected": 5002.25,
+     "precision": 2
+    }
+   ],
+   "tags": [
+    "multi4",
+    "simulation",
+    "probability",
+    "exact",
+    "arithmetic",
+    "exact",
+    "simulation"
    ]
   }
  ]

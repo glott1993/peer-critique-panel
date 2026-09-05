@@ -154,6 +154,7 @@ def main():
     ap.add_argument("--tasks", default="tasks/fresh_tasks.json")
     ap.add_argument("--conditions", default="a,c,d,b", help="order matters: b is sized from c")
     ap.add_argument("--limit", type=int, default=0, help="tasks per type (0 = all)")
+    ap.add_argument("--pick", default="", help="per-type counts, e.g. multi=40,multi4=40,code=30,math=10; types not listed are skipped")
     ap.add_argument("--dry-run", action="store_true", help="1 task per type")
     ap.add_argument("--mock", action="store_true", help="offline mock backend")
     ap.add_argument("--workers", type=int, default=0)
@@ -184,6 +185,13 @@ def main():
             return
 
     panel.ANSWER_TOKENS = int(cfg.get("answer_tokens", panel.ANSWER_TOKENS))
+    if a.pick:
+        want = {kv.split("=")[0]: int(kv.split("=")[1]) for kv in a.pick.split(",")}
+        chosen, seen = [], {}
+        for t in tasks:
+            if seen.get(t["type"], 0) < want.get(t["type"], 0):
+                chosen.append(t); seen[t["type"]] = seen.get(t["type"], 0) + 1
+        tasks = chosen
     limit = 1 if a.dry_run else a.limit
     if limit:
         chosen, seen = [], {}
