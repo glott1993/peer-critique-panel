@@ -135,8 +135,8 @@ class MockBackend:
         with self.lock:
             good = self.rng.random() < self._p(model)
         if task["answer_type"] == "code":
-            import task_bank
-            ref = next(t["reference"] for t in task_bank.CODE_TASKS if t["id"] == task["id"])
+            import task_bank, task_bank2
+            ref = next(t["reference"] for t in task_bank.CODE_TASKS + task_bank2.CODE_TASKS2 if t["id"] == task["id"])
             if not good:
                 ref = ref.replace("return ", "return None  # ", 1)
             return "Here is the function.\n\n```python\n" + ref.strip() + "\n```\n"

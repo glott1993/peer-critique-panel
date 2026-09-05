@@ -20,7 +20,7 @@ import checkers, panel, task_bank
 from backend import Accounting, MockBackend, OpenRouterBackend
 from panel import P, Seat
 
-RESULTS = "results"
+RESULTS = "results"  # overridden by --results
 
 
 def load_config(path):
@@ -84,11 +84,14 @@ def run_a(task, cfg, api, ctx):
     return {"answer": text}
 
 
-def run_b(task, cfg, api, ctx, k):
+def run_b(task, cfg, api, ctx, k, samples=None):
     """Compute-matched single model: k samples, then majority vote (numbers,
-    strings) or a self-review pick (code), then one self-critique pass."""
+    strings) or a self-review pick (code), then one self-critique pass.
+    If samples are passed in, the first k of them are used (shared draws)."""
     model = cfg["baseline"]
-    samples = panel.pool([(lambda: api.chat(model, P.baseline_system, task["prompt"], cfg.get("sample_temperature", 0.7), max_tokens=panel.ANSWER_TOKENS, ctx=dict(ctx, step="sample"))) for _ in range(k)], 4)
+    if samples is None:
+        samples = panel.pool([(lambda: api.chat(model, P.baseline_system, task["prompt"], cfg.get("sample_temperature", 0.7), max_tokens=panel.ANSWER_TOKENS, ctx=dict(ctx, step="sample"))) for _ in range(k)], int(cfg.get("sample_workers", 4)))
+    samples = samples[:k]
     if task["answer_type"] == "code":
         cands = "\n\n".join(f"Candidate {i + 1}:\n{s}" for i, s in enumerate(samples))
         review = (f"Request:\n{task['prompt']}\n\nYou wrote these candidate answers earlier:\n{cands}\n\n"
@@ -114,6 +117,14 @@ def run_panel_cond(task, cfg, api, ctx, with_hub, catalogue, seed):
             "hub_budget": int(cfg.get("hub_budget", 6)), "dissenter": bool(cfg.get("dissenter", True)), "tier": cfg.get("tier", "mid"),
             "catalogue": catalogue, "rng": random.Random(seed), "ctx": ctx}
     return panel.run_panel(task["prompt"], pcfg, api, task=task, prelude=task_bank.TEST_PRELUDE)
+
+
+def score_record(task, out, cond, usage, t0, err=None):
+    ok, detail = checkers.score(task, out.get("answer", ""), task_bank.TEST_PRELUDE)
+    return {"task_id": task["id"], "type": task["type"], "condition": cond, "correct": bool(ok) and not err, "detail": detail, "error": err,
+            "seconds": round(time.time() - t0, 1), "tokens": round(usage["prompt_tokens"] + usage["completion_tokens"]),
+            "prompt_tokens": round(usage["prompt_tokens"]), "completion_tokens": round(usage["completion_tokens"]), "cost": round(usage["cost"], 5),
+            "calls": round(usage["calls"], 1), "call_errors": round(usage["errors"], 1)}
 
 
 # ------------------------------------------------------------------ main ----
@@ -148,7 +159,10 @@ def main():
     ap.add_argument("--workers", type=int, default=0)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--suggest-models", action="store_true")
+    ap.add_argument("--results", default="results", help="results directory (pilot 2 uses results2)")
     a = ap.parse_args()
+    global RESULTS
+    RESULTS = a.results
 
     os.makedirs(RESULTS, exist_ok=True)
     acc = Accounting(os.path.join(RESULTS, "calls.jsonl"))
@@ -156,7 +170,7 @@ def main():
         tasks = json.load(f)["tasks"]
 
     if a.mock:
-        cfg = {"seats": [{"model": "mock/seat-1"}, {"model": "mock/seat-2"}, {"model": "mock/seat-3"}], "hub": "mock/hub", "baseline": "mock/frontier",
+        cfg = {"seats": [{"model": "mock/seat-1"}, {"model": "mock/seat-2"}, {"model": "mock/seat-3"}], "hub": "mock/hub", "baseline": "mock/frontier", "baseline_alt": "mock/frontier-other",
                "rounds": 2, "hub_budget": 4, "dissenter": True, "tier": "mid", "task_workers": 4}
         api = MockBackend(tasks, acc, quality={"frontier": 0.75, "hub": 0.9, "seat": 0.6}, seed=a.seed)
     else:
@@ -191,17 +205,23 @@ def main():
         done = {k: v for k, v in load_results(cond).items() if not v.get("error")}
         todo = [t for t in tasks if t["id"] not in done]
         print(f"\n== condition {cond}: {len(done)} done, {len(todo)} to run")
-        k_by_type = {}
+        k_by_type, kd_by_type = {}, {}
         if cond == "b":
             res_a, res_c = load_results("a"), load_results("c")
             for ttype in {t["type"] for t in tasks}:
-                ta = [r["tokens"] for r in res_a.values() if r["type"] == ttype and r.get("tokens")]
-                tc = [r["tokens"] for r in res_c.values() if r["type"] == ttype and r.get("tokens")]
+                ta = [r["tokens"] for r in res_a.values() if r["type"] == ttype and r.get("tokens") and not r.get("error")]
+                tc = [r["tokens"] for r in res_c.values() if r["type"] == ttype and r.get("tokens") and not r.get("error")]
+                ca = [r["cost"] for r in res_a.values() if r["type"] == ttype and r.get("cost") and not r.get("error")]
+                cc = [r["cost"] for r in res_c.values() if r["type"] == ttype and r.get("cost") and not r.get("error")]
                 if ta and tc:
                     k_by_type[ttype] = max(3, min(int(cfg.get("max_k", 12)), round(statistics.median(tc) / max(1, statistics.median(ta)))))
                 else:
                     k_by_type[ttype] = int(cfg.get("default_k", 5))
-            print("   compute-matched k per type:", k_by_type)
+                if ca and cc:
+                    kd_by_type[ttype] = max(3, min(int(cfg.get("max_k_dollars", 16)), round(statistics.median(cc) / max(1e-9, statistics.median(ca)))))
+                else:
+                    kd_by_type[ttype] = k_by_type[ttype]
+            print("   token-matched k per type:", k_by_type, "| dollar-matched k per type:", kd_by_type)
 
         def one(task, cond=cond):
             ctx = {"task": task["id"], "condition": cond}
@@ -211,8 +231,34 @@ def main():
                     out = run_a(task, cfg, api, ctx)
                 elif cond == "a2":
                     out = run_a(task, dict(cfg, baseline_temperature=cfg.get("sample_temperature", 0.7)), api, ctx)
+                elif cond == "a3":
+                    if not cfg.get("baseline_alt"):
+                        raise SystemExit("condition a3 needs baseline_alt in config.json")
+                    out = run_a(task, dict(cfg, baseline=cfg["baseline_alt"]), api, ctx)
                 elif cond == "b":
-                    out = run_b(task, cfg, api, ctx, k_by_type[task["type"]])
+                    kt, kd = k_by_type[task["type"]], kd_by_type[task["type"]]
+                    kmax = max(kt, kd)
+                    draws = panel.pool([(lambda: api.chat(cfg["baseline"], P.baseline_system, task["prompt"], cfg.get("sample_temperature", 0.7), max_tokens=panel.ANSWER_TOKENS, ctx=dict(ctx, step="sample"))) for _ in range(kmax)], int(cfg.get("sample_workers", 4)))
+                    usage_shared = acc.take(task["id"], cond)  # cost of the shared draws
+                    out = run_b(task, cfg, api, ctx, kt, samples=draws)
+                    usage_b = acc.take(task["id"], cond)
+                    out_bd = run_b(task, cfg, api, dict(ctx, condition="bd"), kd, samples=draws) if kd != kt else None
+                    usage_bd = acc.take(task["id"], "bd")
+                    # charge the shared draws proportionally: b gets the first kt draws, bd all kd draws
+                    per_draw = {k: v / max(1, kmax) for k, v in usage_shared.items()}
+                    for k in usage_b:
+                        usage_b[k] += per_draw[k] * kt
+                    if out_bd is not None:
+                        for k in usage_bd:
+                            usage_bd[k] += per_draw[k] * kd
+                        rec_bd = score_record(task, out_bd, "bd", usage_bd, t0)
+                        rec_bd["k"] = kd; rec_bd["majority_key"] = out_bd.get("majority_key"); rec_bd["answer"] = out_bd.get("answer", "")
+                        save_result(rec_bd)
+                    else:  # same k: the dollar-matched condition is the token-matched one; record it so the report has both
+                        rec_bd = score_record(task, out, "bd", dict(usage_b), t0)
+                        rec_bd["k"] = kt; rec_bd["majority_key"] = out.get("majority_key"); rec_bd["answer"] = out.get("answer", ""); rec_bd["same_as_b"] = True
+                        save_result(rec_bd)
+                    acc.totals[(task["id"], cond)] = usage_b  # put back for the shared accounting below
                 elif cond == "c":
                     out = run_panel_cond(task, cfg, api, ctx, True, catalogue, a.seed + zlib.crc32(task["id"].encode()) % 10000)
                 elif cond == "d":
@@ -223,13 +269,12 @@ def main():
             except Exception as e:  # keep going; the task is recorded as failed and can be rerun
                 out, err = {"answer": ""}, f"{type(e).__name__}: {e}"[:500]
             usage = acc.take(task["id"], cond)
-            ok, detail = checkers.score(task, out.get("answer", ""), task_bank.TEST_PRELUDE)
-            rec = {"task_id": task["id"], "type": task["type"], "condition": cond, "correct": bool(ok) and not err, "detail": detail, "error": err,
-                   "seconds": round(time.time() - t0, 1), "tokens": usage["prompt_tokens"] + usage["completion_tokens"],
-                   "prompt_tokens": usage["prompt_tokens"], "completion_tokens": usage["completion_tokens"], "cost": round(usage["cost"], 5), "calls": usage["calls"], "call_errors": usage["errors"]}
-            if cond in ("c", "d"):
-                pre_ok, _ = checkers.score(task, out.get("pre_hub_answer", ""), task_bank.TEST_PRELUDE) if not err else (False, "")
-                rec.update({"pre_hub_correct": bool(pre_ok), "agreed": out.get("agreed"), "rounds_used": out.get("rounds_used"), "gates": out.get("gates"), "shipped": out.get("shipped"),
+            rec = score_record(task, out, cond, usage, t0, err)
+            if cond in ("c", "d") and not err:
+                pre_ok, _ = checkers.score(task, out.get("pre_hub_answer", ""), task_bank.TEST_PRELUDE)
+                first_draft = next((e.get("draft") for e in (out.get("log") or []) if e.get("step") == 3 and "draft" in e), "")
+                draft_ok, _ = checkers.score(task, first_draft or "", task_bank.TEST_PRELUDE)
+                rec.update({"pre_hub_correct": bool(pre_ok), "pre_critique_correct": bool(draft_ok), "agreed": out.get("agreed"), "rounds_used": out.get("rounds_used"), "gates": out.get("gates"), "shipped": out.get("shipped"),
                             "hub_questions": out.get("hub_questions"), "hub_open": out.get("hub_open"), "hub_sent_back": out.get("hub_sent_back"), "hub_corrected": out.get("hub_corrected"),
                             "checks": out.get("checks"), "author": out.get("author"), "seats": out.get("seats"), "log": out.get("log")})
             if cond == "b":

@@ -12,10 +12,13 @@ Metrics (fixed before the first run; see the paper's Pilot design):
 import json, math, os, random, statistics
 from collections import defaultdict
 
-RESULTS = "results"
+import sys
+RESULTS = sys.argv[sys.argv.index("--results") + 1] if "--results" in sys.argv else "results"
 COND_NAMES = {"a": "single frontier model, one pass (temperature 0.3)", "a2": "single frontier model, one pass (temperature 0.7)",
-              "b": "same model, compute-matched (self-consistency + self-critique)", "c": "panel with hub", "d": "panel without hub"}
-COND_ORDER = ("a", "a2", "b", "c", "d")
+              "a3": "single frontier model from another lab, one pass",
+              "b": "same model, token-matched (k samples + self-critique)", "bd": "same model, dollar-matched (k samples + self-critique)",
+              "c": "panel with hub", "d": "panel without hub"}
+COND_ORDER = ("a", "a2", "a3", "b", "bd", "c", "d")
 
 
 def wilson(k, n, z=1.96):
@@ -93,7 +96,7 @@ def main():
 
     # paired differences
     lines += ["## Paired differences in accuracy (95% bootstrap interval, tasks present in both conditions)", ""]
-    for x, y in (("c", "a"), ("c", "a2"), ("c", "b"), ("c", "d"), ("b", "a"), ("d", "a"), ("a2", "a")):
+    for x, y in (("c", "a"), ("c", "a2"), ("c", "a3"), ("c", "b"), ("c", "bd"), ("c", "d"), ("d", "b"), ("d", "bd"), ("b", "a"), ("bd", "a"), ("d", "a"), ("a2", "a"), ("a3", "a")):
         if x in res and y in res:
             common = sorted(set(res[x]) & set(res[y]))
             if not common:
@@ -111,12 +114,12 @@ def main():
 
     # refusals / no-answer items, and accuracy on answered items only
     lines += ["## No-answer items (refused or failed after retries) and accuracy on answered items", "",
-              "| condition | no answer | of which code / data / math | accuracy, no-answer counted wrong | accuracy on answered items |", "|---|---|---|---|---|"]
+              "| condition | no answer | of which " + " / ".join(types) + " | accuracy, no-answer counted wrong | accuracy on answered items |", "|---|---|---|---|---|"]
     for c in conds:
         rs = list(res[c].values()); na = [r for r in rs if r.get("error")]; ans = [r for r in rs if not r.get("error")]
-        by = {t: sum(1 for r in na if r["type"] == t) for t in ("code", "data", "math")}
+        by = " / ".join(str(sum(1 for r in na if r["type"] == t)) for t in types)
         acc_all = sum(r["correct"] for r in rs) / max(1, len(rs)); acc_ans = sum(r["correct"] for r in ans) / max(1, len(ans))
-        lines.append(f"| {c} | {len(na)}/{len(rs)} | {by['code']} / {by['data']} / {by['math']} | {pct(acc_all)} | {sum(r['correct'] for r in ans)}/{len(ans)} = {pct(acc_ans)} |")
+        lines.append(f"| {c} | {len(na)}/{len(rs)} | {by} | {pct(acc_all)} | {sum(r['correct'] for r in ans)}/{len(ans)} = {pct(acc_ans)} |")
     lines.append("")
     lines.append("A no-answer item is one where every attempt (7 per task) returned an empty or filtered reply, or failed outright; the error text in `results/<condition>/<task>.json` says which. Panel conditions can route around a seat that declines; single-model conditions cannot.")
     lines.append("")
@@ -124,11 +127,20 @@ def main():
     # cost
     lines += ["## Cost per item", "", "| condition | mean tokens | mean cost | median seconds | calls per item | call errors |", "|---|---|---|---|---|---|"]
     for c in conds:
-        rs = list(res[c].values())
+        rs = list(res[c].values()) or [{"tokens": 0, "cost": 0, "seconds": 0}]
         tok = statistics.mean(r["tokens"] for r in rs); cost = statistics.mean(r["cost"] for r in rs); sec = statistics.median(r["seconds"] for r in rs)
         calls = statistics.mean(r.get("calls", 0) for r in rs); errs = sum(r.get("call_errors", 0) for r in rs)
         lines.append(f"| {c} | {tok:,.0f} | ${cost:.4f} | {sec:.0f} | {calls:.1f} | {errs} |")
         summary["cost"][c] = {"mean_tokens": tok, "mean_cost": cost, "median_seconds": sec, "total_cost": sum(r["cost"] for r in rs)}
+    for cnd in ("c", "d"):
+        if cnd in res:
+            rs = [r for r in res[cnd].values() if not r.get("error") and "pre_critique_correct" in r]
+            if rs:
+                dw = [r for r in rs if not r["pre_critique_correct"]]; dr = [r for r in rs if r["pre_critique_correct"]]
+                lines.append("")
+                lines.append(f"Critique in condition {cnd}: first draft right on {len(dr)}/{len(rs)} ({pct(len(dr) / len(rs))}); "
+                             f"of {len(dw)} wrong first drafts, {sum(r['correct'] for r in dw)} ended right after critique and revision ({pct(sum(r['correct'] for r in dw) / len(dw)) if dw else '-'}); "
+                             f"of {len(dr)} right first drafts, {sum(1 for r in dr if not r['correct'])} ended wrong ({pct(sum(1 for r in dr if not r['correct']) / len(dr)) if dr else '-'}).")
     if "b" in res:
         ks = sorted({(r["type"], r.get("k") or 0) for r in res["b"].values() if not r.get("error")})
         lines.append("")

@@ -4,7 +4,9 @@
     "seats: one mid-class model per lab for the mid tier. hub: a frontier-class model (the paper requires the hub to match the top tier in play).",
     "baseline: the best single frontier model, used for conditions a and b. Using the same model as the hub is fine and makes c-vs-a a test of the process, not of a stronger model.",
     "Pinned ids are recorded in results/run_meta.json as the version stamps for the catalogue.",
-    "answer_tokens caps calls that write an answer (a ceiling, not a spend); max_k caps condition b's samples per task."
+    "answer_tokens caps calls that write an answer (a ceiling, not a spend); max_k caps condition b's samples per task; max_k_dollars caps the dollar-matched condition bd.",
+    "baseline_alt is a frontier model from a second lab for condition a3 (one pass), a check on whether refusals are lab-specific.",
+    "provider_pins keeps a lab's model on the lab's own endpoint; fallback hosts returned empty, filtered replies in pilot 1."
   ],
   "tier": "mid",
   "seats": [
@@ -22,6 +24,10 @@
   "sample_temperature": 0.7,
   "default_k": 5,
   "max_k": 12,
+  "max_k_dollars": 16,
+  "sample_workers": 3,
   "answer_tokens": 6000,
-  "task_workers": 2
+  "task_workers": 2,
+  "baseline_alt": "REPLACE-ME/frontier-class-from-another-lab",
+  "provider_pins": {"anthropic/": {"order": ["anthropic"], "allow_fallbacks": false}}
 }

@@ -59,3 +59,36 @@ Code tasks execute model-written Python locally, in a separate interpreter with 
 | `backend.py` | OpenRouter client with retries and accounting; offline mock |
 | `run_pilot.py` | conditions, resumable runs, compute matching |
 | `report.py` | metrics and the falsification readout |
+
+
+## Pilot 2 (harder, larger)
+
+Pilot 1 hit a ceiling: every answered item was right in every condition. Pilot 2 uses a task set built to sit at 50 to 85% single-model accuracy, four times larger, and adds three things the first run was missing.
+
+- **Tasks** (`make_tasks2.py`, default 200 = 60 math, 60 data, 30 code, 50 logic): multi-step exact computations (FIFO inventory, payroll with daily overtime, amortization with an extra payment, month-by-month account simulations, inclusion-exclusion counts, Chinese remainders, business-day dates, exact probabilities as fractions); two-table data questions that need a join; 30 harder functions with larger hidden test sets (`task_bank2.py`, verified on export); four-house logic puzzles with a unique solution proven by exhaustive search. `--level 1|2|3` scales the math, data, and logic difficulty.
+- **Conditions:** a (one pass, 0.3), a2 (one pass, 0.7), a3 (one pass, a frontier model from a second lab; set `baseline_alt`), b (token-matched: k samples + self-critique), bd (dollar-matched: k chosen from cost rather than tokens; shares its draws with b so the pair costs little more than b alone), c (panel with hub), d (panel without hub).
+- **New measures:** accuracy of the panel's first draft before any critique, so critique's contribution is separated from the hub's; token- and dollar-matched baselines side by side; no-answer items separate from wrong answers, with the serving provider logged per call.
+
+### Runbook (from `pilot/`, results go to `results2/`)
+
+```
+python make_tasks2.py
+python -c "import json; c=json.load(open('config.json')); c.update({'baseline_alt': 'REPLACE-WITH-SECOND-LAB-FRONTIER-ID', 'max_k_dollars': 16, 'sample_workers': 3}); json.dump(c, open('config.json', 'w'), indent=2)"
+
+# Stage 1, calibration (about $6): the single model alone, all 200 tasks
+nohup python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions a --workers 2 >> run2.log 2>&1 &
+python report.py --results results2 | head -20        # want roughly 50 to 85% per type; if a type sits at 100%, regenerate with --level 3 and redo stage 1 (rm -rf results2 first)
+
+# Stage 2 (about $100 for 200 tasks): the panel with and without the hub
+nohup python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions c,d --workers 2 >> run2.log 2>&1 &
+
+# Stage 3 (about $100): the matched single-model baselines (b and bd together), one task at a time to respect rate limits
+nohup python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions b --workers 1 >> run2.log 2>&1 &
+
+# Optional (about $12): one pass from a second lab's frontier model
+nohup python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions a3 --workers 1 >> run2.log 2>&1 &
+
+python report.py --results results2
+```
+
+Add `--limit 30` to every run for a 120-task version at about 60% of the cost; the same subset is used in every condition. Status line: `pgrep -f run_pilot.py >/dev/null && echo running || echo stopped; ls results2/*/ | grep -c json; grep -l '"error": "' results2/*/*.json 2>/dev/null | wc -l`.
