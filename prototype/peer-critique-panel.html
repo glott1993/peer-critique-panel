@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peer-critique panel</title>
+<style>
+  :root {
+    --ink: #1C2A3A;
+    --slate: #55657A;
+    --paper: #F6F8F7;
+    --tint: #E3E9EA;
+    --verdigris: #22736E;
+    --wash: #E6F1EF;
+    --ochre: #A8671E;
+    --ochre-wash: #F8F0E4;
+    --rung-2: #B7C6CD;
+    --rung-3: #5F7586;
+    --sans: "Avenir Next", "Segoe UI", "Helvetica Neue", Roboto, system-ui, sans-serif;
+    --serif: Charter, "Iowan Old Style", "Noto Serif", "Source Serif Pro", Palatino, "Book Antiqua", serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.5; }
+  .page { max-width: 680px; margin: 0 auto; padding: 28px 16px 72px; }
+  h1 { font-size: 1.7rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.15; margin: 0; }
+  h2 { font-size: 1.15rem; font-weight: 600; margin: 0 0 10px; }
+  p { margin: 0 0 12px; }
+  .mode-line { color: var(--slate); font-size: 0.95rem; margin: 8px 0 0; }
+  :focus-visible { outline: 2px solid var(--verdigris); outline-offset: 2px; }
+
+  textarea, input[type=text], input[type=password], select {
+    font: inherit; color: var(--ink); background: #fff; border: 1px solid var(--rung-2); border-radius: 4px; padding: 10px 12px; width: 100%;
+  }
+  textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+  select { width: auto; padding: 6px 8px; }
+  .ask { margin-top: 24px; }
+  .hint { color: var(--slate); font-size: 0.9rem; margin: 8px 0 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip { font: inherit; font-size: 0.86rem; background: #fff; border: 1px solid var(--tint); border-radius: 999px; padding: 6px 12px; cursor: pointer; color: var(--ink); text-align: left; }
+  .chip:hover { border-color: var(--rung-3); }
+  .row { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 14px; font-size: 0.92rem; color: var(--slate); }
+  .row label { display: inline-flex; align-items: center; gap: 6px; }
+  .btn { font: inherit; font-weight: 600; background: var(--ink); color: #fff; border: 0; border-radius: 4px; padding: 11px 18px; cursor: pointer; }
+  .btn:disabled { opacity: 0.45; cursor: default; }
+  .btn.quiet { background: transparent; color: var(--ink); border: 1px solid var(--ink); padding: 8px 12px; font-weight: 500; font-size: 0.9rem; }
+  .btn.stop { background: var(--ochre); }
+
+  details.settings { margin-top: 16px; border-top: 1px solid var(--tint); padding-top: 10px; }
+  details.settings summary { cursor: pointer; color: var(--slate); font-size: 0.95rem; }
+  .fields { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 12px; }
+  .field label { display: block; font-size: 0.9rem; color: var(--slate); margin-bottom: 4px; }
+  .field .note { font-size: 0.85rem; color: var(--slate); margin-top: 4px; }
+  .radio { display: flex; gap: 16px; flex-wrap: wrap; }
+  .radio label { display: inline-flex; gap: 6px; align-items: center; color: var(--ink); }
+  .or-only { display: none; }
+  body.or .or-only { display: block; }
+  .field.or-only { display: none; }
+  body.or .field.or-only { display: block; }
+  .field textarea.mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.9rem; min-height: 80px; }
+
+  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 28px 0 0; border-top: 2px solid var(--ink); }
+  ol.steps > li { counter-increment: s; position: relative; padding: 14px 0 14px 46px; border-bottom: 1px solid var(--tint); }
+  ol.steps > li::before {
+    content: counter(s); position: absolute; left: 0; top: 14px; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--tint); color: var(--ink); font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; justify-content: center;
+  }
+  ol.steps > li.running::before, ol.steps > li.done::before { background: var(--ink); color: #fff; }
+  ol.steps > li.hub.running::before, ol.steps > li.hub.done::before { background: var(--verdigris); }
+  ol.steps > li.flag::before { background: var(--ochre); color: #fff; }
+  .head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .head .title { font-weight: 600; }
+  .head .status { color: var(--slate); font-size: 0.88rem; text-align: right; flex: 1; }
+  li.flag .head .status { color: var(--ochre); }
+  .bar { height: 2px; background: var(--tint); margin-top: 10px; overflow: hidden; display: none; }
+  li.running .bar { display: block; }
+  .bar i { display: block; height: 100%; width: 30%; background: var(--ink); animation: slide 1.4s linear infinite; }
+  li.hub .bar i { background: var(--verdigris); }
+  @keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
+  @media (prefers-reduced-motion: reduce) { .bar i { animation: none; width: 100%; } }
+  details.log { margin-top: 8px; }
+  details.log summary { cursor: pointer; color: var(--slate); font-size: 0.88rem; }
+  .entry { display: flex; gap: 10px; margin: 12px 0 0; font-family: var(--serif); font-size: 0.98rem; line-height: 1.55; }
+  .entry .tag { flex: 0 0 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff; font-family: var(--sans); font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .entry.hub .tag { background: var(--verdigris); }
+  .entry.dissent .tag { background: var(--ochre); }
+  .entry .body { flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .entry .body .k { font-family: var(--sans); font-size: 0.84rem; color: var(--slate); display: block; margin-bottom: 2px; white-space: normal; }
+  .entry.note { font-family: var(--sans); color: var(--slate); font-size: 0.9rem; padding-left: 36px; }
+
+  .release { margin-top: 28px; border-top: 2px solid var(--ink); padding-top: 16px; display: none; }
+  .release.show { display: block; }
+  .answer { font-family: var(--serif); font-size: 1.05rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .split { margin-top: 16px; padding: 12px 14px; border-left: 4px solid var(--ochre); background: #fff; font-family: var(--serif); white-space: pre-wrap; }
+  .split .k, .hubstat .k { font-family: var(--sans); font-weight: 600; display: block; margin-bottom: 4px; }
+  .hubstat { margin-top: 12px; padding: 12px 14px; border-left: 4px solid var(--verdigris); background: var(--wash); font-size: 0.95rem; }
+  .hubstat ul { margin: 6px 0 0; padding-left: 18px; }
+  .gates { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 12px; font-size: 0.92rem; }
+  .gate { display: flex; gap: 8px; align-items: baseline; }
+  .gate .mark { flex: 0 0 auto; width: 16px; height: 16px; border: 2px solid var(--verdigris); border-radius: 3px; position: relative; top: 2px; }
+  .gate.ok .mark::after { content: ""; position: absolute; left: 3px; top: 0; width: 4px; height: 8px; border: solid var(--verdigris); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .gate.no .mark { border-color: var(--ochre); }
+  .gate.no .mark::after { content: ""; position: absolute; left: 5px; top: 1px; width: 2px; height: 9px; background: var(--ochre); transform: rotate(45deg); }
+  .baseline { margin-top: 18px; padding: 12px 14px; background: #fff; border: 1px solid var(--tint); border-radius: 4px; }
+  .baseline .answer { font-size: 0.98rem; }
+  .meta { color: var(--slate); font-size: 0.88rem; margin-top: 12px; }
+  details.transcript { margin-top: 12px; }
+  details.transcript summary { cursor: pointer; color: var(--slate); font-size: 0.9rem; }
+  .call { border-top: 1px solid var(--tint); padding: 8px 0; font-size: 0.86rem; }
+  .call summary { color: var(--ink); }
+  .call pre { white-space: pre-wrap; overflow-wrap: anywhere; font-family: var(--serif); font-size: 0.9rem; background: #fff; padding: 8px 10px; border-radius: 3px; margin: 6px 0; }
+  .call .lbl { color: var(--slate); font-size: 0.8rem; }
+
+  .catalogue { margin-top: 32px; border-top: 2px solid var(--ink); padding-top: 14px; }
+  .catalogue table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  .catalogue th, .catalogue td { text-align: left; padding: 6px 6px 6px 0; border-bottom: 1px solid var(--tint); vertical-align: top; }
+  .catalogue th { color: var(--slate); font-weight: 500; }
+  .catalogue td.n, .catalogue th.n { text-align: right; padding-right: 8px; }
+  .catalogue .recent { color: var(--slate); font-family: var(--serif); }
+  .catalogue .tools { display: flex; gap: 10px; align-items: center; margin-top: 10px; font-size: 0.88rem; color: var(--slate); flex-wrap: wrap; }
+
+  .error { margin-top: 16px; padding: 12px 14px; border-left: 4px solid var(--ochre); background: var(--ochre-wash); font-size: 0.95rem; display: none; }
+  .error.show { display: block; }
+  footer { margin-top: 48px; padding-top: 12px; border-top: 2px solid var(--ink); font-size: 0.86rem; color: var(--slate); }
+  @media (min-width: 560px) { .fields { grid-template-columns: 1fr 1fr; } .fields .wide { grid-column: 1 / -1; } .gates { grid-template-columns: 1fr 1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>Peer-critique panel</h1>
+    <p class="mode-line" id="modeLine">Simulation: one model (Claude Sonnet 4.6) in several seats, each with a different lens, and a hub that only asks.</p>
+  </header>
+
+  <section class="ask">
+    <textarea id="req" placeholder="Ask something a panel could argue about."></textarea>
+    <p class="hint">Checkable questions show the most. The hub recomputes any arithmetic it finds, outside the panel.</p>
+    <div class="chips" id="chips"></div>
+    <div class="row">
+      <button class="btn" id="run">Convene the panel</button>
+      <label>Seats <select id="seats"><option>3</option><option>4</option><option>5</option></select></label>
+      <label>Rounds <select id="rounds"><option>1</option><option selected>2</option><option>3</option></select></label>
+      <label>Hub budget <select id="budget"><option>2</option><option selected>3</option><option>4</option><option>6</option></select></label>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" id="dissenter" checked> Designated dissenter each round</label>
+      <label><input type="checkbox" id="baseline"> Also run a single-model baseline</label>
+    </div>
+
+    <details class="settings" id="settings">
+      <summary>Mode and models</summary>
+      <div class="fields">
+        <div class="field wide">
+          <label>Mode</label>
+          <div class="radio">
+            <label><input type="radio" name="mode" value="sim" checked> Simulation (runs here in chat)</label>
+            <label><input type="radio" name="mode" value="or"> Live panel through OpenRouter (host this file yourself)</label>
+          </div>
+          <div class="note or-only">Your key stays in this page's memory only; it is never saved. Set a spend limit on the key at OpenRouter and don't publish the page's address.</div>
+        </div>
+        <div class="field or-only"><label>OpenRouter API key</label><input type="password" id="key" autocomplete="off" placeholder="sk-or-..."></div>
+        <div class="field or-only"><label>Tier</label>
+          <select id="tier" style="width:100%"><option value="light">Light (Haiku-class and equivalents)</option><option value="mid">Mid (Sonnet-class and equivalents)</option><option value="frontier" selected>Frontier (Opus-class and equivalents)</option><option value="god">God tier (every class, weighted agreement)</option></select>
+          <div class="note"><label><input type="checkbox" id="openw"> Add open-weight models</label></div>
+        </div>
+        <div class="field wide or-only">
+          <label>Seats, one model per line (optional class after a space: light, mid, frontier)</label>
+          <textarea id="seatList" class="mono" placeholder="anthropic/claude-sonnet-4-6 mid&#10;openai/... mid&#10;google/... mid"></textarea>
+          <div class="note"><button class="btn quiet" id="pickBtn" type="button">Pick the latest live model per lab for this tier</button> <span id="pickNote"></span></div>
+        </div>
+        <div class="field wide or-only"><label>Hub model (never sits on the panel; a separate instance)</label><input type="text" id="hubModel" placeholder="defaults to the newest frontier-class seat's model, as a separate instance"></div>
+      </div>
+    </details>
+  </section>
+
+  <div class="error" id="error"></div>
+
+  <ol class="steps" id="steps">
+    <li data-step="1"><div class="head"><span class="title">Decomposition</span><span class="status">waiting</span></div><div class="bar"><i></i></div><details class="log"><summary>Exchange</summary><div class="entries"></div></details></li>
+    <li data-step="2"><div class="head"><span class="title">Bidding</span><span class="status">waiting</span></div><div class="bar"><i></i></div><details class="log"><summary>Exchange</summary><div class="entries"></div></details></li>
+    <li data-step="3"><div class="head"><span class="title">Critique</span><span class="status">waiting</span></div><div class="bar"><i></i></div><details class="log"><summary>Exchange</summary><div class="entries"></div></details></li>
+    <li data-step="4"><div class="head"><span class="title">Molding</span><span class="status">waiting</span></div><div class="bar"><i></i></div><details class="log"><summary>Exchange</summary><div class="entries"></div></details></li>
+    <li data-step="5" class="hub"><div class="head"><span class="title">Interrogation</span><span class="status">waiting</span></div><div class="bar"><i></i></div><details class="log"><summary>Exchange</summary><div class="entries"></div></details></li>
+    <li data-step="6"><div class="head"><span class="title">Release</span><span class="status">waiting</span></div><div class="bar"><i></i></div><details class="log"><summary>Exchange</summary><div class="entries"></div></details></li>
+  </ol>
+
+  <section class="release" id="release">
+    <h2>Answer</h2>
+    <div class="answer" id="answer"></div>
+    <div class="split" id="split"></div>
+    <div class="hubstat" id="hubstat"></div>
+    <div class="gates" id="gates"></div>
+    <div class="baseline" id="baselineBox" style="display:none"><h2>Single-model baseline, same request</h2><div class="answer" id="baselineText"></div></div>
+    <div class="meta" id="meta"></div>
+    <details class="transcript" id="transcript"><summary>Full transcript</summary><div id="calls"></div></details>
+  </section>
+
+  <section class="catalogue" id="catalogue">
+    <h2>Catalogue</h2>
+    <p class="hint" id="catNote">Who was challenged, corrected, overruled, or caught by a check, across runs. Stored on this device. The hub reads it before it asks.</p>
+    <div id="catTable"></div>
+    <div class="tools"><button class="btn quiet" id="clearCat" type="button">Clear catalogue</button></div>
+  </section>
+
+  <footer>A prototype of the tiered peer-critique architecture. Nothing picks a model, nothing assigns the work, the hub never writes.</footer>
+</div>
+
+<script>
+// ---------------- helpers ----------------
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function repairJSON(str) {
+  let out = '', inStr = false, escp = false;
+  for (const ch of str) {
+    if (inStr) {
+      if (escp) { out += ch; escp = false; }
+      else if (ch === '\\') { out += ch; escp = true; }
+      else if (ch === '"') { out += ch; inStr = false; }
+      else if (ch === '\n') out += '\\n';
+      else if (ch === '\r') out += '\\r';
+      else if (ch === '\t') out += '\\t';
+      else out += ch;
+    } else {
+      if (ch === '"') inStr = true;
+      out += ch;
+    }
+  }
+  return out.replace(/,\s*([}\]])/g, '$1');
+}
+function parseJSON(t, fb) {
+  if (typeof t !== 'string') return fb;
+  const s = t.indexOf('{'), e = t.lastIndexOf('}');
+  if (s < 0 || e <= s) return fb;
+  const slice = t.slice(s, e + 1);
+  try { return JSON.parse(slice); } catch (err) {}
+  try { return JSON.parse(repairJSON(slice)); } catch (err) { return fb; }
+}
+function extractQuestions(t) {
+  return String(t || '').split(/(?<=\?)\s+|\n+/).map(x => x.replace(/^[\s\-*\d.)]+/, '').trim()).filter(x => x.endsWith('?') && x.length > 12).slice(0, 3);
+}
+const pick = arr => arr.length ? arr[Math.floor(Math.random() * arr.length)] : undefined;
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+async function pool(tasks, n) {
+  const out = new Array(tasks.length); let i = 0;
+  async function worker() { while (i < tasks.length) { const k = i++; out[k] = await tasks[k](); } }
+  await Promise.all(Array.from({ length: Math.min(n, tasks.length) }, worker));
+  return out;
+}
+function safeEval(expr) {
+  const e = String(expr || '').replace(/[×x]/g, '*').replace(/,/g, '');
+  if (!/^[\d\s+\-*/().]+$/.test(e) || !/\d/.test(e)) return null;
+  try { const v = Function('"use strict"; return (' + e + ')')(); return Number.isFinite(v) ? v : null; } catch (err) { return null; }
+}
+const LETTERS = 'ABCDEFGHIJKL';
+const LENSES = [
+  'Careful: correctness first; distrusts any figure or fact that arrives without a source.',
+  'Wide: completeness first; hunts for the part of the request everyone else skipped.',
+  'Plain: usefulness first; asks whether the user could act on this answer today.',
+  'Contrarian: assumes the obvious reading of the request is wrong and tests the alternative.',
+  'Quantitative: wants numbers, units, and a way to check each one.'
+];
+const EXAMPLES = [
+  'A cafe sells 1,240 cups of coffee a day at $4.35. Beans cost $9.80 a pound and a pound makes 48 cups. What is the daily gross margin on coffee, and the annual margin if it is open 310 days?',
+  'Write a Python function that returns the nth Fibonacci number in O(log n) time, and explain why it is O(log n).',
+  'Which is larger by land area, Alabama or Mississippi, and by how much?'
+];
+
+// ---------------- prompts ----------------
+function seatSystem(s, N) {
+  return `You are Seat ${s.letter} on a panel of ${N} AI models answering one user's request together. The other seats are anonymous to you; refer to them only by seat letter. Attack content, not labels. Every challenge must point at evidence: a specific claim, a missing source, a figure to recompute, code to run. Be concrete and brief.${s.lens ? ' Your lens on this panel: ' + s.lens : ''} When asked for JSON, reply with JSON only: no prose before or after, no code fences, and write line breaks inside strings as \\n.`;
+}
+const P = {
+  decompose: (req) => `Request:\n${req}\n\nPropose a breakdown into 1 to 4 components that together answer it. Simple requests get one component. Each component: id (c1, c2, ...), title (under 8 words), what (one sentence).\nJSON: {"components":[{"id":"c1","title":"...","what":"..."}]}`,
+  decomposeReview: (req, comps) => `Request:\n${req}\n\nA seat proposed this breakdown:\n${JSON.stringify(comps)}\n\nCritique it as you would a draft: anything missing, redundant, or mis-scoped? Return the breakdown you would accept, amended if needed (1 to 4 components), and say what you changed.\nJSON: {"changed":"none or a one-sentence description","components":[{"id":"c1","title":"...","what":"..."}]}`,
+  bid: (req, comps) => `Request:\n${req}\n\nComponents:\n${comps.map(c => `${c.id}. ${c.title}: ${c.what}`).join('\n')}\n\nWhich components are you prepared to answer? Bid on any number, including all of them.\nJSON: {"bids":["c1"],"why":"one sentence"}`,
+  draft: (req, c) => `Request:\n${req}\n\nYou bid on component ${c.id}: ${c.title}. ${c.what}\nWrite your draft for this component only. Under 180 words. Give a source or a way to check every factual claim and figure. Plain text, no JSON.`,
+  compare: (req, c, x, y) => `Request:\n${req}\n\nTwo anonymous drafts for component ${c.id} (${c.title}).\n\nDraft X:\n${x}\n\nDraft Y:\n${y}\n\nWhich should the panel keep? Judge on evidence and correctness, not style.\nJSON: {"keep":"X","why":"one sentence that points at evidence"}`,
+  assemble: (req, parts) => `Request:\n${req}\n\nThe panel chose these component drafts:\n${parts.map(p => `[${p.c.id}: ${p.c.title}]\n${p.text}`).join('\n\n')}\n\nStitch them into one complete answer to the request. Keep every factual claim and its source; resolve contradictions between parts; add no new claims. Under 300 words. Plain text, no JSON.`,
+  critique: (req, draft) => `Request:\n${req}\n\nCurrent draft:\n${draft}\n\nChallenge this draft. Each challenge must name the claim and the evidence problem (missing source, wrong figure, untested code, unsupported inference, omission) and how to check it. If you find nothing wrong, return no challenges.\nJSON: {"challenges":[{"claim":"...","problem":"...","check":"..."}],"verdict":"ready or revise"}`,
+  dissent: (req, draft) => `You are this round's designated dissenter. Your only job is to attack the consensus: find the strongest case that the draft is wrong, incomplete, or answers the wrong question. Ground every point in evidence the panel could check.\n\nRequest:\n${req}\n\nCurrent draft:\n${draft}\n\nJSON: {"challenges":[{"claim":"...","problem":"...","check":"..."}],"verdict":"revise"}`,
+  revise: (req, draft, ch) => `Request:\n${req}\n\nCurrent draft:\n${draft}\n\nChallenges from other seats:\n${ch.map((x, i) => `${i + 1}. ${x.claim ? x.claim + ' : ' : ''}${x.problem}${x.check ? ' (check: ' + x.check + ')' : ''}`).join('\n')}\n\nRevise the draft. Accept a challenge only if its evidence holds; reject it with a reason otherwise. Keep the answer under 300 words.\nJSON: {"answer":"full revised answer","accepted":[1],"rejected":[{"n":2,"why":"..."}]}`,
+  vote: (req, draft) => `Request:\n${req}\n\nDraft:\n${draft}\n\nIs this ready to submit to the hub?\nJSON: {"ready":true,"objection":"empty if ready, else the one thing that must change"}`,
+  hubSystem: (B) => `You are the hub. You never write, edit, propose, or reword an answer, and you never suggest what it should say. You only ask questions and request checks. Ask about sources, disputed points, edge cases (what happens if X), and any figure or code that can be verified. Ask only what is still open; never ask what the record already answers. Your budget for this request is ${B} questions in total. When asked for JSON, reply with JSON only: no prose, no code fences, and write line breaks inside strings as \\n.`,
+  hubAsk: (req, answer, record, digest, k, remaining) => `Request:\n${req}\n\nSubmitted answer:\n${answer}\n\nPanel record:\n${recordText(record)}\n\nCatalogue (patterns from past runs):\n${digest}\n\nAsk your questions now: at most ${k} this round, ${remaining} left in your budget. Where the answer contains arithmetic, add a check: an expression using only numbers and + - * / ( ), plus the value the answer claims.\nJSON: {"questions":["..."],"checks":[{"expr":"0.07*1200","claimed":84}]}\nIf nothing is open: {"questions":[],"checks":[]}`,
+  panelReply: (req, answer, batch, failing) => `Request:\n${req}\n\nSubmitted answer:\n${answer}\n\nThe hub asks:\n${batch.map(b => `${b.n}. ${b.q}`).join('\n')}${failing.length ? '\n\nChecks computed outside the panel that failed:\n' + failing.map(c => `${c.expr} = ${c.value}, but the answer claims ${c.claimed}`).join('\n') : ''}\n\nAnswer each question with evidence: a source, a computation, or a plain statement that no source exists. If answering reveals an error in the answer, correct it and include the full corrected answer.\nJSON: {"replies":[{"n":1,"reply":"..."}],"correctedAnswer":null}`,
+  hubReview: (req, answer, batch, remaining) => `Request:\n${req}\n\nCurrent answer:\n${answer}\n\nYour questions and the panel's replies:\n${batch.map(b => `${b.n}. Q: ${b.q}\n   A: ${b.reply}`).join('\n')}\n\nSome of these may be earlier questions you left open, shown again with their replies. Which are now resolved with evidence? Mark the rest open and say why. Ask a follow-up only where a reply is missing evidence; ${remaining} questions remain in your budget.\nJSON: {"resolved":[1],"open":[{"n":2,"why":"..."}],"questions":["follow-up"]}`,
+  splitNote: (req, answer, record, agreed) => `Request:\n${req}\n\nFinal answer:\n${answer}\n\nRecord of dispute:\n${recordText(record)}\nPanel agreement before submission: ${agreed ? 'reached' : 'not reached within the round budget'}.\n\nWrite the note that goes to the user on where the panel split: what was disputed, which seat letters held what, and what the user should check for themselves. Under 90 words. If nothing was disputed, one sentence saying so. Plain text, no JSON.`,
+  baselineSystem: 'Answer the user\'s request as well as you can. Under 300 words. Plain text.'
+};
+function recordText(r) {
+  const lines = [];
+  if (r.accepted.length) lines.push('Challenges accepted in revision: ' + r.accepted.map(c => `[Seat ${c.from.letter}] ${c.problem}`).join(' | '));
+  if (r.challengesRejected.length) lines.push('Challenges rejected in revision: ' + r.challengesRejected.map(c => `[Seat ${c.from.letter}] ${c.problem} (rejected: ${c.why})`).join(' | '));
+  if (r.objections.length) lines.push('Objections at the final vote: ' + r.objections.map(o => `[Seat ${o.from.letter}] ${o.objection}`).join(' | '));
+  if (r.hubOpen && r.hubOpen.length) lines.push('Hub questions left open: ' + r.hubOpen.map(o => `${o.q} (${o.why})`).join(' | '));
+  if (r.checks && r.checks.length) lines.push('Checks: ' + r.checks.map(c => `${c.expr} = ${c.valid ? c.value : 'n/a'} vs claimed ${c.claimed}: ${c.valid ? (c.ok ? 'pass' : 'fail') : 'skipped'}`).join(' | '));
+  return lines.length ? lines.join('\n') : 'No disputes recorded.';
+}
+function catalogueDigest(seats, cat) {
+  const lines = [];
+  for (const s of seats) {
+    const c = cat[s.key]; if (!c || c.runs < 2) continue;
+    if (c.corrected || c.overruled || c.checksFailed) lines.push(`Seat ${s.letter} (${c.label}): ${c.runs} runs; drafts corrected ${c.corrected} times; challenges overruled ${c.overruled} times; checks failed ${c.checksFailed} times.` + (c.recent.length ? ' Recent corrections: ' + c.recent.join(' | ') : ''));
+  }
+  return lines.length ? lines.join('\n') : 'No prior patterns recorded.';
+}
+function normComps(list, req) {
+  const out = (Array.isArray(list) ? list : []).filter(c => c && (c.title || c.what)).slice(0, 4).map((c, i) => ({ id: 'c' + (i + 1), title: String(c.title || 'Component ' + (i + 1)).slice(0, 80), what: String(c.what || '').slice(0, 300) }));
+  return out.length ? out : [{ id: 'c1', title: 'Whole request', what: req.slice(0, 300) }];
+}
+
+// ---------------- pipeline (no DOM; api and ui are injected) ----------------
+async function runPanel(req, cfg, api, ui) {
+  const seats = cfg.seats, N = seats.length, cat = cfg.catalogue;
+  const record = { accepted: [], challengesRejected: [], objections: [], hubOpen: [], checks: [] };
+  const touch = s => { cat[s.key] = cat[s.key] || { key: s.key, label: s.label, runs: 0, bids: 0, drafts: 0, challenged: 0, corrected: 0, overruled: 0, objections: 0, checksFailed: 0, recent: [] }; return cat[s.key]; };
+  seats.forEach(s => { touch(s).runs++; touch(s).label = s.label; });
+  const ask = (s, user, temp) => api.chat(s, seatSystem(s, N), user, temp);
+  const askJSON = async (s, user, fb, temp) => parseJSON(await ask(s, user, temp), fb);
+  const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+
+  // 1. Decomposition
+  ui.status(1, 'running', 'a seat proposes a breakdown');
+  const proposer = pick(seats);
+  let comps = normComps((await askJSON(proposer, P.decompose(req), {}, 0.5)).components, req);
+  ui.log(1, { who: proposer.letter, kind: 'proposed breakdown', text: comps.map(c => `${c.id}. ${c.title}: ${c.what}`).join('\n') });
+  const reviewer = pick(seats.filter(s => s !== proposer)) || proposer;
+  const rv = await askJSON(reviewer, P.decomposeReview(req, comps), { changed: 'none', components: comps }, 0.4);
+  const changed = rv.changed && String(rv.changed).trim().toLowerCase() !== 'none';
+  if (changed) comps = normComps(rv.components, req);
+  ui.log(1, { who: reviewer.letter, kind: 'critique of the breakdown', text: changed ? `Amended: ${rv.changed}\n` + comps.map(c => `${c.id}. ${c.title}: ${c.what}`).join('\n') : 'Accepted as proposed.' });
+  ui.status(1, 'done', plural(comps.length, 'component'));
+
+  // 2. Bidding
+  ui.status(2, 'running', 'every seat bids');
+  const bidRes = await pool(seats.map(s => async () => ({ s, b: await askJSON(s, P.bid(req, comps), { bids: [], why: '' }, 0.5) })), 4);
+  const bidders = {}; comps.forEach(c => bidders[c.id] = []);
+  for (const { s, b } of bidRes) {
+    const ids = (Array.isArray(b.bids) ? b.bids : []).map(String).filter(id => bidders[id]);
+    ids.forEach(id => bidders[id].push(s)); touch(s).bids += ids.length;
+    ui.log(2, { who: s.letter, kind: 'bid', text: (ids.length ? ids.join(', ') : 'no bid') + (b.why ? ` (${b.why})` : '') });
+  }
+  for (const c of comps) {
+    if (!bidders[c.id].length) {
+      const load = s => comps.filter(x => bidders[x.id].includes(s)).length;
+      const s = seats.slice().sort((a, b) => load(a) - load(b))[0];
+      bidders[c.id] = [s];
+      ui.log(2, { note: true, text: `${c.id} drew no bids; it fell to Seat ${s.letter}, the lightest-loaded seat.` });
+    }
+    bidders[c.id] = shuffle(bidders[c.id]).slice(0, 2);
+  }
+  ui.status(2, 'done', comps.map(c => `${c.id}: ${bidders[c.id].map(s => s.letter).join('+')}`).join(', '));
+
+  // 3. Critique (drafts, contested drafts compared, assembly, first critique round)
+  ui.status(3, 'running', 'drafting');
+  const draftJobs = [];
+  for (const c of comps) for (const s of bidders[c.id]) draftJobs.push(async () => ({ c, s, text: await ask(s, P.draft(req, c), 0.8) }));
+  const drafts = await pool(draftJobs, 4);
+  const perComp = {};
+  drafts.forEach(({ c, s, text }) => { (perComp[c.id] = perComp[c.id] || []).push({ s, text }); touch(s).drafts++; ui.log(3, { who: s.letter, kind: `draft of ${c.id}: ${c.title}`, text }); });
+  const chosen = {};
+  const cmpJobs = [];
+  for (const c of comps) {
+    const ds = perComp[c.id];
+    if (ds.length === 1) { chosen[c.id] = ds[0]; continue; }
+    const judge = pick(seats.filter(s => !ds.some(d => d.s === s))) || ds[0].s;
+    cmpJobs.push(async () => {
+      const r = await askJSON(judge, P.compare(req, c, ds[0].text, ds[1].text), { keep: 'X', why: '' }, 0.3);
+      const keep = String(r.keep || 'X').toUpperCase() === 'Y' ? ds[1] : ds[0];
+      chosen[c.id] = keep;
+      ui.log(3, { who: judge.letter, kind: `compared two drafts of ${c.id}`, text: `Kept Seat ${keep.s.letter}'s draft. ${r.why || ''}`.trim() });
+    });
+  }
+  await pool(cmpJobs, 4);
+  const loads = seats.map(s => ({ s, n: comps.filter(c => chosen[c.id].s === s).length })).sort((a, b) => b.n - a.n);
+  const assembler = loads[0].s;
+  let answer;
+  if (comps.length === 1) { answer = chosen[comps[0].id].text; ui.log(3, { note: true, text: `One component, so Seat ${chosen[comps[0].id].s.letter}'s draft is the working answer.` }); }
+  else { answer = await ask(assembler, P.assemble(req, comps.map(c => ({ c, text: chosen[c.id].text }))), 0.5); ui.log(3, { who: assembler.letter, kind: 'assembled answer', text: answer }); }
+  let author = comps.length === 1 ? chosen[comps[0].id].s : assembler;
+
+  async function critiqueRound(round, step) {
+    ui.status(step, 'running', `critique, round ${round}`);
+    const critics = seats.filter(s => s !== author);
+    const dissenter = cfg.dissenter ? pick(critics) : null;
+    const res = await pool(critics.map(s => async () => ({ s, r: await askJSON(s, s === dissenter ? P.dissent(req, answer) : P.critique(req, answer), { challenges: [], verdict: 'ready' }, 0.6) })), 4);
+    const challenges = [];
+    for (const { s, r } of res) {
+      const ch = (Array.isArray(r.challenges) ? r.challenges : []).filter(x => x && (x.problem || x.claim)).slice(0, 4).map(x => ({ from: s, claim: String(x.claim || ''), problem: String(x.problem || ''), check: String(x.check || '') }));
+      ch.forEach(x => challenges.push(x));
+      ui.log(step, { who: s.letter, dissent: s === dissenter, kind: (s === dissenter ? 'designated dissenter' : 'critique') + `, round ${round}`, text: ch.length ? ch.map(x => `${x.claim ? x.claim + ' : ' : ''}${x.problem}${x.check ? ' (check: ' + x.check + ')' : ''}`).join('\n') : 'No challenge.' });
+    }
+    if (challenges.length) touch(author).challenged += challenges.length;
+    return challenges;
+  }
+  let challenges = await critiqueRound(1, 3);
+  ui.status(3, 'done', plural(challenges.length, 'challenge'));
+
+  // 4. Molding
+  let agreed = false, roundsUsed = 0;
+  for (let round = 1; round <= cfg.rounds; round++) {
+    roundsUsed = round;
+    ui.status(4, 'running', `revision, round ${round}`);
+    if (challenges.length) {
+      const reviser = pick(seats.filter(s => s !== author)) || author;
+      const r = await askJSON(reviser, P.revise(req, answer, challenges), { answer, accepted: [], rejected: [] }, 0.5);
+      if (typeof r.answer === 'string' && r.answer.trim().length > 40) answer = r.answer.trim();
+      const acc = (Array.isArray(r.accepted) ? r.accepted : []).map(Number).filter(n => challenges[n - 1]);
+      const rej = (Array.isArray(r.rejected) ? r.rejected : []).map(x => ({ n: Number(x && x.n), why: String((x && x.why) || '') })).filter(x => challenges[x.n - 1]);
+      acc.forEach(n => { const ch = challenges[n - 1]; const t = touch(author); t.corrected++; t.recent.unshift((ch.problem || ch.claim).slice(0, 120)); t.recent = t.recent.slice(0, 3); record.accepted.push(ch); });
+      rej.forEach(x => { const ch = challenges[x.n - 1]; touch(ch.from).overruled++; record.challengesRejected.push(Object.assign({}, ch, { why: x.why })); });
+      ui.log(4, { who: reviser.letter, kind: `revision, round ${round}: accepted ${acc.length}, rejected ${rej.length}`, text: answer + (rej.length ? '\n\nRejected: ' + rej.map(x => `(${x.n}) ${x.why}`).join('; ') : '') });
+      author = reviser;
+    } else {
+      ui.log(4, { note: true, text: `Round ${round}: no challenges to work through.` });
+    }
+    ui.status(4, 'running', `vote, round ${round}`);
+    const votes = await pool(seats.map(s => async () => ({ s, v: await askJSON(s, P.vote(req, answer), { ready: false, objection: 'vote could not be read' }, 0.3) })), 4);
+    const readyW = votes.filter(x => x.v.ready === true).reduce((a, x) => a + (x.s.weight || 1), 0);
+    const totalW = seats.reduce((a, s) => a + (s.weight || 1), 0);
+    const frontier = seats.filter(s => s.tierClass === 'frontier');
+    const frontierOK = frontier.every(s => { const v = votes.find(x => x.s === s); return !!v && v.v.ready === true; });
+    agreed = cfg.tier === 'god' ? (frontierOK && readyW / totalW >= 0.66) : votes.every(x => x.v.ready === true);
+    ui.log(4, { note: true, text: `Vote, round ${round}: ` + votes.map(x => `${x.s.letter} ${x.v.ready === true ? 'ready' : 'not ready (' + (x.v.objection || 'no reason given') + ')'}`).join('; ') + (cfg.tier === 'god' ? ` (weighted ${Math.round(100 * readyW / totalW)}% ready; frontier ${frontierOK ? 'unanimous' : 'split'})` : '') });
+    record.objections = votes.filter(x => x.v.ready !== true).map(x => ({ from: x.s, objection: String(x.v.objection || '') }));
+    if (agreed) break;
+    if (round < cfg.rounds) challenges = await critiqueRound(round + 1, 4);
+  }
+  record.objections.forEach(o => touch(o.from).objections++);
+  ui.status(4, agreed ? 'done' : 'flag', agreed ? `agreed after ${plural(roundsUsed, 'round')}` : `no agreement in ${plural(cfg.rounds, 'round')}; the best draft goes to the hub with the dispute flagged`);
+
+  // 5. Interrogation
+  ui.status(5, 'running', 'the hub reads the record');
+  const hubSys = P.hubSystem(cfg.hubBudget);
+  let remaining = cfg.hubBudget, qn = 0;
+  const qa = [];
+  let hubOpen = [];
+  const hubRaw = await api.chat(cfg.hub, hubSys, P.hubAsk(req, answer, record, catalogueDigest(seats, cat), Math.min(3, remaining), remaining), 0.3);
+  const hq = parseJSON(hubRaw, { questions: extractQuestions(hubRaw), checks: [] });
+  const checks = (Array.isArray(hq.checks) ? hq.checks : []).slice(0, 4).map(c => {
+    const value = safeEval(c && c.expr), claimed = Number(String((c && c.claimed) ?? '').replace(/[$,]/g, ''));
+    const valid = value !== null && Number.isFinite(claimed);
+    const ok = valid && Math.abs(value - claimed) <= Math.max(0.01, Math.abs(value) * 0.005);
+    return { expr: String((c && c.expr) || ''), claimed, value, valid, ok, addressed: false };
+  });
+  record.checks = checks;
+  checks.forEach(c => { ui.log(5, { hub: true, kind: 'check, computed outside the panel', text: `${c.expr} = ${c.valid ? c.value : 'not computable'}; the answer claims ${c.claimed}. ${c.valid ? (c.ok ? 'Passes.' : 'Fails.') : 'Skipped.'}` }); if (c.valid && !c.ok) touch(author).checksFailed++; });
+  let questions = (Array.isArray(hq.questions) ? hq.questions : []).map(String).filter(Boolean);
+  while (questions.length && remaining > 0) {
+    const batch = questions.slice(0, Math.min(3, remaining)).map(q => ({ n: ++qn, q }));
+    remaining -= batch.length;
+    batch.forEach(b => { qa.push(b); ui.log(5, { hub: true, kind: `question ${b.n}`, text: b.q }); });
+    ui.status(5, 'running', `the panel answers (${qn} asked, ${remaining} left)`);
+    const failing = checks.filter(c => c.valid && !c.ok && !c.addressed);
+    const pr = await askJSON(author, P.panelReply(req, answer, batch, failing), { replies: [], correctedAnswer: null }, 0.4);
+    const replies = Array.isArray(pr.replies) ? pr.replies : [];
+    batch.forEach((b, i) => { const r = replies.find(x => x && Number(x.n) === b.n) || replies[i]; b.reply = r ? String(r.reply || '') : 'No reply.'; ui.log(5, { who: author.letter, kind: `reply to question ${b.n}`, text: b.reply }); });
+    if (typeof pr.correctedAnswer === 'string' && pr.correctedAnswer.trim().length > 40) {
+      answer = pr.correctedAnswer.trim(); const t = touch(author); t.corrected++; t.recent.unshift('corrected under interrogation'); t.recent = t.recent.slice(0, 3);
+      failing.forEach(c => c.addressed = true);
+      ui.log(5, { who: author.letter, kind: 'corrected answer after interrogation', text: answer });
+    }
+    ui.status(5, 'running', 'the hub reviews the replies');
+    const underReview = hubOpen.map(o => qa.find(b => b.n === o.n)).filter(Boolean).concat(batch);
+    const rvwRaw = await api.chat(cfg.hub, hubSys, P.hubReview(req, answer, underReview, remaining), 0.3);
+    const rvw = parseJSON(rvwRaw, { resolved: underReview.map(b => b.n), open: [], questions: extractQuestions(rvwRaw) });
+    const resolved = new Set((Array.isArray(rvw.resolved) ? rvw.resolved : []).map(Number));
+    underReview.forEach(b => b.resolved = resolved.has(b.n));
+    hubOpen = (Array.isArray(rvw.open) ? rvw.open : []).map(o => ({ n: Number(o && o.n), why: String((o && o.why) || '') })).filter(o => underReview.find(b => b.n === o.n)).map(o => Object.assign(o, { q: underReview.find(b => b.n === o.n).q }));
+    ui.log(5, { hub: true, kind: 'review', text: hubOpen.length ? 'Still open: ' + hubOpen.map(o => `(${o.n}) ${o.why}`).join('; ') : 'All replies resolved.' });
+    questions = remaining > 0 ? (Array.isArray(rvw.questions) ? rvw.questions : []).map(String).filter(Boolean) : [];
+  }
+  record.hubOpen = hubOpen;
+  const hubClear = !hubOpen.length && !questions.length;
+  ui.status(5, hubClear ? 'done' : 'flag', hubClear ? `no open questions (${plural(qn, 'question')} asked)` : `${plural(hubOpen.length || questions.length, 'question')} still open; budget ${remaining > 0 ? 'left' : 'exhausted'}`);
+
+  // 6. Release
+  ui.status(6, 'running', 'a seat writes the split note');
+  const disputed = record.challengesRejected.length || record.objections.length || hubOpen.length || !agreed;
+  const noteSeat = pick(seats.filter(s => s !== author)) || author;
+  const split = disputed ? await ask(noteSeat, P.splitNote(req, answer, record, agreed), 0.4) : 'The panel agreed without dissent.';
+  ui.log(6, { who: disputed ? noteSeat.letter : '', kind: 'where the panel split', text: split, note: !disputed });
+  let baseline = null;
+  if (cfg.baseline) { ui.status(6, 'running', 'running the single-model baseline'); baseline = await api.chat(cfg.baselineModel, P.baselineSystem, req, 0.7); }
+  const checksOK = !checks.some(c => c.valid && !c.ok && !c.addressed);
+  const gates = { agreed, hubClear, checksOK };
+  const shipped = agreed && hubClear && checksOK;
+  const flags = [!agreed && 'no panel agreement', !hubClear && 'hub questions open', !checksOK && 'a check failed'].filter(Boolean);
+  ui.status(6, shipped ? 'done' : 'flag', shipped ? 'all three release conditions met' : 'released with a flag: ' + flags.join(', '));
+  return { answer, split, gates, checks, qa, hubOpen, baseline, agreed, roundsUsed, author, seats };
+}
+// ---------------- end pipeline ----------------
+
+// ---------------- backends ----------------
+async function anthropicChat({ system, user, temperature }) {
+  const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 1000, temperature, system, messages: [{ role: 'user', content: user }] }) });
+  const d = await r.json();
+  if (d.error) throw new Error(d.error.message || 'API error');
+  const text = (d.content || []).filter(b => b.type === 'text').map(b => b.text).join('\n');
+  const u = d.usage || {};
+  return { text, tokens: (u.input_tokens || 0) + (u.output_tokens || 0), truncated: d.stop_reason === 'max_tokens' };
+}
+async function openrouterChat({ model, system, user, temperature, key }) {
+  const r = await fetch('https://openrouter.ai/api/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key, 'HTTP-Referer': location.origin || 'https://localhost', 'X-Title': 'Peer-critique panel' }, body: JSON.stringify({ model, temperature, max_tokens: 1500, messages: [{ role: 'system', content: system }, { role: 'user', content: user }] }) });
+  const d = await r.json();
+  if (d.error) throw new Error((d.error.message || 'OpenRouter error') + (d.error.code ? ` (${d.error.code})` : ''));
+  const ch = (d.choices || [])[0] || {};
+  const text = (ch.message && ch.message.content) || '';
+  return { text: typeof text === 'string' ? text : JSON.stringify(text), tokens: (d.usage && d.usage.total_tokens) || 0, truncated: ch.finish_reason === 'length' };
+}
+async function listModels(key) {
+  const r = await fetch('https://openrouter.ai/api/v1/models', { headers: key ? { 'Authorization': 'Bearer ' + key } : {} });
+  const d = await r.json();
+  if (!d || !Array.isArray(d.data)) throw new Error('Could not read the model list.');
+  return d.data;
+}
+const LABS = [
+  { id: 'anthropic', name: 'Anthropic', light: /haiku/, mid: /sonnet/, frontier: /opus|fable/ },
+  { id: 'openai', name: 'OpenAI', light: /nano/, mid: /mini/, frontier: /^openai\/gpt-\d/, frontierExclude: /mini|nano|oss|codex|search|audio|realtime|instruct|transcribe|tts|image|chat/ },
+  { id: 'google', name: 'Google', light: /lite/, mid: /flash/, midExclude: /lite/, frontier: /pro/, frontierExclude: /image|tts/ },
+  { id: 'x-ai', name: 'xAI', light: /mini|fast/, mid: /mini|fast/, frontier: /grok/, frontierExclude: /mini|fast|vision|image|code/ }
+];
+const OPEN = [{ id: 'deepseek', name: 'DeepSeek' }, { id: 'mistralai', name: 'Mistral' }, { id: 'qwen', name: 'Qwen' }, { id: 'meta-llama', name: 'Meta' }, { id: 'moonshotai', name: 'Moonshot' }, { id: 'z-ai', name: 'Z.ai' }];
+const EXCLUDE = /embed|tts|whisper|transcri|audio|realtime|moderation|guard|:free|search-preview|computer-use|:online|:nitro|:thinking|:extended|:beta|image-gen/i;
+const price = m => parseFloat((m.pricing && m.pricing.prompt) || 0) || 0;
+function textModel(m) {
+  const a = m.architecture || {};
+  const im = a.input_modalities || m.input_modalities, om = a.output_modalities || m.output_modalities;
+  if (Array.isArray(im) && !im.includes('text')) return false;
+  if (Array.isArray(om) && !om.includes('text')) return false;
+  return true;
+}
+function pickPanel(models, tier, includeOpen) {
+  const live = models.filter(m => m && m.id && !EXCLUDE.test(m.id) && textModel(m));
+  const newest = arr => arr.slice().sort((a, b) => (b.created || 0) - (a.created || 0))[0];
+  const classes = tier === 'god' ? ['light', 'mid', 'frontier'] : [tier];
+  const out = [];
+  for (const lab of LABS) {
+    const mine = live.filter(m => m.id.startsWith(lab.id + '/'));
+    for (const cls of classes) {
+      const ex = lab[cls + 'Exclude'];
+      let m = newest(mine.filter(x => lab[cls].test(x.id) && !(ex && ex.test(x.id))));
+      if (!m && mine.length) { const byPrice = mine.slice().sort((a, b) => price(b) - price(a)); m = cls === 'frontier' ? byPrice[0] : cls === 'light' ? byPrice[byPrice.length - 1] : byPrice[Math.floor(byPrice.length / 2)]; }
+      if (m && !out.find(s => s.model === m.id)) out.push({ model: m.id, lab: lab.name, tierClass: cls, created: m.created });
+    }
+  }
+  if (includeOpen) for (const lab of OPEN) {
+    const mine = live.filter(m => m.id.startsWith(lab.id + '/')).sort((a, b) => price(b) - price(a));
+    if (mine[0] && !out.find(s => s.model === mine[0].id)) out.push({ model: mine[0].id, lab: lab.name, tierClass: classes[classes.length - 1], created: mine[0].created });
+  }
+  return out;
+}
+
+// ---------------- storage for the catalogue ----------------
+const store = {
+  async load() {
+    if (window.storage) { try { const r = await window.storage.get('panel-catalogue', false); return r && r.value ? JSON.parse(r.value) : {}; } catch (e) { return {}; } }
+    try { if (typeof localStorage !== 'undefined') { const v = localStorage.getItem('panel-catalogue'); return v ? JSON.parse(v) : {}; } } catch (e) {}
+    return {};
+  },
+  async save(cat) {
+    const v = JSON.stringify(cat);
+    if (window.storage) { try { await window.storage.set('panel-catalogue', v, false); return true; } catch (e) { return false; } }
+    try { if (typeof localStorage !== 'undefined') { localStorage.setItem('panel-catalogue', v); return true; } } catch (e) {}
+    return false;
+  },
+  async clear() {
+    if (window.storage) { try { await window.storage.delete('panel-catalogue', false); } catch (e) {} return; }
+    try { if (typeof localStorage !== 'undefined') localStorage.removeItem('panel-catalogue'); } catch (e) {}
+  }
+};
+
+// ---------------- UI ----------------
+let catalogue = {}, running = false, abort = false;
+const stepEl = n => document.querySelector(`ol.steps > li[data-step="${n}"]`);
+const ui = {
+  status(n, state, text) { const li = stepEl(n); li.classList.remove('running', 'done', 'flag'); if (state !== 'waiting') li.classList.add(state); li.querySelector('.status').textContent = text; },
+  log(n, e) {
+    const box = stepEl(n).querySelector('.entries');
+    const div = document.createElement('div');
+    if (e.note) { div.className = 'entry note'; div.textContent = e.text; }
+    else {
+      div.className = 'entry' + (e.hub ? ' hub' : '') + (e.dissent ? ' dissent' : '');
+      div.innerHTML = `<span class="tag">${esc(e.hub ? 'H' : e.who)}</span><div class="body"><span class="k">${esc(e.kind)}</span>${esc(e.text)}</div>`;
+    }
+    box.appendChild(div);
+    const d = stepEl(n).querySelector('details.log'); const c = box.children.length; d.querySelector('summary').textContent = `Exchange (${c})`;
+  },
+  reset() { for (let i = 1; i <= 6; i++) { ui.status(i, 'waiting', 'waiting'); const b = stepEl(i).querySelector('.entries'); b.innerHTML = ''; stepEl(i).querySelector('details.log').removeAttribute('open'); stepEl(i).querySelector('summary').textContent = 'Exchange'; } $('#release').classList.remove('show'); $('#error').classList.remove('show'); }
+};
+function showError(msg) { const e = $('#error'); e.textContent = msg; e.classList.add('show'); }
+
+function currentMode() { return document.querySelector('input[name=mode]:checked').value; }
+function setModeLine(cfg) {
+  if (cfg.mode === 'sim') $('#modeLine').textContent = `Simulation: one model (Claude Sonnet 4.6) in ${cfg.seats.length} seats, each with a different lens, and a hub that only asks.`;
+  else $('#modeLine').textContent = `Live panel through OpenRouter: ${cfg.seats.length} seats, ${cfg.tier === 'god' ? 'god tier with weighted agreement' : cfg.tier + ' tier'}. Hub: ${cfg.hub.model}.`;
+}
+document.querySelectorAll('input[name=mode]').forEach(r => r.addEventListener('change', () => { document.body.classList.toggle('or', currentMode() === 'or'); if (currentMode() === 'sim') $('#modeLine').textContent = 'Simulation: one model (Claude Sonnet 4.6) in several seats, each with a different lens, and a hub that only asks.'; else $('#modeLine').textContent = 'Live panel through OpenRouter. Paste a key, pick a tier, then convene.'; }));
+$('#chips').innerHTML = EXAMPLES.map((t, i) => `<button class="chip" type="button" data-i="${i}">${esc(t.length > 70 ? t.slice(0, 68) + '...' : t)}</button>`).join('');
+$('#chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { $('#req').value = EXAMPLES[+b.dataset.i]; $('#req').focus(); } });
+
+function parseSeatList(text) {
+  return text.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const [model, cls] = l.split(/\s+/); return { model, tierClass: ['light', 'mid', 'frontier'].includes(cls) ? cls : null }; });
+}
+$('#pickBtn').addEventListener('click', async () => {
+  const key = $('#key').value.trim(); const note = $('#pickNote');
+  note.textContent = 'Reading the live model list...';
+  try {
+    const models = await listModels(key);
+    const tier = $('#tier').value;
+    const picked = pickPanel(models, tier, $('#openw').checked);
+    if (!picked.length) { note.textContent = 'Nothing matched. Type model ids by hand.'; return; }
+    $('#seatList').value = picked.map(p => `${p.model} ${p.tierClass}`).join('\n');
+    const hubPick = picked.filter(p => p.tierClass === 'frontier' && p.lab === 'Anthropic')[0] || picked.slice().sort((a, b) => (b.created || 0) - (a.created || 0))[0];
+    if (!$('#hubModel').value.trim() && hubPick) $('#hubModel').value = hubPick.model;
+    note.textContent = `Picked ${picked.length} by newest listing per lab and class. Check them; the heuristics are name-based and labs rename things.`;
+  } catch (e) { note.textContent = 'Could not read the model list: ' + e.message + '. If you are inside a chat sandbox, host this file on your own site first.'; }
+});
+
+function buildConfig() {
+  const mode = currentMode();
+  const cfg = { mode, rounds: +$('#rounds').value, hubBudget: +$('#budget').value, dissenter: $('#dissenter').checked, baseline: $('#baseline').checked, catalogue, tier: mode === 'sim' ? 'single' : $('#tier').value };
+  if (mode === 'sim') {
+    const n = +$('#seats').value;
+    cfg.seats = Array.from({ length: n }, (_, i) => ({ letter: LETTERS[i], key: 'sim:' + LETTERS[i] + ':' + LENSES[i].split(':')[0].toLowerCase(), label: 'Sonnet 4.6, lens: ' + LENSES[i].split(':')[0].toLowerCase(), lens: LENSES[i], model: 'claude-sonnet-4-6', tierClass: 'mid', weight: 1 }));
+    cfg.hub = { letter: 'H', key: 'sim:hub', label: 'hub', model: 'claude-sonnet-4-6' };
+    cfg.baselineModel = { letter: 'B', key: 'sim:baseline', label: 'baseline', model: 'claude-sonnet-4-6' };
+  } else {
+    cfg.key = $('#key').value.trim();
+    if (!cfg.key) throw new Error('Paste an OpenRouter API key under Mode and models.');
+    const list = parseSeatList($('#seatList').value);
+    if (list.length < 2) throw new Error('List at least two seat models, or use the pick button.');
+    if (list.length > 12) throw new Error('Twelve seats is the most this prototype runs.');
+    const w = { light: 1, mid: 2, frontier: 3 };
+    cfg.seats = list.map((m, i) => { const cls = m.tierClass || (cfg.tier === 'god' ? 'frontier' : cfg.tier); return { letter: LETTERS[i], key: m.model, label: m.model, lens: '', model: m.model, tierClass: cls, weight: cfg.tier === 'god' ? w[cls] : 1 }; });
+    const hubModel = $('#hubModel').value.trim() || (cfg.seats.filter(s => s.tierClass === 'frontier')[0] || cfg.seats[0]).model;
+    cfg.hub = { letter: 'H', key: hubModel, label: 'hub', model: hubModel };
+    cfg.baselineModel = { letter: 'B', key: hubModel, label: 'baseline', model: hubModel };
+  }
+  return cfg;
+}
+
+function makeApi(cfg, transcript, counters) {
+  return {
+    async chat(who, system, user, temperature) {
+      if (abort) throw new Error('Stopped.');
+      const t0 = Date.now();
+      let last;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const r = cfg.mode === 'sim' ? await anthropicChat({ system, user, temperature }) : await openrouterChat({ model: who.model, system, user, temperature, key: cfg.key });
+          counters.calls++; counters.tokens += r.tokens || 0;
+          transcript.push({ who: who.letter === 'H' ? 'Hub' : who.letter === 'B' ? 'Baseline' : 'Seat ' + who.letter, model: who.model, system, user, out: r.text, tokens: r.tokens, ms: Date.now() - t0, truncated: r.truncated });
+          if (r.truncated) transcript[transcript.length - 1].out += '\n[output hit the length limit]';
+          return r.text;
+        } catch (e) { last = e; if (abort) throw e; await new Promise(res => setTimeout(res, 800 * (attempt + 1))); }
+      }
+      throw last;
+    }
+  };
+}
+
+function renderRelease(res, cfg, transcript, counters, elapsed) {
+  $('#answer').textContent = res.answer;
+  $('#split').innerHTML = `<span class="k">Where the panel split</span>${esc(res.split)}`;
+  const h = $('#hubstat');
+  const qs = res.qa.map(b => `<li>${esc(b.q)}<br><span style="color:var(--slate)">${b.resolved ? 'resolved' : 'open'}: ${esc(b.reply || '')}</span></li>`).join('');
+  const cs = res.checks.map(c => `<li>${esc(c.expr)} = ${c.valid ? esc(c.value) : 'not computable'}; claimed ${esc(c.claimed)}: ${c.valid ? (c.ok ? 'passes' : (c.addressed ? 'failed, then corrected' : 'fails')) : 'skipped'}</li>`).join('');
+  h.innerHTML = `<span class="k">Hub</span>${res.hubOpen.length ? `${res.hubOpen.length} open after ${res.qa.length} question${res.qa.length === 1 ? '' : 's'}` : (res.qa.length ? `No open questions after ${res.qa.length} question${res.qa.length === 1 ? '' : 's'}` : 'The hub had nothing to ask')}.${qs ? '<ul>' + qs + '</ul>' : ''}${cs ? '<ul>' + cs + '</ul>' : ''}`;
+  const g = res.gates;
+  $('#gates').innerHTML = [['The panel agrees', g.agreed], ['The hub has no open questions', g.hubClear], ['Every check passes', g.checksOK]].map(([t, ok]) => `<div class="gate ${ok ? 'ok' : 'no'}"><span class="mark"></span><span>${t}</span></div>`).join('');
+  if (res.baseline) { $('#baselineBox').style.display = 'block'; $('#baselineText').textContent = res.baseline; } else $('#baselineBox').style.display = 'none';
+  const seatCalls = transcript.filter(t => t.who !== 'Baseline');
+  const seatTokens = seatCalls.reduce((a, t) => a + (t.tokens || 0), 0);
+  const baseTokens = transcript.filter(t => t.who === 'Baseline').reduce((a, t) => a + (t.tokens || 0), 0);
+  $('#meta').textContent = `${seatCalls.length} calls, ${Math.round(elapsed)}s, about ${seatTokens.toLocaleString()} tokens for the panel and hub` + (baseTokens ? `; the single-model baseline used ${baseTokens.toLocaleString()}, so the panel cost about ${Math.round(seatTokens / Math.max(1, baseTokens))}x as much` : '') + '.';
+  $('#calls').innerHTML = transcript.map((t, i) => `<details class="call"><summary>${i + 1}. ${esc(t.who)} (${esc(t.model)}) ${t.tokens ? '· ' + t.tokens.toLocaleString() + ' tokens' : ''} · ${(t.ms / 1000).toFixed(1)}s</summary><div class="lbl">System</div><pre>${esc(t.system)}</pre><div class="lbl">Prompt</div><pre>${esc(t.user)}</pre><div class="lbl">Output</div><pre>${esc(t.out)}</pre></details>`).join('');
+  $('#release').classList.add('show');
+}
+
+function renderCatalogue() {
+  const rows = Object.values(catalogue).sort((a, b) => (b.corrected + b.overruled + b.checksFailed) - (a.corrected + a.overruled + a.checksFailed));
+  if (!rows.length) { $('#catTable').innerHTML = '<p class="hint">Empty until the first run finishes.</p>'; return; }
+  $('#catTable').innerHTML = `<table><thead><tr><th>Seat identity</th><th class="n">Runs</th><th class="n">Bids</th><th class="n">Challenged</th><th class="n">Corrected</th><th class="n">Overruled</th><th class="n">Checks failed</th></tr></thead><tbody>${rows.map(r => `<tr><td>${esc(r.label)}${r.recent && r.recent.length ? `<div class="recent">${esc(r.recent.join(' | '))}</div>` : ''}</td><td class="n">${r.runs}</td><td class="n">${r.bids}</td><td class="n">${r.challenged}</td><td class="n">${r.corrected}</td><td class="n">${r.overruled}</td><td class="n">${r.checksFailed}</td></tr>`).join('')}</tbody></table>`;
+}
+$('#clearCat').addEventListener('click', async () => { catalogue = {}; await store.clear(); renderCatalogue(); });
+
+$('#run').addEventListener('click', async () => {
+  if (running) { abort = true; $('#run').textContent = 'Stopping...'; return; }
+  const req = $('#req').value.trim();
+  if (!req) { $('#req').focus(); return; }
+  let cfg;
+  try { cfg = buildConfig(); } catch (e) { showError(e.message); return; }
+  running = true; abort = false; ui.reset(); setModeLine(cfg);
+  $('#run').textContent = 'Stop'; $('#run').classList.add('stop');
+  const transcript = [], counters = { calls: 0, tokens: 0 }, t0 = Date.now();
+  try {
+    const res = await runPanel(req, cfg, makeApi(cfg, transcript, counters), ui);
+    renderRelease(res, cfg, transcript, counters, (Date.now() - t0) / 1000);
+    await store.save(catalogue); renderCatalogue();
+  } catch (e) {
+    showError(abort ? 'Stopped before release. The exchange so far is above.' : 'The run stopped: ' + e.message + (cfg.mode === 'or' ? ' (check the key, the model ids, and your OpenRouter credit)' : ''));
+    for (let i = 1; i <= 6; i++) if (stepEl(i).classList.contains('running')) ui.status(i, 'flag', 'stopped here');
+  } finally { running = false; abort = false; $('#run').textContent = 'Convene the panel'; $('#run').classList.remove('stop'); }
+});
+
+(async () => { catalogue = await store.load(); renderCatalogue(); })();
+</script>
+</body>
+</html>

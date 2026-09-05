@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Tiered Peer-Critique Architecture for AI Answers</title>
+<style>
+  :root {
+    --ink: #1C2A3A;
+    --slate: #55657A;
+    --paper: #F6F8F7;
+    --tint: #E3E9EA;
+    --verdigris: #22736E;
+    --verdigris-wash: #E6F1EF;
+    --ochre: #A8671E;
+    --rung-1: #E1E8EA;
+    --rung-2: #B7C6CD;
+    --rung-3: #5F7586;
+    --rung-4: #1C2A3A;
+    --sans: "Avenir Next", "Segoe UI", "Helvetica Neue", Roboto, system-ui, sans-serif;
+    --serif: Charter, "Iowan Old Style", "Noto Serif", "Source Serif Pro", Palatino, "Book Antiqua", serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 36px 20px 64px;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--sans);
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 2.05rem;
+    letter-spacing: -0.015em;
+    max-width: 14ch;
+  }
+
+  .sub {
+    font-family: var(--sans);
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--slate);
+    margin: 18px 0 0;
+    max-width: 34ch;
+  }
+
+  .draft {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    color: var(--slate);
+    margin: 14px 0 0;
+  }
+  .draft + .draft { margin-top: 4px; }
+
+  .rules {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 36px 0 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .rules div {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 1.02rem;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--tint);
+  }
+  .rules div:last-child { border-bottom: none; }
+  @media (min-width: 560px) {
+    .rules { grid-template-columns: repeat(3, 1fr); }
+    .rules div { border-bottom: none; border-right: 1px solid var(--tint); padding: 14px 16px; }
+    .rules div:first-child { padding-left: 0; }
+    .rules div:last-child { border-right: none; }
+  }
+
+  h2 {
+    font-size: 1.32rem;
+    margin: 52px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--tint);
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin: 24px 0 6px;
+  }
+
+  p { margin: 0 0 16px; }
+  p:last-child { margin-bottom: 0; }
+
+  strong { font-weight: 600; }
+
+  .lead { font-size: 1.08rem; }
+
+  .cite { font-family: var(--sans); font-size: 0.8em; color: var(--verdigris); white-space: nowrap; }
+
+  /* Tier ladder: the one visual */
+  .ladder {
+    margin: 22px 0 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .rung {
+    border-radius: 3px;
+    padding: 12px 14px;
+    font-family: var(--sans);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+  }
+  .rung .name { font-weight: 600; font-size: 1.02rem; min-width: 6.5em; }
+  .rung .who { font-size: 0.9rem; opacity: 0.85; flex: 1 1 100%; }
+  .rung .agree { font-size: 0.85rem; flex: 1 1 100%; opacity: 0.85; }
+  .r1 { background: var(--rung-1); color: var(--ink); width: 76%; }
+  .r2 { background: var(--rung-2); color: var(--ink); width: 84%; }
+  .r3 { background: var(--rung-3); color: #FFFFFF; width: 92%; }
+  .r4 { background: var(--rung-4); color: #FFFFFF; width: 100%; padding-top: 16px; padding-bottom: 16px; }
+  @media (min-width: 560px) {
+    .rung .who { flex: 1 1 auto; }
+    .rung .agree { flex: 0 0 auto; margin-left: auto; }
+  }
+
+  /* The hub callout */
+  .hub {
+    margin: 20px 0 22px;
+    padding: 16px 18px;
+    background: var(--verdigris-wash);
+    border-left: 4px solid var(--verdigris);
+    border-radius: 0 4px 4px 0;
+  }
+  .hub p { font-family: var(--sans); font-size: 1.02rem; line-height: 1.45; }
+  .hub .asks { color: var(--verdigris); font-weight: 600; }
+
+  /* Steps and contributions: real sequences, so numbered */
+  ol.steps, ol.adds {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+    margin: 0;
+  }
+  ol.steps li, ol.adds li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 18px 44px;
+  }
+  ol.steps li::before, ol.adds li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #FFFFFF;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  ol.adds li::before { background: var(--verdigris); }
+  ol.steps li.hub-step::before { background: var(--verdigris); }
+  ol.steps li strong, ol.adds li strong { font-family: var(--sans); display: block; margin-bottom: 4px; }
+  ol.adds li .near { display: block; margin-top: 4px; font-size: 0.92rem; color: var(--slate); }
+
+  /* Release checklist */
+  ul.checks {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px;
+  }
+  ul.checks li {
+    position: relative;
+    padding: 0 0 12px 34px;
+  }
+  ul.checks li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--verdigris);
+    border-radius: 3px;
+  }
+  ul.checks li::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 8px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--verdigris);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .flag {
+    padding: 12px 16px;
+    border-left: 4px solid var(--ochre);
+    background: #FFFFFF;
+    border-radius: 0 4px 4px 0;
+  }
+
+  ul.plain {
+    padding-left: 20px;
+    margin: 0 0 16px;
+  }
+  ul.plain li { margin-bottom: 10px; }
+
+  dl { margin: 0; }
+  dt {
+    font-family: var(--sans);
+    font-weight: 600;
+    margin-top: 18px;
+  }
+  dd { margin: 4px 0 0; }
+  dd .short { color: var(--slate); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 18px 0;
+  }
+  .two-col > div {
+    padding: 14px 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--tint);
+    border-radius: 4px;
+  }
+  .two-col h3 { margin: 0 0 6px; }
+  @media (min-width: 560px) {
+    .two-col { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* The difference table */
+  table.delta {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.93rem;
+    margin: 6px 0 16px;
+  }
+  table.delta th, table.delta td {
+    text-align: left;
+    vertical-align: top;
+    padding: 10px 10px 10px 0;
+    border-bottom: 1px solid var(--tint);
+  }
+  table.delta th {
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--slate);
+    border-bottom: 2px solid var(--ink);
+  }
+  table.delta td:first-child { font-family: var(--sans); font-weight: 600; width: 27%; }
+  table.delta td:nth-child(2) { color: var(--slate); width: 30%; }
+  @media (max-width: 559px) {
+    table.delta thead { display: none; }
+    table.delta tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--tint); }
+    table.delta td { display: block; padding: 2px 0; border: none; width: auto !important; }
+    table.delta td:nth-child(2)::before { content: "Nearest: "; font-family: var(--sans); font-weight: 600; }
+    table.delta td:nth-child(3)::before { content: "Here: "; font-family: var(--sans); font-weight: 600; }
+  }
+
+  ol.refs {
+    padding-left: 28px;
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+  ol.refs li { margin-bottom: 8px; padding-left: 4px; }
+  .refnote { font-size: 0.85rem; color: var(--slate); margin-top: 14px; }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 14px;
+    border-top: 2px solid var(--ink);
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    color: var(--slate);
+  }
+  footer p { margin: 0 0 8px; }
+
+  @media print {
+    body { background: #FFFFFF; font-size: 11pt; }
+    .page { max-width: none; padding: 0; }
+    h2 { break-after: avoid; }
+    .rung, .hub, .flag, .two-col > div, table.delta tr, ol.adds li { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>A Tiered Peer-Critique Architecture for AI Answers</h1>
+    <p class="sub">Every major lab's models sit on a panel and argue it out. A hub that never writes asks the questions.</p>
+    <p class="draft">George W. Lott</p>
+    <p class="draft">Working draft v1.1, September 2026. DOI: <a href="https://doi.org/10.5281/zenodo.22325883" style="color:inherit">10.5281/zenodo.22325883</a></p>
+    <div class="rules">
+      <div>Nothing picks a model.</div>
+      <div>Nothing assigns the work.</div>
+      <div>The hub never writes.</div>
+    </div>
+  </header>
+
+  <h2>Summary</h2>
+  <p class="lead">No single AI model is best at everything, and none is reliable at knowing its own weak spots. Convening a panel is now a shipped feature. This proposal is about what happens after the panel is convened: the answer has to earn its release.</p>
+  <p>Every request runs through the current publicly available models from every major lab, always the latest live version of each, sorted into class tiers. The models break the request down, bid on its parts, challenge each other's drafts, and revise until they agree. A dedicated hub that never writes an answer questions the result until nothing is left open, releases it with a note on where the panel split, and keeps a running catalogue of who was challenged, who was corrected, and who was later proven wrong, so the same class of mistake is caught sooner next time.</p>
+  <p>Where an answer can be checked, this should beat the best single model by a measurable margin. Where it can't, the design says so rather than pretending otherwise. A compute-matched pilot that could show either result is specified at the end.</p>
+
+  <h2>What this proposal adds</h2>
+  <p>Debate between models, councils of models, and judges of models all exist; the prior-work section says where. These six elements are what the design contributes, each named against its nearest neighbor.</p>
+  <ol class="adds">
+    <li><strong>A hub that never writes</strong>The questioner is separated from the authors. It has no answer of its own to defend, picks no winner, and produces no synthesis; it asks until nothing is open, within a budget, and enforces checks it does not need to understand.<span class="near">Nearest: the judge in debate <span class="cite">[1, 3, 4]</span> and the questioning judge in consultancy <span class="cite">[2, 4]</span>, both of which decide.</span></li>
+    <li><strong>Bidding instead of routing</strong>No component picks a model. Models bid for parts of the request as equals and hand them off mid-stream; critique, not a router, sorts good bids from bad.<span class="near">Nearest: learned routers <span class="cite">[16]</span>, confidence-aware routing <span class="cite">[21]</span>, and the contract net <span class="cite">[17]</span>, all of which award the work.</span></li>
+    <li><strong>Seat-anonymous, evidence-required critique with a designated dissenter</strong>Drafts carry a seat number, not a lab name; every challenge must point at evidence; one seat per round is assigned to attack the consensus.<span class="near">Nearest: personas and roles in multi-agent debate <span class="cite">[8]</span>, and the findings on authority bias <span class="cite">[13]</span>, debate hacking <span class="cite">[10]</span>, and persuasion <span class="cite">[20]</span> that motivate the rule.</span></li>
+    <li><strong>Release conditions instead of a round count</strong>Nothing ships until the panel agrees, the hub has no open questions, and every verifiable check passes. Deadlocks escalate to the next tier or ship with the dispute flagged to the user.<span class="near">Nearest: fixed rounds <span class="cite">[7]</span> and fixed layers <span class="cite">[9]</span>, which stop on a count.</span></li>
+    <li><strong>A persistent, version-stamped failure catalogue</strong>The hub keeps a record across users of who was challenged, corrected, and later shown wrong, stamped with the model version, and draws its patterned questions from it.<span class="near">Nearest: static evaluation harnesses, and the per-user memory in council products, which remember the user rather than the errors.</span></li>
+    <li><strong>Cross-lab tiers with weighted agreement</strong>Tiers are matched by model class across labs. Agreement between a lab's light and frontier models is discounted because the light one is usually distilled from the other, and the hub must match the top tier in play.<span class="near">Nearest: mixture-of-agents layers <span class="cite">[9]</span>, and the capability-gap results for weak judges <span class="cite">[4, 5]</span>.</span></li>
+  </ol>
+
+  <h2>The panel</h2>
+  <p><strong>Membership.</strong> The major labs' hosted models by default, always the latest live version of each. Open-weight models (Llama, Mistral, DeepSeek, Qwen and the like) are available as an add-on.</p>
+  <p><strong>Tiers.</strong> Models are grouped by class, and each tier pulls the equivalent model from every lab. The tier a user pays for decides which classes work the request. Every tier runs the same process; cheaper tiers simply run it with cheaper models.</p>
+
+  <div class="ladder">
+    <div class="rung r1">
+      <span class="name">Light</span>
+      <span class="who">Haiku-class and equivalents. Everyday use at the lowest cost.</span>
+      <span class="agree">Agreement within the tier</span>
+    </div>
+    <div class="rung r2">
+      <span class="name">Mid</span>
+      <span class="who">Sonnet-class and equivalents. Everyday use with more headroom.</span>
+      <span class="agree">Agreement within the tier</span>
+    </div>
+    <div class="rung r3">
+      <span class="name">Frontier</span>
+      <span class="who">Opus/Fable-class and equivalents. High-stakes work.</span>
+      <span class="agree">Agreement within the tier</span>
+    </div>
+    <div class="rung r4">
+      <span class="name">God tier</span>
+      <span class="who">Every class at once. For those who can pay for it.</span>
+      <span class="agree">Agreement across tiers, weighted toward the frontier</span>
+    </div>
+  </div>
+
+  <p>At the god tier, the frontier models choose the final answer by looking at where the tiers agree. That agreement is weighted rather than counted one model, one vote: a lab's light model is usually distilled from its frontier model, so the two tend to be wrong in the same places, and agreement between them adds little. The lighter tiers earn their seat a different way, as cheap coverage. They catch omissions, offer alternative readings, and give a fast first pass. When a light model disagrees with a frontier model, it is more often the light model that is wrong, and the split is still recorded.</p>
+  <p>In a perfect world every request would run at the god tier. The tiers exist because that isn't affordable for the everyday user today.</p>
+
+  <h2>The hub</h2>
+  <div class="hub">
+    <p>A dedicated model that never sits on the panel, so it has no answer of its own to defend. It does not choose a model, edit the answer, or define it. <span class="asks">It asks.</span></p>
+  </div>
+  <h3>What it asks</h3>
+  <p>What is the source. Why did seat B disagree. What happens if X. It keeps asking until nothing is left open, within a question budget, so interrogation neither loops forever nor turns into a rubber stamp.</p>
+  <h3>What it must be</h3>
+  <p>At least the class of the highest tier in play. A questioner weaker than the panel it examines gets talked past by confident wrong answers, which is what the weak-judge experiments found once the capability gap widens <span class="cite">[4, 5]</span>. Two things narrow that gap: the hub can enforce checks it doesn't need to understand (run the code, fetch the source, recompute the figure), the way a clerk enforces procedure, and the catalogue hands it patterned questions drawn from past failures.</p>
+  <h3>Where it comes from</h3>
+  <p>Every lab has a model on the panel, so the hub is either supplied by a rotating lab or trained for the role. Either way, it keeps the catalogue.</p>
+
+  <h2>How a request moves</h2>
+  <p>The same six steps run in every tier.</p>
+  <ol class="steps">
+    <li><strong>Decomposition by the panel</strong>The panel proposes a breakdown of the request into components and critiques it the same way it critiques answers. At the god tier the frontier models propose the breakdown and the lighter tiers work from it, so the request isn't debated twice. The hub does not decompose.</li>
+    <li><strong>Bidding, not assignment</strong>Each model puts up which components it is prepared to answer. Bids are equal: no central picker, no ranking by reputation. Models can hand components to each other mid-stream, and one model may claim the whole request.</li>
+    <li><strong>Mandatory critique</strong>Every draft, whole or partial, is challenged by the other models before it goes anywhere. Drafts are attributed by seat, not by name, so a challenge targets the content rather than the label on it, and every challenge has to point at evidence. Critique is what separates good bids from bad ones.</li>
+    <li><strong>Iterative molding</strong>The answer is revised across rounds, by different models, until the panel agrees it is ready to submit. Each tier has a round budget.</li>
+    <li class="hub-step"><strong>Interrogation</strong>The hub questions the submitted answer until it has nothing left to ask.</li>
+    <li><strong>Release</strong>The user receives the answer, a note on where the panel split, and the full transcript on demand.</li>
+  </ol>
+
+  <h2>Release conditions</h2>
+  <p>All three are required before an answer leaves the system.</p>
+  <ul class="checks">
+    <li><strong>The panel agrees</strong>: within the tier on single-tier plans, across tiers at the god tier.</li>
+    <li><strong>The hub has no open questions left.</strong></li>
+    <li><strong>Every verifiable check passes</strong>: code runs, sources are found, numbers recompute.</li>
+  </ul>
+  <div class="flag">
+    <p><strong>Deadlock.</strong> If the panel can't agree, or a hub question can't be answered because no source exists, within the round or time limit, lower tiers may escalate to the next tier up where the plan allows. At the god tier there is nothing above, so the best draft ships with the dispute flagged to the user.</p>
+  </div>
+
+  <h2>Guarding against shared blind spots</h2>
+  <p>Because the models trained on much the same data, unanimous agreement can be unanimous error <span class="cite">[11, 12]</span>.</p>
+  <div class="two-col">
+    <div>
+      <h3>Version 1</h3>
+      <p>Cross-tier agreement plus the verifiable checks.</p>
+    </div>
+    <div>
+      <h3>The fuller version</h3>
+      <p>A designated dissenter each round, whose only job is to attack the consensus, and a rule that no factual claim passes without a source or a check attached.</p>
+    </div>
+  </div>
+
+  <h2>The catalogue</h2>
+  <p>The hub records who bid on what, who was challenged on what, where the panel split, what was corrected, and what was later found wrong. It uses that record to spot the same class of inaccuracy sooner and to sharpen its own questions.</p>
+  <dl>
+    <dt>Two layers</dt>
+    <dd>A global record of patterns across all users, and a private per-user layer.</dd>
+    <dt>Ground truth</dt>
+    <dd>The catalogue logs an error, rather than a disagreement, only once something confirms who was right: user feedback and corrections, automated checks, and outcomes that surface later (a prediction, a figure, or a diagnosis confirmed down the line). All three feed the record.</dd>
+    <dt>Version stamps</dt>
+    <dd>Because the panel always runs the latest live version of each model, every entry is stamped with the model version it describes. A pattern that belonged to last quarter's model is evidence about this quarter's, not a verdict.</dd>
+    <dt>Retention</dt>
+    <dd>Transcripts on demand plus a per-user layer means storing a great deal. The retention policy is a day-one decision, not a later one.</dd>
+  </dl>
+
+  <h2>Where the gain lives</h2>
+  <p>Where an answer can be checked (math, code, lookups, data work), the panel should beat the best single model by a measurable margin, and the verifiable-checks rule is what makes the gain stick. On open-ended judgment, writing, and taste, the evidence points the other way: consensus flattens answers, and models tend to cave under critique even when they were right. There, the panel's honest output is the split note, not a better paragraph.</p>
+  <p>The cost is real. A panel of N models over R rounds spends tens of times the tokens of a single answer and takes minutes rather than seconds. That is acceptable at the god tier and needs a strict round budget at the light tier.</p>
+  <p>One benchmark rule applies before anything is priced: each tier is measured against a single frontier-class model, not against a single model of its own class. A panel of light-class models will not generally beat one frontier model, and a tier that can't should be priced and described accordingly.</p>
+
+  <h2>Prior work</h2>
+  <p>This design sits inside two lines of research and borrows from a third. Naming them is meant to show where the proposal starts, not to claim any of it.</p>
+  <h3>Debate as oversight</h3>
+  <p>Irving, Christiano and Amodei proposed in 2018 that two AIs argue before a judge, on the reasoning that a lie is harder to defend than to refute <span class="cite">[1]</span>. Experiments with human judges followed <span class="cite">[2]</span>, then with model judges: Khan and colleagues found that more persuasive debaters make judges more accurate <span class="cite">[3]</span>, and Kenton and colleagues put weak model judges over strong debaters across extractive QA, math and code, finding that debate beats a single consultant, that its edge over the judge answering alone is mixed once there is no information asymmetry, and that stronger debaters help only modestly <span class="cite">[4]</span>. Later work has modeled how oversight scales with the capability gap <span class="cite">[5]</span> and studied collaborative rather than adversarial resolution of disagreements <span class="cite">[6]</span>. The hub here is a descendant of the judge with one role removed: it never decides for a side and never writes an answer.</p>
+  <h3>Multi-agent debate for accuracy</h3>
+  <p>Du and colleagues showed in 2023 that several instances of a model answering, reading each other, and revising over fixed rounds improves math and factual accuracy <span class="cite">[7]</span>. Variants added personas and assigned roles <span class="cite">[8]</span>, and mixture-of-agents arranged models from different labs in layers with an aggregator writing the final answer <span class="cite">[9]</span>. Recent work goes after the failure modes: debate hacking, where debaters mislead the judge with overconfident claims and end up below single-agent baselines, answered with a non-zero-sum protocol <span class="cite">[10]</span>; homogeneous reasoning paths and deadlock <span class="cite">[11]</span>; the roles of confidence and diversity <span class="cite">[12]</span>; and authority bias in multi-agent evaluation <span class="cite">[13]</span>. The panel here is the collaborative, cross-lab branch of this line, with the aggregator removed.</p>
+  <h3>Judges, routers and aggregators</h3>
+  <p>Using a model as a judge is standard practice and has known biases, including a preference for a model's own outputs <span class="cite">[14, 15]</span>. Routers such as RouteLLM learn to send each request to one model <span class="cite">[16]</span>, and commercial gateways do the same in production. Bidding for work goes back to the contract net of 1980 <span class="cite">[17]</span>. This design uses none of them to pick a model: bidding replaces routing, critique replaces the aggregator, and a questioner replaces the judge.</p>
+  <h3>What the field has found wrong with all of this</h3>
+  <ul class="plain">
+    <li>A single model with a strong prompt matches the best discussion methods on a wide range of reasoning tasks <span class="cite">[18]</span>; debate strategies do not reliably beat self-consistency and ensembling once cost is counted <span class="cite">[19]</span>; and under equal thinking-token budgets, single agents have been reported to beat multi-agent systems on multi-hop reasoning <span class="cite">[22]</span>. This is why the pilot below is compute-matched: the panel is compared against one frontier model given the same token budget, not against one pass.</li>
+    <li>Judges get talked past <span class="cite">[4, 10]</span>, defer to authority <span class="cite">[13]</span>, and are vulnerable to persuasive but wrong reasoning <span class="cite">[20, 23]</span>. This is why critique is seat-anonymous and evidence-required, why a dissenter is designated, and why the hub enforces checks it does not need to understand.</li>
+    <li>Models trained on the same data share blind spots, so agreement is weak evidence <span class="cite">[11, 12]</span>. This is why agreement is weighted across labs and tiers rather than counted, and why nothing ships without a verifiable check where one exists.</li>
+  </ul>
+  <p>Three recent results point the same way as the design. The one lever that made debate competitive in Smit and colleagues' benchmark was tuning how readily agents agree <span class="cite">[19]</span>, which is the quantity the release gate and the designated dissenter control directly. A 2026 study of debate for data cleaning reports that self-verification with identical tools failed, and that a separate critic grounded in code execution with evidence-gated generation was the first debate configuration to significantly beat a single agent on a generative task <span class="cite">[24]</span>: a separate questioner, mechanical checks, and an evidence rule are three of this design's six elements. And heterogeneous panels, models from different labs rather than copies of one, have been reported to show honest gains and resilience under adversarial peers <span class="cite">[25]</span>, which is the case for filling every seat from a different lab.</p>
+
+  <h2 id="whats-different">What's different</h2>
+  <table class="delta">
+    <thead>
+      <tr><th>Element</th><th>Nearest prior work</th><th>What changes here</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hub that never writes</td>
+        <td>Judge in debate [1, 3, 4]; questioning judge in consultancy [2, 4]</td>
+        <td>No verdict between sides and no authored answer. Release is by exhaustion of questions within a budget, plus checks the hub enforces without needing to understand them.</td>
+      </tr>
+      <tr>
+        <td>Bidding, not assignment</td>
+        <td>Learned routers [16]; confidence-aware routing [21]; contract net [17]</td>
+        <td>No picker and no award. Models bid for components as equals and hand them off mid-stream; critique sorts good bids from bad.</td>
+      </tr>
+      <tr>
+        <td>Seat-anonymous, evidence-required critique, with a dissenter</td>
+        <td>Roles in multi-agent debate [8]; authority bias [13]; debate hacking [10]</td>
+        <td>Anonymity removes the label, the evidence rule removes bare assertion, and the dissenter makes disagreement structural rather than hoped for.</td>
+      </tr>
+      <tr>
+        <td>Release conditions</td>
+        <td>Fixed rounds [7]; fixed layers [9]</td>
+        <td>Three conjunctive gates (agreement, no open questions, checks pass), deadlock escalation across tiers, and disputes surfaced to the user rather than smoothed over.</td>
+      </tr>
+      <tr>
+        <td>Failure catalogue</td>
+        <td>Static evaluation harnesses; per-user memory in council products</td>
+        <td>Memory of who was wrong and on what, shared across users, stamped with the model version, and fed back into the hub's questions.</td>
+      </tr>
+      <tr>
+        <td>Cross-lab tiers, weighted agreement</td>
+        <td>Mixture-of-agents layers [9]; weak-judge results [4, 5]</td>
+        <td>Tiers matched by class across labs; agreement within a lab's model family discounted; the hub required to match the top tier in play.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>What this proposal does not claim</h3>
+  <ul class="plain">
+    <li>That debate, councils, or model judges are new. They are not.</li>
+    <li>That the panel beats a single model on open-ended work. The evidence says it flattens such answers, and the design's output there is the split note.</li>
+    <li>That shared blind spots are solved. They are discounted and checked, not removed.</li>
+    <li>That this is cheaper. It is slower and costs more, and the pilot counts that against it.</li>
+  </ul>
+
+  <h2>Products and systems today</h2>
+  <p>The pieces exist separately, and since early 2026 the panel itself is a shipped product. No known system combines tiers, pickerless bidding, a hub that only questions, and a cross-user error catalogue.</p>
+  <dl>
+    <dt>Multi-agent debate (research since 2023)</dt>
+    <dd>Several model instances answer, read each other's answers, and revise over a fixed number of rounds, with measurable gains on math and factual questions. <span class="short">Falls short: usually one model talking to copies of itself, no tiers, no neutral hub, no memory, and it stops on a round count rather than on agreement.</span></dd>
+    <dt>LLM councils (open source, November 2025)</dt>
+    <dd>Several models answer through one API broker, anonymously rank each other's answers, and a chairman model writes the final response. <span class="short">Falls short: the chairman authors, which this design forbids; one round; nothing is remembered.</span></dd>
+    <dt>Council products (2026)</dt>
+    <dd>Perplexity's Model Council (February 2026, opened to Pro subscribers in July) sends one prompt to between two and eight models and has a chair synthesize them, flagging where they converge or clash. Council AI runs twenty-plus models from nine labs to a moderator's verdict and keeps a per-user memory; Roundtable runs three models and a moderator. <span class="short">Falls short: in every case a synthesizer authors the answer; there is no critique-and-revise loop that ends on agreement, no release gate, and the only memory is of the user, not of who was wrong.</span></dd>
+    <dt>Mixture-of-agents</dt>
+    <dd>Layered aggregation, where each layer's models read the previous layer's outputs and an aggregator produces the answer. <span class="short">Falls short: the layers loosely resemble tiers, but aggregators author, there is no critique dialogue, and there is no memory.</span></dd>
+    <dt>Contract-net bidding (1980)</dt>
+    <dd>The ancestor of step 2: tasks are announced, agents bid. <span class="short">Falls short: a manager awards the task. Here nothing awards, and critique does the sorting.</span></dd>
+    <dt>Routers and orchestrators</dt>
+    <dd>Pick one model, or assign work from the top. <span class="short">The opposite of this design, on purpose.</span></dd>
+  </dl>
+  <p style="margin-top:18px">The catalogue has no close analog. The nearest things are evaluation harnesses (static test sets) and per-app lessons-learned memories; neither feeds a live critique loop across users.</p>
+
+  <h2>Known risks</h2>
+  <ul class="plain">
+    <li><strong>Incentives and terms of service.</strong> A catalogue that scores each lab's models against the others is a public scorecard, and some labs restrict using their outputs to evaluate or improve competitors. Expect friction, and expect the choice of who supplies the hub to matter.</li>
+    <li><strong>The question budget is a tuning problem.</strong> Too small and the hub is a rubber stamp; too large and the god tier never ships.</li>
+    <li><strong>Deference.</strong> Even with seats instead of names, models can often recognize each other's style. Anonymized critique reduces caving; it doesn't eliminate it. Kraidia and colleagues study persuasion-driven adversarial influence in multi-agent debate <span class="cite">[20]</span> and are the reference for this risk; the designated dissenter and the verifiable-checks rule are the answer to it.</li>
+    <li><strong>Moving targets.</strong> Always-latest versions mean behavior shifts without notice. The version stamps in the catalogue are the defense, and they have to be checked, not assumed.</li>
+  </ul>
+
+  <h2>Pilot design</h2>
+  <p>Everything above rests on two claims that can be tested cheaply: that the panel beats the best single model where answers can be checked, and that the hub catches what the panel misses. The pilot is built to be argued with, so the metrics are fixed before the first run.</p>
+  <dl>
+    <dt>Tasks</dt>
+    <dd>64 freshly written items across three checkable types: 24 arithmetic and word problems with a numeric answer, 20 data-table questions with a computed answer, and 20 short coding tasks with hidden unit tests. The answers are produced by the same code that writes the prompts, so the key is right by construction, and no public benchmark item is used, so contamination is not in play. Factual lookups that must cite a resolvable source are deferred until web-enabled seats are in place.</dd>
+    <dt>Conditions</dt>
+    <dd>(a) The best single frontier model, one pass. (b) The same model given the panel's token budget: k samples with a majority vote (or a self-review pick for code), then a self-critique pass, where k is set per task type from the tokens the panel actually spent. (c) The panel with the hub, at the mid tier, running the prototype's six steps prompt for prompt. (d) The panel with the hub removed, to isolate what the hub adds.</dd>
+    <dt>Metrics</dt>
+    <dd>Accuracy per condition with confidence intervals; tokens and wall-clock per item; the hub's catch rate (answers the panel agreed on, the hub sent back, and that were in fact wrong) and its false-alarm rate; and the deadlock rate.</dd>
+    <dt>What would falsify the design</dt>
+    <dd>If (c) does not beat (b) on the checkable tasks, the panel is not earning its cost. If (c) does not beat (d), the hub is decoration. Either result is reported as found.</dd>
+    <dt>Status</dt>
+    <dd>The harness, the task set, and the report generator are in the repository that accompanies this draft, tested end to end against a mock backend. Results against live models will be added in the next version, whichever way they come out.</dd>
+  </dl>
+
+  <h2>References</h2>
+  <ol class="refs">
+    <li>G. Irving, P. Christiano, D. Amodei. AI safety via debate. arXiv:1805.00899, 2018.</li>
+    <li>J. Michael, S. Mahdi, D. Rein et al. Debate helps supervise unreliable experts. arXiv:2311.08702, 2023.</li>
+    <li>A. Khan et al. Debating with more persuasive LLMs leads to more truthful answers. ICML 2024. arXiv:2402.06782.</li>
+    <li>Z. Kenton, N. Y. Siegel et al. On scalable oversight with weak LLMs judging strong LLMs. NeurIPS 2024. arXiv:2407.04622.</li>
+    <li>J. Engels, D. D. Baek, S. Kantamneni, M. Tegmark. Scaling laws for scalable oversight. arXiv:2504.18530, 2025.</li>
+    <li>Collaborative disagreement resolution for scalable oversight. ICML 2026. arXiv:2607.01251.</li>
+    <li>Y. Du, S. Li, A. Torralba, J. B. Tenenbaum, I. Mordatch. Improving factuality and reasoning in language models through multiagent debate. arXiv:2305.14325, 2023.</li>
+    <li>T. Liang et al. Encouraging divergent thinking in large language models through multi-agent debate. arXiv:2305.19118, 2023.</li>
+    <li>J. Wang et al. Mixture-of-agents enhances large language model capabilities. arXiv:2406.04692, 2024.</li>
+    <li>Towards scalable oversight with collaborative multi-agent debate in error detection. arXiv:2510.20963, 2025.</li>
+    <li>DynaDebate: breaking homogeneity in multi-agent debate with dynamic path generation. 2026.</li>
+    <li>X. Zhu, C. Zhang, Y. Chi, T. Stafford, N. Collier, A. Vlachos. Demystifying multi-agent debate: the role of confidence and diversity. Findings of ACL 2026.</li>
+    <li>Belief in authority: impact of authority in multi-agent evaluation framework. 2026.</li>
+    <li>L. Zheng et al. Judging LLM-as-a-judge with MT-Bench and Chatbot Arena. NeurIPS 2023. arXiv:2306.05685.</li>
+    <li>Do LLM evaluators prefer themselves for a reason? arXiv:2504.03846, 2025.</li>
+    <li>I. Ong et al. RouteLLM: learning to route LLMs with preference data. arXiv:2406.18665, 2024.</li>
+    <li>R. G. Smith. The contract net protocol: high-level communication and control in a distributed problem solver. IEEE Transactions on Computers, 1980.</li>
+    <li>Q. Wang, Z. Wang, Y. Su, H. Tong, Y. Song. Rethinking the bounds of LLM reasoning: are multi-agent discussions the key? ACL 2024. arXiv:2402.18272.</li>
+    <li>A. P. Smit, N. Grinsztajn, P. Duckworth, T. D. Barrett, A. Pretorius. Should we be going MAD? A look at multi-agent debate strategies for LLMs. ICML 2024. arXiv:2311.17371.</li>
+    <li>I. Kraidia, I. Qaddara, A. Almutairi, N. Alzaben, S. B. Belhouari. When collaboration fails: persuasion driven adversarial influence in multi agent large language model debate. Scientific Reports, 2026.</li>
+    <li>Orchestrating intelligence: confidence-aware routing for multi-agent collaboration. 2026.</li>
+    <li>Single-agent LLMs outperform multi-agent systems on multi-hop reasoning under equal thinking token budgets. arXiv:2604.02460, 2026.</li>
+    <li>Talk isn't always cheap: understanding failure modes in multi-agent debate. arXiv:2509.05396, 2025.</li>
+    <li>When helping hurts and how to fix it: multi-agent debate for data cleaning. arXiv:2606.02866, 2026.</li>
+    <li>Heterogeneous LLM debate under adversarial peers: honest gains, replacement costs, and resilience. arXiv:2606.19826, 2026.</li>
+  </ol>
+  <p class="refnote">Entries without an author list or identifier are cited by title and year; the working draft will fill them in before any formal submission.</p>
+
+  <footer>
+    <p>Working draft v1.1, September 2026. Drafted with Claude (Anthropic). Text licensed CC BY 4.0; the accompanying prototype is MIT licensed.</p>
+    <p>Cite as: George W. Lott. A Tiered Peer-Critique Architecture for AI Answers. Working draft v1.1, Zenodo, 2026. https://doi.org/10.5281/zenodo.22325883</p>
+  </footer>
+
+</div>
+</body>
+</html>

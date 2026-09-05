@@ -1,0 +1,24 @@
+{
+  "_notes": [
+    "Copy to config.json and replace every REPLACE-ME with an exact OpenRouter model id (python run_pilot.py --suggest-models).",
+    "seats: one mid-class model per lab for the mid tier. hub: a frontier-class model (the paper requires the hub to match the top tier in play).",
+    "baseline: the best single frontier model, used for conditions a and b. Using the same model as the hub is fine and makes c-vs-a a test of the process, not of a stronger model.",
+    "Pinned ids are recorded in results/run_meta.json as the version stamps for the catalogue."
+  ],
+  "tier": "mid",
+  "seats": [
+    {"model": "REPLACE-ME/anthropic-mid-class", "label": "Anthropic mid", "class": "mid"},
+    {"model": "REPLACE-ME/openai-mid-class", "label": "OpenAI mid", "class": "mid"},
+    {"model": "REPLACE-ME/google-mid-class", "label": "Google mid", "class": "mid"},
+    {"model": "REPLACE-ME/fourth-lab-mid-class", "label": "Fourth lab mid", "class": "mid"}
+  ],
+  "hub": "REPLACE-ME/frontier-class-hub",
+  "baseline": "REPLACE-ME/frontier-class-baseline",
+  "rounds": 3,
+  "hub_budget": 6,
+  "dissenter": true,
+  "baseline_temperature": 0.3,
+  "sample_temperature": 0.7,
+  "default_k": 5,
+  "task_workers": 2
+}
