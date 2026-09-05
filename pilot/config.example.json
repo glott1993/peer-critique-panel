@@ -3,7 +3,8 @@
     "Copy to config.json and replace every REPLACE-ME with an exact OpenRouter model id (python run_pilot.py --suggest-models).",
     "seats: one mid-class model per lab for the mid tier. hub: a frontier-class model (the paper requires the hub to match the top tier in play).",
     "baseline: the best single frontier model, used for conditions a and b. Using the same model as the hub is fine and makes c-vs-a a test of the process, not of a stronger model.",
-    "Pinned ids are recorded in results/run_meta.json as the version stamps for the catalogue."
+    "Pinned ids are recorded in results/run_meta.json as the version stamps for the catalogue.",
+    "answer_tokens caps calls that write an answer (a ceiling, not a spend); max_k caps condition b's samples per task."
   ],
   "tier": "mid",
   "seats": [
@@ -20,5 +21,7 @@
   "baseline_temperature": 0.3,
   "sample_temperature": 0.7,
   "default_k": 5,
+  "max_k": 12,
+  "answer_tokens": 6000,
   "task_workers": 2
 }

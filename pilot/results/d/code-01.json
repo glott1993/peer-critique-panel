@@ -1,0 +1,112 @@
+{
+ "task_id": "code-01",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 199.0,
+ "tokens": 73129,
+ "prompt_tokens": 37934,
+ "completion_tokens": 35195,
+ "cost": 0.19093,
+ "calls": 30,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Implement and validate parse_duration",
+     "what": "Write parse_duration(s: str) -> int using a strict regex (e.g. re.fullmatch on tokens like r'(\\d+)([hms])' with optional whitespace between, anchored to consume the whole trimmed string) to extract parts. Reject: empty or whitespace-only input, any leftover unmatched characters, decimal numbers, a n"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\nimport re\n\n\ndef parse_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    if not re.fullmatch(r\"\\s*(?:[0-9]+[hms]\\s*)+\", s):\n        raise ValueError(\"malformed duration\")\n\n    parts = re.findall(r\"([0-9]+)([hms])\", s)\n    seen = set()\n    multipliers = {\"h\": 3600, \"m\": 60, \"s\": 1}\n    total = 0\n\n    for number, unit in parts:\n        if unit in seen:\n            raise ValueError(\"repeated unit\")\n        seen.add(unit)\n        total += int(number) * multipliers[unit]\n\n    return total\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "```python\nimport re\n\n\ndef parse_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    if not re.fullmatch(r\"\\s*(?:[0-9]+[hms]\\s*)+\", s):\n        raise ValueError(\"malformed duration\")\n\n    parts = re.findall(r\"([0-9]+)([hms])\", s)\n    seen = set()\n    multipliers = {\"h\": 3600, \"m\": 60, \"s\": 1}\n    total = 0\n\n    for number, unit in parts:\n        if unit in seen:\n            raise ValueError(\"repeated unit\")\n        seen.add(unit)\n        total += int(number) * multipliers[unit]\n\n    return total\n```"
+}

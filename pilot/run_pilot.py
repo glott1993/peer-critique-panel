@@ -80,7 +80,7 @@ def majority(values):
 
 # ------------------------------------------------------------ conditions ----
 def run_a(task, cfg, api, ctx):
-    text = api.chat(cfg["baseline"], P.baseline_system, task["prompt"], cfg.get("baseline_temperature", 0.3), ctx=dict(ctx, step="single-pass"))
+    text = api.chat(cfg["baseline"], P.baseline_system, task["prompt"], cfg.get("baseline_temperature", 0.3), max_tokens=panel.ANSWER_TOKENS, ctx=dict(ctx, step="single-pass"))
     return {"answer": text}
 
 
@@ -88,13 +88,13 @@ def run_b(task, cfg, api, ctx, k):
     """Compute-matched single model: k samples, then majority vote (numbers,
     strings) or a self-review pick (code), then one self-critique pass."""
     model = cfg["baseline"]
-    samples = panel.pool([(lambda: api.chat(model, P.baseline_system, task["prompt"], cfg.get("sample_temperature", 0.7), ctx=dict(ctx, step="sample"))) for _ in range(k)], 4)
+    samples = panel.pool([(lambda: api.chat(model, P.baseline_system, task["prompt"], cfg.get("sample_temperature", 0.7), max_tokens=panel.ANSWER_TOKENS, ctx=dict(ctx, step="sample"))) for _ in range(k)], 4)
     if task["answer_type"] == "code":
         cands = "\n\n".join(f"Candidate {i + 1}:\n{s}" for i, s in enumerate(samples))
         review = (f"Request:\n{task['prompt']}\n\nYou wrote these candidate answers earlier:\n{cands}\n\n"
                   "Pick the best candidate, checking each against the visible examples by hand, and fix any bug you find. "
                   "Reply with the final complete function in one ```python code block.")
-        winner = api.chat(model, P.baseline_system, review, 0.3, ctx=dict(ctx, step="self-review"))
+        winner = api.chat(model, P.baseline_system, review, 0.3, max_tokens=panel.ANSWER_TOKENS, ctx=dict(ctx, step="self-review"))
         key = None
     else:
         keys = [checkers.norm_string(checkers.extract_final(s)) for s in samples]
@@ -105,7 +105,7 @@ def run_b(task, cfg, api, ctx, k):
     critique = (f"Request:\n{task['prompt']}\n\nYour answer:\n{winner}\n\n"
                 "Check this answer for errors step by step: recompute every figure, re-read the question for anything missed, and test code against the visible examples by hand. "
                 "Then give the final answer in the format the request asks for (a FINAL: line, or one ```python block).")
-    final = api.chat(model, P.baseline_system, critique, 0.3, ctx=dict(ctx, step="self-critique"))
+    final = api.chat(model, P.baseline_system, critique, 0.3, max_tokens=panel.ANSWER_TOKENS, ctx=dict(ctx, step="self-critique"))
     return {"answer": final, "k": k, "majority_key": key, "samples": samples}
 
 
@@ -169,6 +169,7 @@ def main():
             suggest_models(api)
             return
 
+    panel.ANSWER_TOKENS = int(cfg.get("answer_tokens", panel.ANSWER_TOKENS))
     limit = 1 if a.dry_run else a.limit
     if limit:
         chosen, seen = [], {}
@@ -197,7 +198,7 @@ def main():
                 ta = [r["tokens"] for r in res_a.values() if r["type"] == ttype and r.get("tokens")]
                 tc = [r["tokens"] for r in res_c.values() if r["type"] == ttype and r.get("tokens")]
                 if ta and tc:
-                    k_by_type[ttype] = max(3, min(12, round(statistics.median(tc) / max(1, statistics.median(ta)))))
+                    k_by_type[ttype] = max(3, min(int(cfg.get("max_k", 12)), round(statistics.median(tc) / max(1, statistics.median(ta)))))
                 else:
                     k_by_type[ttype] = int(cfg.get("default_k", 5))
             print("   compute-matched k per type:", k_by_type)

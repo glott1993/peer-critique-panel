@@ -1,0 +1,80 @@
+{
+ "task_id": "data-01",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 8635.06, expected 8635.06",
+ "error": null,
+ "seconds": 59.9,
+ "tokens": 48827,
+ "prompt_tokens": 38028,
+ "completion_tokens": 10799,
+ "cost": 0.05783,
+ "calls": 16,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "North revenue total",
+     "what": "Include North orders that are shipped or pending, excluding cancelled: ORD-1838 8x17.29=138.32 (shipped), ORD-1322 34x112.02=3808.68 (shipped), ORD-1241 12x65.20=782.40 (pending), ORD-1803 16x81.56=1304.96 (pending), ORD-1407 22x71.04=1562.88 (shipped), ORD-1877 25x21.78=544.50 (shipped), ORD-1469 6"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "North rows from the CSV with status shipped or pending:\n\n- ORD-1838: 8 \u00d7 17.29 = 138.32\n- ORD-1322: 34 \u00d7 112.02 = 3808.68\n- ORD-1241: 12 \u00d7 65.20 = 782.40\n- ORD-1803: 16 \u00d7 81.56 = 1304.96\n- ORD-1407: 22 \u00d7 71.04 = 1562.88\n- ORD-1877: 25 \u00d7 21.78 = 544.50\n- ORD-1469: 6 \u00d7 82.22 = 493.32\n\nCancelled North order excluded:\n- ORD-1460: 11 \u00d7 45.64 = 502.04, status cancelled\n\nSum:\n138.32 + 3808.68 + 782.40 + 1304.96 + 1562.88 + 544.50 + 493.32 = 8635.06\n\nFINAL: 8635.06"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "North rows from the CSV with status shipped or pending:\n\n- ORD-1838: 8 \u00d7 17.29 = 138.32\n- ORD-1322: 34 \u00d7 112.02 = 3808.68\n- ORD-1241: 12 \u00d7 65.20 = 782.40\n- ORD-1803: 16 \u00d7 81.56 = 1304.96\n- ORD-1407: 22 \u00d7 71.04 = 1562.88\n- ORD-1877: 25 \u00d7 21.78 = 544.50\n- ORD-1469: 6 \u00d7 82.22 = 493.32\n\nCancelled North order excluded:\n- ORD-1460: 11 \u00d7 45.64 = 502.04, status cancelled\n\nSum:\n138.32 + 3808.68 + 782.40 + 1304.96 + 1562.88 + 544.50 + 493.32 = 8635.06\n\nFINAL: 8635.06"
+}

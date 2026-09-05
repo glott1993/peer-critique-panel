@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 import checkers
 
 LETTERS = "ABCDEFGHIJKL"
+ANSWER_TOKENS = 6000  # cap for calls that write or rewrite an answer; JSON-only steps keep 1500
 
 
 @dataclass
@@ -210,11 +211,11 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     for s in seats:
         touch(s)["runs"] += 1
 
-    def ask(s, user, temp, step):
-        return api.chat(s.model, seat_system(s, N), user, temp, ctx=dict(ctx, step=step))
+    def ask(s, user, temp, step, max_tokens=1500):
+        return api.chat(s.model, seat_system(s, N), user, temp, max_tokens=max_tokens, ctx=dict(ctx, step=step))
 
-    def ask_json(s, user, fb, temp, step):
-        return parse_json(ask(s, user, temp, step), fb)
+    def ask_json(s, user, fb, temp, step, max_tokens=1500):
+        return parse_json(ask(s, user, temp, step, max_tokens), fb)
 
     def pick(lst):
         return rng.choice(lst) if lst else None
@@ -249,7 +250,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     jobs = []
     for c in comps:
         for s in bidders[c["id"]]:
-            jobs.append(lambda c=c, s=s: {"c": c, "s": s, "text": ask(s, P.draft(req, c), 0.8, "draft")})
+            jobs.append(lambda c=c, s=s: {"c": c, "s": s, "text": ask(s, P.draft(req, c), 0.8, "draft", ANSWER_TOKENS)})
     drafts = pool(jobs)
     per = {}
     for d in drafts:
@@ -274,7 +275,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     if len(comps) == 1:
         answer = chosen[comps[0]["id"]]["text"]
     else:
-        answer = ask(assembler, P.assemble(req, [{"c": c, "text": chosen[c["id"]]["text"]} for c in comps]), 0.5, "assemble")
+        answer = ask(assembler, P.assemble(req, [{"c": c, "text": chosen[c["id"]]["text"]} for c in comps]), 0.5, "assemble", ANSWER_TOKENS)
     author = chosen[comps[0]["id"]]["s"] if len(comps) == 1 else assembler
     log.append({"step": 3, "author": author.letter, "draft": answer})
 
@@ -300,7 +301,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
         rounds_used = rnd
         if challenges:
             reviser = pick([s for s in seats if s is not author]) or author
-            r = ask_json(reviser, P.revise(req, answer, challenges), {"answer": answer, "accepted": [], "rejected": []}, 0.5, "revise")
+            r = ask_json(reviser, P.revise(req, answer, challenges), {"answer": answer, "accepted": [], "rejected": []}, 0.5, "revise", ANSWER_TOKENS)
             if isinstance(r.get("answer"), str) and len(r["answer"].strip()) > 20:
                 answer = r["answer"].strip()
             acc = [int(n) for n in (r.get("accepted") or []) if str(n).isdigit() and 1 <= int(n) <= len(challenges)]
@@ -367,7 +368,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
             remaining -= len(batch)
             qa.extend(batch)
             failing = [f"{c['expr']} = {c['value']}, but the answer claims {c['claimed']}" if c["kind"] == "arithmetic" else f"running the visible examples failed: {c['value']}" for c in checks if c["valid"] and not c["ok"] and not c["addressed"]]
-            pr = ask_json(author, P.panel_reply(req, answer, batch, failing), {"replies": [], "correctedAnswer": None}, 0.4, "panel-reply")
+            pr = ask_json(author, P.panel_reply(req, answer, batch, failing), {"replies": [], "correctedAnswer": None}, 0.4, "panel-reply", ANSWER_TOKENS)
             replies = pr.get("replies") if isinstance(pr.get("replies"), list) else []
             for i, b in enumerate(batch):
                 r = next((x for x in replies if isinstance(x, dict) and str(x.get("n")) == str(b["n"])), replies[i] if i < len(replies) and isinstance(replies[i], dict) else None)

@@ -20,12 +20,12 @@ class Accounting:
         self.lock = threading.Lock()
         self.totals = {}
 
-    def record(self, ctx, model, usage, cost, latency, ok, error=None):
+    def record(self, ctx, model, usage, cost, latency, ok, error=None, finish=None):
         ctx = ctx or {}
         key = (ctx.get("task"), ctx.get("condition"))
         entry = {"ts": time.time(), "task": ctx.get("task"), "condition": ctx.get("condition"), "step": ctx.get("step"),
                  "model": model, "prompt_tokens": usage.get("prompt_tokens", 0), "completion_tokens": usage.get("completion_tokens", 0),
-                 "cost": cost, "latency": round(latency, 3), "ok": ok, "error": error}
+                 "cost": cost, "latency": round(latency, 3), "ok": ok, "error": error, "finish": finish}
         with self.lock:
             t = self.totals.setdefault(key, {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0, "cost": 0.0, "errors": 0})
             t["calls"] += 1
@@ -87,7 +87,7 @@ class OpenRouterBackend:
                 cost = usage.get("cost")
                 if cost is None:
                     cost = 0.0
-                self.acc.record(ctx, model, usage, float(cost), time.time() - t0, True)
+                self.acc.record(ctx, model, usage, float(cost), time.time() - t0, True, finish=choice.get("finish_reason"))
                 return text
             except ValueError:
                 raise

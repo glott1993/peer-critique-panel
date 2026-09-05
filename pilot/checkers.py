@@ -10,6 +10,7 @@ separate, resource-limited interpreter with a timeout.
 import ast, json, operator, os, re, subprocess, sys, tempfile
 
 FINAL_RE = re.compile(r"^\s*\**\s*FINAL\s*:\s*\**\s*(.+?)\s*\**\s*$", re.I | re.M)
+FINAL_ALT_RE = re.compile(r"^\s*\**\s*final\s+answer\s*\**\s*[:=]\s*\**\s*(.+?)\s*\**\s*$", re.I | re.M)
 NUM_RE = re.compile(r"[-+]?\d[\d,]*(?:\.\d+)?(?:[eE][-+]?\d+)?|[-+]?\.\d+")
 CODE_BLOCK_RE = re.compile(r"```(?:python|py)?\s*\n(.*?)```", re.S)
 
@@ -18,7 +19,7 @@ def extract_final(text):
     """Return the value after the last FINAL: line, or None."""
     if not text:
         return None
-    hits = FINAL_RE.findall(text)
+    hits = FINAL_RE.findall(text) or FINAL_ALT_RE.findall(text)
     return hits[-1].strip() if hits else None
 
 
@@ -67,15 +68,45 @@ def check_string(task, text):
     return got == exp, f"got {got!r}, expected {exp!r}"
 
 
+def _compiles(src):
+    try:
+        compile(src, "<candidate>", "exec")
+        return True
+    except Exception:
+        return False
+
+
+ANY_BLOCK_RE = re.compile(r"```[A-Za-z0-9_+.-]*[ \t]*\n(.*?)```", re.S)
+
+
 def extract_code(text):
+    """Pull the candidate function out of a reply.
+
+    Prefers the last fenced block that compiles and defines a function; falls
+    back to any fenced block; with no fences, takes the text from the first
+    code-looking line and trims trailing prose until it compiles.
+    """
     if not text:
         return None
-    blocks = CODE_BLOCK_RE.findall(text)
+    blocks = ANY_BLOCK_RE.findall(text)
+    with_def = [b for b in blocks if "def " in b]
+    for b in reversed(with_def):
+        if _compiles(b):
+            return b
+    if with_def:
+        return with_def[-1]
     if blocks:
         return blocks[-1]
-    if "def " in text:  # bare code without fences
-        return text
-    return None
+    lines = text.splitlines()
+    start = next((i for i, l in enumerate(lines) if re.match(r"\s*(def |import |from |class |@)", l)), None)
+    if start is None:
+        return None
+    body = lines[start:]
+    for end in range(len(body), 0, -1):
+        cand = "\n".join(body[:end])
+        if "def " in cand and _compiles(cand):
+            return cand
+    return "\n".join(body)
 
 
 def run_code(code, tests, prelude, timeout=10):

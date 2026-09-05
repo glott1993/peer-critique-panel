@@ -1,0 +1,151 @@
+{
+ "task_id": "data-01",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 8635.06, expected 8635.06",
+ "error": null,
+ "seconds": 133.9,
+ "tokens": 60979,
+ "prompt_tokens": 44743,
+ "completion_tokens": 16236,
+ "cost": 0.12484,
+ "calls": 21,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": false,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 3,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "8*17.29",
+   "claimed": 138.32,
+   "value": 138.32,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "34*112.02",
+   "claimed": 3808.68,
+   "value": 3808.68,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "22*71.04",
+   "claimed": 1562.88,
+   "value": 1562.88,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "6*82.22",
+   "claimed": 493.32,
+   "value": 493.32,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Sum eligible North orders",
+     "what": "Include all North orders except the cancelled one (ORD-1460): 138.32 + 3808.68 + 782.40 + 1304.96 + 1562.88 + 544.50 + 493.32 = 8635.06; FINAL: 8635.06"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Eligible North orders are all rows with region `North` except cancelled `ORD-1460`.\n\nRevenues:\n- ORD-1838: 8 \u00d7 17.29 = 138.32\n- ORD-1322: 34 \u00d7 112.02 = 3808.68\n- ORD-1241: 12 \u00d7 65.20 = 782.40\n- ORD-1803: 16 \u00d7 81.56 = 1304.96\n- ORD-1407: 22 \u00d7 71.04 = 1562.88\n- ORD-1877: 25 \u00d7 21.78 = 544.50\n- ORD-1469: 6 \u00d7 82.22 = 493.32\n\nSum: 138.32 + 3808.68 + 782.40 + 1304.96 + 1562.88 + 544.50 + 493.32 = 8635.06\n\nFINAL: 8635.06"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Confirm the row inventory: how many rows in the CSV have region North, and does your list of 7 eligible orders plus cancelled ORD-1460 account for every one of them (list the order_ids you found)?",
+    "Does 'excluding cancelled orders' in your reading exclude only status=cancelled, and were 'pending' orders (ORD-1241, ORD-1803) deliberately included rather than treated as not-yet-revenue? State the rule you applied.",
+    "Was any rounding applied to individual line revenues before summing, or is 8635.06 an exact sum of exact products?"
+   ],
+   "replies": [
+    "No reply.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [
+    "No reply received; the row inventory for region North (count and explicit order_id list) is still unverified against the CSV.",
+    "No reply received; the inclusion rule for 'pending' status is still unstated, so it is unclear whether only status=cancelled was excluded.",
+    "No reply received; it is unconfirmed whether line revenues were exact products summed exactly, or rounded before summing."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please answer question 1 with evidence: quote each CSV row whose region field is North, give the count, and confirm whether any row was missed or misread (e.g. a non-North row wrongly included).",
+    "Please answer question 2: state explicitly the filter you applied on the status column, and whether pending orders were counted as revenue; if so, on what basis?",
+    "Please answer question 3: show the running subtotals of your seven line revenues in order, and confirm each product was computed exactly (no intermediate rounding) so the final cent value is exact."
+   ],
+   "replies": [
+    "No reply.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [
+    "No reply received; the North row inventory was never confirmed with quoted rows or a count, so it remains unverified whether all 8 North rows were captured and no non-North row was included.",
+    "No reply received; the status filter actually applied was never stated, so the inclusion of pending orders ORD-1241 and ORD-1803 rests on an unstated reading of 'excluding cancelled orders'.",
+    "No reply received; no running subtotals or confirmation of exact (unrounded) products was given, so the exactness of the final cent value is unverified."
+   ],
+   "corrected": false
+  }
+ ],
+ "answer": "Eligible North orders are all rows with region `North` except cancelled `ORD-1460`.\n\nRevenues:\n- ORD-1838: 8 \u00d7 17.29 = 138.32\n- ORD-1322: 34 \u00d7 112.02 = 3808.68\n- ORD-1241: 12 \u00d7 65.20 = 782.40\n- ORD-1803: 16 \u00d7 81.56 = 1304.96\n- ORD-1407: 22 \u00d7 71.04 = 1562.88\n- ORD-1877: 25 \u00d7 21.78 = 544.50\n- ORD-1469: 6 \u00d7 82.22 = 493.32\n\nSum: 138.32 + 3808.68 + 782.40 + 1304.96 + 1562.88 + 544.50 + 493.32 = 8635.06\n\nFINAL: 8635.06"
+}

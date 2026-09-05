@@ -28,6 +28,8 @@ Scoring: a stored integer must match exactly; a stored decimal must match to wit
 6. `python run_pilot.py` runs everything. It is resumable: results are written per task, so if it stops, run it again and it continues. Order is a, c, d, b (b is sized from c).
 7. `python report.py` writes `results/report.md` and `results/summary.json`.
 
+Two tunables in `config.json`: `answer_tokens` (cap on calls that write an answer; 6000 by default) and `max_k` (cap on condition b's samples; 12 by default). Lowering `max_k` under-budgets b relative to c and should be reported if used.
+
 `python run_pilot.py --mock --limit 3` runs the whole harness offline with a fake backend, which is how it was tested; the numbers it prints mean nothing.
 
 ## Cost
