@@ -69,10 +69,12 @@ Pilot 1 hit a ceiling: every answered item was right in every condition. Pilot 2
 - **Conditions:** a (one pass, 0.3), a2 (one pass, 0.7), a3 (one pass, a frontier model from a second lab; set `baseline_alt`), b (token-matched: k samples + self-critique), bd (dollar-matched: k chosen from cost rather than tokens; shares its draws with b so the pair costs little more than b alone), c (panel with hub), d (panel without hub).
 - **New measures:** accuracy of the panel's first draft before any critique, so critique's contribution is separated from the hub's; token- and dollar-matched baselines side by side; no-answer items separate from wrong answers, with the serving provider logged per call.
 
+Calibration on September 5, 2026 put the level 2 set at 96% for a one-pass frontier model (logic 100%, math 98%), so level 3 is the one to run: 40 math (longer simulations, four-factor products, four-divisor counts, 60 to 90 business days with six holidays), 40 composite tasks of three independent parts each where only a fully correct answer counts, 50 data questions over 80-row tables with duplicate rows to be counted once, 30 code, 40 five-house puzzles.
+
 ### Runbook (from `pilot/`, results go to `results2/`)
 
 ```
-python make_tasks2.py
+python make_tasks2.py --level 3
 python -c "import json; c=json.load(open('config.json')); c.update({'baseline_alt': 'REPLACE-WITH-SECOND-LAB-FRONTIER-ID', 'max_k_dollars': 16, 'sample_workers': 3}); json.dump(c, open('config.json', 'w'), indent=2)"
 
 # Stage 1, calibration (about $6): the single model alone, all 200 tasks

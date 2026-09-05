@@ -141,9 +141,31 @@ def run_code(code, tests, prelude, timeout=10):
     return False, (err[-1] if err else f"exit {r.returncode}")[:300]
 
 
+def check_multi(task, text):
+    raw = extract_final(text)
+    if raw is None:
+        return False, "no FINAL line"
+    parts = [x.strip() for x in raw.split(";")]
+    if len(parts) != len(task["expected"]) and raw.count(",") == len(task["expected"]) - 1:
+        parts = [x.strip() for x in raw.split(",")]
+    if len(parts) != len(task["expected"]):
+        return False, f"expected {len(task['expected'])} parts, got {len(parts)}"
+    details = []
+    ok_all = True
+    for part, exp in zip(parts, task["expected"]):
+        sub = {"expected": exp["expected"], "precision": exp.get("precision", 0)}
+        line = "FINAL: " + part
+        ok, det = check_number(sub, line) if exp["answer_type"] == "number" else check_string(sub, line)
+        ok_all = ok_all and ok
+        details.append(("ok" if ok else "no") + ": " + det)
+    return ok_all, " | ".join(details)
+
+
 def score(task, text, prelude=""):
     """Score an answer text against the task. Hidden tests for code."""
     t = task["answer_type"]
+    if t == "multi":
+        return check_multi(task, text)
     if t == "number":
         return check_number(task, text)
     if t == "string":

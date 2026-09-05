@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-11",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 12.2,
+ "tokens": 1514,
+ "prompt_tokens": 443,
+ "completion_tokens": 1071,
+ "cost": 0.02899,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom datetime import date, datetime\n\n\ndef _parse(s):\n    \"\"\"Parse an ISO date or datetime string into a datetime.\"\"\"\n    try:\n        return datetime.fromisoformat(s)\n    except ValueError:\n        return datetime.combine(date.fromisoformat(s[:10]), datetime.min.time())\n\n\ndef reconcile(bank, ledger, window=2):\n    bank = list(bank)\n    ledger = list(ledger)\n\n    bank_parsed = [(bid, _parse(d), amt) for (bid, d, amt) in bank]\n    ledger_parsed = [(lid, _parse(d), amt) for (lid, d, amt) in ledger]\n\n    # Ledger candidates ordered by date then id, remembering original position.\n    ledger_order = sorted(\n        range(len(ledger_parsed)),\n        key=lambda i: (ledger_parsed[i][1], ledger_parsed[i][0]),\n    )\n\n    used_ledger = set()\n    used_bank = set()\n    matches = []\n\n    limit = window * 86400.0\n\n    # Bank items processed in order of date then id.\n    for bi in sorted(range(len(bank_parsed)),\n                     key=lambda i: (bank_parsed[i][1], bank_parsed[i][0])):\n        bid, bdate, bamt = bank_parsed[bi]\n        for li in ledger_order:\n            if li in used_ledger:\n                continue\n            lid, ldate, lamt = ledger_parsed[li]\n            if abs(bamt - lamt) > 1e-9:\n                continue\n            if abs((bdate - ldate).total_seconds()) > limit:\n                continue\n            used_ledger.add(li)\n            used_bank.add(bi)\n            matches.append((bid, lid))\n            break\n\n    unmatched_bank = [bank[i][0] for i in range(len(bank)) if i not in used_bank]\n    unmatched_ledger = [ledger[i][0] for i in range(len(ledger)) if i not in used_ledger]\n\n    return matches, unmatched_bank, unmatched_ledger\n```\n\nBank items are visited in (date, id) order; for each, the earliest-dated still-free ledger item with an equal amount and a date within `window` days is taken. The unmatched lists preserve the original input ordering."
+}

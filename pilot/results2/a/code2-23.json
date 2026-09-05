@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 12.9,
+ "tokens": 1442,
+ "prompt_tokens": 344,
+ "completion_tokens": 1098,
+ "cost": 0.02917,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\n_ISO_DURATION_RE = re.compile(\n    r\"P(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?\"\n)\n\n\ndef parse_iso_duration(s: str) -> int:\n    \"\"\"Convert an ISO 8601 duration string to a whole number of seconds.\n\n    Uses 1 year = 365 days, 1 month = 30 days, 1 day = 86400 seconds.\n    Raises ValueError for anything that is not a well-formed, non-negative,\n    integer-valued duration with at least one component.\n    \"\"\"\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    m = _ISO_DURATION_RE.fullmatch(s)\n    if m is None:\n        raise ValueError(f\"invalid ISO 8601 duration: {s!r}\")\n\n    years, months, days, hours, minutes, seconds = m.groups()\n\n    # At least one component overall must be present ('P' and 'PT' are invalid).\n    if all(g is None for g in m.groups()):\n        raise ValueError(f\"invalid ISO 8601 duration: {s!r}\")\n\n    # 'T' may appear only if at least one time component follows.\n    if \"T\" in s and hours is None and minutes is None and seconds is None:\n        raise ValueError(f\"invalid ISO 8601 duration: {s!r}\")\n\n    def val(g):\n        return int(g) if g is not None else 0\n\n    total_days = val(years) * 365 + val(months) * 30 + val(days)\n    return (\n        total_days * 86400\n        + val(hours) * 3600\n        + val(minutes) * 60\n        + val(seconds)\n    )\n\n\nassert parse_iso_duration('PT1H30M') == 5400\nassert parse_iso_duration('P1D') == 86400\n```\n\nThe regex enforces the required designator order and integer, non-negative values; the two extra checks reject `'P'`/`'PT'` and a dangling `'T'`. Since `fullmatch` is used, lowercase input, decimals, whitespace, and a missing leading `'P'` all fail."
+}

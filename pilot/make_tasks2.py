@@ -33,8 +33,8 @@ def gen_math(rng, n_target, level):
         return f"math2-{k:02d}"
 
     def fifo():
-        lots = [(rng.randint(40, 160), round(rng.uniform(3.5, 14.0), 2)) for _ in range(2 + level)]
-        sales = [rng.randint(30, 120) for _ in range(1 + level)]
+        lots = [(rng.randint(40, 160), round(rng.uniform(3.5, 14.0), 2)) for _ in range(2 + level + (3 if level >= 3 else 0))]
+        sales = [rng.randint(30, 120) for _ in range(1 + level + (2 if level >= 3 else 0))]
         total_units = sum(q for q, _ in lots)
         while sum(sales) >= total_units - 20:
             sales = [max(20, s - 15) for s in sales]
@@ -68,16 +68,19 @@ def gen_math(rng, n_target, level):
         L = rng.choice([12000, 18500, 24000, 31200]); apr = rng.choice([5.4, 6.0, 6.9, 7.8]); years = rng.choice([3, 4, 5])
         i = apr / 1200; n = years * 12
         M = L * i / (1 - (1 + i) ** (-n))
-        months = 4 + 2 * level
-        extra_month = rng.randint(2, months - 1); extra = rng.choice([500, 750, 1000])
+        months = 4 + 2 * level + (8 if level >= 3 else 0)
+        extras = {rng.randint(2, months - 1): rng.choice([500, 750, 1000])}
+        if level >= 3:
+            extras[rng.randint(2, months - 1)] = rng.choice([300, 600])
         bal = L
         for m in range(1, months + 1):
             interest = bal * i
-            bal = bal - (M - interest) - (extra if m == extra_month else 0)
-        return num_task(nid(), f"A ${L:,} loan at {apr}% APR is repaid with the standard monthly payment for a {years}-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). In month {extra_month} the borrower pays an extra ${extra} of principal on top of the regular payment. What is the remaining balance immediately after the payment in month {months}? Give the amount in dollars to the nearest cent.", round(bal, 2), 2, ["loan", "simulation"])
+            bal = bal - (M - interest) - extras.get(m, 0)
+        ex_text = " and ".join(f"in month {m} an extra ${e} of principal" for m, e in sorted(extras.items()))
+        return num_task(nid(), f"A ${L:,} loan at {apr}% APR is repaid with the standard monthly payment for a {years}-year amortization (interest accrues monthly at one twelfth of the APR; round nothing until the end). On top of the regular payment the borrower pays {ex_text}. What is the remaining balance immediately after the payment in month {months}? Give the amount in dollars to the nearest cent.", round(bal, 2), 2, ["loan", "simulation"])
 
     def bank_sim():
-        months = 3 + 2 * level
+        months = 3 + 2 * level + (6 if level >= 3 else 0)
         bal = rng.choice([1200.0, 2500.0, 4300.0]); rate = rng.choice([0.25, 0.4, 0.5]); fee = rng.choice([8, 12, 15]); thresh = rng.choice([1000, 1500, 2000])
         moves = [rng.choice([-900, -650, -400, -250, 300, 450, 700, 1100]) for _ in range(months)]
         b = bal
@@ -100,6 +103,10 @@ def gen_math(rng, n_target, level):
 
     def incl_excl():
         N = rng.choice([5000, 8000, 12000, 20000]); a, b, c = rng.choice([(3, 5, 7), (4, 6, 9), (5, 7, 11), (6, 10, 15)])
+        if level >= 3:
+            d = rng.choice([13, 17, 19])
+            cnt = sum(1 for x in range(1, N + 1) if (x % a == 0 or x % b == 0 or x % c == 0) and x % d != 0)
+            return num_task(nid(), f"How many integers from 1 to {N:,} inclusive are divisible by at least one of {a}, {b}, or {c}, but not divisible by {d}?", cnt, 0, ["counting", "exact"])
         cnt = sum(1 for x in range(1, N + 1) if x % a == 0 or x % b == 0 or x % c == 0)
         return num_task(nid(), f"How many integers from 1 to {N:,} inclusive are divisible by {a}, {b}, or {c}?", cnt, 0, ["counting", "exact"])
 
@@ -118,12 +125,15 @@ def gen_math(rng, n_target, level):
 
     def digit_sum():
         a = rng.randint(21000, 98000); b = rng.randint(1300, 9900); c = rng.randint(101, 997)
+        if level >= 3:
+            d = rng.randint(1013, 9973)
+            return num_task(nid(), f"Compute {a} x {b} x {c} x {d} and give the sum of the decimal digits of the result.", sum(int(x) for x in str(a * b * c * d)), 0, ["arithmetic", "exact"])
         return num_task(nid(), f"Compute {a} x {b} x {c} and give the sum of the decimal digits of the result.", sum(int(d) for d in str(a * b * c)), 0, ["arithmetic", "exact"])
 
     def business_days_after():
-        start = date(2026, rng.randint(1, 10), rng.randint(1, 28)); N = 10 + 10 * level + rng.randint(0, 9)
-        hol = sorted({start + timedelta(days=rng.randint(1, N + 20)) for _ in range(2 + level)})
-        hol = [h for h in hol if h.weekday() < 5][:3]
+        start = date(2026, rng.randint(1, 10), rng.randint(1, 28)); N = 10 + 10 * level + rng.randint(0, 9) + (40 if level >= 3 else 0)
+        hol = sorted({start + timedelta(days=rng.randint(1, N + 40)) for _ in range(2 + 2 * level)})
+        hol = [h for h in hol if h.weekday() < 5][:(6 if level >= 3 else 3)]
         d, count = start, 0
         while count < N:
             d += timedelta(days=1)
@@ -164,7 +174,7 @@ def gen_math(rng, n_target, level):
         return num_task(nid(), f"A price was {desc}, ending at ${final:.2f}. What was the original price? Give the amount in dollars to the nearest cent.", round(orig, 2), 2, ["percent"])
 
     def contributions():
-        periods = 4 + level; rate = rng.choice([1.5, 2.0, 2.5]); fee = rng.choice([0.5, 0.75]); start = rng.choice([5000, 8000])
+        periods = 4 + level + (5 if level >= 3 else 0); rate = rng.choice([1.5, 2.0, 2.5]); fee = rng.choice([0.5, 0.75]); start = rng.choice([5000, 8000])
         contribs = [rng.choice([0, 250, 400, 600, 900]) for _ in range(periods)]
         b = start
         for c in contribs:
@@ -173,10 +183,31 @@ def gen_math(rng, n_target, level):
         return num_task(nid(), f"An investment account starts with ${start:,}. For each of {periods} periods, in this order: a contribution is added ({cl}); the balance then grows by {rate}%; then a fee of {fee}% of the balance is deducted. What is the balance after period {periods}? Give the amount in dollars to the nearest cent.", round(b, 2), 2, ["simulation"])
 
     gens = [fifo, payroll, amortization, bank_sim, tiered, incl_excl, crt, modpow, digit_sum, business_days_after, probability, tax_credit, series_excl, reverse_percent, contributions]
+    if n_target == "generators":
+        return gens
     i = 0
     while len(tasks) < n_target:
         tasks.append(gens[i % len(gens)]())
         i += 1
+    return tasks
+
+
+# --------------------------------------------------------------- multi ----
+MULTI_RULE = ("Answer all three parts. Show brief working, then end your reply with exactly one line of the form FINAL: <A>; <B>; <C> "
+              "with the three answers in order separated by semicolons. For a number give digits only (no units, no currency sign, no commas; use a decimal point). "
+              "For a date use YYYY-MM-DD. For a fraction use a/b in lowest terms.")
+
+
+def gen_multi(rng, n_target, level):
+    gens = gen_math(rng, "generators", level)
+    tasks = []
+    for k in range(n_target):
+        picks = rng.sample(gens, 3)
+        parts = [g() for g in picks]
+        body = "\n\n".join(f"Part {'ABC'[i]}: " + p["prompt"].split("\n\n")[0] for i, p in enumerate(parts))
+        exp = [{"answer_type": p["answer_type"], "expected": p["expected"], "precision": p.get("precision", 0)} for p in parts]
+        tasks.append({"id": f"multi2-{k + 1:02d}", "type": "multi", "prompt": "This task has three independent parts.\n\n" + body + "\n\n" + MULTI_RULE,
+                      "answer_type": "multi", "expected": exp, "tags": ["multi"] + [t for p in parts for t in p["tags"]]})
     return tasks
 
 
@@ -188,7 +219,7 @@ STATUSES = ["shipped", "shipped", "shipped", "pending", "cancelled", "returned"]
 NAMES = ["Avery", "Blake", "Casey", "Devon", "Emery", "Finley", "Harper", "Jordan", "Kendall", "Logan", "Morgan", "Parker", "Quinn", "Reese", "Rowan", "Sawyer"]
 
 
-def make_tables(rng, n_orders):
+def make_tables(rng, n_orders, dupes=0):
     n_cust = 8 + rng.randint(0, 4)
     names = rng.sample(NAMES, n_cust)
     customers = [{"id": f"C{100 + i}", "name": nm, "region": rng.choice(REGIONS), "tier": rng.choice(TIERS)} for i, nm in enumerate(names)]
@@ -201,7 +232,10 @@ def make_tables(rng, n_orders):
         ids.add(oid)
         orders.append({"id": oid, "cust": rng.choice(customers)["id"], "product": rng.choice(PRODUCTS), "units": rng.randint(1, 45),
                        "price": round(rng.uniform(3, 140), 2), "date": (base + timedelta(days=rng.randint(0, 120))).isoformat(), "status": rng.choice(STATUSES)})
-    return customers, orders
+    display = list(orders)
+    for _ in range(dupes):  # exact repeats of existing rows, shown in the table but counted once
+        display.insert(rng.randrange(len(display) + 1), dict(rng.choice(orders)))
+    return customers, orders, display
 
 
 def tables_text(customers, orders):
@@ -215,7 +249,7 @@ def rev(o):
 
 
 def gen_data(rng, n_target, level):
-    n_orders = {1: 22, 2: 34, 3: 48}.get(level, 34)
+    n_orders = {1: 22, 2: 34, 3: 80}.get(level, 34)
     qtypes = ["tier_region_revenue", "top_customer_revenue", "avg_order_value_gold", "customers_with_cancelled", "top_product_units_tier",
               "median_price_window", "top_customer_share", "orders_in_window_region", "most_orders_customer", "top_two_region_gap",
               "distinct_products_customer", "units_returned", "earliest_order_customer", "q2_gold_minus_silver"]
@@ -223,7 +257,7 @@ def gen_data(rng, n_target, level):
     while len(tasks) < n_target:
         qt = qtypes[i % len(qtypes)]; i += 1
         for _ in range(60):
-            customers, orders = make_tables(rng, n_orders)
+            customers, orders, display = make_tables(rng, n_orders, dupes=(3 if level >= 3 else 0))
             built = build_q(rng, qt, customers, orders)
             if built:
                 break
@@ -231,8 +265,9 @@ def gen_data(rng, n_target, level):
             continue
         k += 1
         prompt, expected, atype, prec = built
-        full = ("Two tables follow. Revenue of an order is units x unit_price. Unless the question says otherwise, revenue counts only orders whose status is shipped or pending (cancelled and returned orders contribute nothing).\n\n"
-                + tables_text(customers, orders) + "\n\n" + prompt)
+        dup_note = " The orders table contains a few exact duplicate rows (same order_id and all other fields); these are data-entry repeats and each such order counts once." if level >= 3 else ""
+        full = ("Two tables follow. Revenue of an order is units x unit_price. Unless the question says otherwise, revenue counts only orders whose status is shipped or pending (cancelled and returned orders contribute nothing)." + dup_note + "\n\n"
+                + tables_text(customers, display) + "\n\n" + prompt)
         t = {"id": f"data2-{k:02d}", "type": "data", "prompt": full + "\n\n" + NUMBER_RULE, "answer_type": atype, "expected": expected, "tags": [qt]}
         if atype == "number":
             t["precision"] = prec
@@ -342,18 +377,22 @@ def build_q(rng, qt, customers, orders):
 
 
 # --------------------------------------------------------------- logic ----
-P_NAMES = ["Ada", "Ben", "Cleo", "Dev"]
-DRINKS = ["tea", "coffee", "milk", "juice"]
-PETS = ["cat", "dog", "fish", "bird"]
-COLORS = ["red", "blue", "green", "white"]
+P_NAMES = ["Ada", "Ben", "Cleo", "Dev", "Eli"]
+DRINKS = ["tea", "coffee", "milk", "juice", "water"]
+PETS = ["cat", "dog", "fish", "bird", "horse"]
+COLORS = ["red", "blue", "green", "white", "yellow"]
+HOUSES = 4
 
 
 def gen_logic(rng, n_target, level):
-    attrs = [("name", P_NAMES), ("drink", DRINKS), ("pet", PETS)] + ([("color", COLORS)] if level >= 2 else [])
+    global HOUSES
+    HOUSES = 5 if level >= 3 else 4
+    vals_of = {"name": P_NAMES[:HOUSES], "drink": DRINKS[:HOUSES], "pet": PETS[:HOUSES], "color": COLORS[:HOUSES]}
+    attrs = [("name", vals_of["name"]), ("drink", vals_of["drink"]), ("pet", vals_of["pet"])] + ([("color", vals_of["color"])] if level >= 2 else [])
     tasks = []
     k = 0
     while len(tasks) < n_target:
-        sol = {a: rng.sample(vals, 4) for a, vals in attrs}  # house index -> value
+        sol = {a: rng.sample(vals, HOUSES) for a, vals in attrs}  # house index -> value
         clues = all_true_clues(sol, attrs)
         rng.shuffle(clues)
         chosen = []
@@ -368,20 +407,20 @@ def gen_logic(rng, n_target, level):
             trial = [x for x in chosen if x is not c]
             if count_solutions(trial, attrs, limit=2) == 1:
                 chosen = trial
-        if len(chosen) < 4:
+        if len(chosen) < HOUSES:
             continue
         # question
         qattr, qval_attr = rng.choice([("pet", "name"), ("drink", "name"), ("name", "drink"), ("name", "pet")] + ([("color", "name"), ("name", "color")] if level >= 2 else []))
-        idx = rng.randrange(4)
+        idx = rng.randrange(HOUSES)
         if qattr == "name":
-            q = f"What is the {qval_attr} of {sol['name'][idx]}?" if qval_attr != "pet" else f"Which pet does {sol['name'][idx]} keep?"
+            q = {"pet": f"Which pet does {sol['name'][idx]} keep?", "drink": f"What does {sol['name'][idx]} drink?", "color": f"What color is {sol['name'][idx]}'s house?"}[qval_attr]
             ans = sol[qval_attr][idx]
         else:
             q = f"Who keeps the {sol[qattr][idx]}?" if qattr == "pet" else (f"Who drinks {sol[qattr][idx]}?" if qattr == "drink" else f"Who lives in the {sol[qattr][idx]} house?")
             ans = sol["name"][idx]
         k += 1
-        intro = ("Four houses stand in a row, numbered 1 to 4 from left to right. Each house has exactly one resident (" + ", ".join(P_NAMES) + "), one drink ("
-                 + ", ".join(DRINKS) + "), and one pet (" + ", ".join(PETS) + ")" + (", and one color (" + ", ".join(COLORS) + ")" if level >= 2 else "")
+        intro = (f"{'Five' if HOUSES == 5 else 'Four'} houses stand in a row, numbered 1 to {HOUSES} from left to right. Each house has exactly one resident (" + ", ".join(vals_of['name']) + "), one drink ("
+                 + ", ".join(vals_of['drink']) + "), and one pet (" + ", ".join(vals_of['pet']) + ")" + (", and one color (" + ", ".join(vals_of['color']) + ")" if level >= 2 else "")
                  + "; no value is shared between houses. Clues:\n" + "\n".join(f"{i + 1}. {c[0]}" for i, c in enumerate(chosen)) + f"\n\n{q} There is exactly one answer.")
         tasks.append(str_task(f"logic2-{k:02d}", intro, ans, ["logic", "exact"], ttype="logic"))
     return tasks
@@ -402,13 +441,13 @@ def all_true_clues(sol, attrs):
             # position clue
             clues.append((f"{label(attr, val)[0].upper() + label(attr, val)[1:]} lives in house {p + 1}.", mk_pos(attr, val, p)))
             # negative position
-            q = (p + rng_offset(p)) % 4
+            q = (p + rng_offset(p)) % HOUSES
             clues.append((f"{label(attr, val)[0].upper() + label(attr, val)[1:]} does not live in house {q + 1}.", mk_notpos(attr, val, q)))
     for a1, a2 in itertools.combinations(A, 2):
-        for i in range(4):
+        for i in range(HOUSES):
             v1, v2 = sol[a1][i], sol[a2][i]
             clues.append((f"{label(a1, v1)[0].upper() + label(a1, v1)[1:]} is {label(a2, v2)}." if a2 != "name" else f"{label(a2, v2)} is {label(a1, v1)}.", mk_same(a1, v1, a2, v2)))
-        for i in range(3):
+        for i in range(HOUSES - 1):
             v1, v2 = sol[a1][i], sol[a2][i + 1]
             clues.append((f"{label(a1, v1)[0].upper() + label(a1, v1)[1:]} lives immediately to the left of {label(a2, v2)}.", mk_left(a1, v1, a2, v2)))
             v1b, v2b = sol[a1][i + 1], sol[a2][i]
@@ -508,12 +547,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=20260906)
     ap.add_argument("--level", type=int, default=2, help="1 easier, 2 default, 3 harder (affects math, data, logic)")
-    ap.add_argument("--counts", default="math=60,data=60,code=30,logic=50")
+    ap.add_argument("--counts", default="math=60,data=60,code=30,logic=50", help="level 3 default: math=40,multi=40,data=50,code=30,logic=40")
     ap.add_argument("--out", default="tasks/pilot2_tasks.json")
     a = ap.parse_args()
+    if a.level >= 3 and a.counts == "math=60,data=60,code=30,logic=50":
+        a.counts = "math=40,multi=40,data=50,code=30,logic=40"
     counts = {kv.split("=")[0]: int(kv.split("=")[1]) for kv in a.counts.split(",")}
     rng = random.Random(a.seed)
-    tasks = gen_math(rng, counts.get("math", 0), a.level) + gen_data(rng, counts.get("data", 0), a.level) + gen_code(counts.get("code", 0)) + gen_logic(rng, counts.get("logic", 0), a.level)
+    tasks = (gen_math(rng, counts.get("math", 0), a.level) + gen_multi(rng, counts.get("multi", 0), a.level) + gen_data(rng, counts.get("data", 0), a.level)
+             + gen_code(counts.get("code", 0)) + gen_logic(rng, counts.get("logic", 0), a.level))
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     with open(a.out, "w") as f:
         json.dump({"seed": a.seed, "level": a.level, "count": len(tasks), "tasks": tasks}, f, indent=1)

@@ -141,6 +141,9 @@ class MockBackend:
                 ref = ref.replace("return ", "return None  # ", 1)
             return "Here is the function.\n\n```python\n" + ref.strip() + "\n```\n"
         exp = task["expected"]
+        if task["answer_type"] == "multi":
+            vals = [e["expected"] if good else (round(float(e["expected"]) * 1.07 + 1, e.get("precision", 0)) if e["answer_type"] == "number" else "Wednesday") for e in exp]
+            return "Working.\nFINAL: " + "; ".join(str(v) for v in vals)
         if task["answer_type"] == "number":
             val = exp if good else round(float(exp) * 1.07 + 1, task.get("precision", 0))
         else:

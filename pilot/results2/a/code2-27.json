@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-27",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 17.6,
+ "tokens": 2071,
+ "prompt_tokens": 350,
+ "completion_tokens": 1721,
+ "cost": 0.04478,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef bowling_score(rolls):\n    \"\"\"Score a complete game of ten-pin bowling.\n\n    Raises ValueError if `rolls` is not exactly one complete, valid game.\n    \"\"\"\n    if isinstance(rolls, (str, bytes)) or not hasattr(rolls, \"__iter__\"):\n        raise ValueError(\"rolls must be a sequence of integers\")\n    rolls = list(rolls)\n\n    for r in rolls:\n        if isinstance(r, bool) or not isinstance(r, int):\n            raise ValueError(\"each roll must be an integer\")\n        if r < 0 or r > 10:\n            raise ValueError(\"each roll must be between 0 and 10\")\n\n    n = len(rolls)\n\n    def get(k):\n        if k >= n:\n            raise ValueError(\"too few rolls for a complete game\")\n        return rolls[k]\n\n    total = 0\n    i = 0\n    for frame in range(10):\n        if frame < 9:\n            first = get(i)\n            if first == 10:                      # strike\n                total += 10 + get(i + 1) + get(i + 2)\n                i += 1\n            else:\n                second = get(i + 1)\n                if first + second > 10:\n                    raise ValueError(\"frame total exceeds 10 pins\")\n                if first + second == 10:         # spare\n                    total += 10 + get(i + 2)\n                else:\n                    total += first + second\n                i += 2\n        else:                                    # tenth frame\n            first = get(i)\n            second = get(i + 1)\n            if first == 10:                      # strike: two bonus rolls\n                third = get(i + 2)\n                if second != 10 and second + third > 10:\n                    raise ValueError(\"invalid bonus rolls in tenth frame\")\n                total += 10 + second + third\n                i += 3\n            elif first + second == 10:           # spare: one bonus roll\n                third = get(i + 2)\n                total += 10 + third\n                i += 3\n            else:\n                if first + second > 10:\n                    raise ValueError(\"frame total exceeds 10 pins\")\n                total += first + second\n                i += 2\n\n    if i != n:\n        raise ValueError(\"too many rolls for a complete game\")\n\n    return total\n```\n\nThe scan walks frame by frame, looking ahead for strike/spare bonuses, and finally checks that every roll was consumed exactly (catching both short and overlong games)."
+}

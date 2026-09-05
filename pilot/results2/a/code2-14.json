@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-14",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 18.3,
+ "tokens": 1949,
+ "prompt_tokens": 344,
+ "completion_tokens": 1605,
+ "cost": 0.04185,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Recursive\u2011descent parser over `fractions.Fraction`:\n\n```python\nimport re\nfrom fractions import Fraction\n\n_TOKEN_RE = re.compile(r'\\s*(\\d+\\s*/\\s*\\d+|\\d+|[+\\-*()])')\n\n\ndef fraction_expr(s: str) -> str:\n    if not isinstance(s, str):\n        raise ValueError(\"input must be a string\")\n\n    # --- tokenize -------------------------------------------------------\n    tokens = []\n    pos = 0\n    n = len(s)\n    while pos < n:\n        if s[pos].isspace():\n            pos += 1\n            continue\n        m = _TOKEN_RE.match(s, pos)\n        if not m or m.start(1) != pos:\n            # allow the regex to have skipped whitespace only\n            if not m:\n                raise ValueError(\"invalid character at position %d\" % pos)\n        tok = m.group(1)\n        if '/' in tok:\n            tok = re.sub(r'\\s+', '', tok)\n        tokens.append(tok)\n        pos = m.end(1)\n\n    if not tokens:\n        raise ValueError(\"empty expression\")\n\n    idx = 0\n\n    def peek():\n        return tokens[idx] if idx < len(tokens) else None\n\n    def advance():\n        nonlocal idx\n        t = tokens[idx]\n        idx += 1\n        return t\n\n    def parse_expr():\n        value = parse_term()\n        while peek() in ('+', '-'):\n            op = advance()\n            rhs = parse_term()\n            value = value + rhs if op == '+' else value - rhs\n        return value\n\n    def parse_term():\n        value = parse_factor()\n        while peek() == '*':\n            advance()\n            value = value * parse_factor()\n        return value\n\n    def parse_factor():\n        t = peek()\n        if t == '-':\n            advance()\n            return -parse_factor()\n        if t == '+':\n            advance()\n            return parse_factor()\n        return parse_atom()\n\n    def parse_atom():\n        t = peek()\n        if t is None:\n            raise ValueError(\"unexpected end of expression\")\n        if t == '(':\n            advance()\n            value = parse_expr()\n            if peek() != ')':\n                raise ValueError(\"missing closing parenthesis\")\n            advance()\n            return value\n        if t[0].isdigit():\n            advance()\n            if '/' in t:\n                num, den = t.split('/')\n                if int(den) == 0:\n                    raise ValueError(\"zero denominator\")\n                return Fraction(int(num), int(den))\n            return Fraction(int(t))\n        raise ValueError(\"unexpected token %r\" % t)\n\n    result = parse_expr()\n    if idx != len(tokens):\n        raise ValueError(\"unexpected token %r\" % tokens[idx])\n\n    if result.denominator == 1:\n        return str(result.numerator)\n    return \"%d/%d\" % (result.numerator, result.denominator)\n```\n\nThe tokenizer rejects stray characters (so things like `3/4/5` or `1 / 2` used as division fail), the parser rejects unbalanced parentheses and dangling operators, and zero denominators raise `ValueError`."
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-06",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 11.3,
+ "tokens": 1197,
+ "prompt_tokens": 309,
+ "completion_tokens": 888,
+ "cost": 0.02374,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Strategy: validate the whole string against a strict canonical-form regex (which encodes the repeat limits and the six legal subtractive pairs), then do the usual left-to-right subtractive scan.\n\n```python\nimport re\n\n_CANONICAL = re.compile(\n    r\"M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\"\n)\n\n_VALUES = {\"I\": 1, \"V\": 5, \"X\": 10, \"L\": 50, \"C\": 100, \"D\": 500, \"M\": 1000}\n\n\ndef roman_to_int(s: str) -> int:\n    \"\"\"Convert a canonical Roman numeral (1..3999) to an int.\n\n    Raises ValueError for the empty string, lowercase input, unknown\n    characters, or non-canonical spellings such as 'IIII' or 'IC'.\n    \"\"\"\n    if not isinstance(s, str):\n        raise ValueError(f\"expected a string, got {type(s).__name__}\")\n    if s == \"\":\n        raise ValueError(\"empty string is not a Roman numeral\")\n    if _CANONICAL.fullmatch(s) is None:\n        raise ValueError(f\"not a canonical Roman numeral: {s!r}\")\n\n    total = 0\n    prev = 0\n    for ch in reversed(s):\n        v = _VALUES[ch]\n        if v < prev:\n            total -= v\n        else:\n            total += v\n            prev = v\n    return total\n```\n\nThe regex `M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})` matches exactly the 3999 canonical numerals plus the empty string, which is rejected separately; `fullmatch` ensures no trailing junk, and lowercase or foreign characters fail to match."
+}

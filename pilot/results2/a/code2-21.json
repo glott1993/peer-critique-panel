@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-21",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 7.8,
+ "tokens": 1007,
+ "prompt_tokens": 312,
+ "completion_tokens": 695,
+ "cost": 0.01894,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef number_to_words(n: int) -> str:\n    if not isinstance(n, int) or isinstance(n, bool):\n        raise ValueError(\"n must be an integer between 0 and 999999\")\n    if n < 0 or n > 999999:\n        raise ValueError(\"n must be between 0 and 999999\")\n\n    ones = [\n        \"zero\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\",\n        \"eight\", \"nine\", \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n        \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\",\n    ]\n    tens = [\n        \"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\",\n        \"sixty\", \"seventy\", \"eighty\", \"ninety\",\n    ]\n\n    def under_hundred(x: int) -> str:\n        if x < 20:\n            return ones[x]\n        t, u = divmod(x, 10)\n        return tens[t] if u == 0 else tens[t] + \"-\" + ones[u]\n\n    def under_thousand(x: int) -> str:\n        parts = []\n        h, rest = divmod(x, 100)\n        if h:\n            parts.append(ones[h] + \" hundred\")\n        if rest or not h:\n            parts.append(under_hundred(rest))\n        return \" \".join(parts)\n\n    if n == 0:\n        return \"zero\"\n\n    thousands, remainder = divmod(n, 1000)\n    words = []\n    if thousands:\n        words.append(under_thousand(thousands) + \" thousand\")\n    if remainder:\n        words.append(under_thousand(remainder))\n    return \" \".join(words)\n```\n\nThe helper `under_thousand` only emits the trailing part when it is nonzero (or when there is no hundreds part at all), so `1000` gives `'one thousand'` and `105` gives `'one hundred five'`."
+}
