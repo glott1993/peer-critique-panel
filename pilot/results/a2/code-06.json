@@ -1,0 +1,16 @@
+{
+ "task_id": "code-06",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.9,
+ "tokens": 643,
+ "prompt_tokens": 308,
+ "completion_tokens": 335,
+ "cost": 0.00992,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom collections import Counter\n\n\ndef top_k_frequent(words, k):\n    \"\"\"Return the k most frequent strings in `words`, most frequent first.\n\n    Ties in frequency are broken by plain (case-sensitive) alphabetical order.\n    If k is larger than the number of distinct words, all distinct words are\n    returned in that same order. k == 0 returns [].\n    \"\"\"\n    if k <= 0:\n        return []\n    counts = Counter(words)\n    ordered = sorted(counts, key=lambda w: (-counts[w], w))\n    return ordered[:k]\n```\n\nNotes: `Counter` tallies occurrences, then sorting by `(-count, word)` puts higher counts first and resolves ties alphabetically. Slicing with `[:k]` naturally handles `k` exceeding the number of distinct words, and the early return covers `k == 0` (and empty input, since slicing an empty list is safe anyway)."
+}

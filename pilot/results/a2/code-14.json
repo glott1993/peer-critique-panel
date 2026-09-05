@@ -1,0 +1,16 @@
+{
+ "task_id": "code-14",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 6.6,
+ "tokens": 822,
+ "prompt_tokens": 295,
+ "completion_tokens": 527,
+ "cost": 0.01465,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef word_wrap(text: str, width: int) -> list:\n    \"\"\"Greedily pack whitespace-separated words into lines of at most `width` chars.\"\"\"\n    if width < 1:\n        raise ValueError(\"width must be at least 1\")\n\n    words = text.split()\n    if not words:\n        return []\n\n    lines = []\n    current = words[0]\n    for word in words[1:]:\n        if len(current) + 1 + len(word) <= width:\n            current += \" \" + word\n        else:\n            lines.append(current)\n            current = word\n    lines.append(current)\n    return lines\n```\n\nWords longer than `width` simply end up alone on their own line, unbroken, since a new line is started whenever the word doesn't fit alongside the current content."
+}

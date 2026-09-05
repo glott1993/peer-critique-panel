@@ -44,7 +44,8 @@ class Accounting:
 
 
 class OpenRouterBackend:
-    def __init__(self, api_key, accounting, max_retries=6, timeout=180, title="Peer-critique pilot"):
+    def __init__(self, api_key, accounting, max_retries=6, timeout=180, title="Peer-critique pilot", provider_pins=None):
+        self.provider_pins = provider_pins or {}  # {"anthropic/": {"order": ["anthropic"], "allow_fallbacks": False}}
         import requests  # imported here so --mock works without it
         self.requests = requests
         self.key = api_key
@@ -59,6 +60,9 @@ class OpenRouterBackend:
                 "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
         if self.include_usage:
             body["usage"] = {"include": True}
+        for prefix, prefs in self.provider_pins.items():
+            if model.startswith(prefix):
+                body["provider"] = prefs
         delay = 1.5
         last_err = None
         for attempt in range(self.max_retries + 1):
@@ -87,7 +91,11 @@ class OpenRouterBackend:
                 cost = usage.get("cost")
                 if cost is None:
                     cost = 0.0
-                self.acc.record(ctx, model, usage, float(cost), time.time() - t0, True, finish=choice.get("finish_reason"))
+                finish = choice.get("finish_reason")
+                served_by = data.get("provider")
+                if not text.strip() or finish in ("content_filter", "error"):
+                    raise RuntimeError(f"empty reply (finish={finish}, provider={served_by})")
+                self.acc.record(ctx, model, usage, float(cost), time.time() - t0, True, finish=f"{finish} via {served_by}")
                 return text
             except ValueError:
                 raise

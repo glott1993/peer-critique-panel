@@ -1,5 +1,5 @@
 {
- "started": "2026-09-05T13:52:53Z",
+ "started": "2026-09-05T15:13:02Z",
  "config": {
   "tier": "mid",
   "seats": [
@@ -32,15 +32,20 @@
   "baseline_temperature": 0.3,
   "sample_temperature": 0.7,
   "default_k": 5,
-  "task_workers": 2
+  "task_workers": 2,
+  "provider_pins": {
+   "anthropic/": {
+    "order": [
+     "anthropic"
+    ],
+    "allow_fallbacks": false
+   }
+  }
  },
  "tasks_file": "tasks/fresh_tasks.json",
  "n_tasks": 64,
  "conditions": [
-  "a",
-  "c",
-  "d",
-  "b"
+  "a2"
  ],
  "mock": false
 }

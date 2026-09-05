@@ -1,0 +1,16 @@
+{
+ "task_id": "code-01",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 19.2,
+ "tokens": 2011,
+ "prompt_tokens": 375,
+ "completion_tokens": 1636,
+ "cost": 0.04278,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here's a strict, single-pass parser: it scans `<digits><unit>` tokens, allowing optional whitespace between parts (but not inside a part), and rejects anything left over, repeated units, or empty input.\n\n```python\nimport re\n\n_PART_RE = re.compile(r'([0-9]+)([hms])')\n_MULTIPLIER = {'h': 3600, 'm': 60, 's': 1}\n\n\ndef parse_duration(s: str) -> int:\n    \"\"\"Convert a duration string like '1h 30m' into a number of seconds.\n\n    Raises ValueError on any malformed input.\n    \"\"\"\n    if not isinstance(s, str):\n        raise ValueError(f'expected a string, got {type(s).__name__}')\n\n    text = s.strip()\n    if not text:\n        raise ValueError('empty duration string')\n\n    total = 0\n    seen = set()\n    pos = 0\n    length = len(text)\n\n    while pos < length:\n        # Optional whitespace between parts ('2h5s' and '1h 30m' both work).\n        while pos < length and text[pos].isspace():\n            pos += 1\n        if pos >= length:\n            break\n\n        match = _PART_RE.match(text, pos)\n        if match is None:\n            raise ValueError(f'invalid duration string: {s!r}')\n\n        number, unit = match.group(1), match.group(2)\n        if unit in seen:\n            raise ValueError(f'duplicate unit {unit!r} in {s!r}')\n        seen.add(unit)\n\n        total += int(number) * _MULTIPLIER[unit]\n        pos = match.end()\n\n    if not seen:\n        raise ValueError(f'invalid duration string: {s!r}')\n\n    return total\n\n\nassert parse_duration('1h 30m') == 5400\nassert parse_duration('45m') == 2700\nassert parse_duration('2h5s') == 7205\n```\n\nNotes: decimals (`'1.5h'`), signs (`'-1h'`), bare numbers (`'90'`), bare units (`'h'`), unknown units (`'5d'`), and repeats (`'1h1h'`) all fail the token scan or the duplicate check and raise `ValueError`. Order is irrelevant, so `'30m1h'` also gives 5400."
+}

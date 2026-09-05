@@ -1,0 +1,16 @@
+{
+ "task_id": "code-17",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 21.0,
+ "tokens": 1876,
+ "prompt_tokens": 249,
+ "completion_tokens": 1627,
+ "cost": 0.04192,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef dedupe_stable(items):\n    \"\"\"Return a new list with duplicates removed, keeping the first\n    occurrence of each value in its original order.\n\n    Equality is decided with ``==``, so unhashable items (lists, dicts,\n    sets, ...) are supported.  A hash-based fast path is used for the\n    hashable, well-behaved values so the common case stays near O(n).\n    \"\"\"\n    out = []\n    seen_hashable = set()   # values that are hashable and equal to themselves\n    seen_other = []         # unhashable values (and oddities like NaN)\n\n    for item in items:\n        # Fast path: membership in a set already uses hash + ==\n        try:\n            duplicate = item in seen_hashable\n            hashable = True\n        except TypeError:\n            duplicate = False\n            hashable = False\n\n        # Slow path: linear scan with == over the remaining seen values\n        if not duplicate and seen_other:\n            duplicate = any(item == other for other in seen_other)\n\n        if duplicate:\n            continue\n\n        out.append(item)\n\n        # NaN-like values (item != item) must go to the linear list so that\n        # pure == semantics are preserved: they never match anything.\n        if hashable and item == item:\n            seen_hashable.add(item)\n        else:\n            seen_other.append(item)\n\n    return out\n```\n\nThe set handles ordinary hashable values quickly, while unhashable values (and self-unequal values such as `float('nan')`) fall back to an `==` scan, so the result always matches plain `==` semantics while preserving first-occurrence order."
+}

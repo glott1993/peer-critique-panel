@@ -164,7 +164,7 @@ def main():
         if not key:
             raise SystemExit("set OPENROUTER_API_KEY first (openrouter.ai -> Keys)")
         cfg = load_config(a.config) if not a.suggest_models else {"seats": [], "hub": "", "baseline": ""}
-        api = OpenRouterBackend(key, acc)
+        api = OpenRouterBackend(key, acc, provider_pins=cfg.get("provider_pins"))
         if a.suggest_models:
             suggest_models(api)
             return
@@ -188,7 +188,7 @@ def main():
     catalogue = json.load(open(cat_path)) if os.path.exists(cat_path) else {}
 
     for cond in conds:
-        done = load_results(cond)
+        done = {k: v for k, v in load_results(cond).items() if not v.get("error")}
         todo = [t for t in tasks if t["id"] not in done]
         print(f"\n== condition {cond}: {len(done)} done, {len(todo)} to run")
         k_by_type = {}
@@ -209,6 +209,8 @@ def main():
             try:
                 if cond == "a":
                     out = run_a(task, cfg, api, ctx)
+                elif cond == "a2":
+                    out = run_a(task, dict(cfg, baseline_temperature=cfg.get("sample_temperature", 0.7)), api, ctx)
                 elif cond == "b":
                     out = run_b(task, cfg, api, ctx, k_by_type[task["type"]])
                 elif cond == "c":

@@ -1,0 +1,16 @@
+{
+ "task_id": "code-15",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 5.8,
+ "tokens": 723,
+ "prompt_tokens": 297,
+ "completion_tokens": 426,
+ "cost": 0.01213,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom collections import defaultdict\n\n\ndef anagram_groups(words):\n    \"\"\"Group anagrams (case-sensitive), keeping only groups of size >= 2.\n\n    Each group is sorted alphabetically (duplicates kept), and the groups\n    are ordered by their first word.\n    \"\"\"\n    buckets = defaultdict(list)\n    for word in words:\n        key = tuple(sorted(word))\n        buckets[key].append(word)\n\n    groups = [sorted(group) for group in buckets.values() if len(group) >= 2]\n    groups.sort(key=lambda g: g[0])\n    return groups\n```\n\nNotes: the key `tuple(sorted(word))` captures exact character counts and is case-sensitive, so `'Eat'` and `'eat'` are not grouped. Duplicate words land in the same bucket and are preserved, so e.g. `['ab', 'ab']` yields `[['ab', 'ab']]`."
+}

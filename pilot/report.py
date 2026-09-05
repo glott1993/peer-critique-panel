@@ -13,8 +13,9 @@ import json, math, os, random, statistics
 from collections import defaultdict
 
 RESULTS = "results"
-COND_NAMES = {"a": "single frontier model, one pass", "b": "same model, compute-matched (self-consistency + self-critique)",
-              "c": "panel with hub", "d": "panel without hub"}
+COND_NAMES = {"a": "single frontier model, one pass (temperature 0.3)", "a2": "single frontier model, one pass (temperature 0.7)",
+              "b": "same model, compute-matched (self-consistency + self-critique)", "c": "panel with hub", "d": "panel without hub"}
+COND_ORDER = ("a", "a2", "b", "c", "d")
 
 
 def wilson(k, n, z=1.96):
@@ -46,7 +47,7 @@ def load():
     res = {}
     for cond in os.listdir(RESULTS) if os.path.isdir(RESULTS) else []:
         d = os.path.join(RESULTS, cond)
-        if os.path.isdir(d) and len(cond) == 1:
+        if os.path.isdir(d) and cond in COND_ORDER:
             res[cond] = {}
             for fn in os.listdir(d):
                 if fn.endswith(".json"):
@@ -66,7 +67,7 @@ def main():
         raise SystemExit("no results yet")
     meta = json.load(open(os.path.join(RESULTS, "run_meta.json"))) if os.path.exists(os.path.join(RESULTS, "run_meta.json")) else {}
     types = sorted({r["type"] for c in res.values() for r in c.values()})
-    conds = [c for c in "abcd" if c in res]
+    conds = [c for c in COND_ORDER if c in res]
     lines = ["# Pilot results", ""]
     if meta:
         lines.append(f"Run started {meta.get('started')}; {'MOCK backend (no real models)' if meta.get('mock') else 'OpenRouter'}; tasks from `{meta.get('tasks_file')}`.")
@@ -92,7 +93,7 @@ def main():
 
     # paired differences
     lines += ["## Paired differences in accuracy (95% bootstrap interval, tasks present in both conditions)", ""]
-    for x, y in (("c", "a"), ("c", "b"), ("c", "d"), ("b", "a"), ("d", "a")):
+    for x, y in (("c", "a"), ("c", "a2"), ("c", "b"), ("c", "d"), ("b", "a"), ("d", "a"), ("a2", "a")):
         if x in res and y in res:
             common = sorted(set(res[x]) & set(res[y]))
             if not common:
@@ -106,6 +107,18 @@ def main():
                 if len(sub) >= 5:
                     m2, lo2, hi2 = paired_bootstrap([int(res[x][tt]["correct"]) for tt in sub], [int(res[y][tt]["correct"]) for tt in sub])
                     lines.append(f"    - {t}: {100 * m2:+.1f} [{100 * lo2:+.1f}, {100 * hi2:+.1f}] over {len(sub)}")
+    lines.append("")
+
+    # refusals / no-answer items, and accuracy on answered items only
+    lines += ["## No-answer items (refused or failed after retries) and accuracy on answered items", "",
+              "| condition | no answer | of which code / data / math | accuracy, no-answer counted wrong | accuracy on answered items |", "|---|---|---|---|---|"]
+    for c in conds:
+        rs = list(res[c].values()); na = [r for r in rs if r.get("error")]; ans = [r for r in rs if not r.get("error")]
+        by = {t: sum(1 for r in na if r["type"] == t) for t in ("code", "data", "math")}
+        acc_all = sum(r["correct"] for r in rs) / max(1, len(rs)); acc_ans = sum(r["correct"] for r in ans) / max(1, len(ans))
+        lines.append(f"| {c} | {len(na)}/{len(rs)} | {by['code']} / {by['data']} / {by['math']} | {pct(acc_all)} | {sum(r['correct'] for r in ans)}/{len(ans)} = {pct(acc_ans)} |")
+    lines.append("")
+    lines.append("A no-answer item is one where every attempt (7 per task) returned an empty or filtered reply, or failed outright; the error text in `results/<condition>/<task>.json` says which. Panel conditions can route around a seat that declines; single-model conditions cannot.")
     lines.append("")
 
     # cost

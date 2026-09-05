@@ -1,0 +1,16 @@
+{
+ "task_id": "code-11",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 12.2,
+ "tokens": 1198,
+ "prompt_tokens": 292,
+ "completion_tokens": 906,
+ "cost": 0.02411,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom math import fsum\n\n\ndef moving_average(xs, w):\n    \"\"\"\n    Return the simple moving averages of `xs` over windows of exactly `w`\n    consecutive elements, each rounded to 4 decimal places (as floats).\n\n    The result has len(xs) - w + 1 elements; if w > len(xs), [] is returned.\n    Raises ValueError if w is not an integer >= 1.\n    \"\"\"\n    if isinstance(w, bool) or not isinstance(w, int):\n        raise ValueError(\"w must be an integer >= 1\")\n    if w < 1:\n        raise ValueError(\"w must be an integer >= 1\")\n\n    values = list(xs)\n    n = len(values)\n    if w > n:\n        return []\n\n    out = []\n    for i in range(n - w + 1):\n        window = values[i:i + w]\n        out.append(float(round(fsum(window) / w, 4)))\n    return out\n\n\nassert moving_average([1, 2, 3, 4], 2) == [1.5, 2.5, 3.5]\nassert moving_average([5, 5, 5], 3) == [5.0]\n```\n\nNotes: `fsum` keeps floating-point sums accurate, each average is rounded to 4 decimals and coerced to `float`, and non-integer or sub-1 window sizes (including booleans) raise `ValueError`."
+}

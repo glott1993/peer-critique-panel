@@ -1,0 +1,16 @@
+{
+ "task_id": "code-18",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 10.0,
+ "tokens": 1188,
+ "prompt_tokens": 300,
+ "completion_tokens": 888,
+ "cost": 0.0237,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef compare_versions(a: str, b: str) -> int:\n    \"\"\"\n    Compare two dotted version strings numerically, part by part.\n\n    Returns -1 if a < b, 0 if a == b, 1 if a > b.\n    Missing trailing parts are treated as 0 ('1.2' == '1.2.0').\n    Leading zeros are allowed ('1.01' == '1.1').\n\n    Raises ValueError if either argument is not a string, or if any\n    dot-separated part is empty or contains characters other than\n    the ASCII decimal digits 0-9.\n    \"\"\"\n    DIGITS = set('0123456789')\n\n    def parse(version, name):\n        if not isinstance(version, str):\n            raise ValueError(\n                \"%s must be a string, got %r\" % (name, type(version).__name__)\n            )\n        parts = version.split('.')\n        numbers = []\n        for part in parts:\n            if part == '':\n                raise ValueError(\"empty version part in %r\" % (version,))\n            if not all(ch in DIGITS for ch in part):\n                raise ValueError(\"invalid version part %r in %r\" % (part, version))\n            numbers.append(int(part))\n        return numbers\n\n    va = parse(a, 'a')\n    vb = parse(b, 'b')\n\n    for i in range(max(len(va), len(vb))):\n        x = va[i] if i < len(va) else 0\n        y = vb[i] if i < len(vb) else 0\n        if x < y:\n            return -1\n        if x > y:\n            return 1\n    return 0\n```\n\nNotes: the digit check uses an explicit ASCII set rather than `str.isdigit()`, so oddities like `'1.\u00b2'` or `'1.\u0663'` are rejected instead of silently accepted or crashing; signs, spaces and empty strings (`''`, `'1..2'`, `'1.'`) also raise `ValueError`."
+}

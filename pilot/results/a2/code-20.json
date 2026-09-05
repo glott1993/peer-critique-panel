@@ -1,0 +1,16 @@
+{
+ "task_id": "code-20",
+ "type": "code",
+ "condition": "a2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 5.0,
+ "tokens": 681,
+ "prompt_tokens": 246,
+ "completion_tokens": 435,
+ "cost": 0.0121,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef caesar_shift(s: str, k: int) -> str:\n    \"\"\"Shift every ASCII letter in s forward by k positions, wrapping around.\n\n    Case is preserved; all non-ASCII-letter characters pass through unchanged.\n    k may be negative or greater than 26 (it is reduced modulo 26).\n    \"\"\"\n    k %= 26\n    out = []\n    for ch in s:\n        if 'a' <= ch <= 'z':\n            out.append(chr((ord(ch) - 97 + k) % 26 + 97))\n        elif 'A' <= ch <= 'Z':\n            out.append(chr((ord(ch) - 65 + k) % 26 + 65))\n        else:\n            out.append(ch)\n    return ''.join(out)\n```\n\nThe explicit `'a' <= ch <= 'z'` checks (rather than `str.isalpha`) ensure only ASCII letters are touched, so digits, punctuation, whitespace, and non-ASCII characters like `\u00e9` or `\u03a9` are left alone. Python's `%` returns a non-negative result for a positive modulus, so negative and oversized `k` values work automatically."
+}
