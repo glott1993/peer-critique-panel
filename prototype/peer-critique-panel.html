@@ -161,7 +161,7 @@
         </div>
         <div class="field or-only"><label>OpenRouter API key</label><input type="password" id="key" autocomplete="off" placeholder="sk-or-..."></div>
         <div class="field or-only"><label>Tier</label>
-          <select id="tier" style="width:100%"><option value="light">Light (Haiku-class and equivalents)</option><option value="mid">Mid (Sonnet-class and equivalents)</option><option value="frontier" selected>Frontier (Opus-class and equivalents)</option><option value="god">God tier (every class, weighted agreement)</option></select>
+          <select id="tier" style="width:100%"><option value="light">Light (Haiku-class and equivalents)</option><option value="mid">Mid (Sonnet-class and equivalents)</option><option value="frontier" selected>Frontier (Opus-class and equivalents)</option><option value="apex">Apex tier (every class, weighted agreement)</option></select>
           <div class="note"><label><input type="checkbox" id="openw"> Add open-weight models</label></div>
         </div>
         <div class="field wide or-only">
@@ -421,8 +421,8 @@ async function runPanel(req, cfg, api, ui) {
     const totalW = seats.reduce((a, s) => a + (s.weight || 1), 0);
     const frontier = seats.filter(s => s.tierClass === 'frontier');
     const frontierOK = frontier.every(s => { const v = votes.find(x => x.s === s); return !!v && v.v.ready === true; });
-    agreed = cfg.tier === 'god' ? (frontierOK && readyW / totalW >= 0.66) : votes.every(x => x.v.ready === true);
-    ui.log(4, { note: true, text: `Vote, round ${round}: ` + votes.map(x => `${x.s.letter} ${x.v.ready === true ? 'ready' : 'not ready (' + (x.v.objection || 'no reason given') + ')'}`).join('; ') + (cfg.tier === 'god' ? ` (weighted ${Math.round(100 * readyW / totalW)}% ready; frontier ${frontierOK ? 'unanimous' : 'split'})` : '') });
+    agreed = cfg.tier === 'apex' ? (frontierOK && readyW / totalW >= 0.66) : votes.every(x => x.v.ready === true);
+    ui.log(4, { note: true, text: `Vote, round ${round}: ` + votes.map(x => `${x.s.letter} ${x.v.ready === true ? 'ready' : 'not ready (' + (x.v.objection || 'no reason given') + ')'}`).join('; ') + (cfg.tier === 'apex' ? ` (weighted ${Math.round(100 * readyW / totalW)}% ready; frontier ${frontierOK ? 'unanimous' : 'split'})` : '') });
     record.objections = votes.filter(x => x.v.ready !== true).map(x => ({ from: x.s, objection: String(x.v.objection || '') }));
     if (agreed) break;
     if (round < cfg.rounds) challenges = await critiqueRound(round + 1, 4);
@@ -534,7 +534,7 @@ function textModel(m) {
 function pickPanel(models, tier, includeOpen) {
   const live = models.filter(m => m && m.id && !EXCLUDE.test(m.id) && textModel(m));
   const newest = arr => arr.slice().sort((a, b) => (b.created || 0) - (a.created || 0))[0];
-  const classes = tier === 'god' ? ['light', 'mid', 'frontier'] : [tier];
+  const classes = tier === 'apex' ? ['light', 'mid', 'frontier'] : [tier];
   const out = [];
   for (const lab of LABS) {
     const mine = live.filter(m => m.id.startsWith(lab.id + '/'));
@@ -594,7 +594,7 @@ function showError(msg) { const e = $('#error'); e.textContent = msg; e.classLis
 function currentMode() { return document.querySelector('input[name=mode]:checked').value; }
 function setModeLine(cfg) {
   if (cfg.mode === 'sim') $('#modeLine').textContent = `Simulation: one model (Claude Sonnet 4.6) in ${cfg.seats.length} seats, each with a different lens, and a hub that only asks.`;
-  else $('#modeLine').textContent = `Live panel through OpenRouter: ${cfg.seats.length} seats, ${cfg.tier === 'god' ? 'god tier with weighted agreement' : cfg.tier + ' tier'}. Hub: ${cfg.hub.model}.`;
+  else $('#modeLine').textContent = `Live panel through OpenRouter: ${cfg.seats.length} seats, ${cfg.tier === 'apex' ? 'Apex tier with weighted agreement' : cfg.tier + ' tier'}. Hub: ${cfg.hub.model}.`;
 }
 document.querySelectorAll('input[name=mode]').forEach(r => r.addEventListener('change', () => { document.body.classList.toggle('or', currentMode() === 'or'); if (currentMode() === 'sim') $('#modeLine').textContent = 'Simulation: one model (Claude Sonnet 4.6) in several seats, each with a different lens, and a hub that only asks.'; else $('#modeLine').textContent = 'Live panel through OpenRouter. Paste a key, pick a tier, then convene.'; }));
 $('#chips').innerHTML = EXAMPLES.map((t, i) => `<button class="chip" type="button" data-i="${i}">${esc(t.length > 70 ? t.slice(0, 68) + '...' : t)}</button>`).join('');
@@ -633,7 +633,7 @@ function buildConfig() {
     if (list.length < 2) throw new Error('List at least two seat models, or use the pick button.');
     if (list.length > 12) throw new Error('Twelve seats is the most this prototype runs.');
     const w = { light: 1, mid: 2, frontier: 3 };
-    cfg.seats = list.map((m, i) => { const cls = m.tierClass || (cfg.tier === 'god' ? 'frontier' : cfg.tier); return { letter: LETTERS[i], key: m.model, label: m.model, lens: '', model: m.model, tierClass: cls, weight: cfg.tier === 'god' ? w[cls] : 1 }; });
+    cfg.seats = list.map((m, i) => { const cls = m.tierClass || (cfg.tier === 'apex' ? 'frontier' : cfg.tier); return { letter: LETTERS[i], key: m.model, label: m.model, lens: '', model: m.model, tierClass: cls, weight: cfg.tier === 'apex' ? w[cls] : 1 }; });
     const hubModel = $('#hubModel').value.trim() || (cfg.seats.filter(s => s.tierClass === 'frontier')[0] || cfg.seats[0]).model;
     cfg.hub = { letter: 'H', key: hubModel, label: 'hub', model: hubModel };
     cfg.baselineModel = { letter: 'B', key: hubModel, label: 'baseline', model: hubModel };

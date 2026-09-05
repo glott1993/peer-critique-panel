@@ -282,12 +282,17 @@
   }
   table.delta td:first-child { font-family: var(--sans); font-weight: 600; width: 27%; }
   table.delta td:nth-child(2) { color: var(--slate); width: 30%; }
+  table.res td:nth-child(2) { color: var(--ink); width: 34%; }
+  table.res td:first-child { width: 34%; }
   @media (max-width: 559px) {
     table.delta thead { display: none; }
     table.delta tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--tint); }
     table.delta td { display: block; padding: 2px 0; border: none; width: auto !important; }
     table.delta td:nth-child(2)::before { content: "Nearest: "; font-family: var(--sans); font-weight: 600; }
     table.delta td:nth-child(3)::before { content: "Here: "; font-family: var(--sans); font-weight: 600; }
+    table.res td:nth-child(2)::before { content: "Correct: "; }
+    table.res td:nth-child(3)::before { content: "No answer: "; }
+    table.res td:nth-child(4)::before { content: "Cost per item: "; font-family: var(--sans); font-weight: 600; }
   }
 
   ol.refs {
@@ -324,7 +329,7 @@
     <h1>A Tiered Peer-Critique Architecture for AI Answers</h1>
     <p class="sub">Every major lab's models sit on a panel and argue it out. A hub that never writes asks the questions.</p>
     <p class="draft">George W. Lott</p>
-    <p class="draft">Working draft v1.1, September 2026. DOI: <a href="https://doi.org/10.5281/zenodo.22325883" style="color:inherit">10.5281/zenodo.22325883</a></p>
+    <p class="draft">Working draft v1.2, September 2026, with pilot results. This version: DOI <span id="doi-v12">[reserved on Zenodo]</span>. Supersedes v1.1, <a href="https://doi.org/10.5281/zenodo.22325883" style="color:inherit">10.5281/zenodo.22325883</a>.</p>
     <div class="rules">
       <div>Nothing picks a model.</div>
       <div>Nothing assigns the work.</div>
@@ -335,7 +340,7 @@
   <h2>Summary</h2>
   <p class="lead">No single AI model is best at everything, and none is reliable at knowing its own weak spots. Convening a panel is now a shipped feature. This proposal is about what happens after the panel is convened: the answer has to earn its release.</p>
   <p>Every request runs through the current publicly available models from every major lab, always the latest live version of each, sorted into class tiers. The models break the request down, bid on its parts, challenge each other's drafts, and revise until they agree. A dedicated hub that never writes an answer questions the result until nothing is left open, releases it with a note on where the panel split, and keeps a running catalogue of who was challenged, who was corrected, and who was later proven wrong, so the same class of mistake is caught sooner next time.</p>
-  <p>Where an answer can be checked, this should beat the best single model by a measurable margin. Where it can't, the design says so rather than pretending otherwise. A compute-matched pilot that could show either result is specified at the end.</p>
+  <p>Where an answer can be checked, this should beat the best single model by a measurable margin. Where it can't, the design says so rather than pretending otherwise. A compute-matched pilot that could show either result is specified at the end, and its results are reported there: on 64 checkable tasks it could not separate the conditions on correctness, because every answered item was right in every condition, and it did separate them on whether an answer arrived at all.</p>
 
   <h2>What this proposal adds</h2>
   <p>Debate between models, councils of models, and judges of models all exist; the prior-work section says where. These six elements are what the design contributes, each named against its nearest neighbor.</p>
@@ -369,14 +374,14 @@
       <span class="agree">Agreement within the tier</span>
     </div>
     <div class="rung r4">
-      <span class="name">God tier</span>
+      <span class="name">Apex tier</span>
       <span class="who">Every class at once. For those who can pay for it.</span>
       <span class="agree">Agreement across tiers, weighted toward the frontier</span>
     </div>
   </div>
 
-  <p>At the god tier, the frontier models choose the final answer by looking at where the tiers agree. That agreement is weighted rather than counted one model, one vote: a lab's light model is usually distilled from its frontier model, so the two tend to be wrong in the same places, and agreement between them adds little. The lighter tiers earn their seat a different way, as cheap coverage. They catch omissions, offer alternative readings, and give a fast first pass. When a light model disagrees with a frontier model, it is more often the light model that is wrong, and the split is still recorded.</p>
-  <p>In a perfect world every request would run at the god tier. The tiers exist because that isn't affordable for the everyday user today.</p>
+  <p>At the Apex tier, the frontier models choose the final answer by looking at where the tiers agree. That agreement is weighted rather than counted one model, one vote: a lab's light model is usually distilled from its frontier model, so the two tend to be wrong in the same places, and agreement between them adds little. The lighter tiers earn their seat a different way, as cheap coverage. They catch omissions, offer alternative readings, and give a fast first pass. When a light model disagrees with a frontier model, it is more often the light model that is wrong, and the split is still recorded.</p>
+  <p>In a perfect world every request would run at the Apex tier. The tiers exist because that isn't affordable for the everyday user today.</p>
 
   <h2>The hub</h2>
   <div class="hub">
@@ -392,7 +397,7 @@
   <h2>How a request moves</h2>
   <p>The same six steps run in every tier.</p>
   <ol class="steps">
-    <li><strong>Decomposition by the panel</strong>The panel proposes a breakdown of the request into components and critiques it the same way it critiques answers. At the god tier the frontier models propose the breakdown and the lighter tiers work from it, so the request isn't debated twice. The hub does not decompose.</li>
+    <li><strong>Decomposition by the panel</strong>The panel proposes a breakdown of the request into components and critiques it the same way it critiques answers. At the Apex tier the frontier models propose the breakdown and the lighter tiers work from it, so the request isn't debated twice. The hub does not decompose.</li>
     <li><strong>Bidding, not assignment</strong>Each model puts up which components it is prepared to answer. Bids are equal: no central picker, no ranking by reputation. Models can hand components to each other mid-stream, and one model may claim the whole request.</li>
     <li><strong>Mandatory critique</strong>Every draft, whole or partial, is challenged by the other models before it goes anywhere. Drafts are attributed by seat, not by name, so a challenge targets the content rather than the label on it, and every challenge has to point at evidence. Critique is what separates good bids from bad ones.</li>
     <li><strong>Iterative molding</strong>The answer is revised across rounds, by different models, until the panel agrees it is ready to submit. Each tier has a round budget.</li>
@@ -403,12 +408,12 @@
   <h2>Release conditions</h2>
   <p>All three are required before an answer leaves the system.</p>
   <ul class="checks">
-    <li><strong>The panel agrees</strong>: within the tier on single-tier plans, across tiers at the god tier.</li>
+    <li><strong>The panel agrees</strong>: within the tier on single-tier plans, across tiers at the Apex tier.</li>
     <li><strong>The hub has no open questions left.</strong></li>
     <li><strong>Every verifiable check passes</strong>: code runs, sources are found, numbers recompute.</li>
   </ul>
   <div class="flag">
-    <p><strong>Deadlock.</strong> If the panel can't agree, or a hub question can't be answered because no source exists, within the round or time limit, lower tiers may escalate to the next tier up where the plan allows. At the god tier there is nothing above, so the best draft ships with the dispute flagged to the user.</p>
+    <p><strong>Deadlock.</strong> If the panel can't agree, or a hub question can't be answered because no source exists, within the round or time limit, lower tiers may escalate to the next tier up where the plan allows. At the Apex tier there is nothing above, so the best draft ships with the dispute flagged to the user.</p>
   </div>
 
   <h2>Guarding against shared blind spots</h2>
@@ -439,7 +444,7 @@
 
   <h2>Where the gain lives</h2>
   <p>Where an answer can be checked (math, code, lookups, data work), the panel should beat the best single model by a measurable margin, and the verifiable-checks rule is what makes the gain stick. On open-ended judgment, writing, and taste, the evidence points the other way: consensus flattens answers, and models tend to cave under critique even when they were right. There, the panel's honest output is the split note, not a better paragraph.</p>
-  <p>The cost is real. A panel of N models over R rounds spends tens of times the tokens of a single answer and takes minutes rather than seconds. That is acceptable at the god tier and needs a strict round budget at the light tier.</p>
+  <p>The cost is real. A panel of N models over R rounds spends tens of times the tokens of a single answer and takes minutes rather than seconds. That is acceptable at the Apex tier and needs a strict round budget at the light tier.</p>
   <p>One benchmark rule applies before anything is priced: each tier is measured against a single frontier-class model, not against a single model of its own class. A panel of light-class models will not generally beat one frontier model, and a tier that can't should be priced and described accordingly.</p>
 
   <h2>Prior work</h2>
@@ -502,7 +507,8 @@
     <li>That debate, councils, or model judges are new. They are not.</li>
     <li>That the panel beats a single model on open-ended work. The evidence says it flattens such answers, and the design's output there is the split note.</li>
     <li>That shared blind spots are solved. They are discounted and checked, not removed.</li>
-    <li>That this is cheaper. It is slower and costs more, and the pilot counts that against it.</li>
+    <li>That this is cheaper by tokens. It is slower and spends several times the tokens; by dollars, in the pilot, four mid-class seats plus a frontier hub cost less per item than twelve samples of the frontier model.</li>
+    <li>That the pilot below shows the panel is more accurate. It does not. It shows the panel answered when a single frontier endpoint declined, and that neither preregistered test was passed at this sample size.</li>
   </ul>
 
   <h2>Products and systems today</h2>
@@ -526,7 +532,7 @@
   <h2>Known risks</h2>
   <ul class="plain">
     <li><strong>Incentives and terms of service.</strong> A catalogue that scores each lab's models against the others is a public scorecard, and some labs restrict using their outputs to evaluate or improve competitors. Expect friction, and expect the choice of who supplies the hub to matter.</li>
-    <li><strong>The question budget is a tuning problem.</strong> Too small and the hub is a rubber stamp; too large and the god tier never ships.</li>
+    <li><strong>The question budget is a tuning problem.</strong> Too small and the hub is a rubber stamp; too large and the Apex tier never ships.</li>
     <li><strong>Deference.</strong> Even with seats instead of names, models can often recognize each other's style. Anonymized critique reduces caving; it doesn't eliminate it. Kraidia and colleagues study persuasion-driven adversarial influence in multi-agent debate <span class="cite">[20]</span> and are the reference for this risk; the designated dissenter and the verifiable-checks rule are the answer to it.</li>
     <li><strong>Moving targets.</strong> Always-latest versions mean behavior shifts without notice. The version stamps in the catalogue are the defense, and they have to be checked, not assumed.</li>
   </ul>
@@ -543,8 +549,38 @@
     <dt>What would falsify the design</dt>
     <dd>If (c) does not beat (b) on the checkable tasks, the panel is not earning its cost. If (c) does not beat (d), the hub is decoration. Either result is reported as found.</dd>
     <dt>Status</dt>
-    <dd>The harness, the task set, and the report generator are in the repository that accompanies this draft, tested end to end against a mock backend. Results against live models will be added in the next version, whichever way they come out.</dd>
+    <dd>Run on September 5, 2026. Results follow.</dd>
   </dl>
+
+  <h2>Pilot results</h2>
+  <p>Setup: OpenRouter; seats Claude Sonnet 5, GPT-5.6 Luna Pro, Gemini 3.8 Flash, and DeepSeek V4 Pro (0813), one per lab; Claude Opus 5 as the hub and as the single-model baseline; three rounds, a six-question hub budget, a designated dissenter; 64 tasks. A supplementary one-pass condition at the sampling temperature (0.7) was added after the run to test whether the refusals described below depended on temperature. Total spend for all conditions was about $34. The harness, every model call, and every result are in the repository.</p>
+  <table class="delta res">
+    <thead><tr><th>Condition</th><th>Correct of 64 (95% interval)</th><th>No answer</th><th>Cost per item</th></tr></thead>
+    <tbody>
+      <tr><td>Single frontier model, one pass, temperature 0.3</td><td>56 = 87.5% [77.2%, 93.5%]</td><td>8, all code</td><td>$0.016</td></tr>
+      <tr><td>Same, temperature 0.7</td><td>56 = 87.5% [77.2%, 93.5%]</td><td>8, all code, the same 8</td><td>$0.014</td></tr>
+      <tr><td>Same model, compute-matched: 12 samples, majority or self-review, then self-critique</td><td>62 = 96.9% [89.3%, 99.1%]</td><td>2, code</td><td>$0.209</td></tr>
+      <tr><td>Panel with hub</td><td>64 = 100% [94.3%, 100%]</td><td>0</td><td>$0.184</td></tr>
+      <tr><td>Panel without hub</td><td>64 = 100% [94.3%, 100%]</td><td>0</td><td>$0.108</td></tr>
+    </tbody>
+  </table>
+  <p>Paired differences, 95% bootstrap intervals over the 64 tasks: panel with hub minus compute-matched single model, +3.1 points [0.0, +7.8]; panel with hub minus panel without, 0.0 [0.0, 0.0]; panel minus one pass, +12.5 [+4.7, +21.9]; compute-matched minus one pass, +9.4 [+3.1, +17.2]; one pass at 0.7 minus one pass at 0.3, 0.0.</p>
+  <h3>Readout</h3>
+  <ul class="plain">
+    <li><strong>Test 1, the panel earns its cost against a compute-matched single model: not shown.</strong> The point estimate favors the panel by 3.1 points and the interval includes zero.</li>
+    <li><strong>Test 2, the hub adds value: not testable in this run.</strong> The panel was right before the hub saw it on all 64 tasks, so the hub's catch rate is undefined. It asked 3.5 questions per item, sent back 56 of 64 right answers, and never turned a right answer wrong.</li>
+    <li><strong>Every answered item was right, in every condition.</strong> The single frontier model's misses were not wrong answers. On 8 of the 20 coding prompts (plain tasks: base conversion, a CSV splitter, a range parser) the lab's own endpoint returned an empty, content-filtered reply on every one of seven attempts, at both temperatures. Twelve samples got around it on all but 2 prompts. The panel answered all 64, with a seat from the same lab on it. This is the robustness the bidding rule was designed for, arrived at from the wrong direction: nothing assigns the work, so a seat that declines a component is simply outbid.</li>
+    <li><strong>Deadlocks ran 12.5% with the hub and 14.1% without.</strong> Unanimity within three rounds fails about one time in seven even when every seat is right, and at this difficulty the flag carried no information: flagged and unflagged answers were all correct.</li>
+    <li><strong>Cost.</strong> By tokens the panel with hub spent 5.6 times the compute-matched single model. By dollars it cost less per item ($0.18 against $0.21), because mid-class tokens are several times cheaper than frontier tokens. Matching compute by tokens was the wrong currency for tiers priced by class; the next version matches by dollars as well.</li>
+  </ul>
+  <h3>What the pilot showed about the pilot</h3>
+  <ul class="plain">
+    <li>The task set was too easy. A ceiling at 100% on answered items cannot show a difference between conditions, and cannot give the hub anything to catch. The next set has to be hard enough that the panel misses some.</li>
+    <li>Three harness faults would each have biased the comparison against the single model, and each was found in the dry runs or the first pass and fixed before the numbers above: a token cap that truncated long answers, empty replies counted as answers, and a fallback host that returned filtered replies. Provider routing is now pinned to each lab's own endpoint and recorded per call.</li>
+    <li>Rate limits on a new account distorted wall-clock time, not results: 1,525 retried calls in the compute-matched condition, none in the panel conditions.</li>
+  </ul>
+  <h3>Next pilot</h3>
+  <p>Tasks calibrated to 60 to 80% single-model accuracy; at least 200 items; a dollar-matched baseline alongside the token-matched one; a sweep of the hub budget; a frontier-tier panel; factual lookups with web-enabled seats; and a replication of the refusal finding across accounts and days, since an endpoint's classifier can change without notice.</p>
 
   <h2>References</h2>
   <ol class="refs">
@@ -577,8 +613,8 @@
   <p class="refnote">Entries without an author list or identifier are cited by title and year; the working draft will fill them in before any formal submission.</p>
 
   <footer>
-    <p>Working draft v1.1, September 2026. Drafted with Claude (Anthropic). Text licensed CC BY 4.0; the accompanying prototype is MIT licensed.</p>
-    <p>Cite as: George W. Lott. A Tiered Peer-Critique Architecture for AI Answers. Working draft v1.1, Zenodo, 2026. https://doi.org/10.5281/zenodo.22325883</p>
+    <p>Working draft v1.2, September 2026. Drafted with Claude (Anthropic). Text licensed CC BY 4.0; the accompanying prototype and pilot harness are MIT licensed.</p>
+    <p>Cite as: George W. Lott. A Tiered Peer-Critique Architecture for AI Answers. Working draft v1.2, Zenodo, 2026. <span id="cite-doi">DOI reserved on Zenodo</span>. Version 1.1: https://doi.org/10.5281/zenodo.22325883</p>
   </footer>
 
 </div>

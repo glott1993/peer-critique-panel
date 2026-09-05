@@ -320,7 +320,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
         total_w = sum(s.weight for s in seats)
         frontier = [s for s in seats if s.tier_class == "frontier"]
         frontier_ok = all(next((v for s2, v in votes if s2 is s), {}).get("ready") is True for s in frontier)
-        agreed = (frontier_ok and ready_w / total_w >= 0.66) if cfg.get("tier") == "god" else all(v.get("ready") is True for _, v in votes)
+        agreed = (frontier_ok and ready_w / total_w >= 0.66) if cfg.get("tier") in ("apex", "god") else all(v.get("ready") is True for _, v in votes)
         record["objections"] = [{"from": s, "objection": str(v.get("objection") or "")} for s, v in votes if v.get("ready") is not True]
         log.append({"step": 4, "round": rnd, "votes": {s.letter: (v.get("ready") is True) for s, v in votes}, "agreed": agreed})
         if agreed:

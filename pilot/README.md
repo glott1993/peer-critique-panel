@@ -30,6 +30,8 @@ Scoring: a stored integer must match exactly; a stored decimal must match to wit
 
 Two tunables in `config.json`: `answer_tokens` (cap on calls that write an answer; 6000 by default) and `max_k` (cap on condition b's samples; 12 by default). Lowering `max_k` under-budgets b relative to c and should be reported if used.
 
+Added after the first run: condition `a2` (one pass at the sampling temperature, `--conditions a2`), a no-answer table in the report (items where every attempt returned an empty or filtered reply are counted separately from wrong answers), `provider_pins` in `config.json` to keep a lab's model on the lab's own endpoint (fallback hosts returned empty, filtered replies), and automatic retry of errored tasks on rerun.
+
 `python run_pilot.py --mock --limit 3` runs the whole harness offline with a fake backend, which is how it was tested; the numbers it prints mean nothing.
 
 ## Cost

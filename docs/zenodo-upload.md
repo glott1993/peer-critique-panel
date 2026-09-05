@@ -45,3 +45,13 @@ Drafted with the assistance of Claude (Anthropic). A browser prototype of the pr
 
 - Put the DOI in `README.md` (the badge and the BibTeX), `CITATION.cff`, and the proposal footer. I'll do this if you send me the DOI.
 - The DOI link is what goes in the LessWrong post, the Show HN post, and the notes to researchers.
+
+
+## Version 1.2 (results)
+
+1. On the published record, choose **New version**. Zenodo copies the metadata.
+2. Delete the old PDF from the new version's files, upload `proposal/tiered-peer-critique-proposal.pdf` (v1.2).
+3. Reserve the DOI for the new version and send it; the PDF footer, README, and CITATION.cff get it, then replace the file once more.
+4. Set Version to 1.2, publication date to the day you publish, and update the description's last sentence: "Version 1.2 adds the results of the preregistered pilot: on 64 checkable tasks neither test was passed at this sample size; every answered item was right in every condition, and the conditions separated only on whether an answer arrived at all."
+5. Publish. The concept DOI on the record always resolves to the latest version; the v1.1 DOI keeps resolving to v1.1.
+6. On GitHub, create release `v1.2` with the new PDF attached.
