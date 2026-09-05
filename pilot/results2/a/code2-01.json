@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-01",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.6,
+ "tokens": 575,
+ "prompt_tokens": 274,
+ "completion_tokens": 301,
+ "cost": 0.0089,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef top_k_by_score(items, k):\n    \"\"\"Return the k highest-scoring names, highest score first.\n\n    Ties in score are broken by name in ascending string order.\n    The input list is never modified.\n    \"\"\"\n    if k <= 0:\n        return []\n    ordered = sorted(items, key=lambda pair: (-pair[1], pair[0]))\n    return [name for name, _ in ordered[:k]]\n```\n\nNotes: `sorted` builds a new list, so `items` is untouched. Using `-score` as the primary key gives descending score while keeping the name key ascending, and a guard on `k <= 0` avoids the negative-slice pitfall (`ordered[:-2]` would silently drop items)."
+}

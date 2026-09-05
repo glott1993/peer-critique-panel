@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 15.5,
+ "tokens": 1679,
+ "prompt_tokens": 344,
+ "completion_tokens": 1335,
+ "cost": 0.0351,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here's a regex-based implementation. The single regex enforces the ordering of designators, and two extra checks handle the \"at least one component\" and \"T must be followed by a time component\" rules.\n\n```python\nimport re\n\n_ISO_DURATION_RE = re.compile(\n    r'\\AP'\n    r'(?:(\\d+)Y)?'\n    r'(?:(\\d+)M)?'\n    r'(?:(\\d+)D)?'\n    r'(?:T'\n    r'(?:(\\d+)H)?'\n    r'(?:(\\d+)M)?'\n    r'(?:(\\d+)S)?'\n    r')?\\Z'\n)\n\n_SECONDS = (\n    365 * 86400,  # years\n    30 * 86400,   # months\n    86400,        # days\n    3600,         # hours\n    60,           # minutes\n    1,            # seconds\n)\n\n\ndef parse_iso_duration(s: str) -> int:\n    \"\"\"Convert an ISO 8601 duration string to a whole number of seconds.\n\n    1 year == 365 days, 1 month == 30 days, 1 day == 86400 seconds.\n    Raises ValueError on anything that is not a well-formed duration.\n    \"\"\"\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    m = _ISO_DURATION_RE.match(s)\n    if m is None:\n        raise ValueError(\"invalid ISO 8601 duration: %r\" % (s,))\n\n    groups = m.groups()\n\n    # At least one component must be present (rejects 'P' and 'PT').\n    if all(g is None for g in groups):\n        raise ValueError(\"invalid ISO 8601 duration: %r\" % (s,))\n\n    # 'T' may appear only if at least one time component follows.\n    if 'T' in s and all(g is None for g in groups[3:]):\n        raise ValueError(\"invalid ISO 8601 duration: %r\" % (s,))\n\n    total = 0\n    for value, factor in zip(groups, _SECONDS):\n        if value is not None:\n            total += int(value) * factor\n    return total\n\n\nassert parse_iso_duration('PT1H30M') == 5400\nassert parse_iso_duration('P1D') == 86400\n```\n\nNote that `M` before `T` is parsed as months and after `T` as minutes, which the positional regex handles automatically; lowercase input, decimals, signs, and a missing leading `P` all fail the anchored match."
+}

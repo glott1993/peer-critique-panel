@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-17",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 9.8,
+ "tokens": 1095,
+ "prompt_tokens": 327,
+ "completion_tokens": 768,
+ "cost": 0.02083,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef sudoku_valid(board):\n    \"\"\"Return True if no row, column, or 3x3 box repeats a non-zero digit.\n\n    The board may be incomplete (0 means empty) and need not be solvable.\n    Raises ValueError if the board is not 9x9 or holds a value outside 0..9.\n    \"\"\"\n    # --- shape validation -------------------------------------------------\n    if not isinstance(board, (list, tuple)) or len(board) != 9:\n        raise ValueError(\"board must be a 9x9 grid\")\n    for row in board:\n        if not isinstance(row, (list, tuple)) or len(row) != 9:\n            raise ValueError(\"board must be a 9x9 grid\")\n\n    # --- value validation -------------------------------------------------\n    for row in board:\n        for value in row:\n            if isinstance(value, bool) or not isinstance(value, int):\n                raise ValueError(\"board values must be integers 0..9\")\n            if value < 0 or value > 9:\n                raise ValueError(\"board values must be integers 0..9\")\n\n    # --- duplicate checks -------------------------------------------------\n    rows = [set() for _ in range(9)]\n    cols = [set() for _ in range(9)]\n    boxes = [set() for _ in range(9)]\n\n    for r in range(9):\n        for c in range(9):\n            v = board[r][c]\n            if v == 0:\n                continue\n            b = (r // 3) * 3 + (c // 3)\n            if v in rows[r] or v in cols[c] or v in boxes[b]:\n                return False\n            rows[r].add(v)\n            cols[c].add(v)\n            boxes[b].add(v)\n\n    return True\n```\n\nShape and value checks run first so an invalid board always raises before any duplicate scanning; the main loop then tracks seen digits per row, column, and box in one pass."
+}

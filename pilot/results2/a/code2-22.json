@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-22",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 7.5,
+ "tokens": 817,
+ "prompt_tokens": 275,
+ "completion_tokens": 542,
+ "cost": 0.01493,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Standard 0/1 knapsack with a 1\u2011D DP array iterated in reverse (which also handles zero\u2011weight items correctly, since each item is applied at most once per cell).\n\n```python\nfrom typing import List, Tuple\n\n\ndef knapsack(items: List[Tuple[int, int]], capacity: int) -> int:\n    if capacity < 0:\n        return 0\n    dp = [0] * (capacity + 1)\n    for weight, value in items:\n        if weight > capacity:\n            continue\n        for c in range(capacity, weight - 1, -1):\n            cand = dp[c - weight] + value\n            if cand > dp[c]:\n                dp[c] = cand\n    return dp[capacity]\n```\n\n- `dp[c]` = best value achievable with total weight at most `c`.\n- Empty `items` or `capacity == 0` yields 0, except zero\u2011weight positive\u2011value items, which are still picked up (their inner loop runs down to index 0).\n- Runs in O(n \u00b7 capacity) time and O(capacity) space."
+}

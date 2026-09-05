@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-15",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 15.2,
+ "tokens": 1596,
+ "prompt_tokens": 381,
+ "completion_tokens": 1215,
+ "cost": 0.03228,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef json_pointer(doc, pointer: str):\n    \"\"\"Resolve an RFC 6901 JSON Pointer against nested dicts/lists.\"\"\"\n    if not isinstance(pointer, str):\n        raise ValueError(\"pointer must be a string\")\n    if pointer == \"\":\n        return doc\n    if not pointer.startswith(\"/\"):\n        raise ValueError(\"pointer must be empty or start with '/'\")\n\n    current = doc\n    for raw in pointer.split(\"/\")[1:]:\n        # '~1' must be decoded before '~0'\n        token = raw.replace(\"~1\", \"/\").replace(\"~0\", \"~\")\n\n        if isinstance(current, dict):\n            if token not in current:\n                raise ValueError(\"missing key: %r\" % (token,))\n            current = current[token]\n        elif isinstance(current, list):\n            if token == \"\" or not all(\"0\" <= c <= \"9\" for c in token):\n                raise ValueError(\"invalid array index: %r\" % (token,))\n            idx = int(token)\n            if idx >= len(current):\n                raise ValueError(\"array index out of range: %r\" % (token,))\n            current = current[idx]\n        else:\n            raise ValueError(\n                \"cannot index into value of type %s\" % type(current).__name__\n            )\n    return current\n```\n\nNotes: the empty pointer returns the document unchanged; each segment is unescaped (`~1` \u2192 `/` first, then `~0` \u2192 `~`); dict lookups use the decoded segment as a key, list lookups require ASCII decimal digits only (so `+1`, `-1`, ` 1`, `1.0`, and `-` all raise `ValueError`), and any other container type raises `ValueError`."
+}

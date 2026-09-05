@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-01",
+ "type": "multi",
+ "condition": "a",
+ "correct": true,
+ "detail": "ok: got 120.0, expected 120.0 | ok: got 4173.0, expected 4173.0 | ok: got 19213.46, expected 19213.46",
+ "error": null,
+ "seconds": 92.7,
+ "tokens": 9187,
+ "prompt_tokens": 393,
+ "completion_tokens": 8794,
+ "cost": 0.22182,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\n233 is prime, so exponents reduce mod 232: 529 mod 232 = 65, need 66^65 mod 233.\n66\u00b2 = 4356 \u2261 162; 66\u2074 \u2261 162\u00b2 = 26244 \u2261 148; 66\u2078 \u2261 148\u00b2 = 21904 \u2261 2.\nSo 66\u00b9\u2076 \u2261 4, 66\u00b3\u00b2 \u2261 16, 66\u2076\u2074 \u2261 256 \u2261 23.\n66\u2076\u2075 \u2261 23\u00b766 = 1518 \u2261 1518 \u2212 1398 = **120**.\n\n**Part B**\nDivisible by 5, 7, or 11 (N = 12000):\n2400 + 1714 + 1090 \u2212 342 \u2212 218 \u2212 155 + 31 = 4520.\nOf these, also divisible by 13 (i.e., by 65, 91, or 143):\n184 + 131 + 83 \u2212 26 \u2212 16 \u2212 11 + 2 = 347.\n4520 \u2212 347 = **4173**.\n\n**Part C**\ni = 0.005, n = 48, (1.005)^48 = 1.2704891586.\nPayment = 31200(0.005)(1.270489159)/(0.270489159) = 732.73291152.\nBalance after 18 months without extras:\n31200(1.005)^18 \u2212 Pmt\u00b7[((1.005)^18 \u22121)/0.005] with (1.005)^18 = 1.0939289396, annuity factor 18.7857879\n= 34130.58291 \u2212 13764.96507 = 20365.61784.\nExtra principal grows with interest:\n500(1.005)^12 = 500(1.0616778) = 530.83891\n600(1.005)^7 = 600(1.0355294) = 621.31764\nBalance = 20365.61784 \u2212 530.83891 \u2212 621.31764 = 19213.4613 \u2248 **19213.46**\n\nFINAL: 120; 4173; 19213.46"
+}

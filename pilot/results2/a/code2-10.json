@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-10",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 9.9,
+ "tokens": 1241,
+ "prompt_tokens": 318,
+ "completion_tokens": 923,
+ "cost": 0.02466,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport calendar\nfrom datetime import date\n\n\ndef nth_weekday(year, month, weekday, n):\n    \"\"\"Return the ISO date of the n-th `weekday` (0=Mon .. 6=Sun) in the month.\n\n    n in 1..5 selects the first..fifth occurrence; n == -1 selects the last.\n    Raises ValueError if the occurrence does not exist (or on bad arguments).\n    \"\"\"\n    if not isinstance(weekday, int) or isinstance(weekday, bool) or not 0 <= weekday <= 6:\n        raise ValueError(\"weekday must be an integer 0 (Monday) .. 6 (Sunday)\")\n    if n not in (1, 2, 3, 4, 5, -1):\n        raise ValueError(\"n must be 1..5 or -1\")\n\n    first_weekday, days_in_month = calendar.monthrange(year, month)  # may raise ValueError\n\n    # Day-of-month of the first occurrence of the requested weekday.\n    first_occurrence = 1 + (weekday - first_weekday) % 7\n\n    if n == -1:\n        day = first_occurrence + 7 * ((days_in_month - first_occurrence) // 7)\n    else:\n        day = first_occurrence + 7 * (n - 1)\n        if day > days_in_month:\n            raise ValueError(\n                \"no occurrence %d of weekday %d in %04d-%02d\" % (n, weekday, year, month)\n            )\n\n    return date(year, month, day).isoformat()\n```"
+}

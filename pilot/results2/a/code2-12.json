@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-12",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 5.5,
+ "tokens": 595,
+ "prompt_tokens": 209,
+ "completion_tokens": 386,
+ "cost": 0.01069,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Standard dynamic programming, using a rolling 1-D array to keep memory at O(min(len(a), len(b))).\n\n```python\ndef lcs_length(a: str, b: str) -> int:\n    \"\"\"Length of the longest common subsequence of a and b.\"\"\"\n    if not a or not b:\n        return 0\n\n    # Iterate over the longer string in the outer loop so the DP row is short.\n    if len(b) > len(a):\n        a, b = b, a\n\n    n = len(b)\n    prev = [0] * (n + 1)\n    curr = [0] * (n + 1)\n\n    for ch in a:\n        for j in range(1, n + 1):\n            if ch == b[j - 1]:\n                curr[j] = prev[j - 1] + 1\n            else:\n                left = curr[j - 1]\n                up = prev[j]\n                curr[j] = left if left >= up else up\n        prev, curr = curr, prev\n        curr[0] = 0  # reused row; index 0 must stay 0 (rest is overwritten)\n\n    return prev[n]\n```\n\nIt runs in O(len(a) * len(b)) time and handles empty inputs by returning 0 immediately."
+}

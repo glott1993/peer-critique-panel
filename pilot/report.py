@@ -50,7 +50,7 @@ def load():
     res = {}
     for cond in os.listdir(RESULTS) if os.path.isdir(RESULTS) else []:
         d = os.path.join(RESULTS, cond)
-        if os.path.isdir(d) and cond in COND_ORDER:
+        if os.path.isdir(d) and (cond in COND_ORDER or (cond.startswith("seat") and cond[4:].isdigit())):
             res[cond] = {}
             for fn in os.listdir(d):
                 if fn.endswith(".json"):
@@ -70,7 +70,13 @@ def main():
         raise SystemExit("no results yet")
     meta = json.load(open(os.path.join(RESULTS, "run_meta.json"))) if os.path.exists(os.path.join(RESULTS, "run_meta.json")) else {}
     types = sorted({r["type"] for c in res.values() for r in c.values()})
-    conds = [c for c in COND_ORDER if c in res]
+    seat_conds = sorted([c for c in res if c.startswith("seat")], key=lambda c: int(c[4:]))
+    conds = [c for c in COND_ORDER if c in res] + seat_conds
+    seat_models = {f"seat{i + 1}": sd.get("label") or sd.get("model") for i, sd in enumerate((meta.get("config") or {}).get("seats", []))}
+    for c in seat_conds:
+        COND_NAMES[c] = f"seat model alone, one pass: {seat_models.get(c, c)}"
+    # the strongest single seat model, for comparisons
+    seat_best = max(seat_conds, key=lambda c: sum(r["correct"] for r in res[c].values()) / max(1, len(res[c]))) if seat_conds else None
     lines = ["# Pilot results", ""]
     if meta:
         lines.append(f"Run started {meta.get('started')}; {'MOCK backend (no real models)' if meta.get('mock') else 'OpenRouter'}; tasks from `{meta.get('tasks_file')}`.")
@@ -96,7 +102,10 @@ def main():
 
     # paired differences
     lines += ["## Paired differences in accuracy (95% bootstrap interval, tasks present in both conditions)", ""]
-    for x, y in (("c", "a"), ("c", "a2"), ("c", "a3"), ("c", "b"), ("c", "bd"), ("c", "d"), ("d", "b"), ("d", "bd"), ("b", "a"), ("bd", "a"), ("d", "a"), ("a2", "a"), ("a3", "a")):
+    pairs = [("c", "a"), ("c", "a2"), ("c", "a3"), ("c", "b"), ("c", "bd"), ("c", "d"), ("d", "b"), ("d", "bd"), ("b", "a"), ("bd", "a"), ("d", "a"), ("a2", "a"), ("a3", "a")]
+    if seat_best:
+        pairs += [("c", seat_best), ("d", seat_best), ("a", seat_best)] + [(seat_best, c2) for c2 in seat_conds if c2 != seat_best]
+    for x, y in pairs:
         if x in res and y in res:
             common = sorted(set(res[x]) & set(res[y]))
             if not common:

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-30",
+ "type": "multi",
+ "condition": "a",
+ "correct": true,
+ "detail": "ok: got 21717.91, expected 21717.91 | ok: got 2828.42, expected 2828.42 | ok: got 38.0, expected 38.0",
+ "error": null,
+ "seconds": 120.4,
+ "tokens": 12431,
+ "prompt_tokens": 569,
+ "completion_tokens": 11862,
+ "cost": 0.2994,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\n\nMonthly rate i = 0.005, n = 60, 1.005^60 = 1.348850153\nPayment P = 31200(0.005)(1.348850153)/(0.348850153) = 603.1834075\n\nBalance after 18 payments ignoring extras:\n31200(1.005^18) \u2212 P\u00b7[(1.005^18\u22121)/0.005] = 34130.582919 \u2212 11331.275582 = 22799.307337\n\nEffect of extras at month 18:\n300(1.005^13) = 320.095860; 750(1.005^3) = 761.306344 \u2192 total 1081.402204\n\nBalance = 22799.307337 \u2212 1081.402204 = 21717.9051 \u2192 **$21,717.91**\n\n**Part B**\n\nTotal units sold = 40+52+93+31+109+95 = 420, so FIFO cost = cost of the first 420 units:\n154 @6.41 = 987.14\n62 @6.88 = 426.56\n92 @8.48 = 780.16\n68 @4.44 = 301.92\n44 @7.56 = 332.64 (154+62+92+68+44 = 420)\nTotal = **$2,828.42**\n\n**Part C**\n\n16^639 = 2^2556; 163 is prime, order divides 162; 2556 mod 162 = 126, so need 2^126 mod 163.\n2^8 = 93, 2^16 = 10, 2^32 = 100, 2^64 = 57.\n126 = 64+32+16+8+4+2: 57\u00b7100 = 158; \u00b710 = 113; \u00b793 = 77; \u00b716 = 91; \u00b74 = 38.\nRemainder = **38**\n\nFINAL: 21717.91; 2828.42; 38"
+}

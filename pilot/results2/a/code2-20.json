@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-20",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 5.0,
+ "tokens": 741,
+ "prompt_tokens": 313,
+ "completion_tokens": 428,
+ "cost": 0.01226,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef justify(words, width):\n    if not words:\n        return []\n\n    lines = []\n    cur = []\n    cur_len = 0\n\n    for w in words:\n        # +len(cur) accounts for the minimum single space between words\n        if cur and cur_len + len(w) + len(cur) > width:\n            lines.append(cur)\n            cur = [w]\n            cur_len = len(w)\n        else:\n            cur.append(w)\n            cur_len += len(w)\n    if cur:\n        lines.append(cur)\n\n    result = []\n    for i, line in enumerate(lines):\n        is_last = (i == len(lines) - 1)\n        if is_last or len(line) == 1:\n            s = ' '.join(line)\n            result.append(s + ' ' * (width - len(s)))\n        else:\n            total_chars = sum(len(w) for w in line)\n            gaps = len(line) - 1\n            spaces = width - total_chars\n            base, extra = divmod(spaces, gaps)\n            parts = []\n            for j, w in enumerate(line[:-1]):\n                parts.append(w)\n                parts.append(' ' * (base + (1 if j < extra else 0)))\n            parts.append(line[-1])\n            result.append(''.join(parts))\n    return result\n```"
+}

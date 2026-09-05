@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-25",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 8.3,
+ "tokens": 981,
+ "prompt_tokens": 367,
+ "completion_tokens": 614,
+ "cost": 0.01718,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Gale\u2013Shapley with proposers proposing; at each step the lexicographically smallest free proposer (that still has receivers left on its list) proposes to its next choice, and each receiver keeps whichever suitor it prefers.\n\n```python\ndef stable_matching(proposers, receivers):\n    # Rank tables for O(1) preference comparisons on the receiver side.\n    rank = {\n        r: {p: i for i, p in enumerate(prefs)}\n        for r, prefs in receivers.items()\n    }\n\n    next_index = {p: 0 for p in proposers}   # next receiver to propose to\n    engaged = {}                             # receiver -> proposer\n    match = {}                               # proposer -> receiver\n\n    while True:\n        # Free proposers that still have someone to propose to, in string order.\n        free = sorted(\n            p for p in proposers\n            if p not in match and next_index[p] < len(proposers[p])\n        )\n        if not free:\n            break\n\n        p = free[0]\n        r = proposers[p][next_index[p]]\n        next_index[p] += 1\n\n        if r not in engaged:\n            engaged[r] = p\n            match[p] = r\n        else:\n            current = engaged[r]\n            if rank[r].get(p, float('inf')) < rank[r].get(current, float('inf')):\n                del match[current]\n                engaged[r] = p\n                match[p] = r\n            # otherwise the receiver rejects p, who stays free\n\n    return match\n```"
+}

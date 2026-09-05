@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-24",
+ "type": "multi4",
+ "condition": "a",
+ "correct": true,
+ "detail": "ok: got 1231.0, expected 1231.0 | ok: got 3201.0, expected 3201.0 | ok: got '2026-07-20', expected '2026-07-20' | ok: got 19618.25, expected 19618.25",
+ "error": null,
+ "seconds": 114.5,
+ "tokens": 11954,
+ "prompt_tokens": 644,
+ "completion_tokens": 11310,
+ "cost": 0.28597,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nMultiples \u22645000: 6\u2192833, 10\u2192500, 15\u2192333; all pairwise LCMs = 30 \u2192166; triple = 166.\nUnion = 833+500+333 \u2212 3(166) + 166 = 1334.\nAlso divisible by 13: 78\u219264, 130\u219238, 195\u219225; pairwise/triple LCM = 390\u219212.\nUnion = 64+38+25 \u2212 36 + 12 = 103.\n1334 \u2212 103 = **1231**\n\n**Part B**\nPer day (reg / 1.5\u00d7 / 2\u00d7): 8:8; 13:8,4,1; 10:8,2; 9:8,1; 0:\u2014; 11:8,3; 9.5:8,1.5; 6:6; 10:8,2; 13:8,4,1; 13:8,4,1; 9.5:8,1.5; 10:8,2; 8:8.\nRegular = 102 h, OT = 25 h, DT = 3 h.\nPay = 102(22) + 25(33) + 3(44) = 2244 + 825 + 132 = **3201.00**\n\n**Part C**\n2026-03-15 is a Sunday; first business day is Mon 2026-03-16. All 5 holidays fall on weekdays, so we need the 91st weekday after Mar 15: Mar 16 + 18 weeks = 2026-07-20 (a Monday). 91 \u2212 5 = 86.\n**2026-07-20**\n\n**Part D**\ni = 0.00575, n = 48, (1.00575)^48 = 1.3168065535 \u2192 PMT = 31200(0.00575)(1.3168066)/(0.3168066) = 745.6761644.\nRegular balance at 18: 31200(1.00575)^18 \u2212 PMT\u00b7[((1.00575)^18\u22121)/i] = 34591.9732 \u2212 14098.7380 = 20493.2352.\nExtras compounded: 500(1.00575)^16 = 548.0380; 300(1.00575)^15 = 326.9429.\nBalance = 20493.2352 \u2212 548.0380 \u2212 326.9429 = **19618.25**\n\nFINAL: 1231; 3201.00; 2026-07-20; 19618.25"
+}

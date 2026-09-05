@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-11",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 13.6,
+ "tokens": 1659,
+ "prompt_tokens": 443,
+ "completion_tokens": 1216,
+ "cost": 0.03261,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom datetime import date, datetime, timedelta\n\n\ndef _parse(s):\n    \"\"\"Parse an ISO date or datetime string into a datetime object.\"\"\"\n    if isinstance(s, datetime):\n        return s\n    if isinstance(s, date):\n        return datetime(s.year, s.month, s.day)\n    s = str(s).strip()\n    try:\n        return datetime.fromisoformat(s)\n    except ValueError:\n        return datetime.combine(date.fromisoformat(s[:10]), datetime.min.time())\n\n\ndef reconcile(bank, ledger, window=2):\n    \"\"\"\n    Greedy bank reconciliation.\n\n    Bank items are processed in order of (date, id).  For each, the earliest-dated\n    unmatched ledger item with an equal amount and a date within `window` days is\n    chosen (ties broken by id).  Each item is used at most once.\n\n    Returns (matches, unmatched_bank, unmatched_ledger).\n    \"\"\"\n    bank = list(bank)\n    ledger = list(ledger)\n\n    bank_dt = [_parse(item[1]) for item in bank]\n    ledger_dt = [_parse(item[1]) for item in ledger]\n\n    limit = timedelta(days=window)\n\n    # Bank processing order: by date, then id.\n    bank_order = sorted(range(len(bank)), key=lambda i: (bank_dt[i], bank[i][0]))\n    # Candidate preference order for ledger: by date, then id.\n    ledger_order = sorted(range(len(ledger)), key=lambda j: (ledger_dt[j], ledger[j][0]))\n\n    ledger_used = [False] * len(ledger)\n    bank_used = [False] * len(bank)\n    matches = []\n\n    for i in bank_order:\n        b_id, _, b_amt = bank[i]\n        for j in ledger_order:\n            if ledger_used[j]:\n                continue\n            l_id, _, l_amt = ledger[j]\n            if l_amt != b_amt:\n                continue\n            if abs(bank_dt[i] - ledger_dt[j]) <= limit:\n                ledger_used[j] = True\n                bank_used[i] = True\n                matches.append((b_id, l_id))\n                break\n\n    unmatched_bank = [bank[i][0] for i in range(len(bank)) if not bank_used[i]]\n    unmatched_ledger = [ledger[j][0] for j in range(len(ledger)) if not ledger_used[j]]\n\n    return matches, unmatched_bank, unmatched_ledger\n```\n\nNotes: dates are compared as timestamps, so plain `YYYY-MM-DD` strings and full ISO datetimes both work; unmatched lists preserve the original input order while matches follow the greedy processing order."
+}

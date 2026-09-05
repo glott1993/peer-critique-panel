@@ -155,6 +155,7 @@ def main():
     ap.add_argument("--conditions", default="a,c,d,b", help="order matters: b is sized from c")
     ap.add_argument("--limit", type=int, default=0, help="tasks per type (0 = all)")
     ap.add_argument("--pick", default="", help="per-type counts, e.g. multi=40,multi4=40,code=30,math=10; types not listed are skipped")
+    ap.add_argument("--ids", default="", help="file with one task id per line; only those tasks run")
     ap.add_argument("--dry-run", action="store_true", help="1 task per type")
     ap.add_argument("--mock", action="store_true", help="offline mock backend")
     ap.add_argument("--workers", type=int, default=0)
@@ -185,6 +186,9 @@ def main():
             return
 
     panel.ANSWER_TOKENS = int(cfg.get("answer_tokens", panel.ANSWER_TOKENS))
+    if a.ids:
+        keep = {l.strip() for l in open(a.ids) if l.strip()}
+        tasks = [t for t in tasks if t["id"] in keep]
     if a.pick:
         want = {kv.split("=")[0]: int(kv.split("=")[1]) for kv in a.pick.split(",")}
         chosen, seen = [], {}
@@ -243,6 +247,11 @@ def main():
                     if not cfg.get("baseline_alt"):
                         raise SystemExit("condition a3 needs baseline_alt in config.json")
                     out = run_a(task, dict(cfg, baseline=cfg["baseline_alt"]), api, ctx)
+                elif cond.startswith("seat") and cond[4:].isdigit():
+                    idx = int(cond[4:]) - 1
+                    if not 0 <= idx < len(cfg["seats"]):
+                        raise SystemExit(f"no seat {idx + 1} in config.json")
+                    out = run_a(task, dict(cfg, baseline=cfg["seats"][idx]["model"]), api, ctx)
                 elif cond == "b":
                     kt, kd = k_by_type[task["type"]], kd_by_type[task["type"]]
                     kmax = max(kt, kd)

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-16",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 25.5,
+ "tokens": 2724,
+ "prompt_tokens": 408,
+ "completion_tokens": 2316,
+ "cost": 0.05994,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\n_VERSION_RE = re.compile(r'^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$')\n_COMPARATOR_RE = re.compile(r'^(>=|<=|>|<|=)?\\s*(.*)$')\n\n\ndef satisfies(version: str, spec: str) -> bool:\n    \"\"\"Return True if `version` satisfies `spec`.\n\n    Supported specs: exact ('1.2.3'), caret ('^1.2.3'), tilde ('~1.2.3'),\n    or a space-separated conjunction of comparators ('>=1.0.0 <2.0.0').\n    Raises ValueError on malformed input.\n    \"\"\"\n\n    def parse_version(text):\n        if not isinstance(text, str):\n            raise ValueError(\"version must be a string\")\n        m = _VERSION_RE.match(text.strip())\n        if not m:\n            raise ValueError(\"malformed version: %r\" % (text,))\n        return tuple(int(g) for g in m.groups())\n\n    ver = parse_version(version)\n\n    if not isinstance(spec, str):\n        raise ValueError(\"spec must be a string\")\n    s = spec.strip()\n    if not s:\n        raise ValueError(\"empty spec\")\n\n    def in_range(low, high):  # [low, high)\n        return low <= ver < high\n\n    # Caret / tilde ranges: must constitute the whole spec.\n    if s[0] in '^~':\n        base = parse_version(s[1:])\n        M, m, p = base\n        if s[0] == '^':\n            if M > 0:\n                upper = (M + 1, 0, 0)\n            elif m > 0:\n                upper = (0, m + 1, 0)\n            else:\n                upper = (0, 0, p + 1)\n        else:  # '~'\n            upper = (M, m + 1, 0)\n        return in_range(base, upper)\n\n    # Otherwise: conjunction of comparators (or a bare exact version).\n    raw_tokens = s.split()\n    tokens = []\n    i = 0\n    while i < len(raw_tokens):\n        tok = raw_tokens[i]\n        if tok in ('>=', '<=', '>', '<', '='):\n            # operator separated from its version by whitespace\n            if i + 1 >= len(raw_tokens):\n                raise ValueError(\"malformed spec: %r\" % (spec,))\n            tokens.append(tok + raw_tokens[i + 1])\n            i += 2\n        else:\n            tokens.append(tok)\n            i += 1\n\n    if not tokens:\n        raise ValueError(\"malformed spec: %r\" % (spec,))\n\n    for tok in tokens:\n        if tok[0] in '^~':\n            raise ValueError(\"caret/tilde ranges cannot be combined: %r\" % (spec,))\n        m = _COMPARATOR_RE.match(tok)\n        op = m.group(1) or '='\n        target = parse_version(m.group(2))\n        if op == '=':\n            ok = ver == target\n        elif op == '>':\n            ok = ver > target\n        elif op == '>=':\n            ok = ver >= target\n        elif op == '<':\n            ok = ver < target\n        else:  # '<='\n            ok = ver <= target\n        if not ok:\n            return False\n    return True\n```\n\nNotes: versions must be exactly three non-negative integers without leading zeros (per semver); anything else raises `ValueError`. Caret/tilde ranges are only valid as a complete spec, while comparators may be freely conjoined (a bare version inside a conjunction is treated as `=`)."
+}

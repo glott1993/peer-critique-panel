@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-28",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 8.5,
+ "tokens": 997,
+ "prompt_tokens": 327,
+ "completion_tokens": 670,
+ "cost": 0.01838,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    t = s.replace('-', '').replace(' ', '')\n    if len(t) == 10:\n        if not all(c.isdigit() and c.isascii() for c in t[:9]):\n            return False\n        last = t[9]\n        if last == 'X':\n            v = 10\n        elif last.isdigit() and last.isascii():\n            v = int(last)\n        else:\n            return False\n        total = sum((i + 1) * int(c) for i, c in enumerate(t[:9])) + 10 * v\n        return total % 11 == 0\n    if len(t) == 13:\n        if not all(c.isdigit() and c.isascii() for c in t):\n            return False\n        total = sum(int(c) * (1 if i % 2 == 0 else 3) for i, c in enumerate(t))\n        return total % 10 == 0\n    return False\n```\n\nHyphens and spaces are stripped first; `isdigit()`/`isascii()` together reject non-ASCII digit characters, and lowercase `'x'` fails the check since only the exact character `'X'` is accepted."
+}

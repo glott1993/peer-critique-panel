@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-04",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 16.2,
+ "tokens": 1503,
+ "prompt_tokens": 343,
+ "completion_tokens": 1160,
+ "cost": 0.03071,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\ndef shortest_path(graph, src, dst):\n    if src == dst:\n        return [src]\n    if src not in graph:\n        return []\n\n    # (total_weight, path_so_far, node)\n    heap = [(0, [src], src)]\n    best = {}  # finalized nodes -> True\n\n    while heap:\n        dist, path, node = heapq.heappop(heap)\n        if node in best:\n            continue\n        best[node] = True\n        if node == dst:\n            return path\n        for nbr, w in graph.get(node, {}).items():\n            if nbr in best:\n                continue\n            heapq.heappush(heap, (dist + w, path + [nbr], nbr))\n\n    return []\n```\n\nNotes: it's Dijkstra where the priority key is `(distance, path)`, so ties in weight are broken by the lexicographically smallest path. This is correct because with positive weights two equal-weight paths to the same node can never have one as a prefix of the other, so appending a node preserves their lexicographic order."
+}

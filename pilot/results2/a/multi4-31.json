@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-31",
+ "type": "multi4",
+ "condition": "a",
+ "correct": true,
+ "detail": "ok: got 130.8, expected 130.8 | ok: got '137/165', expected '137/165' | ok: got 16233.34, expected 16233.34 | ok: got 118.0, expected 118.0",
+ "error": null,
+ "seconds": 92.3,
+ "tokens": 9647,
+ "prompt_tokens": 519,
+ "completion_tokens": 9128,
+ "cost": 0.2308,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nFactor = 0.85 \u00d7 1.18 \u00d7 1.12\u00b3 = 0.85 \u00d7 1.18 \u00d7 1.404928 = 1.409142784\nOriginal = 184.32 / 1.409142784 = 130.8029\u2026 \u2192 **$130.80**\n\n**Part B**\nTotal ways: C(11,3) = 165. \"No two share a color\" means one of each color: 7\u00d72\u00d72 = 28.\nP(at least two match) = 1 \u2212 28/165 = **137/165**\n\n**Part C**\nr = 0.00575, n = 60, (1.00575)^60 = 1.410595435\nPayment = 24000(0.00575)/(1 \u2212 1/1.410595435) = 138/0.291079516 = 474.09725\nBalance after 18 payments (no extras) = 24000(1.00575)^18 \u2212 P\u00b7[(1.00575)^18 \u2212 1]/r\n= 26609.21020 \u2212 8963.90855 = 17645.30165\nExtras grown forward: 600(1.00575)^16 = 657.64559; 750(1.00575) = 754.31250 \u2192 1411.95809\nBalance = 17645.30165 \u2212 1411.95809 = **$16,233.34**\n\n**Part D**\n257 is prime, so exponents reduce mod 256: 606 \u2261 94.\n69\u00b2 \u2261 135, 69\u2074 \u2261 \u221222, 69\u2078 \u2261 \u221230, 69\u00b9\u2076 \u2261 129, 69\u00b3\u00b2 \u2261 \u221264, 69\u2076\u2074 \u2261 \u221216.\n94 = 64+16+8+4+2: (\u221216)(129) \u2261 \u22128; (\u22128)(\u221230) \u2261 \u221217; (\u221217)(\u221222) \u2261 117; 117\u00b7135 = 15795 \u2261 118.\n\nFINAL: 130.80; 137/165; 16233.34; 118"
+}
