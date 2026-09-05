@@ -1,0 +1,18 @@
+{
+ "task_id": "math-13",
+ "type": "math",
+ "condition": "b",
+ "correct": true,
+ "detail": "got 115.0, expected 115.0",
+ "error": null,
+ "seconds": 118.2,
+ "tokens": 4499,
+ "prompt_tokens": 2594,
+ "completion_tokens": 1905,
+ "cost": 0.06059,
+ "calls": 48,
+ "call_errors": 35,
+ "k": 12,
+ "majority_key": 115.0,
+ "answer": "Checking each figure:\n\n- Exactly 3 women, 1 man: C(6,3) = 6!/(3!3!) = 20; C(5,1) = 5; product = 20 \u00d7 5 = 100.\n- Exactly 4 women, 0 men: C(6,4) = C(6,2) = 15; C(5,0) = 1; product = 15.\n- \"At least 3 women\" out of a 4-member committee means exactly 3 or exactly 4 \u2014 no other cases (5+ women impossible in a committee of 4).\n- Total: 100 + 15 = 115.\n\nSanity check: total committees C(11,4) = 330; complement (\u22642 women) = C(6,2)C(5,2) + C(6,1)C(5,3) + C(6,0)C(5,4) = 15\u00b710 + 6\u00b710 + 5 = 150 + 60 + 5 = 215; 330 \u2212 215 = 115. \u2713\n\nFINAL: 115"
+}

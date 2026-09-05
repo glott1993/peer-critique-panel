@@ -1,0 +1,18 @@
+{
+ "task_id": "math-04",
+ "type": "math",
+ "condition": "b",
+ "correct": true,
+ "detail": "got 396.62, expected 396.62",
+ "error": null,
+ "seconds": 138.7,
+ "tokens": 18900,
+ "prompt_tokens": 2980,
+ "completion_tokens": 15920,
+ "cost": 0.4129,
+ "calls": 35,
+ "call_errors": 22,
+ "k": 12,
+ "majority_key": 396.62,
+ "answer": "**Recheck**\n\n- i = 0.059/12 = 0.00491666667; n = 72\n- ln(1.00491666667) = 0.00491666667 \u2212 0.00001208681 + 0.00000003962 \u2212 ... = 0.00490461933\n- \u00d772 = 0.35313259 \u2192 (1+i)^72 = e^0.35313259 = 1.42351988\n- 1/1.42351988 = 0.70248404 \u2192 annuity factor numerator: 1 \u2212 0.70248404 = 0.29751596\n- Payment = 24000 \u00d7 0.00491666667 / 0.29751596 = 118.00 / 0.29751596 = 396.6174\n\n(Sanity check: total paid \u2248 396.62 \u00d7 72 = 28,556.5, i.e. about $4,556 interest on $24,000 over 6 years at ~5.9% \u2014 plausible.)\n\nRounds to 396.62 (my earlier discount factor was off in the 7th decimal, which does not change the cents).\n\nFINAL: 396.62"
+}

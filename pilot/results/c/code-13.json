@@ -1,0 +1,118 @@
+{
+ "task_id": "code-13",
+ "type": "code",
+ "condition": "c",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 163.2,
+ "tokens": 59896,
+ "prompt_tokens": 36148,
+ "completion_tokens": 23748,
+ "cost": 0.1441,
+ "calls": 25,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Regex-based slugify function",
+     "what": "Use re.sub to lowercase input, replace maximal runs of non ASCII-alphanumeric characters with a single hyphen, then strip leading/trailing hyphens."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\nimport re\n\ndef slugify(title: str) -> str:\n    lowered = title.lower()\n    slug = re.sub(r'[^a-z0-9]+', '-', lowered)\n    return slug.strip('-')\n```\n\nVerification notes:\n\n- `re.sub(r'[^a-z0-9]+', '-', lowered)` replaces every maximal run of characters that are not ASCII lowercase letters or digits with a single `-`. Since `lowered` is already lowercased, uppercase letters don't need to appear in the class. Check: `re.sub(r'[^a-z0-9]+', '-', 'hello, world!')` \u2192 `'hello-world'` (comma+space collapse to one hyphen, trailing `!` becomes trailing hyphen, stripped after).\n- `.strip('-')` removes only leading/trailing hyphens, not internal ones \u2014 verify with `'--a--b--'.strip('-') == 'a--b'`.\n- Non-ASCII letters (e.g. `'\u00e9'`, `'\u00f1'`) are not in `[a-z0-9]`, so they fall into the \"not ASCII letter/digit\" class and act as separators, matching the no-transliteration requirement. Check: `slugify('caf\u00e9 Menu')` \u2192 `'caf-menu'` (\u00e9 becomes part of a separator run, not preserved, not transliterated).\n- Empty/all-separator input: `slugify('!!!')` \u2192 `re.sub` gives `'-'`, then `.strip('-')` gives `''`. Matches \"result may be empty.\"\n- Given examples: `slugify('Hello, World!')` \u2192 lower `'hello, world!'` \u2192 sub `'hello-world-'` \u2192 strip `'hello-world'`. \u2713\n  `slugify('  Multiple   spaces ')` \u2192 lower same \u2192 sub `'-multiple-spaces-'` \u2192 strip `'multiple-spaces'`. \u2713\n\nYou can reproduce all these by running the snippets above in a Python REPL (`python3 -c \"...\"`); no external dependencies beyond stdlib `re`."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "This is false after Unicode lowercasing: Python lowercases some non-ASCII letters into ASCII characters. For example, `\"\u212a\".lower()` is `\"k\"`, and `\"\u0130\".lower()` is `\"i\\u0307\"`; the draft therefore returns `\"k\"` and `\"i\"` instead of treating those original non-ASCII letters as separators. `slugify(\"A\u212aB\")` returns `\"akb\"`, while the no-transliteration requirement suggests `\"a-b\"`."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "Here is the revised function. Replacing non-ASCII characters before lowercasing prevents Unicode characters (such as the Kelvin sign '\u212a' or '\u0130') from folding into ASCII characters and violating the no-transliteration requirement.\n\n```python\nimport re\n\ndef slugify(title: str) -> str:\n    slug = re.sub(r'[^A-Za-z0-9]+', '-', title)\n    return slug.strip('-').lower()\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Here is the revised function. Replacing non-ASCII characters before lowercasing prevents Unicode characters (such as the Kelvin sign '\u212a' or '\u0130') from folding into ASCII characters and violating the no-transliteration requirement.\n\n```python\nimport re\n\ndef slugify(title: str) -> str:\n    slug = re.sub(r'[^A-Za-z0-9]+', '-', title)\n    return slug.strip('-').lower()\n```"
+}

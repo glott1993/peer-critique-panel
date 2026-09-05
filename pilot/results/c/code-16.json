@@ -1,0 +1,133 @@
+{
+ "task_id": "code-16",
+ "type": "code",
+ "condition": "c",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 186.2,
+ "tokens": 60749,
+ "prompt_tokens": 39139,
+ "completion_tokens": 21610,
+ "cost": 0.23345,
+ "calls": 20,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": true,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(4*3*2*1)/(2*1)",
+   "claimed": 12.0,
+   "value": 12.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Implement next permutation",
+     "what": "Find the rightmost ascent, swap its successor with the pivot, reverse the suffix in place, and return whether a next permutation existed."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "Here is the implementation of `next_permutation(lst)` using Narayana Pandita's algorithm (the standard algorithm used in C++'s `std::next_permutation`):\n\n```python\ndef next_permutation(lst: list[int]) -> bool:\n    \"\"\"\n    Rearranges lst in place into the lexicographically next greater permutation.\n    Returns True if such a permutation existed, or False if lst was in descending\n    order (in which case it is reversed to ascending order) or had length <= 1.\n    \"\"\"\n    n = len(lst)\n    if n <= 1:\n        return False\n\n    # Step 1: Find the largest index i such that lst[i] < lst[i + 1] (pivot)\n    i = n - 2\n    while i >= 0 and lst[i] >= lst[i + 1]:\n        i -= 1\n\n    # If no such index exists, the list is descending; reverse to ascending.\n    if i < 0:\n        lst.reverse()\n        return False\n\n    # Step 2: Find the largest index j > i such that lst[j] > lst[i]\n    j = n - 1\n    while lst[j] <= lst[i]:\n        j -= 1\n\n    # Step 3: Swap pivot lst[i] with successor lst[j]\n    lst[i], lst[j] = lst[j], lst[i]\n\n    # Step 4: Reverse suffix lst[i + 1:] in place\n    left, right = i + 1, n - 1\n    while left < right:\n        lst[left], lst[right] = lst[right], lst[left]\n        left += 1\n        right -= 1\n\n    return True\n```\n\n### Verification & Correctness\n- **Algorithmic Source**: The algorithm operates in $O(n)$ time and $O(1)$ auxiliary space, following Knuth, *The Art of Computer Programming*, Vol. 4A, Section 7.2.1.2 (Algorithm L).\n- **Visible tests**:\n  - `_a = [1, 2, 3]`: `next_permutation(_a)` yields `True`, `_a == [1, 3, 2]`.\n  - `_b = [3, 2, 1]`: `next_permutation(_b)` yields `False`, `_b == [1, 2, 3]`.\n- **Edge cases**: `[]` and `[x]` terminate at `n <= 1` returning `False`. Non-strict comparisons (`>=` and `<=`) ensure correct handling of identical elements."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The hidden tests may include duplicates, and if the algorithm has a subtle bug with duplicates (e.g., [1,1,5] or [1,3,2,2]), the draft would fail. The draft's confidence in duplicate handling is based on assertion, not evidence."
+    },
+    {
+     "from": "D",
+     "problem": "A hidden test might use a non-increasing list with duplicates and check the result is sorted ascending. If the reverse operation somehow produced a different order (it won't, but the draft's reasoning is incomplete), the test would fail. More importantly, the draft's claim about 'reversed to ascending order' is not backed by a test case."
+    },
+    {
+     "from": "D",
+     "problem": "A hidden test may call `next_permutation([])` or `next_permutation([42])` and check the return value and list state. If the function accidentally modified the list (it doesn't, but the draft doesn't prove it), the test would fail. The draft's edge case handling is untested."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 0,
+   "answer": "Here is the implementation of `next_permutation(lst)` using Narayana Pandita's algorithm (the standard algorithm used in C++'s `std::next_permutation`):\n\n```python\ndef next_permutation(lst: list[int]) -> bool:\n    \"\"\"\n    Rearranges lst in place into the lexicographically next greater permutation.\n    Returns True if such a permutation existed, or False if lst was in descending\n    order (in which case it is reversed to ascending order) or had length <= 1.\n    \"\"\"\n    n = len(lst)\n    if n <= 1:\n        return False\n\n    # Step 1: Find the largest index i such that lst[i] < lst[i + 1] (pivot)\n    i = n - 2\n    while i >= 0 and lst[i] >= lst[i + 1]:\n        i -= 1\n\n    # If no such index exists, the list is descending; reverse to ascending.\n    if i < 0:\n        lst.reverse()\n        return False\n\n    # Step 2: Find the largest index j > i such that lst[j] > lst[i]\n    j = n - 1\n    while lst[j] <= lst[i]:\n        j -= 1\n\n    # Step 3: Swap pivot lst[i] with successor lst[j]\n    lst[i], lst[j] = lst[j], lst[i]\n\n    # Step 4: Reverse suffix lst[i + 1:] in place\n    left, right = i + 1, n - 1\n    while left < right:\n        lst[left], lst[right] = lst[right], lst[left]\n        left += 1\n        right -= 1\n\n    return True\n```\n\n### Verification & Correctness\n- **Algorithmic Source**: The algorithm operates in $O(n)$ time and $O(1)$ auxiliary space, following Knuth, *The Art of Computer Programming*, Vol. 4A, Section 7.2.1.2 (Algorithm L).\n- **Visible tests**:\n  - `_a = [1, 2, 3]`: `next_permutation(_a)` yields `True`, `_a == [1, 3, 2]`.\n  - `_b = [3, 2, 1]`: `next_permutation(_b)` yields `False`, `_b == [1, 2, 3]`.\n- **Edge cases**: `[]` and `[x]` terminate at `n <= 1` returning `False`. Non-strict comparisons (`>=` and `<=`) ensure correct handling of identical elements."
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The signature uses the PEP 585 annotation `list[int]`, which raises TypeError on Python 3.8 and earlier at function-definition time. What is the target interpreter version for the hidden tests, and what evidence do you have that it is 3.9+ (rather than using `typing.List` or dropping the annotation)?",
+    "The step-2 loop `while lst[j] <= lst[i]: j -= 1` has no explicit lower bound on j. Can you give the invariant that proves j never decrements past i (and thus never reaches -1 or wraps to a negative index), and cite what guarantees it after the step-1 scan terminates at i >= 0?",
+    "What are the actual observed outputs (return value and final list contents) for duplicate-heavy inputs that the visible tests do not cover: [1,1], [1,1,1], [1,5,1], [2,3,3,1], and [1,3,2,2]? Please state which of these you ran versus reasoned about."
+   ],
+   "replies": [
+    "No evidence exists for the target interpreter version; the request never states one. The PEP 585 subscripted-generic annotation `list[int]` in a function signature is evaluated eagerly at def-time in CPython <3.9 and raises `TypeError: 'type' object is not subscriptable`. Since the hidden-test harness's Python version is unstated, this is an unjustified assumption that could crash import entirely on 3.7/3.8. Safer: drop the annotation or use `from __future__ import annotations` (PEP 563) which defers evaluation and works back to 3.7, or `typing.List[int]`. I recommend removing the annotation outright since it adds no runtime value here.",
+    "Invariant, proved directly from step 1's exit condition: step 1's while loop decrements i while `lst[i] >= lst[i+1]`, so it stops at the largest i with `lst[i] < lst[i+1]` (or i=-1, handled separately). By construction of that scan, for every k>i we have lst[k] >= lst[k+1] (the suffix i+1..n-1 is non-increasing), and specifically lst[i+1] > lst[i]. Therefore at j=i+1, the step-2 condition `lst[j] <= lst[i]` is false (since lst[i+1] > lst[i]), so the step-2 while loop halts no later than j=i+1. It can never reach j=i or below, hence never -1. This is a plain deductive proof from the code's own step-1 postcondition, not an external citation \u2014 Knuth's Algorithm L relies on the same fact but I did not re-derive it from the book, just from the code.",
+    "I traced these by hand through the algorithm (reasoned, not executed in an interpreter \u2014 I have no code execution here) and recomputed the multiset-preservation as a sanity check for each:\n[1,1] -> i scan hits -1 (1>=1), reverse -> False, [1,1].\n[1,1,1] -> same, i=-1 -> False, [1,1,1].\n[1,5,1] -> pivot i=0 (1<5), j=1 (lst[1]=5>1, since lst[2]=1<=1 skipped), swap -> [5,1,1], reverse suffix (len1, no-op) -> True, [5,1,1]. Checked against sorted multiset-permutation order {1,1,5}: sequence is [1,1,5],[1,5,1],[5,1,1] \u2014 matches.\n[2,3,3,1] -> pivot i=0 (2<3), j=2 (lst[2]=3>2, lst[3]=1 skipped), swap(0,2) -> [3,3,2,1], reverse suffix idx1..3 [3,2,1]->[1,2,3] -> True, [3,1,2,3]. Multiset {1,2,3,3} preserved, consistent with manual pivot/successor derivation.\n[1,3,2,2] -> pivot i=0 (1<3), j=3 (lst[3]=2>1, loop condition false immediately since lst[3]=2 not <=1), swap(0,3) -> [2,3,2,1], reverse suffix idx1..3 [3,2,1]->[1,2,3] -> True, [2,1,2,3].\nAll five are reasoned traces only; none were run through an actual Python interpreter, so there is no execution-log evidence, only manual derivation cross-checked against multiset invariants."
+   ],
+   "open": [],
+   "corrected": true
+  }
+ ],
+ "answer": "```python\ndef next_permutation(lst):\n    \"\"\"\n    Rearranges lst in place into the lexicographically next greater permutation.\n    Returns True if such a permutation existed, or False if lst was in descending\n    (non-increasing) order (in which case it is rearranged to ascending order) or\n    had length <= 1.\n    \"\"\"\n    n = len(lst)\n    if n <= 1:\n        return False\n\n    # Step 1: Find the largest index i such that lst[i] < lst[i + 1] (pivot)\n    i = n - 2\n    while i >= 0 and lst[i] >= lst[i + 1]:\n        i -= 1\n\n    # If no such index exists, the list is non-increasing; reverse to ascending.\n    if i < 0:\n        lst.reverse()\n        return False\n\n    # Step 2: Find the largest index j > i such that lst[j] > lst[i].\n    # Invariant: since lst[i+1] > lst[i] by construction of step 1, the loop\n    # below is guaranteed to stop at j >= i+1 and never underflows past i.\n    j = n - 1\n    while lst[j] <= lst[i]:\n        j -= 1\n\n    # Step 3: Swap pivot lst[i] with successor lst[j]\n    lst[i], lst[j] = lst[j], lst[i]\n\n    # Step 4: Reverse suffix lst[i + 1:] in place\n    left, right = i + 1, n - 1\n    while left < right:\n        lst[left], lst[right] = lst[right], lst[left]\n        left += 1\n        right -= 1\n\n    return True\n```\nChange from the original submission: removed the `list[int]` PEP 585 annotation from the signature (no target Python version was specified, and that annotation raises `TypeError` at def-time on CPython < 3.9). Logic is unchanged; the step-2 loop-safety invariant is stated explicitly in a comment rather than only claimed in prose."
+}

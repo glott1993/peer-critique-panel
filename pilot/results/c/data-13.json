@@ -1,0 +1,146 @@
+{
+ "task_id": "data-13",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 2442.45, expected 2442.45",
+ "error": null,
+ "seconds": 164.3,
+ "tokens": 92546,
+ "prompt_tokens": 65140,
+ "completion_tokens": 27406,
+ "cost": 0.20445,
+ "calls": 26,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "32*89.44+16*87.00+17*86.00+17*107.72",
+   "claimed": 7547.32,
+   "value": 7547.32,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "6*68.02+18*66.28+25*103.14+13*71.17",
+   "claimed": 5104.87,
+   "value": 5104.87,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(32*89.44+16*87.00+17*86.00+17*107.72)-(6*68.02+18*66.28+25*103.14+13*71.17)",
+   "claimed": 2442.45,
+   "value": 2442.45,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "15*30.08+26*44.19+38*28.04+32*39.52",
+   "claimed": 3930.3,
+   "value": 3930.3,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter and compute per-order revenue",
+     "what": "From the full 15-row CSV, exclude cancelled orders (ORD-1864 North Crate, ORD-1492 West Anvil). For each remaining order compute revenue = units \u00d7 unit_price."
+    },
+    {
+     "id": "c2",
+     "title": "Sum revenue by region",
+     "what": "Group the remaining orders by region (North, East, West, South) and sum revenue per region: North\u22481736.37, East\u22485104.87, West\u22483930.30, South\u22487547.32."
+    },
+    {
+     "id": "c3",
+     "title": "Find top two regions and their difference",
+     "what": "Identify the highest-revenue region (South) and second-highest (East), then compute the difference to the nearest cent: 7547.32 \u2212 5104.87 = 2442.45."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Excluding cancelled orders (ORD-1864, ORD-1492), revenue = units \u00d7 unit_price, summed by region:\n\nNorth: ORD-1383: 27\u00d764.31=1736.37 \u2192 Total = 1736.37\n\nEast: ORD-1472: 6\u00d768.02=408.12; ORD-1849: 18\u00d766.28=1193.04; ORD-1230: 25\u00d7103.14=2578.50; ORD-1256: 13\u00d771.17=925.21 \u2192 Total = 5104.87\n\nWest: ORD-1353: 15\u00d730.08=451.20; ORD-1111: 26\u00d744.19=1148.94; ORD-1810: 38\u00d728.04=1065.52; ORD-1655: 32\u00d739.52=1264.64 \u2192 Total = 3930.30\n\nSouth: ORD-1755: 32\u00d789.44=2862.08; ORD-1482: 16\u00d787.00=1392.00; ORD-1114: 17\u00d786.00=1462.00; ORD-1052: 17\u00d7107.72=1831.24 \u2192 Total = 7547.32\n\nRanking: South (7547.32) > East (5104.87) > West (3930.30) > North (1736.37)\n\nDifference between highest (South) and second-highest (East):\n7547.32 \u2212 5104.87 = 2442.45\n\nFINAL: 2442.45"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "ORD-1052 (South, pending) is included in the South total: what in the prompt's wording supports including non-cancelled, non-shipped statuses, and would the highest/second-highest ranking or the difference change if pending orders were also excluded?",
+    "Can you show the row-by-row accounting that all 15 CSV rows are assigned exactly once (13 included: North 1, East 4, West 4, South 4; plus the 2 cancelled), so no order was dropped or double-counted?",
+    "Are all 13 revenue products exact to the cent as written (no intermediate rounding), and does the reported difference come from summing unrounded products rather than the rounded per-order figures shown?"
+   ],
+   "replies": [
+    "1) Wording: the prompt says 'Excluding cancelled orders' \u2014 only status='cancelled' rows (ORD-1864, ORD-1492) qualify for exclusion. 'pending' (ORD-1052) is a distinct status, not cancelled, so it is correctly included in South's total per the literal instruction. If pending orders were also excluded (a stricter reading not supported by the prompt), South would drop ORD-1052 (17\u00d7107.72=1831.24), making South=7547.32-1831.24=5716.08. Ranking would still be South>East>West>North (since 5716.08>5104.87), but the difference would change to 5716.08-5104.87=611.21, not 2442.45. Since the prompt only specifies excluding cancelled orders, the original inclusion and difference (2442.45) stand as correct under the given instructions.",
+    "2) Full row accounting, 15 rows, each used exactly once:\nCancelled (excluded, 2): ORD-1864 (North), ORD-1492 (West).\nIncluded (13):\nNorth (1): ORD-1383.\nEast (4): ORD-1472, ORD-1849, ORD-1230, ORD-1256.\nWest (4): ORD-1353, ORD-1111, ORD-1810, ORD-1655.\nSouth (4): ORD-1755, ORD-1482, ORD-1114, ORD-1052.\nCount check: 1+4+4+4=13 included +2 cancelled =15 = total rows. No order appears twice, none omitted.",
+    "3) All 13 per-order revenue figures are exact to the cent, verified by direct multiplication (unit_price has \u22642 decimal places, units is an integer, so products terminate at 2 decimals with no rounding needed): North 27\u00d764.31=1736.37; East 6\u00d768.02=408.12, 18\u00d766.28=1193.04, 25\u00d7103.14=2578.50, 13\u00d771.17=925.21; West 15\u00d730.08=451.20, 26\u00d744.19=1148.94, 38\u00d728.04=1065.52, 32\u00d739.52=1264.64; South 32\u00d789.44=2862.08, 16\u00d787.00=1392.00, 17\u00d786.00=1462.00, 17\u00d7107.72=1831.24. Summing these exact cent values gives North=1736.37, East=5104.87, West=3930.30, South=7547.32, and difference=7547.32-5104.87=2442.45 exactly \u2014 no intermediate rounding occurred because every product was already exact to the cent."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Excluding cancelled orders (ORD-1864, ORD-1492), revenue = units \u00d7 unit_price, summed by region:\n\nNorth: ORD-1383: 27\u00d764.31=1736.37 \u2192 Total = 1736.37\n\nEast: ORD-1472: 6\u00d768.02=408.12; ORD-1849: 18\u00d766.28=1193.04; ORD-1230: 25\u00d7103.14=2578.50; ORD-1256: 13\u00d771.17=925.21 \u2192 Total = 5104.87\n\nWest: ORD-1353: 15\u00d730.08=451.20; ORD-1111: 26\u00d744.19=1148.94; ORD-1810: 38\u00d728.04=1065.52; ORD-1655: 32\u00d739.52=1264.64 \u2192 Total = 3930.30\n\nSouth: ORD-1755: 32\u00d789.44=2862.08; ORD-1482: 16\u00d787.00=1392.00; ORD-1114: 17\u00d786.00=1462.00; ORD-1052: 17\u00d7107.72=1831.24 \u2192 Total = 7547.32\n\nRanking: South (7547.32) > East (5104.87) > West (3930.30) > North (1736.37)\n\nDifference between highest (South) and second-highest (East):\n7547.32 \u2212 5104.87 = 2442.45\n\nFINAL: 2442.45"
+}

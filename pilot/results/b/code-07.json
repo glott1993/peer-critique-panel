@@ -1,0 +1,18 @@
+{
+ "task_id": "code-07",
+ "type": "code",
+ "condition": "b",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 78.3,
+ "tokens": 2760,
+ "prompt_tokens": 1180,
+ "completion_tokens": 1580,
+ "cost": 0.0454,
+ "calls": 22,
+ "call_errors": 8,
+ "k": 12,
+ "majority_key": null,
+ "answer": "Checking the code:\n\n- `DIGITS` has 10 digits + 26 letters = 36 characters, so index 0..35 covers every valid remainder for bases 2..36.\n- Validation runs before any work, so an out-of-range base always raises `ValueError`. I dropped the extra `isinstance` check, since the spec only asks for `ValueError` on a base outside 2..36 (and `True`/`False` as a base would fail the range test anyway).\n- `n == 0` short-circuits to `'0'` for every base.\n- `255, 16`: `divmod(255,16) = (15,15)` \u2192 `'f'`; `divmod(15,16) = (0,15)` \u2192 `'f'`; reversed \u2192 `'ff'`. \u2713\n- `-10, 2`: sign recorded, `n = 10`; remainders 0,1,0,1 \u2192 digits `['0','1','0','1']`, append `'-'`, reverse \u2192 `'-1010'`. \u2713\n\n```python\nDIGITS = \"0123456789abcdefghijklmnopqrstuvwxyz\"\n\n\ndef int_to_base(n: int, base: int) -> str:\n    if base < 2 or base > 36:\n        raise ValueError(\"base must be in the range 2..36\")\n\n    if n == 0:\n        return \"0\"\n\n    negative = n < 0\n    n = abs(n)\n\n    out = []\n    while n:\n        n, r = divmod(n, base)\n        out.append(DIGITS[r])\n    if negative:\n        out.append(\"-\")\n    return \"\".join(reversed(out))\n```"
+}

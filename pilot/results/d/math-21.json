@@ -1,0 +1,115 @@
+{
+ "task_id": "math-21",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 78.43, expected 78.43",
+ "error": null,
+ "seconds": 126.2,
+ "tokens": 53809,
+ "prompt_tokens": 33191,
+ "completion_tokens": 20618,
+ "cost": 0.10581,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute complement probability",
+     "what": "Calculate 0.88^12 as probability of zero successes in 12 trials."
+    },
+    {
+     "id": "c2",
+     "title": "Subtract from one",
+     "what": "Compute 1 minus 0.88^12 to get probability of at least one success."
+    },
+    {
+     "id": "c3",
+     "title": "Format as percentage",
+     "what": "Convert the result to a percentage rounded to two decimal places."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ],
+    "c2": [
+     "C",
+     "D"
+    ],
+    "c3": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the probability of at least one success across $n = 12$ independent attempts, we calculate the complement probability (the probability of zero successes in 12 attempts):\n\n1. **Probability of failure on a single attempt:**\n   $$q = 1 - p = 1 - 0.12 = 0.88$$\n\n2. **Probability of zero successes in 12 independent attempts:**\n   $$P(X = 0) = q^{12} = 0.88^{12} \\approx 0.21567116$$\n\n3. **Probability of at least one success:**\n   $$P(X \\ge 1) = 1 - P(X = 0) = 1 - 0.88^{12} \\approx 1 - 0.21567116 = 0.78432884$$\n\n4. **Convert to a percentage rounded to two decimal places:**\n   $$0.78432884 \\times 100\\% \\approx 78.43\\%$$\n\n**Verification method:**\n```python\np_at_least_one = 1 - (0.88**12)\nprint(f\"{p_at_least_one * 100:.2f}\")  # Outputs 78.43\n```\n\nFINAL: 78.43"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "This is a rounded intermediate value, but it is accurate: direct computation gives 0.215671155821681."
+    },
+    {
+     "from": "B",
+     "problem": "No substantive error is present. The complement method correctly uses the stated independence assumption; the only possible omission is that independence is essential."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 1,
+   "answer": "To find the probability of at least one success across $n = 12$ independent attempts, use the complement (probability of zero successes):\n\n1. **Failure probability per attempt:**\n$$q = 1 - p = 1 - 0.12 = 0.88$$\n\n2. **Probability of zero successes in 12 attempts:**\n$$P(X=0) = q^{12} = 0.88^{12} = 0.215671155821681$$\n\n3. **Probability of at least one success:**\n$$P(X \\ge 1) = 1 - 0.88^{12} = 0.784328844178319$$\n\n4. **As a percentage (2 decimal places):**\n$$78.43\\%$$\n\n**Verification:**\n```python\np_at_least_one = 1 - (0.88**12)\nprint(f\"{p_at_least_one * 100:.2f}\")  # 78.43\n```\n\nThis relies on the attempts being independent, as stated in the problem, so the complement rule $P(\\text{at least one}) = 1 - P(\\text{none})$ applies directly.\n\nFINAL: 78.43"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "To find the probability of at least one success across $n = 12$ independent attempts, use the complement (probability of zero successes):\n\n1. **Failure probability per attempt:**\n$$q = 1 - p = 1 - 0.12 = 0.88$$\n\n2. **Probability of zero successes in 12 attempts:**\n$$P(X=0) = q^{12} = 0.88^{12} = 0.215671155821681$$\n\n3. **Probability of at least one success:**\n$$P(X \\ge 1) = 1 - 0.88^{12} = 0.784328844178319$$\n\n4. **As a percentage (2 decimal places):**\n$$78.43\\%$$\n\n**Verification:**\n```python\np_at_least_one = 1 - (0.88**12)\nprint(f\"{p_at_least_one * 100:.2f}\")  # 78.43\n```\n\nThis relies on the attempts being independent, as stated in the problem, so the complement rule $P(\\text{at least one}) = 1 - P(\\text{none})$ applies directly.\n\nFINAL: 78.43"
+}

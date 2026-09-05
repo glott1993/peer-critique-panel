@@ -1,0 +1,157 @@
+{
+ "task_id": "data-20",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 25.2, expected 25.2",
+ "error": null,
+ "seconds": 162.0,
+ "tokens": 87482,
+ "prompt_tokens": 57442,
+ "completion_tokens": 30040,
+ "cost": 0.20607,
+ "calls": 27,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 2,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "1865.43+2928.45+1419.47+1636.25+414.32+2315.94+3424.94+526.89+292.86+25.50+3783.96+2029.92",
+   "claimed": 20663.93,
+   "value": 20663.93,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "21*88.83+35*83.67+13*109.19+17*96.25+8*51.79+22*105.27+38*90.13+21*25.09+3*97.62+6*4.25+36*105.11+24*84.58",
+   "claimed": 20663.93,
+   "value": 20663.93,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(13*109.19+36*105.11)/20663.93*100",
+   "claimed": 25.2,
+   "value": 25.18122157788959,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute revenue per order",
+     "what": "Calculate units \u00d7 unit_price for each order and exclude cancelled ones."
+    },
+    {
+     "id": "c2",
+     "title": "Sum total and East revenue",
+     "what": "Sum revenue for all non-cancelled orders and separately for East region orders."
+    },
+    {
+     "id": "c3",
+     "title": "Calculate percentage",
+     "what": "Divide East revenue by total revenue and multiply by 100, rounding to one decimal."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ],
+    "c2": [
+     "A",
+     "D"
+    ],
+    "c3": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Excluding cancelled orders ORD-1406 and ORD-1865:\n\nEast revenue = (13 \u00d7 109.19) + (36 \u00d7 105.11) = 1,419.47 + 3,783.96 = 5,203.43.\n\nTotal non-cancelled revenue = 20,663.93.\n\nEast percentage = (5,203.43 \u00f7 20,663.93) \u00d7 100 = 25.1812%, which rounds to 25.2%.\n\nFINAL: 25.2"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "ORD-1523 is marked 'pending', not cancelled, so it should be included. However, the draft's total non-cancelled revenue of 20,663.93 needs verification against all non-cancelled rows. If the draft accidentally excluded pending orders too, the total would be wrong."
+    },
+    {
+     "from": "D",
+     "problem": "East region non-cancelled orders are ORD-1225 and ORD-1823 only. The draft's calculation (13\u00d7109.19) + (36\u00d7105.11) is correct. However, if there were any East pending orders, they would need inclusion. There are none, so this is fine."
+    },
+    {
+     "from": "D",
+     "problem": "5203.43 / 20663.93 = 0.251811... \u00d7 100 = 25.1811%. Rounding to one decimal place gives 25.2%. This is correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Excluding cancelled orders (ORD-1406 and ORD-1865):\n\nEast region revenue:\n- ORD-1225: 13 \u00d7 109.19 = 1,419.47\n- ORD-1823: 36 \u00d7 105.11 = 3,783.96\nTotal East = 5,203.43\n\nTotal non-cancelled revenue (shipped and pending):\n1,865.43 + 2,928.45 + 1,419.47 + 1,636.25 + 414.32 + 2,315.94 + 3,424.94 + 526.89 + 292.86 + 25.50 + 3,783.96 + 2,029.92 = 20,663.93\n\nEast share = (5,203.43 \u00f7 20,663.93) \u00d7 100 = 25.1812%, which rounds to 25.2%.\n\nFINAL: 25.2"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The record notes that the total of 20,663.93 still needs an explicit row-by-row verification. Please map each of the 12 addends in your total to its order_id, and confirm that 12 is exactly 14 rows minus the 2 cancelled rows (ORD-1406, ORD-1865) with no row counted twice or omitted.",
+    "Does the result change if revenue per row is computed at full precision and rounded only at the end, versus rounding each row's revenue to cents first? State the unrounded ratio to at least 4 decimal places and confirm the one-decimal rounding is not on a boundary."
+   ],
+   "replies": [
+    "Row-by-row mapping of all 12 non-cancelled orders (14 total rows minus 2 cancelled: ORD-1406 and ORD-1865):\n1. ORD-1706: 21 \u00d7 88.83 = 1,865.43\n2. ORD-1543: 35 \u00d7 83.67 = 2,928.45\n3. ORD-1225: 13 \u00d7 109.19 = 1,419.47 (East)\n4. ORD-1738: 17 \u00d7 96.25 = 1,636.25\n5. ORD-1228: 8 \u00d7 51.79 = 414.32\n6. ORD-1412: 22 \u00d7 105.27 = 2,315.94\n7. ORD-1672: 38 \u00d7 90.13 = 3,424.94\n8. ORD-1614: 21 \u00d7 25.09 = 526.89\n9. ORD-1096: 3 \u00d7 97.62 = 292.86\n10. ORD-1409: 6 \u00d7 4.25 = 25.50\n11. ORD-1823: 36 \u00d7 105.11 = 3,783.96 (East)\n12. ORD-1523: 24 \u00d7 84.58 = 2,029.92\nSumming all 12: 1,865.43 + 2,928.45 + 1,419.47 + 1,636.25 + 414.32 + 2,315.94 + 3,424.94 + 526.89 + 292.86 + 25.50 + 3,783.96 + 2,029.92 = 20,663.93. Exactly 12 rows are included; none omitted, none duplicated.",
+    "Because units are integers and unit_price values have at most two decimal places, multiplying units \u00d7 unit_price produces exact cent values with no fractional cents to round (e.g., 21 \u00d7 88.83 = 1865.43 exactly). Thus full precision per row is identical to cent rounding. The unrounded East share ratio is 5,203.43 / 20,663.93 = 0.25181222... (25.1812%). To one decimal place, rounding 25.1812% yields 25.2%, well clear of any rounding boundary (the boundary to round to 25.1% is 25.15%, and to 25.3% is 25.25%)."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Excluding cancelled orders (ORD-1406 and ORD-1865):\n\nEast region revenue:\n- ORD-1225: 13 \u00d7 109.19 = 1,419.47\n- ORD-1823: 36 \u00d7 105.11 = 3,783.96\nTotal East = 5,203.43\n\nTotal non-cancelled revenue (shipped and pending):\n1,865.43 + 2,928.45 + 1,419.47 + 1,636.25 + 414.32 + 2,315.94 + 3,424.94 + 526.89 + 292.86 + 25.50 + 3,783.96 + 2,029.92 = 20,663.93\n\nEast share = (5,203.43 \u00f7 20,663.93) \u00d7 100 = 25.1812%, which rounds to 25.2%.\n\nFINAL: 25.2"
+}

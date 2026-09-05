@@ -1,0 +1,89 @@
+{
+ "task_id": "data-12",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 20.0, expected 20.0",
+ "error": null,
+ "seconds": 63.0,
+ "tokens": 55490,
+ "prompt_tokens": 41625,
+ "completion_tokens": 13865,
+ "cost": 0.08014,
+ "calls": 20,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter shipped orders",
+     "what": "Extract all orders with status equal to shipped from the table."
+    },
+    {
+     "id": "c2",
+     "title": "Compute median of units",
+     "what": "Sort the units values of shipped orders and calculate the median."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Shipped-order units: 6, 36, 34, 2, 20, 12, 15, 20, 34, 38.\n\nSorted: 2, 6, 12, 15, 20, 20, 34, 34, 36, 38.\n\nThere are 10 values, so the median is the average of the 5th and 6th values: (20 + 20) / 2 = 20.\n\nFINAL: 20"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Shipped-order units: 6, 36, 34, 2, 20, 12, 15, 20, 34, 38.\n\nSorted: 2, 6, 12, 15, 20, 20, 34, 34, 36, 38.\n\nThere are 10 values, so the median is the average of the 5th and 6th values: (20 + 20) / 2 = 20.\n\nFINAL: 20"
+}

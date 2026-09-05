@@ -1,0 +1,148 @@
+{
+ "task_id": "data-07",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 61.31, expected 61.31",
+ "error": null,
+ "seconds": 85.5,
+ "tokens": 62826,
+ "prompt_tokens": 51102,
+ "completion_tokens": 11724,
+ "cost": 0.13762,
+ "calls": 22,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 4,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(69.62+97.13+17.18)/3",
+   "claimed": 61.31,
+   "value": 61.31,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "69.62+97.13+17.18",
+   "claimed": 183.93,
+   "value": 183.93,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(12*69.62+14*97.13+13*17.18)/(12+14+13)",
+   "claimed": 62.02,
+   "value": 62.015384615384626,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Average West shipped price",
+     "what": "Shipped West unit_prices are 69.62, 97.13, and 17.18; average = (69.62 + 97.13 + 17.18) / 3 = 61.31.\nFINAL: 61.31"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the average `unit_price` of shipped orders in the West region, filter the dataset for rows where `region == 'West'` and `status == 'shipped'`:\n\n1. ORD-1195: `unit_price` = 69.62\n2. ORD-1209: `unit_price` = 97.13\n3. ORD-1728: `unit_price` = 17.18\n\n(Note: ORD-1666 has `region == 'West'` with `unit_price` = 25.81, but its status is `pending`, so it is excluded.)\n\nSum of unit prices:\n69.62 + 97.13 + 17.18 = 183.93\n\nAverage:\n183.93 / 3 = 61.31\n\nFINAL: 61.31"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The question says 'average unit_price' but doesn't specify simple vs. quantity-weighted average. If a revenue/units-weighted average is intended (total revenue / total units for shipped West orders), the answer changes: revenue = 12*69.62 + 14*97.13 + 13*17.18 = 835.44 + 1359.82 + 223.34 = 2418.60; units = 12+14+13 = 39; weighted average = 2418.60/39 = 62.02, not 61.31."
+    },
+    {
+     "from": "A",
+     "problem": "This filter is asserted without showing a full scan of all 20 rows for region=='West'; an error in filtering (e.g., missing a West row or including a non-West row) would silently change the result."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 1,
+   "answer": "Filter rows where region=='West': ORD-1195 (shipped, 69.62), ORD-1666 (pending, 25.81), ORD-1209 (shipped, 97.13), ORD-1728 (shipped, 17.18) \u2014 4 West rows total, matching a full scan of the CSV. Of these, 3 are 'shipped': ORD-1195, ORD-1209, ORD-1728.\n\n'Average unit_price' plainly means the arithmetic mean of the unit_price field for the qualifying rows, not a units- or revenue-weighted average (units-weighting would answer 'what is the average price per unit sold', a different question not asked here). So:\n\nSum = 69.62 + 97.13 + 17.18 = 183.93\nAverage = 183.93 / 3 = 61.31\n\nFINAL: 61.31"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The record says a full scan was requested; can you state, row by row for all 20 orders, the region value you read, so it is verifiable that exactly ORD-1195, ORD-1666, ORD-1209, ORD-1728 are West and none other?",
+    "Was ORD-1728 (West, Crate, unit_price 17.18) checked for status spelling exactly 'shipped', and did any West row have a status other than the three values seen (e.g. trailing whitespace or a different case) that could alter the filter?",
+    "Does the final value 61.31 come from rounding 61.31 exactly, or from a repeating quotient \u2014 i.e. what is the unrounded quotient of 183.93/3, and does it round to 61.31 at two decimals?"
+   ],
+   "replies": [
+    "Full scan confirmed: ORD-1338 South, ORD-1178 South, ORD-1186 North, ORD-1195 West, ORD-1756 East, ORD-1626 South, ORD-1162 East, ORD-1334 East, ORD-1897 North, ORD-1318 South, ORD-1477 South, ORD-1744 North, ORD-1873 South, ORD-1666 West, ORD-1018 East, ORD-1209 West, ORD-1778 East, ORD-1308 North, ORD-1247 North, ORD-1728 West. Only ORD-1195, ORD-1666, ORD-1209, ORD-1728 are West \u2014 4 rows, none missed.",
+    "Statuses as given in the CSV: ORD-1195=shipped, ORD-1666=pending, ORD-1209=shipped, ORD-1728=shipped. All values are consistent lowercase strings with no visible trailing whitespace or case variants in the source table, so no source exists indicating an alternate spelling; filtering on exact match 'shipped' yields the same 3 rows (ORD-1195, ORD-1209, ORD-1728).",
+    "183.93 / 3 = 61.31 exactly (61.31 \u00d7 3 = 183.93, no remainder), so it is not a repeating quotient requiring rounding \u2014 the two-decimal result 61.31 is exact."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please independently re-add the three shipped West unit_prices in a different order (17.18 + 69.62 + 97.13) and confirm the total is 183.93, and confirm no fourth West row (ORD-1666, pending) was inadvertently included in that sum."
+   ],
+   "replies": [
+    "Re-added in the specified order: 17.18 + 69.62 = 86.80; 86.80 + 97.13 = 183.93. Matches the original sum. Confirmed the West rows are exactly ORD-1195(shipped,69.62), ORD-1209(shipped,97.13), ORD-1728(shipped,17.18), and ORD-1666 is pending and correctly excluded \u2014 only 3 shipped West rows exist in the 20-row CSV. 183.93/3 = 61.31, consistent with the original answer. No error found."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Filter rows where region=='West': ORD-1195 (shipped, 69.62), ORD-1666 (pending, 25.81), ORD-1209 (shipped, 97.13), ORD-1728 (shipped, 17.18) \u2014 4 West rows total, matching a full scan of the CSV. Of these, 3 are 'shipped': ORD-1195, ORD-1209, ORD-1728.\n\n'Average unit_price' plainly means the arithmetic mean of the unit_price field for the qualifying rows, not a units- or revenue-weighted average (units-weighting would answer 'what is the average price per unit sold', a different question not asked here). So:\n\nSum = 69.62 + 97.13 + 17.18 = 183.93\nAverage = 183.93 / 3 = 61.31\n\nFINAL: 61.31"
+}

@@ -1,0 +1,112 @@
+{
+ "task_id": "data-08",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 59.18, expected 59.18",
+ "error": null,
+ "seconds": 69.9,
+ "tokens": 58847,
+ "prompt_tokens": 48183,
+ "completion_tokens": 10664,
+ "cost": 0.10146,
+ "calls": 19,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "51.16+64.55+51.88+88.82+39.50",
+   "claimed": 295.91,
+   "value": 295.90999999999997,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "295.91/5",
+   "claimed": 59.182,
+   "value": 59.182,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Average shipped West prices",
+     "what": "Filter shipped orders in the West, sum their unit prices, and divide by the five qualifying orders."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Filtering the CSV for region=West AND status=shipped yields exactly 5 orders:\n\n- ORD-1477, Dowel, unit_price=51.16\n- ORD-1356, Crate, unit_price=64.55\n- ORD-1305, Bolt, unit_price=51.88\n- ORD-1852, Anvil, unit_price=88.82\n- ORD-1480, Anvil, unit_price=39.50\n\nCheck: these are the only rows where region=\"West\" and status=\"shipped\" \u2014 verify by scanning all 20 rows for that pair (other West rows are pending/cancelled: ORD-1712 pending, ORD-1485 pending, ORD-1129 cancelled, ORD-1568 pending).\n\nSum of unit_price = 51.16 + 64.55 + 51.88 + 88.82 + 39.50 = 295.91\n\nAverage = 295.91 / 5 = 59.182 \u2192 rounds to 59.18\n\nThis can be verified by re-summing the five unit_price values above or by running a filter/groupby in a spreadsheet: `=AVERAGEIFS(unit_price, region, \"West\", status, \"shipped\")`.\n\nFINAL: 59.18"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Enumerate every row with region=West (all 9 of them) with its status, so the shipped/non-shipped split can be audited row by row \u2014 does that scan confirm exactly 5 shipped West rows and no others?",
+    "The question mentions revenue (units x unit_price) but asks for average unit_price: confirm whether the intended statistic is the unweighted mean of unit_price or a units-weighted average, and state why the unweighted reading is correct here.",
+    "Does 'average unit_price' here deliberately exclude pending and cancelled West orders, and would the answer change if 'shipped' were read to include pending (not-yet-cancelled) orders? Give that alternate figure for comparison."
+   ],
+   "replies": [
+    "1. Full scan of all 9 West rows with status: ORD-1477 shipped, ORD-1712 pending, ORD-1356 shipped, ORD-1305 shipped, ORD-1485 pending, ORD-1852 shipped, ORD-1129 cancelled, ORD-1480 shipped, ORD-1568 pending. That confirms exactly 5 shipped West rows (1477,1356,1305,1852,1480) and 4 non-shipped (2 pending Dowel/Bolt, 1 cancelled Dowel, 1 pending Dowel) \u2014 no other West rows exist in the 20-row table.\n\n2. The question explicitly asks for the 'average unit_price', not a revenue-weighted price, and defines revenue separately as units x unit_price only to clarify terminology, not to redefine the requested statistic. So the correct computation is the plain unweighted arithmetic mean of the 5 unit_price values: (51.16+64.55+51.88+88.82+39.50)/5 = 295.91/5 = 59.182 -> 59.18. A units-weighted average would require multiplying by units and dividing by total units, which is not what 'average unit_price' means literally; unweighted is correct.\n\n3. Yes, 'shipped' is a distinct status value in the status column separate from 'pending' and 'cancelled', so the filter correctly excludes both. If 'shipped' were misread to include 'pending' (treating not-yet-cancelled as shipped), the West set would grow to 8 rows: 1477(51.16),1712(94.82),1356(64.55),1305(51.88),1485(76.41),1852(88.82),1480(39.50),1568(45.24). Sum = 512.38, average = 512.38/8 = 64.0475 -> 64.05. This is a different, incorrect figure since 'pending' is not 'shipped'; the original filter (shipped only) is the correct reading.\n\nNo errors found in the original computation; the answer 59.18 stands confirmed.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Filtering the CSV for region=West AND status=shipped yields exactly 5 orders:\n\n- ORD-1477, Dowel, unit_price=51.16\n- ORD-1356, Crate, unit_price=64.55\n- ORD-1305, Bolt, unit_price=51.88\n- ORD-1852, Anvil, unit_price=88.82\n- ORD-1480, Anvil, unit_price=39.50\n\nCheck: these are the only rows where region=\"West\" and status=\"shipped\" \u2014 verify by scanning all 20 rows for that pair (other West rows are pending/cancelled: ORD-1712 pending, ORD-1485 pending, ORD-1129 cancelled, ORD-1568 pending).\n\nSum of unit_price = 51.16 + 64.55 + 51.88 + 88.82 + 39.50 = 295.91\n\nAverage = 295.91 / 5 = 59.182 \u2192 rounds to 59.18\n\nThis can be verified by re-summing the five unit_price values above or by running a filter/groupby in a spreadsheet: `=AVERAGEIFS(unit_price, region, \"West\", status, \"shipped\")`.\n\nFINAL: 59.18"
+}

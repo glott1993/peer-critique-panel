@@ -1,0 +1,155 @@
+{
+ "task_id": "math-14",
+ "type": "math",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 406.0, expected 406.0",
+ "error": null,
+ "seconds": 174.7,
+ "tokens": 56644,
+ "prompt_tokens": 39560,
+ "completion_tokens": 17084,
+ "cost": 0.11432,
+ "calls": 26,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 4,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(10*36)+(5*9)+(1*1)",
+   "claimed": 406.0,
+   "value": 406.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(14*13*12*11*10)/(5*4*3*2*1)",
+   "claimed": 2002.0,
+   "value": 2002.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "2002-(126+630+840)",
+   "claimed": 406.0,
+   "value": 406.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute committee count",
+     "what": "Count committees with exactly 3, 4, or 5 women: C(5,3)C(9,2) + C(5,4)C(9,1) + C(5,5)C(9,0). Show this working briefly and evaluate the sum."
+    },
+    {
+     "id": "c2",
+     "title": "Format final response",
+     "what": "End with exactly one line of the form FINAL: <answer>, using digits only for the numerical answer and no commas, units, or extra text on that final line."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Working: Break into cases by number of women (3, 4, or 5), since the committee has 5 seats total.\n\n- 3 women, 2 men: C(5,3)\u00b7C(9,2) = 10\u00b736 = 360\n- 4 women, 1 man: C(5,4)\u00b7C(9,1) = 5\u00b79 = 45\n- 5 women, 0 men: C(5,5)\u00b7C(9,0) = 1\u00b71 = 1\n\nSum: 360 + 45 + 1 = 406\n\nCheck via complement: total committees C(14,5) = 2002. Complement (0, 1, or 2 women) = C(5,0)C(9,5) + C(5,1)C(9,4) + C(5,2)C(9,3) = 126 + 630 + 840 = 1596. Then 2002 \u2212 1596 = 406, matching the direct sum.\n\nFINAL: 406"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "There is no substantive mathematical error under the standard interpretation that a committee is an unordered selection. The only implicit assumption is that member order or assigned roles do not matter."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "Working: Break into cases by number of women, since the committee has 5 seats total.\n\n- 3 women, 2 men: C(5,3)\u00b7C(9,2) = 10\u00b736 = 360\n- 4 women, 1 man: C(5,4)\u00b7C(9,1) = 5\u00b79 = 45\n- 5 women, 0 men: C(5,5)\u00b7C(9,0) = 1\u00b71 = 1\n\nSum: 360 + 45 + 1 = 406\n\nCheck via complement: total committees C(14,5) = 2002. Complement (0, 1, or 2 women) = C(5,0)C(9,5) + C(5,1)C(9,4) + C(5,2)C(9,3) = 126 + 630 + 840 = 1596. Then 2002 \u2212 1596 = 406, matching.\n\nFINAL: 406"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The record notes the only implicit assumption is that committee selections are unordered with no assigned roles; what in the problem statement supports that reading, and would the intended answer change under any plausible alternative reading?",
+    "Both the direct case sum and the complement check rely on C(14,5)=2002 and the individual binomial values; can you state the source or explicit computation for C(9,5)=126, C(9,4)=126 vs 630 (i.e., C(5,1)C(9,4)), and C(5,2)C(9,3)=840, so each complement term is independently verifiable?",
+    "Edge case: does 'at least 3 women' unambiguously exclude any committee with 2 or fewer women, and is the 5-women case (only 1 way, leaving 0 men) legitimately a valid 5-member committee here?"
+   ],
+   "replies": [
+    "The problem statement says 'choose a committee of 5 members'; a committee is normally a set of members, with no roles, offices, or ordering mentioned, so the unordered combination reading is supported. Under a plausible alternative reading in which the 5 selected members are assigned distinct roles or are ordered, each unordered committee could be arranged in 5! ways, changing the answer to 406 \u00d7 120 = 48720.",
+    "Using C(n,k) = n!/(k!(n-k)!): C(9,5) = 9!/(5!4!) = 126. C(9,4) = 9!/(4!5!) = 126, so the complement term for 1 woman and 4 men is C(5,1)C(9,4) = 5 \u00d7 126 = 630, not C(9,4) alone. C(5,2) = 10 and C(9,3) = 9!/(3!6!) = (9\u00d78\u00d77)/(3\u00d72\u00d71) = 84, so C(5,2)C(9,3) = 10 \u00d7 84 = 840. No external source; these are direct binomial-coefficient computations.",
+    "Yes, 'at least 3 women' means the number of women is \u2265 3, so committees with 0, 1, or 2 women are unambiguously excluded. The 5-women case is valid: there are exactly 5 women available, so choosing all 5 women and 0 men is a legitimate 5-member committee, with C(5,5) = 1 and C(9,0) = 1."
+   ],
+   "open": [
+    "The complement terms C(9,5)=126, C(5,1)C(9,4)=630 and C(5,2)C(9,3)=840 are now shown by explicit factorial computation, but the total C(14,5)=2002 used in the complement check, and the direct-case factors C(5,3)=10, C(9,2)=36, C(5,4)=5, C(9,1)=9, are still asserted without shown computation, so the arithmetic identity 2002-1596=406 is not yet independently verifiable end to end."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please show the explicit computation of C(14,5) and of the direct-case factors C(5,3), C(9,2), C(5,4), C(9,1), and confirm that 126+630+840=1596 and 2002-1596=406 arithmetically."
+   ],
+   "replies": [
+    "C(14,5)=14!/(5!9!)=(14\u00d713\u00d712\u00d711\u00d710)/(5\u00d74\u00d73\u00d72\u00d71)=240240/120=2002.\nC(5,3)=5!/(3!2!)=(5\u00d74)/(2\u00d71)=10.\nC(9,2)=9!/(2!7!)=(9\u00d78)/(2\u00d71)=36.\nC(5,4)=5!/(4!1!)=5.\nC(9,1)=9!/(1!8!)=9.\nComplement terms: C(5,0)C(9,5)=1\u00d7126=126; C(5,1)C(9,4)=5\u00d7126=630; C(5,2)C(9,3)=10\u00d784=840.\n126+630+840=756+840=1596.\n2002\u22121596=406.\nThese confirm the direct-case total 360+45+1=406."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Working: Break into cases by number of women, since the committee has 5 seats total.\n\n- 3 women, 2 men: C(5,3)\u00b7C(9,2) = 10\u00b736 = 360\n- 4 women, 1 man: C(5,4)\u00b7C(9,1) = 5\u00b79 = 45\n- 5 women, 0 men: C(5,5)\u00b7C(9,0) = 1\u00b71 = 1\n\nSum: 360 + 45 + 1 = 406\n\nCheck via complement: total committees C(14,5) = 2002. Complement (0, 1, or 2 women) = C(5,0)C(9,5) + C(5,1)C(9,4) + C(5,2)C(9,3) = 126 + 630 + 840 = 1596. Then 2002 \u2212 1596 = 406, matching.\n\nFINAL: 406"
+}

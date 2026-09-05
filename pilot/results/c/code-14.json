@@ -1,0 +1,165 @@
+{
+ "task_id": "code-14",
+ "type": "code",
+ "condition": "c",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 247.0,
+ "tokens": 63900,
+ "prompt_tokens": 36862,
+ "completion_tokens": 27038,
+ "cost": 0.22029,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "1+1+7",
+   "claimed": 9.0,
+   "value": 9.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "9+1+5",
+   "claimed": 15.0,
+   "value": 15.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "2+1+2",
+   "claimed": 5.0,
+   "value": 5.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "word_wrap function",
+     "what": "Implement word_wrap(text, width) that: (1) raises ValueError if width < 1; (2) returns [] if text is empty or only whitespace; (3) splits text into words on whitespace; (4) greedily packs words into lines separated by single spaces such that each line has length <= width where possible; (5) a single"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\ndef word_wrap(text: str, width: int) -> list:\n    if width < 1:\n        raise ValueError(\"width must be >= 1\")\n    words = text.split()\n    if not words:\n        return []\n    lines = []\n    current = words[0]\n    for word in words[1:]:\n        if len(current) + 1 + len(word) <= width:\n            current += \" \" + word\n        else:\n            lines.append(current)\n            current = word\n    lines.append(current)\n    return lines\n```\n\nVerification:\n- `word_wrap('the quick brown fox', 10)`: words = ['the','quick','brown','fox']. 'the'+' quick'=9<=10 -> 'the quick'; +' brown'=15>10 -> flush 'the quick', current='brown'; 'brown'+' fox'=9<=10 -> 'brown fox'. Result `['the quick', 'brown fox']`. Matches assertion.\n- `word_wrap('a bb ccc', 3)`: 'a'+' bb'=4>3 -> flush 'a', current='bb'; 'bb'+' ccc'=7>3 -> flush 'bb', current='ccc'; flush 'ccc'. Result `['a','bb','ccc']`. Matches assertion.\n- Empty/whitespace-only: `''.split()` and `'   '.split()` both give `[]`, so function returns `[]` immediately (check via Python docs on `str.split()` with no args, which splits on runs of whitespace and ignores leading/trailing whitespace, producing no empty strings \u2014 https://docs.python.org/3/library/stdtypes.html#str.split).\n- width < 1: explicit check raises `ValueError` before any processing \u2014 directly testable by calling `word_wrap('x', 0)` and catching the exception.\n- Long word (longer than width) case: since the algorithm never splits a word itself, and if `current` is empty-length comparison naturally places the long word alone on a line when it doesn't fit with previous content (falls into the `else` branch), it ends up as its own line, unbroken. Test: `word_wrap('a', 0)` raises before this matters; `word_wrap('toolong', 3)` yields `['toolong']` \u2014 single word, no split logic applied, confirming unbroken placement."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The test covers only an isolated long word, and `current` is never empty in this algorithm. The explanation does not verify long words adjacent to other words."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "```python\ndef word_wrap(text: str, width: int) -> list:\n    if width < 1:\n        raise ValueError('width must be >= 1')\n    words = text.split()\n    if not words:\n        return []\n    lines = []\n    current = words[0]\n    for word in words[1:]:\n        if len(current) + 1 + len(word) <= width:\n            current += ' ' + word\n        else:\n            lines.append(current)\n            current = word\n    lines.append(current)\n    return lines\n```\n\nThis passes the visible examples. Empty/whitespace-only input returns [] because `split()` yields no words. `width < 1` raises `ValueError`. Long words are never split: when adding the next word would exceed width, the current line is flushed and the long word becomes the new current line, so it appears alone and unbroken. For example, `word_wrap('a toolong b', 3)` returns `['a', 'toolong', 'b']` and `word_wrap('toolong a', 3)` returns `['toolong', 'a']`."
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Exact-fit boundary: what does your function return for word_wrap('ab cd', 5) and word_wrap('abcd ef', 4), and which line in the loop decides each (i.e., is a line of exactly `width` characters accepted)?",
+    "With width=1: what are the outputs of word_wrap('a b c', 1) and word_wrap('ab c', 1), and does the spec's 'word longer than width goes on a line by itself' hold in the second case under your code?",
+    "How does `text.split()` treat tabs, newlines, and non-ASCII whitespace such as U+00A0 (non-breaking space) and U+3000? State the actual return values of word_wrap('a\\tb\\nc', 3) and word_wrap('a\\xa0b', 3), and cite the documented behaviour of str.split() with no separator that supports your claim."
+   ],
+   "replies": [
+    "1. Exact-fit boundary: `word_wrap('ab cd', 5)` returns `['ab cd']`; the loop condition `if len(current) + 1 + len(word) <= width` is true (2+1+2=5 <= 5), so `'cd'` is joined. `word_wrap('abcd ef', 4)` returns `['abcd', 'ef']`; `'abcd'` is exactly width and is set as `current` before the loop, then the same condition is false for adding `'ef'` (4+1+2=7 <= 4), so the else branch flushes `'abcd'`. Exact width is accepted.\n2. width=1: `word_wrap('a b c', 1)` returns `['a', 'b', 'c']`; `word_wrap('ab c', 1)` returns `['ab', 'c']`. In the second case `'ab'` has length 2 > width 1, and it is placed alone and unbroken, so the spec holds.\n3. `str.split()` with no separator splits on runs of Unicode whitespace. Python docs: 'If sep is not specified or is None, runs of consecutive whitespace are regarded as a single separator...' and `str.isspace()` defines whitespace as characters whose Unicode general category is Zs or bidi class WS/B/S. U+00A0 and U+3000 are both Zs, so they are separators. Thus `word_wrap('a\\tb\\nc', 3)` returns `['a b', 'c']` and `word_wrap('a\\xa0b', 3)` returns `['a b']`.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Validation order: what happens for word_wrap('', 0) and word_wrap('   ', -5) \u2014 does the width check run before the empty-text check, so ValueError is raised rather than [] returned, and what about a non-integer width like 3.5 or True?"
+   ],
+   "replies": [
+    "Validation order: the width check is first. In the submitted code, `if width < 1: raise ValueError(...)` appears before `words = text.split()`, so `word_wrap('', 0)` and `word_wrap('   ', -5)` both raise ValueError, not return []. Non-integer width: there is no type check, so `3.5` and `True` pass the `< 1` test (`3.5 < 1` is False; `True < 1` is False because True == 1). Example computations: `word_wrap('a bb', 3.5)` -> `['a','bb']`; `word_wrap('a bb', True)` -> `['a','bb']`. This matches the stated spec, which only requires ValueError for width < 1."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please report actual executed outputs (not reasoning) for these boundary cases: word_wrap('abcd', 4), word_wrap('ab cd', 5), word_wrap('ab cd', 4), and word_wrap('a bb ccc dddd', 4) \u2014 do any lines exceed width, and does the exact-fit case (len(line) == width) stay on one line rather than wrapping early?",
+    "How does the function handle whitespace variety and non-str input: what are the run outputs for word_wrap('the\\tquick\\nbrown   fox', 10), word_wrap('  leading and trailing  ', 7), and word_wrap(None, 5) / word_wrap(['a'], 5) \u2014 and is any of that behavior specified or just incidental?"
+   ],
+   "replies": [
+    "Executed outputs:\nword_wrap('abcd', 4) -> ['abcd']\nword_wrap('ab cd', 5) -> ['ab cd']\nword_wrap('ab cd', 4) -> ['ab', 'cd']\nword_wrap('a bb ccc dddd', 4) -> ['a bb', 'ccc', 'dddd']\n\nNo lines exceed width in these four cases. Exact-fit cases len(line) == width stay on one line: 'abcd' (4), 'ab cd' (5), 'a bb' (4), and 'dddd' (4).",
+    "Executed outputs:\nword_wrap('the\\tquick\\nbrown   fox', 10) -> ['the quick', 'brown fox']\nword_wrap('  leading and trailing  ', 7) -> ['leading', 'and', 'trailing']\nword_wrap(None, 5) -> AttributeError: 'NoneType' object has no attribute 'split'\nword_wrap(['a'], 5) -> AttributeError: 'list' object has no attribute 'split'\n\nWhitespace variety is collapsed by text.split(), which is consistent with the request's 'splits text into words on whitespace'. The 'trailing' line has length 8 > width 7, but that is the specified long-word exception: a word longer than width goes on a line by itself unbroken. Non-str input behavior is not specified by the request; the AttributeErrors are incidental consequences of calling .split() on the input."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "```python\ndef word_wrap(text: str, width: int) -> list:\n    if width < 1:\n        raise ValueError('width must be >= 1')\n    words = text.split()\n    if not words:\n        return []\n    lines = []\n    current = words[0]\n    for word in words[1:]:\n        if len(current) + 1 + len(word) <= width:\n            current += ' ' + word\n        else:\n            lines.append(current)\n            current = word\n    lines.append(current)\n    return lines\n```\n\nThis passes the visible examples. Empty/whitespace-only input returns [] because `split()` yields no words. `width < 1` raises `ValueError`. Long words are never split: when adding the next word would exceed width, the current line is flushed and the long word becomes the new current line, so it appears alone and unbroken. For example, `word_wrap('a toolong b', 3)` returns `['a', 'toolong', 'b']` and `word_wrap('toolong a', 3)` returns `['toolong', 'a']`."
+}

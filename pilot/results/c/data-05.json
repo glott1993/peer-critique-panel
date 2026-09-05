@@ -1,0 +1,156 @@
+{
+ "task_id": "data-05",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 4.0, expected 4.0",
+ "error": null,
+ "seconds": 199.9,
+ "tokens": 74535,
+ "prompt_tokens": 47513,
+ "completion_tokens": 27022,
+ "cost": 0.2605,
+ "calls": 22,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(31+28+31+30+31+20-1)-168",
+   "claimed": 2.0,
+   "value": 2.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(31+28+31+30+31+22-1)-168",
+   "claimed": 4.0,
+   "value": 4.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(31+28+31+30+31+7-1)-154",
+   "claimed": 3.0,
+   "value": 3.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Whole request",
+     "what": "Here is a table of orders (CSV). Revenue of an order is units x unit_price.\n\norder_id,region,product,units,unit_price,order_date,status\nORD-1138,West,Crate,22,90.04,2026-06-22,shipped\nORD-1559,East,Anvil,38,101.78,2026-06-20,cancelled\nORD-1777,North,Dowel,3,112.65,2026-05-25,pending\nORD-1589,East,An"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine which orders were placed on a weekend, we map each `order_date` in 2026 to its day of the week (2026-01-01 was a Thursday):\n\n- **ORD-1138**: 2026-06-22 (Monday)\n- **ORD-1559**: 2026-06-20 (Saturday) \u2014 **Weekend**\n- **ORD-1777**: 2026-05-25 (Monday)\n- **ORD-1589**: 2026-05-16 (Saturday) \u2014 **Weekend**\n- **ORD-1004**: 2026-06-10 (Wednesday)\n- **ORD-1174**: 2026-06-05 (Friday)\n- **ORD-1708**: 2026-05-14 (Thursday)\n- **ORD-1689**: 2026-06-23 (Tuesday)\n- **ORD-1541**: 2026-05-17 (Sunday) \u2014 **Weekend**\n- **ORD-1419**: 2026-06-29 (Monday)\n- **ORD-1109**: 2026-06-18 (Thursday)\n- **ORD-1825**: 2026-06-07 (Sunday) \u2014 **Weekend**\n- **ORD-1886**: 2026-05-01 (Friday)\n- **ORD-1161**: 2026-06-12 (Friday)\n- **ORD-1835**: 2026-04-27 (Monday)\n- **ORD-1300**: 2026-06-01 (Monday)\n- **ORD-1089**: 2026-06-03 (Wednesday)\n\nThere are 4 orders placed on a Saturday or a Sunday (ORD-1559, ORD-1589, ORD-1541, ORD-1825).\n\nFINAL: 4"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "No substantive error is evident; the four marked dates are correctly classified using the stated 2026-01-01 Thursday anchor."
+    },
+    {
+     "from": "B",
+     "problem": "This is consistent with the question, but the draft could explicitly note that cancelled and pending orders are intentionally retained."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 2,
+   "rejected": 0,
+   "answer": "Using 2026-01-01 as Thursday, the weekend dates in the table are:\n- ORD-1559: 2026-06-20 (Saturday)\n- ORD-1589: 2026-05-16 (Saturday)\n- ORD-1541: 2026-05-17 (Sunday)\n- ORD-1825: 2026-06-07 (Sunday)\n\nNo status filter is applied, so cancelled and pending orders remain eligible. All other listed dates are weekdays.\nFINAL: 4"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "What independent source or verifiable computation establishes that 2026-01-01 is a Thursday, rather than it being assumed? Please state the check used (e.g., a doomsday/anchor rule or day-count from a known reference date).",
+    "Please show the full 17-row scan: for every order_id, the computed day-of-year offset and resulting weekday, so it can be confirmed that no weekend date was missed among the 13 rows dismissed as 'weekdays'.",
+    "For the near-miss dates adjacent to the identified weekends (2026-06-22, 2026-06-21 if present, 2026-06-23, 2026-05-25, 2026-06-12), what weekday does each resolve to under the stated anchor, and does any of them fall on Saturday or Sunday?"
+   ],
+   "replies": [
+    "No reply.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [
+    "No reply; the Thursday anchor for 2026-01-01 is still asserted without any stated check (no day-count from a known date, no doomsday rule).",
+    "No reply; the 13 rows dismissed as weekdays were never enumerated, so a missed Saturday/Sunday cannot be ruled out.",
+    "No reply; the weekdays for the near-miss dates (2026-06-22, 2026-06-23, 2026-05-25, 2026-06-12) remain unverified."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please state the verification for the anchor: from a reference date you can justify (e.g., 2025-01-01 or 2026-03-01), give the day count to 2026-01-01 and the mod-7 result showing it is Thursday. Also confirm 2026 is treated as a non-leap year and say where that matters.",
+    "Please supply the full 17-row table: order_id, date, day-of-year, (day-of-year - 1) mod 7, and weekday, so the 13 non-weekend rows are individually accounted for.",
+    "For the four dates closest to a weekend boundary (2026-06-22, 2026-06-23, 2026-05-25, 2026-06-12), state each computed weekday and whether an off-by-one in the anchor would flip any of them into Saturday or Sunday."
+   ],
+   "replies": [
+    "Anchor verification: Use 2025-01-01, which is a well-known Wednesday (Jan 1, 2025). 2025 is a non-leap year (365 days), so 2026-01-01 is 365 days later. 365 mod 7 = 1, so 2026-01-01 is Wednesday + 1 = Thursday. This confirms the anchor. 2026 is a non-leap year because 2026 is not divisible by 4 (2026/4 = 506.5). This matters for day-of-year calculations after February: February has 28 days, so dates from March onward are shifted one day earlier relative to a leap-year calendar. For example, 2026-03-01 is day 60, not day 61.\n\nFull 17-row table (day-of-year, (day-of-year - 1) mod 7, weekday):\nORD-1138, 2026-06-22, 173, 4, Monday\nORD-1559, 2026-06-20, 171, 2, Saturday\nORD-1777, 2026-05-25, 145, 4, Monday\nORD-1589, 2026-05-16, 136, 2, Saturday\nORD-1004, 2026-06-10, 161, 6, Wednesday\nORD-1174, 2026-06-05, 156, 1, Friday\nORD-1708, 2026-05-14, 134, 0, Thursday\nORD-1689, 2026-06-23, 174, 5, Tuesday\nORD-1541, 2026-05-17, 137, 3, Sunday\nORD-1419, 2026-06-29, 180, 4, Monday\nORD-1109, 2026-06-18, 169, 0, Thursday\nORD-1825, 2026-06-07, 158, 3, Sunday\nORD-1886, 2026-05-01, 121, 1, Friday\nORD-1161, 2026-06-12, 163, 1, Friday\nORD-1835, 2026-04-27, 117, 4, Monday\nORD-1300, 2026-06-01, 152, 4, Monday\nORD-1089, 2026-06-03, 154, 6, Wednesday\n\nBoundary dates check:\n2026-06-22: day 173, (173-1) mod 7 = 172 mod 7 = 4 \u2192 Monday. Off-by-one anchor would make it Sunday (flips into weekend).\n2026-06-23: day 174, (174-1) mod 7 = 173 mod 7 = 5 \u2192 Tuesday. Off-by-one anchor would make it Monday (no flip).\n2026-05-25: day 145, (145-1) mod 7 = 144 mod 7 = 4 \u2192 Monday. Off-by-one anchor would make it Sunday (flips into weekend).\n2026-06-12: day 163, (163-1) mod 7 = 162 mod 7 = 1 \u2192 Friday. Off-by-one anchor would make it Thursday (no flip).\n\nSo an off-by-one anchor error would incorrectly add 2026-06-22 and 2026-05-25 as weekend dates, changing the count from 4 to 6. The original answer's weekend dates (2026-06-20, 2026-05-16, 2026-05-17, 2026-06-07) are all correct, and the count of 4 is correct.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Using 2026-01-01 as Thursday, the weekend dates in the table are:\n- ORD-1559: 2026-06-20 (Saturday)\n- ORD-1589: 2026-05-16 (Saturday)\n- ORD-1541: 2026-05-17 (Sunday)\n- ORD-1825: 2026-06-07 (Sunday)\n\nNo status filter is applied, so cancelled and pending orders remain eligible. All other listed dates are weekdays.\nFINAL: 4"
+}

@@ -1,0 +1,80 @@
+{
+ "task_id": "data-18",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'ord-1845', expected 'ord-1845'",
+ "error": null,
+ "seconds": 49.9,
+ "tokens": 50223,
+ "prompt_tokens": 39157,
+ "completion_tokens": 11066,
+ "cost": 0.05476,
+ "calls": 16,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compare order revenues",
+     "what": "ORD-1845 has the largest revenue: 40 \u00d7 117.63 = 4705.20; FINAL: ORD-1845"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Comparing revenue = units \u00d7 unit_price across all 20 rows, the largest is ORD-1845: 40 \u00d7 117.63 = 4705.20. The next largest is ORD-1177 at 20 \u00d7 110.62 = 2212.40, well below ORD-1845. Status does not affect the requirement since \u201cany status\u201d is allowed.\n\nFINAL: ORD-1845"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Comparing revenue = units \u00d7 unit_price across all 20 rows, the largest is ORD-1845: 40 \u00d7 117.63 = 4705.20. The next largest is ORD-1177 at 20 \u00d7 110.62 = 2212.40, well below ORD-1845. Status does not affect the requirement since \u201cany status\u201d is allowed.\n\nFINAL: ORD-1845"
+}

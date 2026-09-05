@@ -1,0 +1,16 @@
+{
+ "task_id": "code-02",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 28.9,
+ "tokens": 751,
+ "prompt_tokens": 350,
+ "completion_tokens": 401,
+ "cost": 0.01178,
+ "calls": 5,
+ "call_errors": 4,
+ "answer": "```python\ndef merge_intervals(intervals):\n    \"\"\"Merge overlapping or touching [start, end] intervals.\n\n    Returns a new list of two-element lists sorted by start.\n    The input list and its inner lists are never modified.\n    \"\"\"\n    if not intervals:\n        return []\n\n    # Copy each pair so the caller's data is untouched, then sort by start (then end).\n    ordered = sorted(([int(s), int(e)] for s, e in intervals), key=lambda p: (p[0], p[1]))\n\n    merged = [ordered[0]]\n    for start, end in ordered[1:]:\n        last = merged[-1]\n        if start <= last[1]:          # overlap or touch -> extend\n            if end > last[1]:\n                last[1] = end\n        else:                          # gap -> start a new interval\n            merged.append([start, end])\n    return merged\n```\n\nSorting by start guarantees that only the most recently merged interval can be extended; `start <= last[1]` treats touching endpoints (e.g. `[1, 4]` and `[4, 5]`) as mergeable, while `[1, 4]` and `[5, 6]` stay separate."
+}

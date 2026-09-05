@@ -1,0 +1,115 @@
+{
+ "task_id": "data-20",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 25.2, expected 25.2",
+ "error": null,
+ "seconds": 154.2,
+ "tokens": 96833,
+ "prompt_tokens": 64886,
+ "completion_tokens": 31947,
+ "cost": 0.13279,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute order revenues excluding cancelled",
+     "what": "Calculate units\u00d7unit_price for each non-cancelled order."
+    },
+    {
+     "id": "c2",
+     "title": "Sum total and East revenue",
+     "what": "Add all non-cancelled revenues and separately sum East region revenues."
+    },
+    {
+     "id": "c3",
+     "title": "Calculate percentage",
+     "what": "Divide East revenue by total revenue and convert to a percentage rounded to one decimal."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ],
+    "c3": [
+     "B",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine the East region's percentage of total revenue excluding cancelled orders, we exclude rows with status `cancelled` (ORD-1406 and ORD-1865) and include all other orders (both `shipped` and `pending`). Revenue is calculated as `units \u00d7 unit_price`.\n\n### 1. East Region Revenue\n* **ORD-1225:** $13 \\times 109.19 = 1,419.47$\n* **ORD-1823:** $36 \\times 105.11 = 3,783.96$\n* **East Total:** $1,419.47 + 3,783.96 = 5,203.43$\n\n### 2. Other Non-Cancelled Revenue by Region\n* **North:**\n  * ORD-1706: $21 \\times 88.83 = 1,865.43$\n  * ORD-1738: $17 \\times 96.25 = 1,636.25$\n  * ORD-1614: $21 \\times 25.09 = 526.89$\n  * ORD-1096: $3 \\times 97.62 = 292.86$\n  * *North Sum:* $4,321.43$\n* **South:**\n  * ORD-1543: $35 \\times 83.67 = 2,928.45$\n  * ORD-1523: $24 \\times 84.58 = 2,029.92$\n  * *South Sum:* $4,958.37$\n* **West:**\n  * ORD-1228: $8 \\times 51.79 = 414.32$\n  * ORD-1412: $22 \\times 105.27 = 2,315.94$\n  * ORD-1672: $38 \\times 90.13 = 3,424.94$\n  * ORD-1409: $6 \\times 4.25 = 25.50$\n  * *West Sum:* $6,180.70$\n\n### 3. Total Non-Cancelled Revenue\n$$\\text{Total} = 4,321.43 + 4,958.37 + 6,180.70 + 5,203.43 = 20,663.93$$\n\n### 4. East Region Share Calculation\n$$\\frac{5,203.43}{20,663.93} \\times 100\\% \\approx 25.1812\\%$$\n\nRounding to one decimal place gives 25.2%.\n\nFINAL: 25.2"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Recomputation finds no error: East revenue is 13\u00d7109.19 + 36\u00d7105.11 = 5203.43, and non-cancelled total revenue is 20663.93."
+    },
+    {
+     "from": "B",
+     "problem": "This matches the explicit instruction to exclude only cancelled orders; the pending orders ORD-1412 and ORD-1523 should therefore remain in the denominator."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 1,
+   "answer": "Exclude the two cancelled orders (ORD-1406 and ORD-1865); retain shipped and pending orders.\n\nEast revenue:\n13 \u00d7 109.19 + 36 \u00d7 105.11 = 5,203.43\n\nTotal non-cancelled revenue:\n4,321.43 + 4,958.37 + 6,180.70 + 5,203.43 = 20,663.93\n\nEast percentage:\n(5,203.43 \u00f7 20,663.93) \u00d7 100 = 25.1812%, which rounds to one decimal place.\n\nFINAL: 25.2"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Exclude the two cancelled orders (ORD-1406 and ORD-1865); retain shipped and pending orders.\n\nEast revenue:\n13 \u00d7 109.19 + 36 \u00d7 105.11 = 5,203.43\n\nTotal non-cancelled revenue:\n4,321.43 + 4,958.37 + 6,180.70 + 5,203.43 = 20,663.93\n\nEast percentage:\n(5,203.43 \u00f7 20,663.93) \u00d7 100 = 25.1812%, which rounds to one decimal place.\n\nFINAL: 25.2"
+}

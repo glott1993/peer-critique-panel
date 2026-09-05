@@ -1,0 +1,80 @@
+{
+ "task_id": "math-14",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 406.0, expected 406.0",
+ "error": null,
+ "seconds": 72.0,
+ "tokens": 34202,
+ "prompt_tokens": 26643,
+ "completion_tokens": 7559,
+ "cost": 0.03994,
+ "calls": 16,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Count qualifying committees",
+     "what": "Compute the number of 5-member committees with exactly 3, 4, or 5 women from 5 women and 9 men."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Component c1: Count committees of 5 with at least 3 women, from 5 women and 9 men.\n\nBreak into cases by number of women (3, 4, or 5), since \"at least 3\" out of a committee of 5 means women can be 3, 4, or 5 (can't exceed 5 women available, and committee size is 5).\n\n**Case: exactly 3 women, 2 men**\nC(5,3) \u00d7 C(9,2) = 10 \u00d7 36 = 360\n- C(5,3) = 5!/(3!2!) = 10\n- C(9,2) = 9!/(2!7!) = 36\n\n**Case: exactly 4 women, 1 man**\nC(5,4) \u00d7 C(9,1) = 5 \u00d7 9 = 45\n- C(5,4) = 5\n- C(9,1) = 9\n\n**Case: exactly 5 women, 0 men**\nC(5,5) \u00d7 C(9,0) = 1 \u00d7 1 = 1\n\n**Total:** 360 + 45 + 1 = 406\n\nCheck via complement/alternate method: total committees C(14,5) = 2002. Cases with 0,1,2 women:\n- 0 women: C(9,5) = 126\n- 1 woman: C(5,1)\u00d7C(9,4) = 5\u00d7126 = 630\n- 2 women: C(5,2)\u00d7C(9,3) = 10\u00d784 = 840\nSum = 126+630+840 = 1596\n2002 \u2212 1596 = 406 \u2713 (matches, confirms answer)\n\nVerifiable via any binomial coefficient calculator or by direct enumeration (small enough for a script to brute-force check with itertools.combinations in Python).\n\nFINAL: 406"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Component c1: Count committees of 5 with at least 3 women, from 5 women and 9 men.\n\nBreak into cases by number of women (3, 4, or 5), since \"at least 3\" out of a committee of 5 means women can be 3, 4, or 5 (can't exceed 5 women available, and committee size is 5).\n\n**Case: exactly 3 women, 2 men**\nC(5,3) \u00d7 C(9,2) = 10 \u00d7 36 = 360\n- C(5,3) = 5!/(3!2!) = 10\n- C(9,2) = 9!/(2!7!) = 36\n\n**Case: exactly 4 women, 1 man**\nC(5,4) \u00d7 C(9,1) = 5 \u00d7 9 = 45\n- C(5,4) = 5\n- C(9,1) = 9\n\n**Case: exactly 5 women, 0 men**\nC(5,5) \u00d7 C(9,0) = 1 \u00d7 1 = 1\n\n**Total:** 360 + 45 + 1 = 406\n\nCheck via complement/alternate method: total committees C(14,5) = 2002. Cases with 0,1,2 women:\n- 0 women: C(9,5) = 126\n- 1 woman: C(5,1)\u00d7C(9,4) = 5\u00d7126 = 630\n- 2 women: C(5,2)\u00d7C(9,3) = 10\u00d784 = 840\nSum = 126+630+840 = 1596\n2002 \u2212 1596 = 406 \u2713 (matches, confirms answer)\n\nVerifiable via any binomial coefficient calculator or by direct enumeration (small enough for a script to brute-force check with itertools.combinations in Python).\n\nFINAL: 406"
+}

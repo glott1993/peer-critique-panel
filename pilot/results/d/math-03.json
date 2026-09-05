@@ -1,0 +1,112 @@
+{
+ "task_id": "math-03",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 571.93, expected 571.93",
+ "error": null,
+ "seconds": 222.8,
+ "tokens": 73457,
+ "prompt_tokens": 33495,
+ "completion_tokens": 39962,
+ "cost": 0.22233,
+ "calls": 30,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Whole request",
+     "what": "A $24,000 loan is repaid in equal monthly payments over 4 years at 6.75% APR, compounded monthly (standard amortization). What is the monthly payment, in dollars to the nearest cent? Show brief working, then end with exactly one line of the form FINAL: <answer>."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Standard amortization formula:  \n\\(M=P\\frac{r}{1-(1+r)^{-n}}\\)\n\nUsing \\(P=24000\\), monthly rate \\(r=0.0675/12=0.005625\\), and \\(n=4\\times12=48\\):\n\n\\(M=24000\\frac{0.005625}{1-(1.005625)^{-48}}=571.930...\\)\n\nCheck by evaluating the displayed formula with a calculator or spreadsheet PMT function: `=PMT(0.0675/12,48,-24000)`.\n\nFINAL: 571.93"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Standard amortization formula:  \n\\(M=P\\frac{r}{1-(1+r)^{-n}}\\)\n\nUsing \\(P=24000\\), monthly rate \\(r=0.0675/12=0.005625\\), and \\(n=4\\times12=48\\):\n\n\\(M=24000\\frac{0.005625}{1-(1.005625)^{-48}}=571.930...\\)\n\nCheck by evaluating the displayed formula with a calculator or spreadsheet PMT function: `=PMT(0.0675/12,48,-24000)`.\n\nFINAL: 571.93"
+}

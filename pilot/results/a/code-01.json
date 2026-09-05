@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 15.6,
- "tokens": 1697,
+ "seconds": 15.0,
+ "tokens": 1589,
  "prompt_tokens": 375,
- "completion_tokens": 1322,
- "cost": 0.03492,
+ "completion_tokens": 1214,
+ "cost": 0.03222,
  "calls": 1,
  "call_errors": 0,
- "answer": "Uses a strict token-by-token scan: each part must be digits immediately followed by one of `h`/`m`/`s`, with optional whitespace only *between* parts.\n\n```python\nimport re\n\n_TOKEN = re.compile(r'([0-9]+)([hms])')\n_MULT = {'h': 3600, 'm': 60, 's': 1}\n\n\ndef parse_duration(s: str) -> int:\n    \"\"\"Convert a duration string like '1h 30m' into a number of seconds.\"\"\"\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    text = s.strip()\n    if not text:\n        raise ValueError(\"empty duration string\")\n\n    total = 0\n    seen = set()\n    pos = 0\n    n = len(text)\n\n    while pos < n:\n        m = _TOKEN.match(text, pos)\n        if not m:\n            raise ValueError(f\"malformed duration string: {s!r}\")\n        value, unit = m.group(1), m.group(2)\n        if unit in seen:\n            raise ValueError(f\"unit {unit!r} repeated in: {s!r}\")\n        seen.add(unit)\n        total += int(value) * _MULT[unit]\n        pos = m.end()\n        # allow whitespace (or nothing) between parts\n        while pos < n and text[pos].isspace():\n            pos += 1\n\n    return total\n\n\nassert parse_duration('1h 30m') == 5400\nassert parse_duration('45m') == 2700\nassert parse_duration('2h5s') == 7205\n```"
+ "answer": "```python\nimport re\n\n_PART_RE = re.compile(r'([0-9]+)([a-zA-Z])')\n_MULT = {'h': 3600, 'm': 60, 's': 1}\n\n\ndef parse_duration(s: str) -> int:\n    \"\"\"Convert a duration string like '1h 30m' into a number of seconds.\"\"\"\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    text = s.strip()\n    if not text:\n        raise ValueError(\"empty duration string\")\n\n    total = 0\n    seen = set()\n\n    # Parts may be separated by any amount of whitespace (or none at all),\n    # but a number must be immediately followed by its unit letter.\n    for token in re.split(r'\\s+', text):\n        pos = 0\n        while pos < len(token):\n            m = _PART_RE.match(token, pos)\n            if m is None:\n                raise ValueError(\"malformed duration: %r\" % (s,))\n            number, unit = m.group(1), m.group(2)\n            if unit not in _MULT:\n                raise ValueError(\"unknown unit %r in %r\" % (unit, s))\n            if unit in seen:\n                raise ValueError(\"repeated unit %r in %r\" % (unit, s))\n            seen.add(unit)\n            total += int(number) * _MULT[unit]\n            pos = m.end()\n\n    if not seen:\n        raise ValueError(\"malformed duration: %r\" % (s,))\n\n    return total\n\n\nassert parse_duration('1h 30m') == 5400\nassert parse_duration('45m') == 2700\nassert parse_duration('2h5s') == 7205\n```\n\nNotes: the string is stripped, split on whitespace, and each whitespace-free chunk is consumed greedily as `<digits><letter>` pairs. Anything left over (a bare number, a bare unit, a sign, a decimal point, an unknown letter) or a duplicated unit raises `ValueError`, as does an empty/whitespace-only input."
 }

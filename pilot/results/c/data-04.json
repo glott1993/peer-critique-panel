@@ -1,0 +1,120 @@
+{
+ "task_id": "data-04",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 'crate', expected 'crate'",
+ "error": null,
+ "seconds": 126.6,
+ "tokens": 56105,
+ "prompt_tokens": 43541,
+ "completion_tokens": 12564,
+ "cost": 0.08488,
+ "calls": 19,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "30+33+18+9+24",
+   "claimed": 114.0,
+   "value": 114.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "5+1+36+29+29+7",
+   "claimed": 107.0,
+   "value": 107.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "114+107+65+46",
+   "claimed": 332.0,
+   "value": 332.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Sum units by product",
+     "what": "Add units for each product across all orders regardless of status: Crate=30+33+18+9+24=114, Easel=5+1+36+29+29+7=107, Dowel=38+27=65, Bolt=25+21=46; cross-check sum=332 matches sum of all units column."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Using the supplied CSV and summing the `units` column by `product` across all statuses:\n\nCrate = 30 + 33 + 18 + 9 + 24 = 114  \nEasel = 5 + 1 + 36 + 29 + 29 + 7 = 107  \nDowel = 38 + 27 = 65  \nBolt = 25 + 21 = 46  \n\nCheck: 114 + 107 + 65 + 46 = 332, matching the sum of all `units` values in the CSV.\n\nFINAL: Crate"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The Crate rows in the CSV are ORD-1199 (30), ORD-1851 (33), ORD-1485 (18), ORD-1332 (9), and ORD-1484 (24) \u2014 can you confirm no Crate row was omitted, and state how many rows each product contributes so the row counts add to 15?",
+    "The Easel total of 107 is within 7 units of Crate's 114; if any single row were misassigned between Crate and Easel, would the ranking change, and can you re-verify each Easel row's product label (ORD-1151, ORD-1414, ORD-1523, ORD-1017, ORD-1504, ORD-1808)?",
+    "Since the question says 'counting all orders regardless of status', can you confirm that cancelled and pending rows were included and state which rows would drop out if only shipped orders counted \u2014 and whether the winner would change under that alternative reading?"
+   ],
+   "replies": [
+    "Confirmed from the CSV: Crate has 5 rows\u2014ORD-1199 (30), ORD-1851 (33), ORD-1485 (18), ORD-1332 (9), and ORD-1484 (24). Row counts are Crate 5, Easel 6, Dowel 2, and Bolt 2; 5 + 6 + 2 + 2 = 15. No Crate row was omitted.",
+    "The CSV labels all listed rows as Easel: ORD-1151 (5), ORD-1414 (1), ORD-1523 (36), ORD-1017 (29), ORD-1504 (29), and ORD-1808 (7), totaling 107. A misassignment from Easel to Crate would not change the winner; a misassignment from Crate to Easel would change the ranking because the 7-unit gap becomes 7 - 2x, and every Crate row has x > 3.5 units.",
+    "All 15 orders were included regardless of status. Cancelled or pending rows are ORD-1199, ORD-1485, ORD-1151, ORD-1332, ORD-1806, ORD-1414, and ORD-1484. If only shipped orders counted, totals would be Crate 33, Easel 101, Dowel 65, and Bolt 25, so the winner would change to Easel. Under the requested all-status interpretation, the original result is correct.\nFINAL: Crate"
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Using the supplied CSV and summing the `units` column by `product` across all statuses:\n\nCrate = 30 + 33 + 18 + 9 + 24 = 114  \nEasel = 5 + 1 + 36 + 29 + 29 + 7 = 107  \nDowel = 38 + 27 = 65  \nBolt = 25 + 21 = 46  \n\nCheck: 114 + 107 + 65 + 46 = 332, matching the sum of all `units` values in the CSV.\n\nFINAL: Crate"
+}

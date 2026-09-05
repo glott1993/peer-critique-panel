@@ -1,0 +1,93 @@
+{
+ "task_id": "data-04",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'crate', expected 'crate'",
+ "error": null,
+ "seconds": 101.5,
+ "tokens": 49765,
+ "prompt_tokens": 38371,
+ "completion_tokens": 11394,
+ "cost": 0.05951,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Sum units by product",
+     "what": "Crate: 30+33+18+9+24=114; Easel: 5+36+29+1+29+7=107; Dowel: 38+27=65; Bolt: 25+21=46. Crate has the largest total (114 units), so answer is Crate."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine which product has the largest total number of units across all orders regardless of status, we aggregate the `units` column for each product:\n\n- **Crate**:\n  - ORD-1199: 30\n  - ORD-1851: 33\n  - ORD-1485: 18\n  - ORD-1332: 9\n  - ORD-1484: 24\n  - Sum = 30 + 33 + 18 + 9 + 24 = **114**\n\n- **Easel**:\n  - ORD-1151: 5\n  - ORD-1414: 1\n  - ORD-1523: 36\n  - ORD-1017: 29\n  - ORD-1504: 29\n  - ORD-1808: 7\n  - Sum = 5 + 1 + 36 + 29 + 29 + 7 = **107**\n\n- **Dowel**:\n  - ORD-1346: 38\n  - ORD-1088: 27\n  - Sum = 38 + 27 = **65**\n\n- **Bolt**:\n  - ORD-1341: 25\n  - ORD-1806: 21\n  - Sum = 25 + 21 = **46**\n\nThese sums can be verified by running `pandas` in Python:\n```python\nimport pandas as pd\nimport io\n\ndf = pd.read_csv(io.StringIO(csv_text))\nprint(df.groupby('product')['units'].sum().sort_values(ascending=False))\n```\n\nCrate has the highest unit total at 114.\n\nFINAL: Crate"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Untested code: csv_text is undefined in the snippet, so it cannot run as shown and would raise a NameError."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "To find the product with largest total units regardless of status, sum units by product.\n\nCrate: 30 + 33 + 18 + 9 + 24 = 114\nEasel: 5 + 1 + 36 + 29 + 29 + 7 = 107\nDowel: 38 + 27 = 65\nBolt: 25 + 21 = 46\n\nCrate has the highest total units.\n\nFINAL: Crate"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "To find the product with largest total units regardless of status, sum units by product.\n\nCrate: 30 + 33 + 18 + 9 + 24 = 114\nEasel: 5 + 1 + 36 + 29 + 29 + 7 = 107\nDowel: 38 + 27 = 65\nBolt: 25 + 21 = 46\n\nCrate has the highest total units.\n\nFINAL: Crate"
+}

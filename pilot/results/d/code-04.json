@@ -1,0 +1,159 @@
+{
+ "task_id": "code-04",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 208.3,
+ "tokens": 92581,
+ "prompt_tokens": 62698,
+ "completion_tokens": 29883,
+ "cost": 0.14144,
+ "calls": 29,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Implement Luhn Validator",
+     "what": "Define luhn_valid(s: str) -> bool: strip spaces and hyphens; if len<2 or non-digit present, return False; iterate digits right-to-left doubling every second one (subtract 9 if >9); sum and return True iff sum % 10 == 0."
+    },
+    {
+     "id": "c2",
+     "title": "Validate Against Given Examples",
+     "what": "Run the function against both provided asserts ('4111 1111 1111 1111' -> True, '...1112' -> False) plus a couple of edge cases (empty string, single digit, letters present) to confirm False-path logic before finalizing."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "A"
+    ],
+    "c2": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "Here is the complete implementation of `luhn_valid`:\n\n```python\ndef luhn_valid(s: str) -> bool:\n    cleaned = s.replace(\" \", \"\").replace(\"-\", \"\")\n    if len(cleaned) < 2 or not cleaned.isdigit():\n        return False\n\n    total = 0\n    # Iterate from right to left (0-indexed from the rightmost digit)\n    for idx, char in enumerate(reversed(cleaned)):\n        digit = int(char)\n        if idx % 2 == 1:\n            digit *= 2\n            if digit > 9:\n                digit -= 9\n        total += digit\n\n    return total % 10 == 0\n\n\nif __name__ == \"__main__\":\n    # Visible examples\n    assert luhn_valid(\"4111 1111 1111 1111\") is True\n    assert luhn_valid(\"4111 1111 1111 1112\") is False\n\n    # Edge cases: length < 2\n    assert luhn_valid(\"\") is False\n    assert luhn_valid(\"6\") is False\n    assert luhn_valid(\" - - \") is False\n\n    # Edge cases: non-digit characters present\n    assert luhn_valid(\"4111 1111 1111 111a\") is False\n    assert luhn_valid(\"4111-1111-1111-111#\") is False\n```\n\n### Verification & Check\n- **Rule compliance**: \n  - `s.replace(\" \", \"\").replace(\"-\", \"\")` strips all spaces and hyphens.\n  - `len(cleaned) < 2 or not cleaned.isdigit()` rejects strings with fewer than two characters or non-digit characters (e.g., `\"\"`, `\"6\"`, `\" - - \"`, `'a'`, `'#'`).\n  - `enumerate(reversed(cleaned))` enables 0-indexed traversal from the rightmost digit, doubling every second digit (`idx % 2 == 1`), subtracting 9 if the result exceeds 9, and summing all digits.\n- **Visible examples**:\n  - `'4111 1111 1111 1111'`: The 8 digits at even indices remain `1` (sum = 8). Seven digits at odd indices double to `2` (sum = 14), and the final digit `4` at index 15 doubles to `8`. Total sum = $8 + 14 + 8 = 30 \\equiv 0 \\pmod{10}$, returning `True`.\n  - `'4111 1111 1111 1112'`: Modifying index 0 from `1` to `2` increases the total sum by 1 to 31, failing the modulo check ($31 \\not\\equiv 0 \\pmod{10}$) and returning `False`."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "`str.isdigit()` accepts some Unicode digit-like characters that `int()` cannot parse, such as superscript two. For example, `luhn_valid('1\u00b2')` passes the validation check and then raises `ValueError` instead of returning `False`. It also accepts non-ASCII digits despite the likely intended digit set being `0`-`9`."
+    },
+    {
+     "from": "D",
+     "problem": "The visible example is 16 digits long: '4111111111111111' after cleaning. The draft's claim that 8 digits remain 1 and 7 digits double to 2 ignores the 4s and misstates the digit counts, making the verification unreliable as evidence the function passes the example."
+    },
+    {
+     "from": "D",
+     "problem": "The request specifies removing all spaces and hyphens. The draft uses chained .replace(' ', '').replace('-', ''), which does remove both characters, but the order of removal is irrelevant for correctness. This is not actually a bug."
+    },
+    {
+     "from": "D",
+     "problem": "After removing spaces and hyphens, ' - - ' becomes empty string, which has fewer than 2 characters, so returning False is correct. The draft's assertion is consistent with the spec."
+    },
+    {
+     "from": "D",
+     "problem": "Including executable test code in the same block is acceptable and common, but if the hidden test harness imports the module, the assertions under `if __name__ == '__main__'` will not run, so they do not affect correctness. This is not a functional issue."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "```python\ndef luhn_valid(s: str) -> bool:\n    cleaned = s.replace(\" \", \"\").replace(\"-\", \"\")\n    if len(cleaned) < 2 or not all('0' <= c <= '9' for c in cleaned):\n        return False\n\n    total = 0\n    for idx, char in enumerate(reversed(cleaned)):\n        digit = int(char)\n        if idx % 2 == 1:\n            digit *= 2\n            if digit > 9:\n                digit -= 9\n        total += digit\n\n    return total % 10 == 0\n\n\nif __name__ == \"__main__\":\n    assert luhn_valid(\"4111 1111 1111 1111\") is True\n    assert luhn_valid(\"4111 1111 1111 1112\") is False\n    assert luhn_valid(\"\") is False\n    assert luhn_valid(\"6\") is False\n    assert luhn_valid(\" - - \") is False\n    assert luhn_valid(\"4111 1111 1111 111a\") is False\n    assert luhn_valid(\"4111-1111-1111-111#\") is False\n    assert luhn_valid(\"1\\u00b2\") is False\n    assert luhn_valid(\"\\uff11\\uff12\") is False\n```\n\nReplaced `cleaned.isdigit()` with a strict ASCII-only check (`all('0' <= c <= '9' for c in cleaned)`), since `str.isdigit()` accepts Unicode digit-like characters (e.g. superscript '\u00b2', fullwidth '\uff11\uff12') that `int()` cannot parse or that aren't intended as valid input, which would have caused a `ValueError` or incorrect acceptance instead of returning `False`.\n\nThe verification math in the previous draft for the first example was indeed wrong (miscounted digits/sums), but that was only a flaw in the prose explanation, not in the code itself \u2014 the code correctly computes total=30 and returns True, so no code change was needed there; I've dropped the incorrect narrative rather than repeat it."
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "It includes an `if __name__ == \"__main__\":` test harness after the function, while the request specifically asks for the complete function definition in one code block. Although the harness does not break the shown assertions, it is extra executable content and may violate a strict grader that extracts or compares the requested function body."
+    },
+    {
+     "from": "B",
+     "problem": "It assumes `s` is always a string based on the annotation. If hidden tests pass `None` or another object, `s.replace(...)` raises `AttributeError` rather than returning `False`. The prompt specifies `s: str`, so this is not necessarily a defect, but the draft does not explicitly defend that contract boundary."
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure, untested claim"
+    },
+    {
+     "from": "D",
+     "problem": "omission of failing behavior; unsupported inference"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "```python\ndef luhn_valid(s: str) -> bool:\n    cleaned = s.replace(\" \", \"\").replace(\"-\", \"\")\n    if len(cleaned) < 2 or not all('0' <= c <= '9' for c in cleaned):\n        return False\n\n    total = 0\n    for idx, char in enumerate(reversed(cleaned)):\n        digit = int(char)\n        if idx % 2 == 1:\n            digit *= 2\n            if digit > 9:\n                digit -= 9\n        total += digit\n\n    return total % 10 == 0\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\ndef luhn_valid(s: str) -> bool:\n    cleaned = s.replace(\" \", \"\").replace(\"-\", \"\")\n    if len(cleaned) < 2 or not all('0' <= c <= '9' for c in cleaned):\n        return False\n\n    total = 0\n    for idx, char in enumerate(reversed(cleaned)):\n        digit = int(char)\n        if idx % 2 == 1:\n            digit *= 2\n            if digit > 9:\n                digit -= 9\n        total += digit\n\n    return total % 10 == 0\n```"
+}

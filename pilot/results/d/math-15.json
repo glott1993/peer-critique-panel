@@ -1,0 +1,89 @@
+{
+ "task_id": "math-15",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'sunday', expected 'sunday'",
+ "error": null,
+ "seconds": 122.4,
+ "tokens": 39194,
+ "prompt_tokens": 25654,
+ "completion_tokens": 13540,
+ "cost": 0.06917,
+ "calls": 20,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute 1118 mod 7",
+     "what": "Divide 1118 by 7 to find remainder days offset."
+    },
+    {
+     "id": "c2",
+     "title": "Add remainder to Tuesday",
+     "what": "Shift Tuesday forward by the remainder to get the resulting weekday."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the day of the week 1118 days after Tuesday, October 27, 2026, compute the remainder when 1118 is divided by 7 (the number of days in a week):\n\n1. **Compute $1118 \\pmod 7$:**\n   $$1118 \\div 7 = 159 \\text{ with a remainder of } 5$$\n   Because $159 \\times 7 = 1113$, and $1118 - 1113 = 5$.\n   Thus, $1118 \\equiv 5 \\pmod 7$. \n   (Verifiable in Python: `1118 % 7` returns `5`.)\n\n2. **Advance the weekday by the remainder:**\n   Add 5 days to Tuesday (or count backward 2 days, since $5 \\equiv -2 \\pmod 7$):\n   - Day 0: Tuesday\n   - Day 1: Wednesday\n   - Day 2: Thursday\n   - Day 3: Friday\n   - Day 4: Saturday\n   - Day 5: Sunday\n\n**Verification:**\n```python\nimport datetime\n\nstart = datetime.date(2026, 10, 27)  # Tuesday\nend = start + datetime.timedelta(days=1118)\nprint(end.strftime(\"%A\"))  # Outputs: Sunday\nprint(end)  # Outputs: 2029-11-18\n```\n\nFINAL: Sunday"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "To find the day of the week 1118 days after Tuesday, October 27, 2026, compute the remainder when 1118 is divided by 7 (the number of days in a week):\n\n1. **Compute $1118 \\pmod 7$:**\n   $$1118 \\div 7 = 159 \\text{ with a remainder of } 5$$\n   Because $159 \\times 7 = 1113$, and $1118 - 1113 = 5$.\n   Thus, $1118 \\equiv 5 \\pmod 7$. \n   (Verifiable in Python: `1118 % 7` returns `5`.)\n\n2. **Advance the weekday by the remainder:**\n   Add 5 days to Tuesday (or count backward 2 days, since $5 \\equiv -2 \\pmod 7$):\n   - Day 0: Tuesday\n   - Day 1: Wednesday\n   - Day 2: Thursday\n   - Day 3: Friday\n   - Day 4: Saturday\n   - Day 5: Sunday\n\n**Verification:**\n```python\nimport datetime\n\nstart = datetime.date(2026, 10, 27)  # Tuesday\nend = start + datetime.timedelta(days=1118)\nprint(end.strftime(\"%A\"))  # Outputs: Sunday\nprint(end)  # Outputs: 2029-11-18\n```\n\nFINAL: Sunday"
+}

@@ -1,0 +1,18 @@
+{
+ "task_id": "math-14",
+ "type": "math",
+ "condition": "b",
+ "correct": true,
+ "detail": "got 406.0, expected 406.0",
+ "error": null,
+ "seconds": 120.0,
+ "tokens": 5737,
+ "prompt_tokens": 2652,
+ "completion_tokens": 3085,
+ "cost": 0.09038,
+ "calls": 38,
+ "call_errors": 25,
+ "k": 12,
+ "majority_key": 406.0,
+ "answer": "Verification:\n\n- C(5,3) = 10, C(9,2) = 9\u00b78/2 = 36 \u2192 10\u00b736 = 360\n- C(5,4) = 5, C(9,1) = 9 \u2192 5\u00b79 = 45\n- C(5,5) = 1, C(9,0) = 1 \u2192 1\n- Sum: 360 + 45 + 1 = 406\n\nSanity check: total committees C(14,5) = 2002; committees with 0, 1, 2 women are C(9,5)=126, 5\u00b7C(9,4)=5\u00b7126=630, 10\u00b7C(9,3)=10\u00b784=840, summing to 1596. Then 2002 \u2212 1596 = 406. \u2713\n\n\"At least 3 women\" is correctly interpreted as 3, 4, or 5 women, and 5 women is possible since exactly 5 women exist.\n\nFINAL: 406"
+}

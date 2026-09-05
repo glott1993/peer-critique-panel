@@ -5,14 +5,14 @@
  "correct": true,
  "detail": "got 8635.06, expected 8635.06",
  "error": null,
- "seconds": 25.6,
- "tokens": 14830,
- "prompt_tokens": 8902,
- "completion_tokens": 5928,
- "cost": 0.19271,
+ "seconds": 26.9,
+ "tokens": 14695,
+ "prompt_tokens": 8854,
+ "completion_tokens": 5841,
+ "cost": 0.1903,
  "calls": 13,
  "call_errors": 0,
  "k": 12,
  "majority_key": 8635.06,
- "answer": "Verification:\n\nNorth rows (all): ORD-1838, ORD-1322, ORD-1241, ORD-1460(cancelled\u2192excluded), ORD-1803, ORD-1407, ORD-1877, ORD-1469.\n\n- 8 \u00d7 17.29 = 138.32\n- 34 \u00d7 112.02 = 3808.68\n- 12 \u00d7 65.20 = 782.40\n- 16 \u00d7 81.56 = 1304.96\n- 22 \u00d7 71.04 = 1562.88\n- 25 \u00d7 21.78 = 544.50\n- 6 \u00d7 82.22 = 493.32\n\nRunning sum: 138.32 \u2192 3947.00 \u2192 4729.40 \u2192 6034.36 \u2192 7597.24 \u2192 8141.74 \u2192 8635.06\n\nNo North rows missed; only cancelled North order (ORD-1460) excluded; pending orders correctly included. Original answer confirmed.\n\nFINAL: 8635.06"
+ "answer": "Verification of each North, non-cancelled order:\n- ORD-1838: 8 \u00d7 17.29 = 138.32\n- ORD-1322: 34 \u00d7 112.02 = 3808.68\n- ORD-1241: 12 \u00d7 65.20 = 782.40 (pending, included)\n- ORD-1803: 16 \u00d7 81.56 = 1304.96 (pending, included)\n- ORD-1407: 22 \u00d7 71.04 = 1562.88\n- ORD-1877: 25 \u00d7 21.78 = 544.50\n- ORD-1469: 6 \u00d7 82.22 = 493.32\n- ORD-1460 (North, cancelled) excluded; all other North rows accounted for.\n\nRunning total: 138.32 + 3808.68 = 3947.00; +782.40 = 4729.40; +1304.96 = 6034.36; +1562.88 = 7597.24; +544.50 = 8141.74; +493.32 = 8635.06\n\nNo other regions included; only \"cancelled\" excluded (pending kept).\n\nFINAL: 8635.06"
 }

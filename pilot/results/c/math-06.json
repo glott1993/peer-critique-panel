@@ -1,0 +1,110 @@
+{
+ "task_id": "math-06",
+ "type": "math",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 120.0, expected 120.0",
+ "error": null,
+ "seconds": 80.2,
+ "tokens": 34420,
+ "prompt_tokens": 25207,
+ "completion_tokens": 9213,
+ "cost": 0.067,
+ "calls": 19,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 2,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "4*(1/12+1/9)",
+   "claimed": 0.7777777777777778,
+   "value": 0.7777777777777777,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(1-4*(1/12+1/9))/(1/9)*60",
+   "claimed": 120.0,
+   "value": 120.00000000000006,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute remaining time",
+     "what": "Together, the pumps fill 4(1/12+1/9)=7/9 of the tank, leaving 2/9; pump B fills that in (2/9)/(1/9)=2 hours=120.0 minutes.\nFINAL: 120.0"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Rates: A = 1/12 tank/hr, B = 1/9 tank/hr.\n\nCombined rate for 4 hours: 4\u00d7(1/12+1/9) = 4\u00d7(3/36+4/36) = 4\u00d77/36 = 28/36 = 7/9 tank filled.\n\nRemaining tank = 1 \u2212 7/9 = 2/9.\n\nPump B alone finishes remaining 2/9 at rate 1/9 tank/hr:\nTime = (2/9)/(1/9) = 2 hours = 2\u00d760 = 120.0 minutes.\n\nCheck: verify 1/12+1/9 = 3/36+4/36 = 7/36 (common denominator 36 \u2014 correct since 12\u00d73=36, 9\u00d74=36). Then 4\u00d77/36 = 28/36 = 7/9 (divide num/denom by 4) \u2014 correct. 1 \u2212 7/9 = 2/9 \u2014 correct. (2/9)\u00f7(1/9) = 2 \u2014 correct arithmetic, verifiable by cross-multiplication: (2/9)\u00d7(9/1)=2.\n\nFINAL: 120.0"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The 4 hours of joint running assumes the tank does not reach full capacity before A is switched off \u2014 can you confirm 7/9 < 1 and that no overflow/cap condition applies at any point in the first 4 hours?",
+    "Does the problem's phrasing 'how many more minutes' unambiguously mean time after the 4-hour mark (not total elapsed time), and would any alternative reading change the figure?"
+   ],
+   "replies": [
+    "1. Confirmed: 7/9 \u22480.7778 <1, so the tank is only 77.8% full at the 4\u2011hour mark; no overflow or cap condition arises during that period (rate is constant, filling is monotonic, and 4\u00d77/36 never exceeds 1 for any t\u22644h since even the full 4h total is 7/9<1). 2. The phrase 'how many more minutes' modifies the action after A is switched off, i.e., the additional time B alone needs to complete the job\u2014exactly what was computed (2/9 tank \u00f7 1/9 tank/hr = 2 h = 120.0 min). No alternative reading (e.g., total elapsed time = 4h+2h = 6h = 360 min) matches the wording 'more minutes needed,' which specifically asks for the extra time beyond the initial 4-hour period. No error found; answer stands.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Rates: A = 1/12 tank/hr, B = 1/9 tank/hr.\n\nCombined rate for 4 hours: 4\u00d7(1/12+1/9) = 4\u00d7(3/36+4/36) = 4\u00d77/36 = 28/36 = 7/9 tank filled.\n\nRemaining tank = 1 \u2212 7/9 = 2/9.\n\nPump B alone finishes remaining 2/9 at rate 1/9 tank/hr:\nTime = (2/9)/(1/9) = 2 hours = 2\u00d760 = 120.0 minutes.\n\nCheck: verify 1/12+1/9 = 3/36+4/36 = 7/36 (common denominator 36 \u2014 correct since 12\u00d73=36, 9\u00d74=36). Then 4\u00d77/36 = 28/36 = 7/9 (divide num/denom by 4) \u2014 correct. 1 \u2212 7/9 = 2/9 \u2014 correct. (2/9)\u00f7(1/9) = 2 \u2014 correct arithmetic, verifiable by cross-multiplication: (2/9)\u00d7(9/1)=2.\n\nFINAL: 120.0"
+}

@@ -1,0 +1,89 @@
+{
+ "task_id": "data-03",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'anvil', expected 'anvil'",
+ "error": null,
+ "seconds": 77.8,
+ "tokens": 64129,
+ "prompt_tokens": 50923,
+ "completion_tokens": 13206,
+ "cost": 0.0692,
+ "calls": 20,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Aggregate units by product",
+     "what": "Count all orders regardless of status and sum units for each product: Anvil 120, Easel 94, Bolt 26, Crate 30, Dowel 81. Revenue is irrelevant to this question."
+    },
+    {
+     "id": "c2",
+     "title": "Identify and report the maximum",
+     "what": "Select Anvil as the product with the largest total units, show the brief aggregation as working, and end exactly with FINAL: Anvil."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Anvil: 34 + 30 + 6 + 26 + 15 + 9 = 120  \nEasel: 9 + 14 + 34 + 37 = 94  \nDowel: 36 + 8 + 37 = 81  \nCrate: 9 + 21 = 30  \nBolt: 11 + 8 + 7 = 26  \n\nThe largest total is Anvil.\n\nFINAL: Anvil"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Anvil: 34 + 30 + 6 + 26 + 15 + 9 = 120  \nEasel: 9 + 14 + 34 + 37 = 94  \nDowel: 36 + 8 + 37 = 81  \nCrate: 9 + 21 = 30  \nBolt: 11 + 8 + 7 = 26  \n\nThe largest total is Anvil.\n\nFINAL: Anvil"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code-17",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 30.2,
+ "tokens": 2535,
+ "prompt_tokens": 249,
+ "completion_tokens": 2286,
+ "cost": 0.0584,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here's a stable dedupe that relies only on `==` (with an identity shortcut, matching Python's `in` semantics), so it works for unhashable items like lists, while using a hash-based fast path for common immutable types to avoid quadratic blowup on large inputs.\n\n```python\ndef dedupe_stable(items):\n    \"\"\"Return a new list with duplicates removed, keeping first occurrences.\n\n    Equality is decided with ``==`` (with an identity shortcut), so the\n    function works for unhashable values such as lists and dicts.\n    \"\"\"\n    # Types whose __hash__ is known to be consistent with __eq__, so a set\n    # can safely be used as a fast membership index.\n    FAST = (int, float, bool, complex, str, bytes, bytearray, type(None),\n            frozenset, tuple, range)\n\n    result = []\n    seen_hashed = set()   # fast path members\n    seen_linear = []      # everything else, compared with ==\n\n    for item in items:\n        hashed = False\n        if isinstance(item, FAST) and not isinstance(item, bytearray):\n            try:\n                if item in seen_hashed:\n                    continue\n                hashed = True\n            except TypeError:\n                hashed = False  # e.g. a tuple containing a list\n\n        duplicate = False\n        for other in seen_linear:\n            if other is item or other == item:\n                duplicate = True\n                break\n        if duplicate:\n            continue\n\n        result.append(item)\n        if hashed:\n            seen_hashed.add(item)\n        else:\n            seen_linear.append(item)\n\n    return result\n\n\nassert dedupe_stable([1, 2, 1, 3, 2]) == [1, 2, 3]\nassert dedupe_stable([[1], [2], [1]]) == [[1], [2]]\n```\n\nNotes: the original objects are kept (not copies), input order is preserved, and cross-type equality behaves as `==` dictates (e.g. `1`, `True`, and `1.0` collapse together)."
+}

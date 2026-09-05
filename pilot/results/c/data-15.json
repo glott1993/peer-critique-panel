@@ -1,0 +1,104 @@
+{
+ "task_id": "data-15",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 3.0, expected 3.0",
+ "error": null,
+ "seconds": 85.3,
+ "tokens": 50725,
+ "prompt_tokens": 41711,
+ "completion_tokens": 9014,
+ "cost": 0.07251,
+ "calls": 19,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "1+1+1",
+   "claimed": 3.0,
+   "value": 3.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Count West products",
+     "what": "West products are Dowel, Crate, and Bolt, so there are 3 distinct products.\nFINAL: 3"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "West region rows from the CSV:\n\n- ORD-1567: West, Dowel\n- ORD-1749: West, Crate\n- ORD-1271: West, Crate\n- ORD-1628: West, Bolt\n\nDistinct products appearing in these West rows: Dowel, Crate, Bolt.\n\nCount = 3.\n\nFINAL: 3"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please state the full scan: for each of the 17 data rows, list the order_id and its region value, so the West subset can be verified as exactly ORD-1567, ORD-1749, ORD-1271, ORD-1628 with no West row missed.",
+    "The question says 'any status' \u2014 confirm that cancelled ORD-1628 (Bolt) and any pending West rows were deliberately included, and state whether any West row's product would change the distinct count if status filtering had been applied.",
+    "Are product names compared case-sensitively or with any normalisation (e.g. trailing whitespace), and does any West row's product string differ in form from a product name appearing in other regions?"
+   ],
+   "replies": [
+    "Full scan of the 17 rows (order_id -> region): ORD-1114 East, ORD-1764 East, ORD-1847 East, ORD-1567 West, ORD-1749 West, ORD-1865 East, ORD-1590 North, ORD-1738 South, ORD-1881 South, ORD-1456 North, ORD-1132 South, ORD-1675 South, ORD-1271 West, ORD-1783 East, ORD-1628 West, ORD-1554 South, ORD-1888 North. The West subset is exactly ORD-1567, ORD-1749, ORD-1271, ORD-1628.",
+    "Yes, 'any status' includes all statuses. ORD-1628 is West/cancelled and is deliberately included; there are no West pending rows. If status filtering had excluded cancelled orders, ORD-1628 (Bolt) would be removed and the distinct West product count would drop from 3 to 2 (Dowel, Crate).",
+    "Product names are compared as exact strings from the CSV; no case or whitespace normalisation was applied. West product strings are Dowel, Crate, Crate, Bolt. These match product strings in other regions exactly: Dowel appears in South ORD-1738 and ORD-1132, Crate appears in North ORD-1590, and Bolt appears in East ORD-1764 and South ORD-1675. No West row product string differs in form."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "West region rows from the CSV:\n\n- ORD-1567: West, Dowel\n- ORD-1749: West, Crate\n- ORD-1271: West, Crate\n- ORD-1628: West, Bolt\n\nDistinct products appearing in these West rows: Dowel, Crate, Bolt.\n\nCount = 3.\n\nFINAL: 3"
+}

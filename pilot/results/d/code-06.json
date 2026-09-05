@@ -1,0 +1,89 @@
+{
+ "task_id": "code-06",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 102.1,
+ "tokens": 41977,
+ "prompt_tokens": 30905,
+ "completion_tokens": 11072,
+ "cost": 0.05978,
+ "calls": 20,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Function behavior",
+     "what": "Define top_k_frequent(words, k) to count each string, rank distinct words by descending frequency and then plain case-sensitive alphabetical order, return the first k words, return [] when k == 0, and return all distinct words when k exceeds their count. The implementation must pass the two visible "
+    },
+    {
+     "id": "c2",
+     "title": "Response format",
+     "what": "Provide the complete Python function definition with any required imports in exactly one ```python code block; brief surrounding prose is allowed, but the code must be directly runnable."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Both drafts implement the same logic; c1's explicit `k <= 0` check is unnecessary since `ranked[:0] == []` and negative k isn't a valid input per spec, but keeping it is harmless and slightly clearer. Using `sorted(counts, key=...)` (c2) vs `sorted(counts.keys(), key=...)` (c1) is equivalent since iterating a `Counter` yields its keys (docs.python.org/3/library/collections.html#collections.Counter).\n\n```python\nfrom collections import Counter\n\ndef top_k_frequent(words, k):\n    if k <= 0:\n        return []\n    counts = Counter(words)\n    ordered = sorted(counts, key=lambda word: (-counts[word], word))\n    return ordered[:k]\n```\n\nVerification against visible examples:\n- `['a','b','a','c','b','a'], 2`: counts a=3, b=2, c=1 \u2192 ordered=['a','b','c'] \u2192 `[:2]` = `['a','b']`. Matches.\n- `['x','y','z'], 2`: all counts=1 \u2192 ordered sorted alphabetically = `['x','y','z']` \u2192 `[:2]` = `['x','y']`. Matches.\n\nEdge cases:\n- `k == 0` returns `[]` via the explicit guard.\n- `k` exceeding distinct word count: Python list slicing doesn't raise on out-of-range stop index, so `ordered[:k]` just returns all of `ordered` (verifiable via `['a','b'][:5] == ['a','b']`).\n- Ties broken by plain string comparison, which is case-sensitive Unicode code-point order (docs.python.org/3/reference/expressions.html#comparisons), matching the spec's \"case-sensitive\" requirement."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Both drafts implement the same logic; c1's explicit `k <= 0` check is unnecessary since `ranked[:0] == []` and negative k isn't a valid input per spec, but keeping it is harmless and slightly clearer. Using `sorted(counts, key=...)` (c2) vs `sorted(counts.keys(), key=...)` (c1) is equivalent since iterating a `Counter` yields its keys (docs.python.org/3/library/collections.html#collections.Counter).\n\n```python\nfrom collections import Counter\n\ndef top_k_frequent(words, k):\n    if k <= 0:\n        return []\n    counts = Counter(words)\n    ordered = sorted(counts, key=lambda word: (-counts[word], word))\n    return ordered[:k]\n```\n\nVerification against visible examples:\n- `['a','b','a','c','b','a'], 2`: counts a=3, b=2, c=1 \u2192 ordered=['a','b','c'] \u2192 `[:2]` = `['a','b']`. Matches.\n- `['x','y','z'], 2`: all counts=1 \u2192 ordered sorted alphabetically = `['x','y','z']` \u2192 `[:2]` = `['x','y']`. Matches.\n\nEdge cases:\n- `k == 0` returns `[]` via the explicit guard.\n- `k` exceeding distinct word count: Python list slicing doesn't raise on out-of-range stop index, so `ordered[:k]` just returns all of `ordered` (verifiable via `['a','b'][:5] == ['a','b']`).\n- Ties broken by plain string comparison, which is case-sensitive Unicode code-point order (docs.python.org/3/reference/expressions.html#comparisons), matching the spec's \"case-sensitive\" requirement."
+}

@@ -1,0 +1,97 @@
+{
+ "task_id": "data-09",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got '2026-05-13', expected '2026-05-13'",
+ "error": null,
+ "seconds": 111.5,
+ "tokens": 71781,
+ "prompt_tokens": 52762,
+ "completion_tokens": 19019,
+ "cost": 0.11026,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute daily revenue",
+     "what": "Exclude cancelled orders, sum units \u00d7 unit_price by date, and compare totals: 2026-05-13 = 40 \u00d7 119.11 = 4764.40, the highest total.\nFINAL: 2026-05-13"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine the date with the highest total revenue, we exclude all rows where `status` is `cancelled` (ORD-1201, ORD-1344, ORD-1553, ORD-1744) and compute `revenue = units * unit_price` for each remaining order, aggregating by `order_date`:\n\n- **2026-04-02**: ORD-1672 ($37 \\times 17.49 = 647.13$)\n- **2026-04-11**: ORD-1156 ($15 \\times 112.60 = 1,689.00$)\n- **2026-04-14**: ORD-1769 ($40 \\times 15.96 = 638.40$)\n- **2026-04-15**: ORD-1776 ($2 \\times 106.68 = 213.36$)\n- **2026-04-28**: ORD-1243 ($21 \\times 101.67 = 2,135.07$)\n- **2026-05-03**: ORD-1431 ($23 \\times 51.91 = 1,193.93$)\n- **2026-05-08**: ORD-1176 ($22 \\times 76.02 = 1,672.44$) + ORD-1375 ($13 \\times 117.82 = 1,531.66$) = **$3,204.10$**\n- **2026-05-13**: ORD-1440 ($40 \\times 119.11 = 4,764.40$) = **$4,764.40$**\n- **2026-05-27**: ORD-1267 ($4 \\times 111.38 = 445.52$)\n- **2026-05-30**: ORD-1282 ($8 \\times 42.32 = 338.56$)\n- **2026-06-05**: ORD-1291 ($39 \\times 26.34 = 1,027.26$)\n- **2026-06-12**: ORD-1290 ($17 \\times 109.07 = 1,854.19$) + ORD-1209 ($7 \\times 55.17 = 386.19$) = **$2,240.38$**\n- **2026-06-17**: ORD-1309 ($39 \\times 100.96 = 3,937.44$)\n- **2026-06-27**: ORD-1439 ($26 \\times 38.21 = 993.46$)\n\nThe highest daily total is $4,764.40 on 2026-05-13.\n\nFINAL: 2026-05-13"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "No substantive numerical error is apparent: 40 \u00d7 119.11 = 4,764.40, and this exceeds the next-highest listed total, 3,937.44 on 2026-06-17."
+    },
+    {
+     "from": "B",
+     "problem": "The reasoning should explicitly note that pending orders are retained, since the request excludes only cancelled orders. ORD-1440 is pending and drives the winning date."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 2,
+   "rejected": 0,
+   "answer": "Excluding only cancelled orders (ORD-1201, ORD-1344, ORD-1553, ORD-1744) \u2014 note that pending orders are NOT excluded, since the request only excludes cancelled \u2014 compute revenue = units \u00d7 unit_price and sum by order_date:\n\n- 2026-04-02: 647.13\n- 2026-04-11: 1,689.00 (pending, kept)\n- 2026-04-14: 638.40\n- 2026-04-15: 213.36\n- 2026-04-28: 2,135.07 (pending, kept)\n- 2026-05-03: 1,193.93\n- 2026-05-08: 1,672.44 + 1,531.66 = 3,204.10\n- 2026-05-13: 4,764.40 (ORD-1440, pending, kept: 40 \u00d7 119.11 = 4,764.40)\n- 2026-05-27: 445.52\n- 2026-05-30: 338.56 (pending, kept)\n- 2026-06-05: 1,027.26\n- 2026-06-12: 1,854.19 + 386.19 = 2,240.38 (both pending, kept)\n- 2026-06-17: 3,937.44\n- 2026-06-27: 993.46 (pending, kept)\n\nHighest single-day total is 4,764.40 on 2026-05-13, exceeding the next highest (3,937.44 on 2026-06-17). No other date has multiple orders that could surpass it.\n\nFINAL: 2026-05-13"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Excluding only cancelled orders (ORD-1201, ORD-1344, ORD-1553, ORD-1744) \u2014 note that pending orders are NOT excluded, since the request only excludes cancelled \u2014 compute revenue = units \u00d7 unit_price and sum by order_date:\n\n- 2026-04-02: 647.13\n- 2026-04-11: 1,689.00 (pending, kept)\n- 2026-04-14: 638.40\n- 2026-04-15: 213.36\n- 2026-04-28: 2,135.07 (pending, kept)\n- 2026-05-03: 1,193.93\n- 2026-05-08: 1,672.44 + 1,531.66 = 3,204.10\n- 2026-05-13: 4,764.40 (ORD-1440, pending, kept: 40 \u00d7 119.11 = 4,764.40)\n- 2026-05-27: 445.52\n- 2026-05-30: 338.56 (pending, kept)\n- 2026-06-05: 1,027.26\n- 2026-06-12: 1,854.19 + 386.19 = 2,240.38 (both pending, kept)\n- 2026-06-17: 3,937.44\n- 2026-06-27: 993.46 (pending, kept)\n\nHighest single-day total is 4,764.40 on 2026-05-13, exceeding the next highest (3,937.44 on 2026-06-17). No other date has multiple orders that could surpass it.\n\nFINAL: 2026-05-13"
+}

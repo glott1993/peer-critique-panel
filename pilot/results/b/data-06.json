@@ -1,0 +1,18 @@
+{
+ "task_id": "data-06",
+ "type": "data",
+ "condition": "b",
+ "correct": true,
+ "detail": "got 4.0, expected 4.0",
+ "error": null,
+ "seconds": 196.1,
+ "tokens": 22271,
+ "prompt_tokens": 9158,
+ "completion_tokens": 13113,
+ "cost": 0.37361,
+ "calls": 58,
+ "call_errors": 45,
+ "k": 12,
+ "majority_key": 4.0,
+ "answer": "**Verification**\n\nAnchor: 2024-01-01 = Monday \u2192 2025-01-01 = Wednesday (366 days, +2) \u2192 2026-01-01 = Thursday (365 days, +1). \u2713\n\nMonth starts in 2026: Apr 1 = Thu + 90 days (90 mod 7 = 6) = Wednesday \u2713; May 1 = Wed + 30 (mod 7 = 2) = Friday \u2713; Jun 1 = Fri + 31 (mod 7 = 3) = Monday \u2713.\n\nEach order (offset mod 7 from month start):\n- ORD-1665 06-22: +21\u21920 = Monday\n- ORD-1494 06-20: +19\u21925 = **Saturday**\n- ORD-1469 04-06: +5 = Monday\n- ORD-1825 04-26: +25\u21924 = **Sunday**\n- ORD-1376 04-10: +9\u21922 = Friday\n- ORD-1858 04-08: +7\u21920 = Wednesday\n- ORD-1162 04-18: +17\u21923 = **Saturday**\n- ORD-1075 04-22: +21\u21920 = Wednesday\n- ORD-1584 06-29: +28\u21920 = Monday\n- ORD-1776 06-12: +11\u21924 = Friday\n- ORD-1276 04-17: +16\u21922 = Friday\n- ORD-1218 04-21: +20\u21926 = Tuesday\n- ORD-1069 05-02: +1 = **Saturday**\n- ORD-1658 06-11: +10\u21923 = Thursday\n- ORD-1490 04-30: +29\u21921 = Thursday\n\nAll 15 rows counted; question says \"any status\", so cancelled/pending included. Weekend orders: ORD-1494, ORD-1825, ORD-1162, ORD-1069 = 4. Original answer confirmed.\n\nFINAL: 4"
+}

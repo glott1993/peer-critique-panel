@@ -1,0 +1,98 @@
+{
+ "task_id": "data-19",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 6.0, expected 6.0",
+ "error": null,
+ "seconds": 157.0,
+ "tokens": 93946,
+ "prompt_tokens": 65845,
+ "completion_tokens": 28101,
+ "cost": 0.12121,
+ "calls": 23,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter eligible orders",
+     "what": "Exclude the two orders whose status is cancelled; retain shipped and pending orders."
+    },
+    {
+     "id": "c2",
+     "title": "Calculate regional and total revenue",
+     "what": "For each retained order, compute revenue as units \u00d7 unit_price, then sum North-region revenue and total retained revenue."
+    },
+    {
+     "id": "c3",
+     "title": "Compute and format the answer",
+     "what": "Calculate (North revenue \u00f7 total retained revenue) \u00d7 100, round to one decimal place, show brief working, and end with exactly one FINAL line."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "D",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Exclude the two cancelled orders (ORD-1478 and ORD-1414), leaving 15 eligible orders.\n\nNorth revenue:\n- ORD-1528: 3 \u00d7 119.73 = 359.19\n- ORD-1613: 16 \u00d7 37.13 = 594.08\n- North total = 953.27\n\nTotal retained revenue = 15,843.33.\n\nNorth percentage = (953.27 \u00f7 15,843.33) \u00d7 100 = 6.0169%, which rounds to one decimal place as 6.0%.\n\nFINAL: 6.0"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Exclude the two cancelled orders (ORD-1478 and ORD-1414), leaving 15 eligible orders.\n\nNorth revenue:\n- ORD-1528: 3 \u00d7 119.73 = 359.19\n- ORD-1613: 16 \u00d7 37.13 = 594.08\n- North total = 953.27\n\nTotal retained revenue = 15,843.33.\n\nNorth percentage = (953.27 \u00f7 15,843.33) \u00d7 100 = 6.0169%, which rounds to one decimal place as 6.0%.\n\nFINAL: 6.0"
+}

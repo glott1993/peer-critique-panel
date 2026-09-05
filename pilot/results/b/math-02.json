@@ -1,0 +1,18 @@
+{
+ "task_id": "math-02",
+ "type": "math",
+ "condition": "b",
+ "correct": true,
+ "detail": "got 13078.46, expected 13078.46",
+ "error": null,
+ "seconds": 163.6,
+ "tokens": 39556,
+ "prompt_tokens": 3103,
+ "completion_tokens": 36453,
+ "cost": 0.92684,
+ "calls": 31,
+ "call_errors": 18,
+ "k": 12,
+ "majority_key": 13078.46,
+ "answer": "**Recheck**\n\n- Monthly rate: i = 0.042/12 = 0.0035; n = 60 months.\n- (1.0035)^60: ln(1.0035) = 0.00349388925 \u2192 \u00d760 = 0.20963336 \u2192 e^0.20963336 = 1.23322582.\n- Initial deposit grows: 2500 \u00d7 1.23322582 = 3083.064553\n- Annuity (deposits at end of each month, balance right after 60th deposit \u2014 no extra interest after it): 150 \u00d7 (1.23322582 \u2212 1)/0.0035 = 150 \u00d7 66.6359489 = 9995.392335\n- Total: 3083.064553 + 9995.392335 = 13078.456888\n\nQuestion re-read: $2,500 initial, 4.2% compounded monthly, $150 end-of-month deposits, balance immediately after the 60th deposit \u2014 ordinary annuity is correct. Rounds to $13,078.46.\n\nFINAL: 13078.46"
+}

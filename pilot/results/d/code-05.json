@@ -1,0 +1,89 @@
+{
+ "task_id": "code-05",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 128.5,
+ "tokens": 48803,
+ "prompt_tokens": 30111,
+ "completion_tokens": 18692,
+ "cost": 0.08511,
+ "calls": 20,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Guard reversed date range",
+     "what": "Parse start and end dates; if end is before start, return 0 immediately."
+    },
+    {
+     "id": "c2",
+     "title": "Count weekdays minus eligible holidays",
+     "what": "Count all Monday-Friday dates from start to end inclusive, then subtract the count of unique holiday dates that fall within that inclusive range and are weekdays."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\nfrom datetime import date, timedelta\n\n\ndef business_days(start: str, end: str, holidays) -> int:\n    start_date = date.fromisoformat(start)\n    end_date = date.fromisoformat(end)\n\n    if end_date < start_date:\n        return 0\n\n    holiday_dates = {date.fromisoformat(day) for day in holidays}\n    count = 0\n    current = start_date\n\n    while current <= end_date:\n        if current.weekday() < 5 and current not in holiday_dates:\n            count += 1\n        current += timedelta(days=1)\n\n    return count\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\nfrom datetime import date, timedelta\n\n\ndef business_days(start: str, end: str, holidays) -> int:\n    start_date = date.fromisoformat(start)\n    end_date = date.fromisoformat(end)\n\n    if end_date < start_date:\n        return 0\n\n    holiday_dates = {date.fromisoformat(day) for day in holidays}\n    count = 0\n    current = start_date\n\n    while current <= end_date:\n        if current.weekday() < 5 and current not in holiday_dates:\n            count += 1\n        current += timedelta(days=1)\n\n    return count\n```"
+}

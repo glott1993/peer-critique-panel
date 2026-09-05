@@ -1,0 +1,97 @@
+{
+ "task_id": "data-13",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 2442.45, expected 2442.45",
+ "error": null,
+ "seconds": 81.5,
+ "tokens": 57225,
+ "prompt_tokens": 39443,
+ "completion_tokens": 17782,
+ "cost": 0.09412,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Whole request",
+     "what": "Here is a table of orders (CSV). Revenue of an order is units x unit_price.\n\norder_id,region,product,units,unit_price,order_date,status\nORD-1383,North,Dowel,27,64.31,2026-06-09,shipped\nORD-1472,East,Easel,6,68.02,2026-04-15,shipped\nORD-1353,West,Anvil,15,30.08,2026-04-27,shipped\nORD-1864,North,Crate"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Working:\nNorth: 27\u00d764.31=1736.37 (ORD-1864 cancelled excluded) \u2192 1736.37\nEast: 6\u00d768.02=408.12; 18\u00d766.28=1193.04; 25\u00d7103.14=2578.50; 13\u00d771.17=925.21 \u2192 sum=5104.87\nWest: 15\u00d730.08=451.20; 26\u00d744.19=1148.94; 38\u00d728.04=1065.52; 32\u00d739.52=1264.64 (ORD-1492 cancelled excluded) \u2192 sum=3930.30\nSouth: 32\u00d789.44=2862.08; 16\u00d787.00=1392.00; 17\u00d786.00=1462.00; 17\u00d7107.72=1831.24 \u2192 sum=7547.32\n\nHighest region: South = 7547.32\nSecond highest: East = 5104.87\nDifference = 7547.32 \u2212 5104.87 = 2442.45\n\nCheck: recompute any line by units\u00d7unit_price from the CSV as given; totals sum verified by re-adding line items above.\n\nFINAL: 2442.45"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "No arithmetic error is evident: the CSV calculations produce South 7547.32, East 5104.87, and a difference of 2442.45."
+    },
+    {
+     "from": "B",
+     "problem": "It does not provide JSON; it provides prose working followed by a FINAL line. If the explicit JSON schema is binding, the draft is invalid even though the arithmetic is correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "Working:\nNorth: 27\u00d764.31 = 1736.37 (ORD-1864 cancelled excluded)\nEast: 6\u00d768.02 + 18\u00d766.28 + 25\u00d7103.14 + 13\u00d771.17 = 408.12 + 1193.04 + 2578.50 + 925.21 = 5104.87\nWest: 15\u00d730.08 + 26\u00d744.19 + 38\u00d728.04 + 32\u00d739.52 = 451.20 + 1148.94 + 1065.52 + 1264.64 = 3930.30 (ORD-1492 cancelled excluded)\nSouth: 32\u00d789.44 + 16\u00d787.00 + 17\u00d786.00 + 17\u00d7107.72 = 2862.08 + 1392.00 + 1462.00 + 1831.24 = 7547.32\n\nHighest region: South (7547.32)\nSecond highest: East (5104.87)\nDifference: 7547.32 - 5104.87 = 2442.45\n\nFINAL: 2442.45"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Working:\nNorth: 27\u00d764.31 = 1736.37 (ORD-1864 cancelled excluded)\nEast: 6\u00d768.02 + 18\u00d766.28 + 25\u00d7103.14 + 13\u00d771.17 = 408.12 + 1193.04 + 2578.50 + 925.21 = 5104.87\nWest: 15\u00d730.08 + 26\u00d744.19 + 38\u00d728.04 + 32\u00d739.52 = 451.20 + 1148.94 + 1065.52 + 1264.64 = 3930.30 (ORD-1492 cancelled excluded)\nSouth: 32\u00d789.44 + 16\u00d787.00 + 17\u00d786.00 + 17\u00d7107.72 = 2862.08 + 1392.00 + 1462.00 + 1831.24 = 7547.32\n\nHighest region: South (7547.32)\nSecond highest: East (5104.87)\nDifference: 7547.32 - 5104.87 = 2442.45\n\nFINAL: 2442.45"
+}

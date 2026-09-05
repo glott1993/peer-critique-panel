@@ -1,0 +1,114 @@
+{
+ "task_id": "math-08",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 54.0, expected 54.0",
+ "error": null,
+ "seconds": 115.3,
+ "tokens": 58271,
+ "prompt_tokens": 41742,
+ "completion_tokens": 16529,
+ "cost": 0.09228,
+ "calls": 30,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Set up acid balance equation",
+     "what": "Write 0.20(18) + 0.40x = 0.35(18 + x), representing total acid before and after mixing."
+    },
+    {
+     "id": "c2",
+     "title": "Solve for x",
+     "what": "Expand and simplify to 0.05x = 2.7, then divide to get x = 54.00 liters."
+    },
+    {
+     "id": "c3",
+     "title": "Verify final concentration",
+     "what": "Plug x=54 back in: total acid = 3.6+21.6=25.2, total volume=72, ratio=25.2/72=0.35, confirming correctness."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "C",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Set up the acid balance equation, where x is the liters of 40% solution added:\n\n0.20(18) + 0.40x = 0.35(18 + x)\n\nSolve:\n3.6 + 0.40x = 6.3 + 0.35x\n0.05x = 2.7\nx = 54\n\nVerification:\n- Initial acid: 0.20 \u00d7 18 = 3.6 L\n- Added acid: 0.40 \u00d7 54 = 21.6 L\n- Total acid: 3.6 + 21.6 = 25.2 L\n- Total volume: 18 + 54 = 72 L\n- Final concentration: 25.2 / 72 = 0.35 = 35% \u2713\n\nCross-check via alligation (lever rule): distances from target to endpoints are 35\u221220=15 and 40\u221235=5, giving ratio added:original = 15:5 = 3:1, so x = 3\u00d718 = 54, matching the algebraic solution.\n\nFINAL: 54.00"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Set up the acid balance equation, where x is the liters of 40% solution added:\n\n0.20(18) + 0.40x = 0.35(18 + x)\n\nSolve:\n3.6 + 0.40x = 6.3 + 0.35x\n0.05x = 2.7\nx = 54\n\nVerification:\n- Initial acid: 0.20 \u00d7 18 = 3.6 L\n- Added acid: 0.40 \u00d7 54 = 21.6 L\n- Total acid: 3.6 + 21.6 = 25.2 L\n- Total volume: 18 + 54 = 72 L\n- Final concentration: 25.2 / 72 = 0.35 = 35% \u2713\n\nCross-check via alligation (lever rule): distances from target to endpoints are 35\u221220=15 and 40\u221235=5, giving ratio added:original = 15:5 = 3:1, so x = 3\u00d718 = 54, matching the algebraic solution.\n\nFINAL: 54.00"
+}

@@ -1,0 +1,93 @@
+{
+ "task_id": "math-07",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 36.0, expected 36.0",
+ "error": null,
+ "seconds": 65.9,
+ "tokens": 31365,
+ "prompt_tokens": 24367,
+ "completion_tokens": 6998,
+ "cost": 0.0304,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Solve mixture equation",
+     "what": "Let x be liters added: 0.10(18)+0.40x=0.30(18+x), so x=36.00 liters.\nFINAL: 36.00"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Let \\(x\\) be liters of 40% acid solution added.\n\nAcid before: \\(0.10(18)=1.8\\) liters  \nAcid added: \\(0.40x\\)  \nTarget acid: \\(0.30(18+x)\\)\n\nEquation:\n\\[\n1.8+0.40x=0.30(18+x)\n\\]\n\\[\n1.8+0.40x=5.4+0.30x\n\\]\n\\[\n0.10x=3.6\n\\]\n\\[\nx=36.00\n\\]\n\nCheck: total acid \\(=1.8+14.4=16.2\\) liters; total volume \\(=54\\) liters; \\(16.2/54=0.30\\).\n\nFINAL: 36.00"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The draft does not state that assumption. In chemistry, \u201c10%\u201d and \u201c40%\u201d may denote mass percentages, and mixing volumes may not be exactly additive; liters alone are insufficient without densities and a specified percentage basis."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "Assuming volume percentages and additive volumes:\n\nLet x be the liters of 40% acid solution added.\n\nAcid in original solution: 0.10 * 18 = 1.8 liters\nAcid added: 0.40x liters\nTotal acid in final mixture: 0.30(18 + x) liters\n\nEquation:\n1.8 + 0.40x = 0.30(18 + x)\n1.8 + 0.40x = 5.4 + 0.30x\n0.10x = 3.6\nx = 36.00\n\nCheck: Total acid = 1.8 + 14.4 = 16.2 L; total volume = 54 L; 16.2 / 54 = 0.30.\n\nFINAL: 36.00"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Assuming volume percentages and additive volumes:\n\nLet x be the liters of 40% acid solution added.\n\nAcid in original solution: 0.10 * 18 = 1.8 liters\nAcid added: 0.40x liters\nTotal acid in final mixture: 0.30(18 + x) liters\n\nEquation:\n1.8 + 0.40x = 0.30(18 + x)\n1.8 + 0.40x = 5.4 + 0.30x\n0.10x = 3.6\nx = 36.00\n\nCheck: Total acid = 1.8 + 14.4 = 16.2 L; total volume = 54 L; 16.2 / 54 = 0.30.\n\nFINAL: 36.00"
+}

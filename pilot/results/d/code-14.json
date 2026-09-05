@@ -1,0 +1,80 @@
+{
+ "task_id": "code-14",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 74.7,
+ "tokens": 41439,
+ "prompt_tokens": 30996,
+ "completion_tokens": 10443,
+ "cost": 0.06183,
+ "calls": 16,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Whole request",
+     "what": "Implement word_wrap(text, width) that: splits text on whitespace into words; raises ValueError if width < 1 regardless of text content; returns [] if text is empty or contains only whitespace; otherwise greedily packs words into lines joined by single spaces such that each line has length <= width w"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\ndef word_wrap(text: str, width: int) -> list:\n    if width < 1:\n        raise ValueError(\"width must be >= 1\")\n\n    words = text.split()\n    if not words:\n        return []\n\n    lines = []\n    current = words[0]\n\n    for word in words[1:]:\n        if len(current) + 1 + len(word) <= width:\n            current += \" \" + word\n        else:\n            lines.append(current)\n            current = word\n\n    lines.append(current)\n    return lines\n```\n\nVerification:\n- `width < 1` check comes first, so it raises `ValueError` regardless of `text` (satisfies \"raises ValueError if width < 1 regardless of text content\"). Check: `word_wrap('', 0)` and `word_wrap('abc', -1)` both raise.\n- `text.split()` with no arguments splits on any whitespace and discards empty strings, so `''`, `'   '`, `'\\t\\n'` all yield `words == []`, giving `return []` \u2014 matches \"empty or only whitespace returns []\".\n- Greedy packing: start each line with the first word, then add `\" \" + word` only if resulting length \u2264 `width`; otherwise start a new line. A word longer than `width` becomes `current` alone and is appended on the next flush without being split \u2014 matches \"word longer than width goes on a line by itself, unbroken\" (no code path ever slices a word).\n- Trace example 1: `word_wrap('the quick brown fox', 10)`:\n  words=['the','quick','brown','fox']; current='the'; 'the quick'=9\u226410\u2192current='the quick'; 'the quick brown'=15>10\u2192flush 'the quick', current='brown'; 'brown fox'=9\u226410\u2192current='brown fox'; end\u2192append. Result `['the quick','brown fox']` \u2713.\n- Trace example 2: `word_wrap('a bb ccc', 3)`:\n  words=['a','bb','ccc']; current='a'; 'a bb'=4>3\u2192flush 'a', current='bb'; 'bb ccc'=6>3\u2192flush 'bb', current='ccc'; end\u2192append 'ccc'. Result `['a','bb','ccc']` \u2713.\n- Line length invariant: every appended line's length is checked against `width` before concatenation, so no line exceeds `width` except a single overlong word (unavoidable per spec, and never joined with anything since the next comparison `len(current)+1+len(word) <= width` will fail for any subsequent word if `current` alone already exceeds `width`, given `len(word) >= 0`... actually need `len(current)+1+len(word) > width` since `len(current) > width` already \u2014 always true). So overlong words stay isolated. Check with `word_wrap('a bbbbb c', 3)` \u2192 expect `['a','bbbbb','c']`."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\ndef word_wrap(text: str, width: int) -> list:\n    if width < 1:\n        raise ValueError(\"width must be >= 1\")\n\n    words = text.split()\n    if not words:\n        return []\n\n    lines = []\n    current = words[0]\n\n    for word in words[1:]:\n        if len(current) + 1 + len(word) <= width:\n            current += \" \" + word\n        else:\n            lines.append(current)\n            current = word\n\n    lines.append(current)\n    return lines\n```\n\nVerification:\n- `width < 1` check comes first, so it raises `ValueError` regardless of `text` (satisfies \"raises ValueError if width < 1 regardless of text content\"). Check: `word_wrap('', 0)` and `word_wrap('abc', -1)` both raise.\n- `text.split()` with no arguments splits on any whitespace and discards empty strings, so `''`, `'   '`, `'\\t\\n'` all yield `words == []`, giving `return []` \u2014 matches \"empty or only whitespace returns []\".\n- Greedy packing: start each line with the first word, then add `\" \" + word` only if resulting length \u2264 `width`; otherwise start a new line. A word longer than `width` becomes `current` alone and is appended on the next flush without being split \u2014 matches \"word longer than width goes on a line by itself, unbroken\" (no code path ever slices a word).\n- Trace example 1: `word_wrap('the quick brown fox', 10)`:\n  words=['the','quick','brown','fox']; current='the'; 'the quick'=9\u226410\u2192current='the quick'; 'the quick brown'=15>10\u2192flush 'the quick', current='brown'; 'brown fox'=9\u226410\u2192current='brown fox'; end\u2192append. Result `['the quick','brown fox']` \u2713.\n- Trace example 2: `word_wrap('a bb ccc', 3)`:\n  words=['a','bb','ccc']; current='a'; 'a bb'=4>3\u2192flush 'a', current='bb'; 'bb ccc'=6>3\u2192flush 'bb', current='ccc'; end\u2192append 'ccc'. Result `['a','bb','ccc']` \u2713.\n- Line length invariant: every appended line's length is checked against `width` before concatenation, so no line exceeds `width` except a single overlong word (unavoidable per spec, and never joined with anything since the next comparison `len(current)+1+len(word) <= width` will fail for any subsequent word if `current` alone already exceeds `width`, given `len(word) >= 0`... actually need `len(current)+1+len(word) > width` since `len(current) > width` already \u2014 always true). So overlong words stay isolated. Check with `word_wrap('a bbbbb c', 3)` \u2192 expect `['a','bbbbb','c']`."
+}

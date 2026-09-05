@@ -1,0 +1,16 @@
+{
+ "task_id": "code-18",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 10.0,
+ "tokens": 1090,
+ "prompt_tokens": 300,
+ "completion_tokens": 790,
+ "cost": 0.02125,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef compare_versions(a: str, b: str) -> int:\n    \"\"\"Compare two dotted numeric version strings.\n\n    Returns -1 if a < b, 0 if a == b, 1 if a > b.\n    Missing trailing parts count as 0 ('1.2' == '1.2.0').\n    Leading zeros are allowed ('1.01' == '1.1').\n    Raises ValueError for empty parts or parts with non-digit characters.\n    \"\"\"\n    _DIGITS = set(\"0123456789\")\n\n    def parse(v, name):\n        if not isinstance(v, str):\n            raise ValueError(f\"{name} must be a string, got {type(v).__name__}\")\n        parts = v.split(\".\")\n        out = []\n        for part in parts:\n            if part == \"\":\n                raise ValueError(f\"empty version part in {name}: {v!r}\")\n            if not all(ch in _DIGITS for ch in part):\n                raise ValueError(f\"non-digit version part {part!r} in {name}: {v!r}\")\n            out.append(int(part))\n        return out\n\n    pa = parse(a, \"a\")\n    pb = parse(b, \"b\")\n\n    n = max(len(pa), len(pb))\n    for i in range(n):\n        x = pa[i] if i < len(pa) else 0\n        y = pb[i] if i < len(pb) else 0\n        if x < y:\n            return -1\n        if x > y:\n            return 1\n    return 0\n```\n\nNotes: only ASCII digits are accepted, so inputs like `'1.\u0662'`, `'1.-2'`, `' 1.2'`, `'1..2'`, `''` and `'1.'` all raise `ValueError`. Comparison pads the shorter version with zeros, and `int()` conversion makes leading zeros irrelevant."
+}

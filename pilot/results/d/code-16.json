@@ -1,0 +1,97 @@
+{
+ "task_id": "code-16",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 104.9,
+ "tokens": 36210,
+ "prompt_tokens": 22788,
+ "completion_tokens": 13422,
+ "cost": 0.08586,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Implement Next Permutation",
+     "what": "Provide an in-place Python function that handles duplicates, wraps non-increasing lists to ascending order, and returns whether a next permutation existed."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\ndef next_permutation(lst):\n    \"\"\"Rearrange lst in place to its lexicographically next permutation.\n\n    Returns True if a greater permutation exists; otherwise wraps to the\n    lowest permutation and returns False.\n    \"\"\"\n    n = len(lst)\n    if n <= 1:\n        return False\n\n    i = n - 2\n    while i >= 0 and lst[i] >= lst[i + 1]:\n        i -= 1\n\n    if i < 0:\n        lst.reverse()\n        return False\n\n    j = n - 1\n    while lst[j] <= lst[i]:\n        j -= 1\n\n    lst[i], lst[j] = lst[j], lst[i]\n\n    left, right = i + 1, n - 1\n    while left < right:\n        lst[left], lst[right] = lst[right], lst[left]\n        left += 1\n        right -= 1\n\n    return True\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The pivot-finding condition lst[i] >= lst[i+1] and successor-finding condition lst[j] <= lst[i] are correct for duplicates, but the reverse-suffix step after swap may not produce the lexicographically smallest suffix when duplicates are present in certain arrangements"
+    },
+    {
+     "from": "D",
+     "problem": "The code checks n <= 1 and returns False without modifying the list, but for a single-element list the 'first permutation' is the same as the input, so returning False is correct only if the list is already in non-increasing order \u2014 which it is for one element; however, for an empty list, the specification says 'rearrange it into the first permutation (sorted ascending)' but the code returns False without any rearrangement, which is undefined behavior for an empty list"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "```python\ndef next_permutation(lst):\n    \"\"\"Rearrange lst in place to its lexicographically next permutation.\n\n    Returns True if a greater permutation exists; otherwise wraps to the\n    lowest permutation and returns False.\n    \"\"\"\n    n = len(lst)\n    if n <= 1:\n        return False\n\n    i = n - 2\n    while i >= 0 and lst[i] >= lst[i + 1]:\n        i -= 1\n\n    if i < 0:\n        lst.reverse()\n        return False\n\n    j = n - 1\n    while lst[j] <= lst[i]:\n        j -= 1\n\n    lst[i], lst[j] = lst[j], lst[i]\n\n    left, right = i + 1, n - 1\n    while left < right:\n        lst[left], lst[right] = lst[right], lst[left]\n        left += 1\n        right -= 1\n\n    return True\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\ndef next_permutation(lst):\n    \"\"\"Rearrange lst in place to its lexicographically next permutation.\n\n    Returns True if a greater permutation exists; otherwise wraps to the\n    lowest permutation and returns False.\n    \"\"\"\n    n = len(lst)\n    if n <= 1:\n        return False\n\n    i = n - 2\n    while i >= 0 and lst[i] >= lst[i + 1]:\n        i -= 1\n\n    if i < 0:\n        lst.reverse()\n        return False\n\n    j = n - 1\n    while lst[j] <= lst[i]:\n        j -= 1\n\n    lst[i], lst[j] = lst[j], lst[i]\n\n    left, right = i + 1, n - 1\n    while left < right:\n        lst[left], lst[right] = lst[right], lst[left]\n        left += 1\n        right -= 1\n\n    return True\n```"
+}

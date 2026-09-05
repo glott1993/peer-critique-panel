@@ -1,0 +1,89 @@
+{
+ "task_id": "data-14",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 5746.56, expected 5746.56",
+ "error": null,
+ "seconds": 134.2,
+ "tokens": 67922,
+ "prompt_tokens": 47876,
+ "completion_tokens": 20046,
+ "cost": 0.1133,
+ "calls": 20,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter orders and compute revenues",
+     "what": "Exclude only cancelled orders; for every pending or shipped order, calculate revenue as units \u00d7 unit_price and sum these revenues by region."
+    },
+    {
+     "id": "c2",
+     "title": "Compare the top two regions",
+     "what": "Rank regional totals, subtract the second-highest total from the highest total, and report the difference rounded to the nearest cent."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Excluding cancelled orders (ORD-1268, ORD-1512, ORD-1343, ORD-1756), revenue by region:\n\n**West:**\n- ORD-1138: 20\u00d769.83 = 1396.60\n- ORD-1661: 34\u00d7108.79 = 3698.86\n- ORD-1675: 40\u00d779.06 = 3162.40\n- ORD-1501: 5\u00d798.66 = 493.30\n- Total = 8751.16\n\n**South:**\n- ORD-1397: 34\u00d750.33 = 1711.22\n- ORD-1815: 4\u00d7102.02 = 408.08\n- ORD-1645: 15\u00d755.50 = 832.50\n- ORD-1353: 2\u00d726.40 = 52.80\n- Total = 3004.60\n\n**North:**\n- ORD-1877: 17\u00d745.77 = 778.09\n- ORD-1286: 20\u00d765.82 = 1316.40\n- Total = 2094.49\n\n**East:**\n- ORD-1047: 21\u00d741.12 = 863.52\n- Total = 863.52\n\nRanking: West (8751.16) > South (3004.60) > North (2094.49) > East (863.52)\n\nDifference between highest (West) and second highest (South) = 8751.16 \u2212 3004.60 = 5746.56\n\nVerification code:\n```python\nimport pandas as pd\ndf = pd.read_csv('orders.csv')\nvalid = df[df['status'] != 'cancelled'].copy()\nvalid['revenue'] = valid['units'] * valid['unit_price']\nrev_by_region = valid.groupby('region')['revenue'].sum().sort_values(ascending=False)\ndiff = rev_by_region.iloc[0] - rev_by_region.iloc[1]\nprint(round(diff, 2))\n```\n\nFINAL: 5746.56"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Excluding cancelled orders (ORD-1268, ORD-1512, ORD-1343, ORD-1756), revenue by region:\n\n**West:**\n- ORD-1138: 20\u00d769.83 = 1396.60\n- ORD-1661: 34\u00d7108.79 = 3698.86\n- ORD-1675: 40\u00d779.06 = 3162.40\n- ORD-1501: 5\u00d798.66 = 493.30\n- Total = 8751.16\n\n**South:**\n- ORD-1397: 34\u00d750.33 = 1711.22\n- ORD-1815: 4\u00d7102.02 = 408.08\n- ORD-1645: 15\u00d755.50 = 832.50\n- ORD-1353: 2\u00d726.40 = 52.80\n- Total = 3004.60\n\n**North:**\n- ORD-1877: 17\u00d745.77 = 778.09\n- ORD-1286: 20\u00d765.82 = 1316.40\n- Total = 2094.49\n\n**East:**\n- ORD-1047: 21\u00d741.12 = 863.52\n- Total = 863.52\n\nRanking: West (8751.16) > South (3004.60) > North (2094.49) > East (863.52)\n\nDifference between highest (West) and second highest (South) = 8751.16 \u2212 3004.60 = 5746.56\n\nVerification code:\n```python\nimport pandas as pd\ndf = pd.read_csv('orders.csv')\nvalid = df[df['status'] != 'cancelled'].copy()\nvalid['revenue'] = valid['units'] * valid['unit_price']\nrev_by_region = valid.groupby('region')['revenue'].sum().sort_values(ascending=False)\ndiff = rev_by_region.iloc[0] - rev_by_region.iloc[1]\nprint(round(diff, 2))\n```\n\nFINAL: 5746.56"
+}

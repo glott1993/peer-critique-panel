@@ -1,0 +1,167 @@
+{
+ "task_id": "code-13",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 212.3,
+ "tokens": 83803,
+ "prompt_tokens": 46346,
+ "completion_tokens": 37457,
+ "cost": 0.18397,
+ "calls": 33,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Regex-based slugify function",
+     "what": "Use re.sub with pattern [^A-Za-z0-9]+ to replace non-ASCII-alphanumeric runs with a hyphen, lowercase first, then strip leading/trailing hyphens."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "Here is the implementation of `slugify` using Python's standard `re` module:\n\n```python\nimport re\n\ndef slugify(title: str) -> str:\n    # 1. Convert text to lowercase\n    # 2. Replace maximal runs of non-ASCII alphanumeric characters with a single hyphen\n    # 3. Strip hyphens from both ends\n    return re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')\n```\n\n### Verification and Checks\n- **Visible tests**:\n  - `slugify('Hello, World!')`: `title.lower()` yields `'hello, world!'`. `re.sub(r'[^a-z0-9]+', '-', ...)` transforms `', '` and `'!'` into single hyphens, resulting in `'hello-world-'`. Calling `.strip('-')` returns `'hello-world'`.\n  - `slugify('  Multiple   spaces ')`: Leading/trailing whitespace runs turn into single hyphens, then get removed by `.strip('-')`, returning `'multiple-spaces'`.\n- **Non-ASCII treatment**: The character class `[^a-z0-9]+` treats all non-ASCII characters (e.g., `'caf\u00e9'`, `'\u041c\u043e\u0441\u043a\u0432\u0430'`) strictly as non-alphanumeric separators, matching the specification without requiring transliteration. You can verify this by checking `slugify('caf\u00e9 au lait') == 'caf-au-lait'`.\n- **Empty result check**: For inputs consisting entirely of non-ASCII or punctuation characters like `'---'` or `'!!!'`, the substitution produces `'-'`, and `.strip('-')` evaluates to `''`, adhering to the empty result requirement."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "This is false after lowercasing: some non-ASCII characters lowercase to ASCII characters. For example, '\u212a'.lower() is 'k', so slugify('\u212a') returns 'k', not ''."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "```python\nimport re\n\ndef slugify(title: str) -> str:\n    # 1. Lowercase the text (some non-ASCII chars, e.g. 'K' KELVIN SIGN U+212A, lower to ASCII 'k')\n    # 2. Replace maximal runs of characters that are NOT ASCII letters/digits with a single hyphen\n    # 3. Strip hyphens from both ends\n    return re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Unsupported inference: `title.lower()` can transform non-ASCII characters into ASCII characters before the regex runs. For example, `slugify('\\u212A')` returns `'k'` because U+212A KELVIN SIGN lowercases to ASCII `k`, and `slugify('\\u0130stanbul')` returns `'i-stanbul'` because U+0130 lowercases to `i` plus a combining mark. This conflicts with the requirement that non-ASCII letters count as separators, unless Unicode case-mapping side effects are explicitly intended."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "Here is the revised function that replaces non-ASCII characters before lowercasing, preventing Unicode case foldings (such as U+212A KELVIN SIGN lowercasing to 'k') from introducing ASCII letters:\n\n```python\nimport re\n\ndef slugify(title: str) -> str:\n    return re.sub(r'[^A-Za-z0-9]+', '-', title).lower().strip('-')\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "This reverses the requested operation order. Lowercasing first can turn some non-ASCII characters into ASCII letters, so they must not be treated as separators afterward."
+    },
+    {
+     "from": "D",
+     "problem": "The regex [^A-Za-z0-9]+ correctly treats non-ASCII as separators, but the order of operations (lowercase after replacement) means Unicode characters that lowercase to ASCII (like U+212A KELVIN SIGN \u2192 'k') are removed before lowercasing. This is actually correct per the spec, but the draft's comment claims this prevents Unicode case foldings from introducing ASCII letters\u2014this is an unsupported inference about why the order matters"
+    },
+    {
+     "from": "D",
+     "problem": "The regex on empty string returns '', and strip('-') on '' returns ''. This is correct, but the claim is untested in visible examples"
+    },
+    {
+     "from": "D",
+     "problem": "The regex [^A-Za-z0-9]+ matches the entire string, replaces with '-', then strip('-') removes it, yielding ''. This is correct per spec, but the claim is untested"
+    },
+    {
+     "from": "D",
+     "problem": "The regex correctly treats non-ASCII as separators, but the claim that this matches the spec's 'Non-ASCII letters count as separators' is untested for mixed cases"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "```python\nimport re\n\ndef slugify(title: str) -> str:\n    return re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')\n```"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\nimport re\n\ndef slugify(title: str) -> str:\n    return re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')\n```"
+}

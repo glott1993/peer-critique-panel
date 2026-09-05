@@ -1,0 +1,80 @@
+{
+ "task_id": "math-16",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'monday', expected 'monday'",
+ "error": null,
+ "seconds": 55.9,
+ "tokens": 18572,
+ "prompt_tokens": 13119,
+ "completion_tokens": 5453,
+ "cost": 0.03675,
+ "calls": 16,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute weekday offset",
+     "what": "Calculate 175 modulo 7 to find the weekday shift from Monday."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "175 \u00f7 7 = 25 exactly, so 175 mod 7 = 0. A zero-day weekday shift leaves Monday unchanged. Check: 7 \u00d7 25 = 175.\n\nFINAL: Monday"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "175 \u00f7 7 = 25 exactly, so 175 mod 7 = 0. A zero-day weekday shift leaves Monday unchanged. Check: 7 \u00d7 25 = 175.\n\nFINAL: Monday"
+}

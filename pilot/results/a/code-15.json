@@ -1,0 +1,16 @@
+{
+ "task_id": "code-15",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 6.5,
+ "tokens": 753,
+ "prompt_tokens": 297,
+ "completion_tokens": 456,
+ "cost": 0.01289,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom collections import defaultdict\n\n\ndef anagram_groups(words):\n    \"\"\"Group anagrams (case-sensitive), keeping only groups with >= 2 words.\n\n    Each group is sorted alphabetically (duplicates kept); groups are\n    ordered by their first (smallest) word.\n    \"\"\"\n    buckets = defaultdict(list)\n    for word in words:\n        key = tuple(sorted(word))\n        buckets[key].append(word)\n\n    groups = [sorted(group) for group in buckets.values() if len(group) >= 2]\n    groups.sort(key=lambda g: g[0])\n    return groups\n```\n\nThe key idea: two strings are anagrams exactly when their sorted character sequences match, so `tuple(sorted(word))` is a safe dictionary key. After bucketing, groups of size 1 are dropped, each surviving group is sorted alphabetically, and the groups themselves are ordered by their first element."
+}

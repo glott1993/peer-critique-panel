@@ -1,0 +1,16 @@
+{
+ "task_id": "code-11",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 12.7,
+ "tokens": 1186,
+ "prompt_tokens": 292,
+ "completion_tokens": 894,
+ "cost": 0.02381,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport math\n\n\ndef moving_average(xs, w):\n    \"\"\"Return simple moving averages of xs over windows of exactly w elements.\n\n    Each average is rounded to 4 decimal places and returned as a float.\n    The result has len(xs) - w + 1 elements, or [] if w > len(xs).\n    Raises ValueError if w is not an integer >= 1.\n    \"\"\"\n    if isinstance(w, bool) or not isinstance(w, int):\n        raise ValueError(\"w must be an integer >= 1\")\n    if w < 1:\n        raise ValueError(\"w must be an integer >= 1\")\n\n    xs = list(xs)\n    n = len(xs)\n    if w > n:\n        return []\n\n    out = []\n    for i in range(n - w + 1):\n        total = math.fsum(xs[i:i + w])\n        out.append(float(round(total / w, 4)))\n    return out\n```\n\nNotes: `math.fsum` avoids accumulated floating-point drift, and each window is summed independently so results don't depend on earlier windows."
+}

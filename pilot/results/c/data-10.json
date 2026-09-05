@@ -1,0 +1,118 @@
+{
+ "task_id": "data-10",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got '2026-04-19', expected '2026-04-19'",
+ "error": null,
+ "seconds": 110.5,
+ "tokens": 61477,
+ "prompt_tokens": 45543,
+ "completion_tokens": 15934,
+ "cost": 0.12804,
+ "calls": 19,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 2,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "39*114.97",
+   "claimed": 4483.83,
+   "value": 4483.83,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "34*80.34",
+   "claimed": 2731.56,
+   "value": 2731.56,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "1*31.96+9*95.41",
+   "claimed": 890.65,
+   "value": 890.65,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter and compare revenue",
+     "what": "Exclude cancelled orders, sum units \u00d7 unit_price by date, and compare totals: 2026-04-19 = 4483.83, the highest total. FINAL: 2026-04-19"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Using the supplied CSV, I excluded rows with status `cancelled` and computed each remaining order\u2019s revenue as `units \u00d7 unit_price`. Totals by date:\n\n2026-04-12: 1\u00d731.96 + 9\u00d795.41 = 890.65  \n2026-04-14: 15\u00d7103.11 = 1546.65  \n2026-04-15: 28\u00d74.76 = 133.28  \n2026-04-19: 39\u00d7114.97 = 4483.83  \n2026-04-21: 4\u00d7101.77 = 407.08  \n2026-05-05: 32\u00d712.78 = 408.96  \n2026-05-17: 34\u00d780.34 = 2731.56  \n2026-05-21: 31\u00d732.69 = 1013.39  \n2026-05-27: 8\u00d787.06 = 696.48  \n\nThe highest total is 4483.83 on 2026-04-19.\n\nFINAL: 2026-04-19"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Which specific order_ids did you exclude as cancelled, and does the count of excluded rows plus the rows in your date totals reconcile to all 15 CSV rows?",
+    "Your date list has 9 entries \u2014 confirm which rows share a date, and state explicitly whether 'pending' orders (ORD-1663, ORD-1692) were intentionally included since only 'cancelled' was to be excluded."
+   ],
+   "replies": [
+    "The excluded cancelled order_ids are ORD-1523, ORD-1642, ORD-1356, ORD-1807, and ORD-1717: 5 rows. The date totals contain 10 non-cancelled rows, so 5 + 10 = 15, reconciling to all CSV rows.",
+    "The 9 date entries represent 10 non-cancelled rows because 2026-04-12 is shared by ORD-1638 and ORD-1663. All other listed dates have one row each. Pending orders were intentionally included: ORD-1663 contributes 9\u00d795.41 = 858.69, and ORD-1692 contributes 8\u00d787.06 = 696.48, since only cancelled orders were excluded."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Using the supplied CSV, I excluded rows with status `cancelled` and computed each remaining order\u2019s revenue as `units \u00d7 unit_price`. Totals by date:\n\n2026-04-12: 1\u00d731.96 + 9\u00d795.41 = 890.65  \n2026-04-14: 15\u00d7103.11 = 1546.65  \n2026-04-15: 28\u00d74.76 = 133.28  \n2026-04-19: 39\u00d7114.97 = 4483.83  \n2026-04-21: 4\u00d7101.77 = 407.08  \n2026-05-05: 32\u00d712.78 = 408.96  \n2026-05-17: 34\u00d780.34 = 2731.56  \n2026-05-21: 31\u00d732.69 = 1013.39  \n2026-05-27: 8\u00d787.06 = 696.48  \n\nThe highest total is 4483.83 on 2026-04-19.\n\nFINAL: 2026-04-19"
+}

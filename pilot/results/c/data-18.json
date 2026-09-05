@@ -1,0 +1,120 @@
+{
+ "task_id": "data-18",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 'ord-1845', expected 'ord-1845'",
+ "error": null,
+ "seconds": 80.4,
+ "tokens": 55808,
+ "prompt_tokens": 43902,
+ "completion_tokens": 11906,
+ "cost": 0.09258,
+ "calls": 19,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "40*117.63",
+   "claimed": 4705.2,
+   "value": 4705.2,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "20*110.62",
+   "claimed": 2212.4,
+   "value": 2212.4,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "22*80.17",
+   "claimed": 1763.74,
+   "value": 1763.74,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute maximum revenue",
+     "what": "Compare units \u00d7 unit_price for all orders; ORD-1845 gives 40 \u00d7 117.63 = 4705.20, the largest revenue."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Revenue = units \u00d7 unit_price. Checking all orders, the largest product is ORD-1845: 40 \u00d7 117.63 = 4705.20. The next largest is ORD-1177 at 20 \u00d7 110.62 = 2212.40, so ORD-1845 has the maximum revenue.\n\nFINAL: ORD-1845"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The answer asserts ORD-1845 is the maximum but only names one runner-up; can you show the computed revenue for every one of the 20 rows (or at least all rows with units*unit_price above 2000) to demonstrate a full scan rather than a spot check?",
+    "Which other high-revenue candidates were considered \u2014 specifically ORD-1444 (22 x 80.17), ORD-1696 (26 x 61.27), ORD-1200 (21 x 67.57), ORD-1737 (40 x 20.68), ORD-1136 (40 x 36.83) and ORD-1521 (19 x 61.37) \u2014 and what revenue did each yield?",
+    "The question says 'any status': can you confirm that cancelled and pending orders were included in the scan, and state explicitly whether any cancelled/pending order would have won had it been excluded or included differently?"
+   ],
+   "replies": [
+    "Computed revenue for every row (units \u00d7 unit_price):\nORD-1884: 6 \u00d7 49.93 = 299.58\nORD-1851: 5 \u00d7 60.94 = 304.70\nORD-1725: 17 \u00d7 19.11 = 324.87\nORD-1603: 20 \u00d7 41.27 = 825.40\nORD-1828: 6 \u00d7 101.13 = 606.78\nORD-1737: 40 \u00d7 20.68 = 827.20\nORD-1602: 38 \u00d7 20.64 = 784.32\nORD-1444: 22 \u00d7 80.17 = 1763.74\nORD-1540: 6 \u00d7 78.04 = 468.24\nORD-1267: 17 \u00d7 36.21 = 615.57\nORD-1154: 9 \u00d7 105.40 = 948.60\nORD-1696: 26 \u00d7 61.27 = 1593.02\nORD-1521: 19 \u00d7 61.37 = 1166.03\nORD-1845: 40 \u00d7 117.63 = 4705.20\nORD-1560: 23 \u00d7 39.14 = 900.22\nORD-1177: 20 \u00d7 110.62 = 2212.40\nORD-1200: 21 \u00d7 67.57 = 1418.97\nORD-1136: 40 \u00d7 36.83 = 1473.20\nORD-1259: 33 \u00d7 32.16 = 1061.28\nORD-1711: 16 \u00d7 70.92 = 1134.72\nORD-1845 yields the maximum revenue (4705.20).\n\nQ2 specifically:\nORD-1444 = 1763.74\nORD-1696 = 1593.02\nORD-1200 = 1418.97\nORD-1737 = 827.20\nORD-1136 = 1473.20\nORD-1521 = 1166.03\nAll are below ORD-1845.\n\nQ3: Cancelled and pending orders were included in the scan. None of them would have won even if excluded, because the maximum revenue order (ORD-1845) has status shipped. The highest-revenue non-shipped order is ORD-1177 (pending) at 2212.40, which is still less than 4705.20, so the result is unchanged.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Revenue = units \u00d7 unit_price. Checking all orders, the largest product is ORD-1845: 40 \u00d7 117.63 = 4705.20. The next largest is ORD-1177 at 20 \u00d7 110.62 = 2212.40, so ORD-1845 has the maximum revenue.\n\nFINAL: ORD-1845"
+}

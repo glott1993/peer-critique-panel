@@ -1,0 +1,120 @@
+{
+ "task_id": "code-05",
+ "type": "code",
+ "condition": "c",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 140.5,
+ "tokens": 68061,
+ "prompt_tokens": 49007,
+ "completion_tokens": 19054,
+ "cost": 0.10498,
+ "calls": 25,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Parse dates and handle reversed range",
+     "what": "Convert start and end from ISO strings with date.fromisoformat; if end is before start, return 0 immediately."
+    },
+    {
+     "id": "c2",
+     "title": "Normalize holidays",
+     "what": "Build a set of date objects from the holiday strings so membership checks are O(1) and weekend holidays are not double counted."
+    },
+    {
+     "id": "c3",
+     "title": "Count eligible weekdays",
+     "what": "Iterate every date from start to end inclusive, count dates whose weekday is Monday through Friday and that are not in the holiday set."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ],
+    "c3": [
+     "D",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "All three drafts are functionally identical: parse with `date.fromisoformat`, bail out to 0 if `end < start`, build a `set` of holiday `date` objects, then loop day-by-day counting dates where `weekday() < 5` (Mon=0..Fri=4, per stdlib docs) and not in the holiday set. No contradictions to resolve \u2014 c1/c2/c3 differ only in comments/helper naming, not logic.\n\nOn the \"no double counting\" point: c2's and c3's explanation is correct in effect but slightly overstated as a design choice \u2014 it's really just a consequence of checking `weekday() < 5` before consulting the holiday set, so a weekend holiday can never be added or subtracted regardless of set membership. Verified: `business_days('2026-09-05','2026-09-06', ['2026-09-05'])` \u2192 0, since both days fail the weekday test outright.\n\nBoth visible asserts check out:\n- `2026-09-07` is a Monday (`date(2026,9,7).weekday() == 0`), so Mon\u2013Fri with no holidays = 5.\n- Removing `2026-09-09` (Wednesday, a counted weekday) drops it to 4.\n\nComplexity is O(n) in days spanned \u2014 fine unless hidden tests use multi-decade ranges, which isn't indicated.\n\n```python\nfrom datetime import date, timedelta\n\ndef business_days(start: str, end: str, holidays) -> int:\n    start_date = date.fromisoformat(start)\n    end_date = date.fromisoformat(end)\n\n    # Reversed range -> 0\n    if end_date < start_date:\n        return 0\n\n    # Normalize holidays to date objects for O(1) lookup and to\n    # avoid string-format mismatches.\n    holiday_set = {date.fromisoformat(h) for h in holidays}\n\n    count = 0\n    current = start_date\n    while current <= end_date:\n        # weekday(): Monday=0 ... Sunday=6, so < 5 selects Mon-Fri.\n        # Weekend holidays are naturally excluded by this check alone,\n        # so they can never be double counted or subtracted.\n        if current.weekday() < 5 and current not in holiday_set:\n            count += 1\n        current += timedelta(days=1)\n\n    return count\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "It raises OverflowError when end is the maximum representable date, 9999-12-31. After processing that date, `current += timedelta(days=1)` attempts to create 10000-01-01."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "```python\nfrom datetime import date, timedelta\n\ndef business_days(start: str, end: str, holidays) -> int:\n    start_date = date.fromisoformat(start)\n    end_date = date.fromisoformat(end)\n\n    if end_date < start_date:\n        return 0\n\n    holiday_set = {date.fromisoformat(h) for h in holidays}\n\n    count = 0\n    current = start_date\n    while current <= end_date:\n        # weekday(): Monday=0 ... Sunday=6, so < 5 selects Mon-Fri.\n        # Weekend holidays are naturally excluded by this check alone.\n        if current.weekday() < 5 and current not in holiday_set:\n            count += 1\n\n        # Avoid incrementing past the final date; otherwise date.max overflows.\n        if current == end_date:\n            break\n        current += timedelta(days=1)\n\n    return count\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\nfrom datetime import date, timedelta\n\ndef business_days(start: str, end: str, holidays) -> int:\n    start_date = date.fromisoformat(start)\n    end_date = date.fromisoformat(end)\n\n    if end_date < start_date:\n        return 0\n\n    holiday_set = {date.fromisoformat(h) for h in holidays}\n\n    count = 0\n    current = start_date\n    while current <= end_date:\n        # weekday(): Monday=0 ... Sunday=6, so < 5 selects Mon-Fri.\n        # Weekend holidays are naturally excluded by this check alone.\n        if current.weekday() < 5 and current not in holiday_set:\n            count += 1\n\n        # Avoid incrementing past the final date; otherwise date.max overflows.\n        if current == end_date:\n            break\n        current += timedelta(days=1)\n\n    return count\n```"
+}

@@ -1,0 +1,109 @@
+{
+ "task_id": "code-12",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 125.8,
+ "tokens": 60548,
+ "prompt_tokens": 45198,
+ "completion_tokens": 15350,
+ "cost": 0.0664,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Stack-based bracket scanner",
+     "what": "Implement `is_balanced` by pushing opening brackets onto a stack, popping and verifying matches on closing brackets (returning False on mismatch or underflow), ignoring non-bracket characters, and returning True if and only if the stack is empty at termination."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\ndef is_balanced(s: str) -> bool:\n    pairs = {')': '(', ']': '[', '}': '{'}\n    openers = set(pairs.values())\n    stack = []\n    for ch in s:\n        if ch in openers:\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n        # else: ignore non-bracket characters\n    return not stack\n```\n\nLogic: only characters in `openers` push, only characters in `pairs` (closers) trigger a pop-and-match check; everything else falls through untouched, satisfying \"ignore non-bracket characters.\"\n\nVerification of the two visible examples by hand-tracing the stack:\n- `'([]{})'`: push `(` \u2192 `[(]`; push `[` \u2192 `[(,[]`; see `]`, pop `[`, matches; see `{`, push \u2192 `[(,{]`; see `}`, pop `{`, matches; see `)`, pop `(`, matches; stack empty \u2192 True. \u2713\n- `'([)]'`: push `(`; push `[`; see `)`, pop `[`, but `pairs[')'] == '('` \u2260 `[` \u2192 return False immediately. \u2713\n\nEdge cases covered:\n- Empty string: loop never runs, stack stays `[]`, returns True (per spec).\n- Closing bracket with empty stack (underflow), e.g. `')'`: `not stack` is True so we go to `return False` inside the `if` \u2014 correct, no IndexError since the `or` short-circuits `not stack` before `stack.pop()`.\n- Extra unmatched opener, e.g. `'('`: stack ends `['(']`, `not stack` is False \u2192 returns False.\n\nAnyone can check by running this directly in a Python REPL (3.x, no dependencies) against these traces or additional hidden cases \u2014 no external source needed since it's pure deterministic logic."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Those examples do not test ignored characters interleaved with brackets, bracket-only underflow after ignored text, or unmatched openers after nested valid pairs. The implementation appears correct, but the verification claim is incomplete rather than exhaustive."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "Accepted challenge 1: the implementation is correct, but the original verification did not test all specified edge cases. The revised answer retains the logic and covers ignored characters, underflow, unmatched openers, and the empty string.\n\n```python\ndef is_balanced(s: str) -> bool:\n    pairs = {')': '(', ']': '[', '}': '{'}\n    openers = set(pairs.values())\n    stack = []\n\n    for ch in s:\n        if ch in openers:\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n\n    return not stack\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Accepted challenge 1: the implementation is correct, but the original verification did not test all specified edge cases. The revised answer retains the logic and covers ignored characters, underflow, unmatched openers, and the empty string.\n\n```python\ndef is_balanced(s: str) -> bool:\n    pairs = {')': '(', ']': '[', '}': '{'}\n    openers = set(pairs.values())\n    stack = []\n\n    for ch in s:\n        if ch in openers:\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n\n    return not stack\n```"
+}

@@ -1,0 +1,122 @@
+{
+ "task_id": "data-12",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 20.0, expected 20.0",
+ "error": null,
+ "seconds": 104.0,
+ "tokens": 71980,
+ "prompt_tokens": 52470,
+ "completion_tokens": 19510,
+ "cost": 0.1594,
+ "calls": 26,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(20+20)/2",
+   "claimed": 20.0,
+   "value": 20.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter shipped orders",
+     "what": "Select rows where status equals shipped."
+    },
+    {
+     "id": "c2",
+     "title": "Extract units column",
+     "what": "List the units value for each shipped order."
+    },
+    {
+     "id": "c3",
+     "title": "Sort and compute median",
+     "what": "Sort the units values and take the middle (or average of two middle) values."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "B"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the median number of units over the shipped orders, we filter the dataset for rows where `status` is \"shipped\":\n\n- `ORD-1386`: 6\n- `ORD-1124`: 36\n- `ORD-1393`: 34\n- `ORD-1623`: 2\n- `ORD-1325`: 20\n- `ORD-1438`: 12\n- `ORD-1394`: 15\n- `ORD-1591`: 20\n- `ORD-1160`: 34\n- `ORD-1616`: 38\n\nThis yields 10 values: 6, 36, 34, 2, 20, 12, 15, 20, 34, 38.\n\nSorting these values in ascending order:\n2, 6, 12, 15, 20, 20, 34, 34, 36, 38\n\nBecause $n = 10$ is an even number of observations, the median is the arithmetic mean of the 5th and 6th values:\n\n$$\\text{Median} = \\frac{20 + 20}{2} = 20$$\n\nFINAL: 20"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please state the full row-by-row scan of all 16 orders with their status, showing which are excluded (pending/cancelled) and confirming the shipped count is exactly 10 \u2014 does any row's status differ in spelling or case from the four values assumed?",
+    "Since n=10 is even, does the reported value change under any alternative median convention (e.g., lower/upper median, or a percentile interpolation method), given that the 5th and 6th sorted values are both 20?",
+    "Can you confirm the sorted shipped-units list is a permutation of the extracted list (i.e., same 10 values, none dropped or duplicated), and that unit_price and revenue play no role in this question?"
+   ],
+   "replies": [
+    "Row-by-row scan of all 16 orders:\n1. ORD-1386: shipped (included, units = 6)\n2. ORD-1124: shipped (included, units = 36)\n3. ORD-1715: pending (excluded)\n4. ORD-1393: shipped (included, units = 34)\n5. ORD-1623: shipped (included, units = 2)\n6. ORD-1613: pending (excluded)\n7. ORD-1297: cancelled (excluded)\n8. ORD-1325: shipped (included, units = 20)\n9. ORD-1896: cancelled (excluded)\n10. ORD-1438: shipped (included, units = 12)\n11. ORD-1394: shipped (included, units = 15)\n12. ORD-1100: cancelled (excluded)\n13. ORD-1522: pending (excluded)\n14. ORD-1591: shipped (included, units = 20)\n15. ORD-1160: shipped (included, units = 34)\n16. ORD-1616: shipped (included, units = 38)\n\nCounts: shipped = 10, pending = 3, cancelled = 3 (total = 16). All status values are strictly lower-case with standard spelling; none deviate.",
+    "No, the value does not change under any standard median convention. The 5th and 6th sorted order statistics are x_(5) = 20 and x_(6) = 20. Under the lower median convention x_(5) = 20; under the upper median convention x_(6) = 20; and under any linear quantile/percentile interpolation method (including all 9 Hyndman-Fan types), any convex combination (1 - g)*20 + g*20 evaluates strictly to 20.",
+    "Confirmed. The multiset of extracted units is {2: 1, 6: 1, 12: 1, 15: 1, 20: 2, 34: 2, 36: 1, 38: 1}, which maps 1-to-1 to the sorted list [2, 6, 12, 15, 20, 20, 34, 34, 36, 38] with length 10. The prompt specifies 'median of units over the shipped orders'; unit_price and revenue are irrelevant distractor fields."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "To find the median number of units over the shipped orders, we filter the dataset for rows where `status` is \"shipped\":\n\n- `ORD-1386`: 6\n- `ORD-1124`: 36\n- `ORD-1393`: 34\n- `ORD-1623`: 2\n- `ORD-1325`: 20\n- `ORD-1438`: 12\n- `ORD-1394`: 15\n- `ORD-1591`: 20\n- `ORD-1160`: 34\n- `ORD-1616`: 38\n\nThis yields 10 values: 6, 36, 34, 2, 20, 12, 15, 20, 34, 38.\n\nSorting these values in ascending order:\n2, 6, 12, 15, 20, 20, 34, 34, 36, 38\n\nBecause $n = 10$ is an even number of observations, the median is the arithmetic mean of the 5th and 6th values:\n\n$$\\text{Median} = \\frac{20 + 20}{2} = 20$$\n\nFINAL: 20"
+}

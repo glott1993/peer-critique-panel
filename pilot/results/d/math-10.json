@@ -1,0 +1,102 @@
+{
+ "task_id": "math-10",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 15.0, expected 15.0",
+ "error": null,
+ "seconds": 137.9,
+ "tokens": 43577,
+ "prompt_tokens": 27564,
+ "completion_tokens": 16013,
+ "cost": 0.07141,
+ "calls": 21,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute triple product",
+     "what": "Multiply 4964 by 725 then by 87 to get the product."
+    },
+    {
+     "id": "c2",
+     "title": "Sum product digits",
+     "what": "Add the decimal digits of the resulting product to get the final digit sum."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ],
+    "c2": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Working:\n\n4964 \u00d7 725 = 4964 \u00d7 (700 + 25) = 3,474,800 + 124,100 = 3,598,900\n\n3,598,900 \u00d7 87 = 3,598,900 \u00d7 (80 + 7) = 287,912,000 + 25,192,300 = 313,104,300\n\nCross-check via a different grouping: 4964 \u00d7 87 = 4964\u00d780 + 4964\u00d77 = 397,120 + 34,748 = 431,868. Then 431,868 \u00d7 725 = 431,868\u00d7700 + 431,868\u00d725 = 302,307,600 + 10,796,700 = 313,104,300 \u2014 matches.\n\nProduct = 313,104,300\n\nDigit sum: 3+1+3+1+0+4+3+0+0 = 15\n\nFINAL: 15"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The arithmetic is correct, but the draft's literal ending requirement conflicts with the requested JSON envelope: a JSON response cannot end with a standalone line exactly matching `FINAL: 15`."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 0,
+   "rejected": 1,
+   "answer": "Working:\n4964 \u00d7 725 = 4964 \u00d7 (700 + 25) = 3,474,800 + 124,100 = 3,598,900\n3,598,900 \u00d7 87 = 3,598,900 \u00d7 (80 + 7) = 287,912,000 + 25,192,300 = 313,104,300\nCross-check: 4964 \u00d7 87 = 4964 \u00d7 80 + 4964 \u00d7 7 = 397,120 + 34,748 = 431,868; 431,868 \u00d7 725 = 431,868 \u00d7 700 + 431,868 \u00d7 25 = 302,307,600 + 10,796,700 = 313,104,300\nProduct = 313,104,300\nDigit sum: 3+1+3+1+0+4+3+0+0 = 15\nFINAL: 15"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Working:\n4964 \u00d7 725 = 4964 \u00d7 (700 + 25) = 3,474,800 + 124,100 = 3,598,900\n3,598,900 \u00d7 87 = 3,598,900 \u00d7 (80 + 7) = 287,912,000 + 25,192,300 = 313,104,300\nCross-check: 4964 \u00d7 87 = 4964 \u00d7 80 + 4964 \u00d7 7 = 397,120 + 34,748 = 431,868; 431,868 \u00d7 725 = 431,868 \u00d7 700 + 431,868 \u00d7 25 = 302,307,600 + 10,796,700 = 313,104,300\nProduct = 313,104,300\nDigit sum: 3+1+3+1+0+4+3+0+0 = 15\nFINAL: 15"
+}

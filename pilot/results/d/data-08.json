@@ -1,0 +1,97 @@
+{
+ "task_id": "data-08",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 59.18, expected 59.18",
+ "error": null,
+ "seconds": 68.0,
+ "tokens": 58425,
+ "prompt_tokens": 47711,
+ "completion_tokens": 10714,
+ "cost": 0.05341,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Average West shipped prices",
+     "what": "Shipped West unit_prices are 51.16, 64.55, 51.88, 88.82, and 39.50; average = (295.91 / 5) = 59.18.\nFINAL: 59.18"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "West region, status=shipped rows:\n\n- ORD-1477, Dowel, unit_price=51.16\n- ORD-1356, Crate, unit_price=64.55\n- ORD-1305, Bolt, unit_price=51.88\n- ORD-1852, Anvil, unit_price=88.82\n- ORD-1480, Anvil, unit_price=39.50\n\n(ORD-1712, ORD-1485, ORD-1568 are West but pending; ORD-1129 is West but cancelled \u2014 excluded.)\n\nSum = 51.16+64.55+51.88+88.82+39.50 = 295.91\nCount = 5\nAverage = 295.91/5 = 59.182 \u2192 59.18\n\nCheck: recompute by filtering CSV rows where region=\"West\" and status=\"shipped\", sum unit_price column, divide by row count.\n\nFINAL: 59.18"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "ORD-1477 is West, shipped, Dowel, unit_price 51.16 \u2014 verified against CSV. No error."
+    },
+    {
+     "from": "D",
+     "problem": "Recompute: 51.16 + 64.55 + 51.88 + 88.82 + 39.50 = 295.91; 295.91 / 5 = 59.182 \u2192 59.18. Correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 2,
+   "rejected": 0,
+   "answer": "West shipped unit prices: 51.16, 64.55, 51.88, 88.82, 39.50.\n\nSum = 295.91; count = 5.\nAverage = 295.91 / 5 = 59.182, which rounds to 59.18.\n\nFINAL: 59.18"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "West shipped unit prices: 51.16, 64.55, 51.88, 88.82, 39.50.\n\nSum = 295.91; count = 5.\nAverage = 295.91 / 5 = 59.182, which rounds to 59.18.\n\nFINAL: 59.18"
+}

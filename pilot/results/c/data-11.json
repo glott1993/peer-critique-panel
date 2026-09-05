@@ -1,0 +1,130 @@
+{
+ "task_id": "data-11",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 23.0, expected 23.0",
+ "error": null,
+ "seconds": 88.5,
+ "tokens": 61465,
+ "prompt_tokens": 45771,
+ "completion_tokens": 15694,
+ "cost": 0.13842,
+ "calls": 26,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(22+24)/2",
+   "claimed": 23.0,
+   "value": 23.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "30+15+39+24+31+36+22+20+6+12",
+   "claimed": 235.0,
+   "value": 235.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter shipped orders",
+     "what": "Extract all rows where status equals shipped."
+    },
+    {
+     "id": "c2",
+     "title": "Sort units values",
+     "what": "List the units field for shipped orders and sort ascending."
+    },
+    {
+     "id": "c3",
+     "title": "Compute median",
+     "what": "Average the two middle values since count is even to get the median."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "A"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Filtering rows with status=shipped from the CSV:\n\nORD-1503:30, ORD-1071:15, ORD-1125:39, ORD-1662:24, ORD-1542:31, ORD-1673:36, ORD-1851:22, ORD-1687:20, ORD-1353:6, ORD-1524:12\n\nThat's 10 shipped orders. Sorted ascending units:\n6, 12, 15, 20, 22, 24, 30, 31, 36, 39\n\nWith an even count of 10, the median is the average of the 5th and 6th values: (22 + 24) / 2 = 23.\n\nFINAL: 23"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please re-scan all 16 rows and state explicitly which order_ids have status exactly 'shipped' and which are excluded (pending/cancelled), so the count of 10 can be verified against the full table rather than asserted.",
+    "The answer's sorted list of shipped units is 6,12,15,20,22,24,30,31,36,39 \u2014 can you confirm each of these values maps back to a specific shipped order_id, and that no shipped row's units value was dropped or duplicated in that list?",
+    "The question asks for the median of units, not of revenue \u2014 did any part of your working use unit_price or revenue, and does the answer's interpretation of 'shipped orders' exclude pending and cancelled rows deliberately?"
+   ],
+   "replies": [
+    "1) Full scan of all 16 rows by status:\nSHIPPED (10): ORD-1503(units=30), ORD-1071(15), ORD-1125(39), ORD-1662(24), ORD-1542(31), ORD-1673(36), ORD-1851(22), ORD-1687(20), ORD-1353(6), ORD-1524(12).\nEXCLUDED (6): ORD-1528(pending), ORD-1052(pending), ORD-1266(pending), ORD-1793(cancelled), ORD-1276(pending), ORD-1811(pending).\n10+6=16, matches full table. Count of 10 shipped orders verified.\n\n2) Mapping each sorted value back to its order_id:\n6\u2192ORD-1353, 12\u2192ORD-1524, 15\u2192ORD-1071, 20\u2192ORD-1687, 22\u2192ORD-1851, 24\u2192ORD-1662, 30\u2192ORD-1503, 31\u2192ORD-1542, 36\u2192ORD-1673, 39\u2192ORD-1125.\nAll 10 shipped rows are represented exactly once \u2014 no drops, no duplicates.\n\n3) The working only used the 'units' column; unit_price/revenue was never referenced in the median computation (only units values 30,15,39,24,31,36,22,20,6,12 were sorted and averaged). The filter to 'shipped' status was deliberate and correct per the question's implicit scope of 'shipped orders' \u2014 pending and cancelled rows were properly excluded as shown in (1).\n\nMedian recheck: sorted shipped units = 6,12,15,20,22,24,30,31,36,39 (n=10, even). Median = avg of 5th and 6th = (22+24)/2 = 23. Original answer stands, no correction needed.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Filtering rows with status=shipped from the CSV:\n\nORD-1503:30, ORD-1071:15, ORD-1125:39, ORD-1662:24, ORD-1542:31, ORD-1673:36, ORD-1851:22, ORD-1687:20, ORD-1353:6, ORD-1524:12\n\nThat's 10 shipped orders. Sorted ascending units:\n6, 12, 15, 20, 22, 24, 30, 31, 36, 39\n\nWith an even count of 10, the median is the average of the 5th and 6th values: (22 + 24) / 2 = 23.\n\nFINAL: 23"
+}

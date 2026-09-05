@@ -1,0 +1,80 @@
+{
+ "task_id": "data-17",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'ord-1491', expected 'ord-1491'",
+ "error": null,
+ "seconds": 92.7,
+ "tokens": 43495,
+ "prompt_tokens": 34865,
+ "completion_tokens": 8630,
+ "cost": 0.06295,
+ "calls": 16,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute and verify revenues",
+     "what": "Calculate units \u00d7 unit_price for every order regardless of status, identify the maximum revenue and its order_id, verify the comparison, then provide brief working and end with exactly one line in the form FINAL: <order_id>."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Let me compute the revenue for each order:\n\n| order_id | units | unit_price | revenue |\n|----------|-------|------------|---------|\n| ORD-1535 | 23 | 105.36 | 2,423.28 |\n| ORD-1661 | 13 | 35.85 | 466.05 |\n| ORD-1149 | 36 | 72.33 | 2,603.88 |\n| ORD-1019 | 33 | 31.56 | 1,041.48 |\n| ORD-1172 | 26 | 8.28 | 215.28 |\n| ORD-1668 | 6 | 102.56 | 615.36 |\n| ORD-1789 | 39 | 60.23 | 2,348.97 |\n| ORD-1665 | 10 | 24.19 | 241.90 |\n| ORD-1491 | 37 | 78.06 | 2,888.22 |\n| ORD-1590 | 38 | 37.65 | 1,430.70 |\n| ORD-1095 | 13 | 86.94 | 1,130.22 |\n| ORD-1240 | 23 | 30.89 | 710.47 |\n| ORD-1542 | 1 | 70.63 | 70.63 |\n| ORD-1403 | 9 | 50.44 | 453.96 |\n| ORD-1169 | 28 | 17.36 | 486.08 |\n\nThe maximum revenue is **2,888.22** for order **ORD-1491** (37 \u00d7 78.06 = 2,888.22), which exceeds the next highest ORD-1149 at 2,603.88.\n\nFINAL: ORD-1491"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Let me compute the revenue for each order:\n\n| order_id | units | unit_price | revenue |\n|----------|-------|------------|---------|\n| ORD-1535 | 23 | 105.36 | 2,423.28 |\n| ORD-1661 | 13 | 35.85 | 466.05 |\n| ORD-1149 | 36 | 72.33 | 2,603.88 |\n| ORD-1019 | 33 | 31.56 | 1,041.48 |\n| ORD-1172 | 26 | 8.28 | 215.28 |\n| ORD-1668 | 6 | 102.56 | 615.36 |\n| ORD-1789 | 39 | 60.23 | 2,348.97 |\n| ORD-1665 | 10 | 24.19 | 241.90 |\n| ORD-1491 | 37 | 78.06 | 2,888.22 |\n| ORD-1590 | 38 | 37.65 | 1,430.70 |\n| ORD-1095 | 13 | 86.94 | 1,130.22 |\n| ORD-1240 | 23 | 30.89 | 710.47 |\n| ORD-1542 | 1 | 70.63 | 70.63 |\n| ORD-1403 | 9 | 50.44 | 453.96 |\n| ORD-1169 | 28 | 17.36 | 486.08 |\n\nThe maximum revenue is **2,888.22** for order **ORD-1491** (37 \u00d7 78.06 = 2,888.22), which exceeds the next highest ORD-1149 at 2,603.88.\n\nFINAL: ORD-1491"
+}

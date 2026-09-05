@@ -1,0 +1,18 @@
+{
+ "task_id": "code-19",
+ "type": "code",
+ "condition": "b",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 121.2,
+ "tokens": 18049,
+ "prompt_tokens": 10185,
+ "completion_tokens": 7864,
+ "cost": 0.24753,
+ "calls": 35,
+ "call_errors": 21,
+ "k": 12,
+ "majority_key": null,
+ "answer": "Verification by hand:\n\n- `[[1,2,3],[4,5,6],[7,8,9]]`: top row `1,2,3` (top\u21921); right col rows 1\u20132 \u2192 `6,9` (right\u21921); bottom row cols 1\u21920 \u2192 `8,7` (bottom\u21921); left col rows 1\u21921 \u2192 `4` (left\u21921). Second pass: `5`, then right col `range(2,2)` empty, and both guards fail. Result `[1,2,3,6,9,8,7,4,5]` \u2713\n- `[[1,2],[3,4]]`: `1,2` (top\u21921); right col row 1 \u2192 `4` (right\u21920); bottom row col 0 \u2192 `3` (bottom\u21920); left col `range(0,0,-1)` empty (left\u21921); loop exits since `top=1 > bottom=0`. Result `[1,2,4,3]` \u2713\n- `[]` and `[[]]` \u2192 `[]`; single row `[[1,2,3]]` \u2192 `[1,2,3]` (the bottom-row guard `top<=bottom` prevents duplication); single column `[[1],[2],[3]]` \u2192 `[1,2,3]`; `3\u00d74` case yields `1,2,3,4,8,12,11,10,9,5,6,7` \u2713\n\nNo errors found.\n\n```python\ndef spiral_order(matrix):\n    \"\"\"Return elements of a rectangular matrix in clockwise spiral order.\"\"\"\n    if not matrix or not matrix[0]:\n        return []\n\n    top, bottom = 0, len(matrix) - 1\n    left, right = 0, len(matrix[0]) - 1\n    result = []\n\n    while top <= bottom and left <= right:\n        # across the top row\n        for col in range(left, right + 1):\n            result.append(matrix[top][col])\n        top += 1\n\n        # down the right column\n        for row in range(top, bottom + 1):\n            result.append(matrix[row][right])\n        right -= 1\n\n        # back along the bottom row (if a row remains)\n        if top <= bottom:\n            for col in range(right, left - 1, -1):\n                result.append(matrix[bottom][col])\n            bottom -= 1\n\n        # up the left column (if a column remains)\n        if left <= right:\n            for row in range(bottom, top - 1, -1):\n                result.append(matrix[row][left])\n            left += 1\n\n    return result\n```"
+}

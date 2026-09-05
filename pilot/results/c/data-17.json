@@ -1,0 +1,120 @@
+{
+ "task_id": "data-17",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 'ord-1491', expected 'ord-1491'",
+ "error": null,
+ "seconds": 99.3,
+ "tokens": 51178,
+ "prompt_tokens": 39676,
+ "completion_tokens": 11502,
+ "cost": 0.10695,
+ "calls": 19,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "37*78.06",
+   "claimed": 2888.22,
+   "value": 2888.2200000000003,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "36*72.33",
+   "claimed": 2603.88,
+   "value": 2603.88,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "23*105.36",
+   "claimed": 2423.28,
+   "value": 2423.28,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute revenue for every order and identify the maximum",
+     "what": "For each order, calculate revenue as units \u00d7 unit_price without filtering by status, compare all revenues, and report the order_id with the largest revenue, showing brief working and ending with exactly one line of the form FINAL: <order_id>."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Revenue = units \u00d7 unit_price for each order:\n\n- ORD-1535: 23 \u00d7 105.36 = 2423.28\n- ORD-1661: 13 \u00d7 35.85 = 466.05\n- ORD-1149: 36 \u00d7 72.33 = 2603.88\n- ORD-1019: 33 \u00d7 31.56 = 1041.48\n- ORD-1172: 26 \u00d7 8.28 = 215.28\n- ORD-1668: 6 \u00d7 102.56 = 615.36\n- ORD-1789: 39 \u00d7 60.23 = 2348.97\n- ORD-1665: 10 \u00d7 24.19 = 241.90\n- ORD-1491: 37 \u00d7 78.06 = 2888.22\n- ORD-1590: 38 \u00d7 37.65 = 1430.70\n- ORD-1095: 13 \u00d7 86.94 = 1130.22\n- ORD-1240: 23 \u00d7 30.89 = 710.47\n- ORD-1542: 1 \u00d7 70.63 = 70.63\n- ORD-1403: 9 \u00d7 50.44 = 453.96\n- ORD-1169: 28 \u00d7 17.36 = 486.08\n\nMaximum revenue is 2888.22 from ORD-1491.\n\nFINAL: ORD-1491"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The three largest computed revenues are close (2603.88, 2888.22, 2423.28) \u2014 can you confirm each of the top-three products was recomputed independently rather than carried over, and state which row you re-read from the CSV for each?",
+    "ORD-1491 has status 'cancelled'; the question says 'any status' \u2014 can you confirm no status filter was applied at any step, and that ORD-1789 (also cancelled, 2348.97) and ORD-1665 were likewise included?",
+    "Did you verify that all 15 CSV rows were included in the scan (no row skipped or duplicated), and what row count did your enumeration reach?"
+   ],
+   "replies": [
+    "I recomputed each top-three row independently from the original CSV: ORD-1491 = 37 \u00d7 78.06 = 2888.22 from row `ORD-1491,East,Easel,37,78.06,2026-06-19,cancelled`; ORD-1149 = 36 \u00d7 72.33 = 2603.88 from row `ORD-1149,West,Dowel,36,72.33,2026-04-12,shipped`; ORD-1535 = 23 \u00d7 105.36 = 2423.28 from row `ORD-1535,South,Bolt,23,105.36,2026-04-26,shipped`. These were separate multiplications, not carried over.",
+    "Yes, no status filter was applied. The submitted list includes cancelled rows ORD-1789 (39 \u00d7 60.23 = 2348.97) and ORD-1665 (10 \u00d7 24.19 = 241.90), and ORD-1491 was also treated as eligible despite cancelled status.",
+    "Yes, I verified all 15 CSV rows were included exactly once; the enumeration reached 15 rows/order IDs, matching the input."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Revenue = units \u00d7 unit_price for each order:\n\n- ORD-1535: 23 \u00d7 105.36 = 2423.28\n- ORD-1661: 13 \u00d7 35.85 = 466.05\n- ORD-1149: 36 \u00d7 72.33 = 2603.88\n- ORD-1019: 33 \u00d7 31.56 = 1041.48\n- ORD-1172: 26 \u00d7 8.28 = 215.28\n- ORD-1668: 6 \u00d7 102.56 = 615.36\n- ORD-1789: 39 \u00d7 60.23 = 2348.97\n- ORD-1665: 10 \u00d7 24.19 = 241.90\n- ORD-1491: 37 \u00d7 78.06 = 2888.22\n- ORD-1590: 38 \u00d7 37.65 = 1430.70\n- ORD-1095: 13 \u00d7 86.94 = 1130.22\n- ORD-1240: 23 \u00d7 30.89 = 710.47\n- ORD-1542: 1 \u00d7 70.63 = 70.63\n- ORD-1403: 9 \u00d7 50.44 = 453.96\n- ORD-1169: 28 \u00d7 17.36 = 486.08\n\nMaximum revenue is 2888.22 from ORD-1491.\n\nFINAL: ORD-1491"
+}

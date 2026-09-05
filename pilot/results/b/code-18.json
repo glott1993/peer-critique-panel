@@ -1,0 +1,18 @@
+{
+ "task_id": "code-18",
+ "type": "code",
+ "condition": "b",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 189.9,
+ "tokens": 23423,
+ "prompt_tokens": 10858,
+ "completion_tokens": 12565,
+ "cost": 0.36842,
+ "calls": 58,
+ "call_errors": 44,
+ "k": 12,
+ "majority_key": null,
+ "answer": "Checking the code:\n\n- `parse` splits on `.`, rejects empty parts and any part containing a non-ASCII-digit character (so `'+5'`, `'-1'`, `'1_0'`, `'1 '`, and Unicode digits all raise `ValueError`, which bare `int()` would wrongly accept for the last two).\n- Non-string input raises `ValueError` (not `TypeError`), which is the safer reading of the spec.\n- Padding is done by index-guarding rather than mutating the lists, so both directions work.\n\nHand-testing the visible examples:\n- `'1.2.10'` \u2192 `[1, 2, 10]`, `'1.2.9'` \u2192 `[1, 2, 9]`; `n = 3`; i=0: 1==1; i=1: 2==2; i=2: 10 > 9 \u2192 returns `1`. \u2713\n- `'1.2'` \u2192 `[1, 2]`, `'1.2.0'` \u2192 `[1, 2, 0]`; `n = 3`; i=0,1 equal; i=2: pad `a` to 0 vs 0 \u2192 loop ends \u2192 returns `0`. \u2713\n- Extra: `'1.01'` vs `'1.1'` \u2192 `[1, 1]` vs `[1, 1]` \u2192 `0`; `'1.2'` vs `'1.10'` \u2192 i=1: 2 < 10 \u2192 `-1`; `'1..2'` \u2192 empty part \u2192 `ValueError`; `''` \u2192 `ValueError`.\n\nI removed the stray meta-commentary from the previous draft.\n\n```python\ndef compare_versions(a: str, b: str) -> int:\n    \"\"\"\n    Compare two dotted version strings numerically, part by part.\n\n    Returns -1 if a < b, 0 if a == b, 1 if a > b.\n    Missing trailing parts are treated as 0 ('1.2' == '1.2.0').\n    Leading zeros are allowed ('1.01' == '1.1').\n\n    Raises ValueError if either argument is not a string, or if any\n    dot-separated part is empty or contains anything other than\n    ASCII decimal digits.\n    \"\"\"\n    DIGITS = frozenset('0123456789')\n\n    def parse(v, name):\n        if not isinstance(v, str):\n            raise ValueError(\n                f\"{name} must be a string, got {type(v).__name__}\"\n            )\n        numbers = []\n        for part in v.split('.'):\n            if part == '':\n                raise ValueError(f\"empty version part in {name}: {v!r}\")\n            if not all(ch in DIGITS for ch in part):\n                raise ValueError(\n                    f\"invalid version part {part!r} in {name}: {v!r}\"\n                )\n            numbers.append(int(part))\n        return numbers\n\n    pa = parse(a, 'a')\n    pb = parse(b, 'b')\n\n    n = max(len(pa), len(pb))\n    for i in range(n):\n        x = pa[i] if i < len(pa) else 0\n        y = pb[i] if i < len(pb) else 0\n        if x < y:\n            return -1\n        if x > y:\n            return 1\n    return 0\n```"
+}

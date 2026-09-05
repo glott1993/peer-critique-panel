@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 199.0,
- "tokens": 73129,
- "prompt_tokens": 37934,
- "completion_tokens": 35195,
- "cost": 0.19093,
- "calls": 30,
+ "seconds": 268.9,
+ "tokens": 99097,
+ "prompt_tokens": 53876,
+ "completion_tokens": 45221,
+ "cost": 0.23887,
+ "calls": 34,
  "call_errors": 0,
  "pre_hub_correct": true,
  "agreed": false,
@@ -40,8 +40,13 @@
    "components": [
     {
      "id": "c1",
-     "title": "Implement and validate parse_duration",
-     "what": "Write parse_duration(s: str) -> int using a strict regex (e.g. re.fullmatch on tokens like r'(\\d+)([hms])' with optional whitespace between, anchored to consume the whole trimmed string) to extract parts. Reject: empty or whitespace-only input, any leftover unmatched characters, decimal numbers, a n"
+     "title": "Tokenize & validate format",
+     "what": "Use a strict regex (e.g. r'^\\s*(\\d+[hms]\\s*)*$' plus per-part r'(\\d+)([hms])') to ensure the whole string, after stripping leading/trailing whitespace, consists only of digit+unit tokens separated by optional whitespace, with no whitespace between a number and its unit, no decimals, and nothing else"
+    },
+    {
+     "id": "c2",
+     "title": "Enforce uniqueness & compute seconds",
+     "what": "Iterate matched (number, unit) pairs, raise ValueError on a repeated unit, then sum number*3600/60/1 per unit into an int result, raising ValueError if zero parts were found (covers empty-string and pure-whitespace cases)."
     }
    ]
   },
@@ -51,13 +56,17 @@
     "c1": [
      "D",
      "B"
+    ],
+    "c2": [
+     "B",
+     "A"
     ]
    }
   },
   {
    "step": 3,
    "author": "B",
-   "draft": "```python\nimport re\n\n\ndef parse_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    if not re.fullmatch(r\"\\s*(?:[0-9]+[hms]\\s*)+\", s):\n        raise ValueError(\"malformed duration\")\n\n    parts = re.findall(r\"([0-9]+)([hms])\", s)\n    seen = set()\n    multipliers = {\"h\": 3600, \"m\": 60, \"s\": 1}\n    total = 0\n\n    for number, unit in parts:\n        if unit in seen:\n            raise ValueError(\"repeated unit\")\n        seen.add(unit)\n        total += int(number) * multipliers[unit]\n\n    return total\n```"
+   "draft": "```python\nimport re\n\n\ndef parse_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    pattern = r\"\\s*(?:[0-9]+[hms])(?:\\s*[0-9]+[hms])*\\s*\"\n    if not re.fullmatch(pattern, s):\n        raise ValueError(\"malformed duration\")\n\n    seconds_per_unit = {\"h\": 3600, \"m\": 60, \"s\": 1}\n    seen = set()\n    total = 0\n\n    for number, unit in re.findall(r\"([0-9]+)([hms])\", s):\n        if unit in seen:\n            raise ValueError(\"repeated unit\")\n        seen.add(unit)\n        total += int(number) * seconds_per_unit[unit]\n\n    if not seen:\n        raise ValueError(\"empty duration\")\n\n    return total\n```"
   },
   {
    "step": 3,
@@ -68,7 +77,7 @@
    "step": 4,
    "round": 1,
    "votes": {
-    "A": true,
+    "A": false,
     "B": true,
     "C": true,
     "D": false
@@ -84,7 +93,7 @@
    "step": 4,
    "round": 2,
    "votes": {
-    "A": false,
+    "A": true,
     "B": true,
     "C": true,
     "D": false
@@ -108,5 +117,5 @@
    "agreed": false
   }
  ],
- "answer": "```python\nimport re\n\n\ndef parse_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    if not re.fullmatch(r\"\\s*(?:[0-9]+[hms]\\s*)+\", s):\n        raise ValueError(\"malformed duration\")\n\n    parts = re.findall(r\"([0-9]+)([hms])\", s)\n    seen = set()\n    multipliers = {\"h\": 3600, \"m\": 60, \"s\": 1}\n    total = 0\n\n    for number, unit in parts:\n        if unit in seen:\n            raise ValueError(\"repeated unit\")\n        seen.add(unit)\n        total += int(number) * multipliers[unit]\n\n    return total\n```"
+ "answer": "```python\nimport re\n\n\ndef parse_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    pattern = r\"\\s*(?:[0-9]+[hms])(?:\\s*[0-9]+[hms])*\\s*\"\n    if not re.fullmatch(pattern, s):\n        raise ValueError(\"malformed duration\")\n\n    seconds_per_unit = {\"h\": 3600, \"m\": 60, \"s\": 1}\n    seen = set()\n    total = 0\n\n    for number, unit in re.findall(r\"([0-9]+)([hms])\", s):\n        if unit in seen:\n            raise ValueError(\"repeated unit\")\n        seen.add(unit)\n        total += int(number) * seconds_per_unit[unit]\n\n    if not seen:\n        raise ValueError(\"empty duration\")\n\n    return total\n```"
 }

@@ -1,0 +1,144 @@
+{
+ "task_id": "data-02",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 6324.35, expected 6324.35",
+ "error": null,
+ "seconds": 136.0,
+ "tokens": 77666,
+ "prompt_tokens": 58080,
+ "completion_tokens": 19586,
+ "cost": 0.17585,
+ "calls": 23,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 5,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "21*18.59+27*18.43+30*51.94+12*88.04+26*56.68+21*64.19",
+   "claimed": 6324.35,
+   "value": 6324.349999999999,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "36*105.35+3*12.95",
+   "claimed": 3831.45,
+   "value": 3831.45,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "21*64.19",
+   "claimed": 1347.99,
+   "value": 1347.99,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter South non-cancelled and sum revenue",
+     "what": "Select South region orders with status not cancelled and compute total revenue as units multiplied by unit_price."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Filter the CSV to South-region orders with status other than cancelled:\n\n- ORD-1634: 21 \u00d7 18.59 = 390.39\n- ORD-1779: 27 \u00d7 18.43 = 497.61\n- ORD-1578: 30 \u00d7 51.94 = 1,558.20\n- ORD-1740: 12 \u00d7 88.04 = 1,056.48\n- ORD-1357: 26 \u00d7 56.68 = 1,473.68\n- ORD-1184: 21 \u00d7 64.19 = 1,347.99\n\nSumming these CSV row calculations: 390.39 + 497.61 + 1,558.20 + 1,056.48 + 1,473.68 + 1,347.99 = 6,324.35.\n\nFINAL: 6324.35"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Enumerate every row whose region is South (by order_id) and state its status, to confirm the source table contains exactly 8 such rows and that only ORD-1631 and ORD-1215 were dropped as cancelled.",
+    "Does your total include any 'pending' South orders, and if none exist in the data, confirm explicitly that the pending/shipped distinction cannot change this answer?",
+    "How did you handle rounding: were the six line revenues each exact to the cent before summing, or did any product require rounding that could shift the total?"
+   ],
+   "replies": [
+    "The South-region rows in the source CSV are: ORD-1631 \u2014 cancelled; ORD-1634 \u2014 shipped; ORD-1779 \u2014 shipped; ORD-1578 \u2014 shipped; ORD-1740 \u2014 shipped; ORD-1215 \u2014 cancelled; ORD-1357 \u2014 shipped; ORD-1184 \u2014 shipped. This confirms exactly 8 South rows, with ORD-1631 and ORD-1215 excluded as cancelled.",
+    "No pending South orders exist in the source table. The six included South orders are all shipped, so the pending/shipped distinction cannot change this total.",
+    "Each included line revenue is an exact cent amount because units are integers and each unit_price has two decimal places: 390.39, 497.61, 1558.20, 1056.48, 1473.68, and 1347.99. Their sum is 6324.35, so no additional rounding was required."
+   ],
+   "open": [
+    "The reply restates the same six line figures and the same total rather than showing an independent recomputation; the products and the running sum have not been verified by a second, traceable route (e.g. cumulative subtotals or an integer-cent computation)."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please recompute independently in integer cents: give units \u00d7 (unit_price in cents) for each of the six included South rows, then the running cumulative subtotal after each row, and confirm the final cent total matches 632435."
+   ],
+   "replies": [
+    "Using the six included South-region rows from the CSV, with prices converted to cents:\n- ORD-1634: 21 \u00d7 1,859 = 39,039 cents; cumulative subtotal: 39,039\n- ORD-1779: 27 \u00d7 1,843 = 49,761 cents; cumulative subtotal: 88,800\n- ORD-1578: 30 \u00d7 5,194 = 155,820 cents; cumulative subtotal: 244,620\n- ORD-1740: 12 \u00d7 8,804 = 105,648 cents; cumulative subtotal: 350,268\n- ORD-1357: 26 \u00d7 5,668 = 147,368 cents; cumulative subtotal: 497,636\n- ORD-1184: 21 \u00d7 6,419 = 134,799 cents; cumulative subtotal: 632,435\n\nThe final total is 632,435 cents, which matches 632435 and equals $6,324.35. No correction is needed."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please list all South-region rows in the CSV with order_id, status and revenue, stating which were excluded and why, and confirm the South count (included + excluded) accounts for every South row, including any with status other than 'shipped' or 'cancelled'."
+   ],
+   "replies": [
+    "Source: the provided CSV. All South-region rows are:\n- ORD-1631 \u2014 cancelled \u2014 36 \u00d7 105.35 = 3792.60; excluded because status is cancelled.\n- ORD-1634 \u2014 shipped \u2014 21 \u00d7 18.59 = 390.39; included.\n- ORD-1779 \u2014 shipped \u2014 27 \u00d7 18.43 = 497.61; included.\n- ORD-1578 \u2014 shipped \u2014 30 \u00d7 51.94 = 1558.20; included.\n- ORD-1740 \u2014 shipped \u2014 12 \u00d7 88.04 = 1056.48; included.\n- ORD-1215 \u2014 cancelled \u2014 3 \u00d7 12.95 = 38.85; excluded because status is cancelled.\n- ORD-1357 \u2014 shipped \u2014 26 \u00d7 56.68 = 1473.68; included.\n- ORD-1184 \u2014 shipped \u2014 21 \u00d7 64.19 = 1347.99; included.\n\nThere are 8 South rows total: 6 included and 2 excluded, accounting for every South row. No South row has a status other than shipped or cancelled. The included revenue is 390.39 + 497.61 + 1558.20 + 1056.48 + 1473.68 + 1347.99 = 6324.35. The submitted answer is correct.\nFINAL: 6324.35"
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Filter the CSV to South-region orders with status other than cancelled:\n\n- ORD-1634: 21 \u00d7 18.59 = 390.39\n- ORD-1779: 27 \u00d7 18.43 = 497.61\n- ORD-1578: 30 \u00d7 51.94 = 1,558.20\n- ORD-1740: 12 \u00d7 88.04 = 1,056.48\n- ORD-1357: 26 \u00d7 56.68 = 1,473.68\n- ORD-1184: 21 \u00d7 64.19 = 1,347.99\n\nSumming these CSV row calculations: 390.39 + 497.61 + 1,558.20 + 1,056.48 + 1,473.68 + 1,347.99 = 6,324.35.\n\nFINAL: 6324.35"
+}

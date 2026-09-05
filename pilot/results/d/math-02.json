@@ -1,0 +1,130 @@
+{
+ "task_id": "math-02",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 13078.46, expected 13078.46",
+ "error": null,
+ "seconds": 276.6,
+ "tokens": 120867,
+ "prompt_tokens": 63781,
+ "completion_tokens": 57086,
+ "cost": 0.268,
+ "calls": 37,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Monthly rate and initial deposit growth",
+     "what": "Compute the monthly interest rate 0.042/12 and the future value of the initial $2,500 after 60 months."
+    },
+    {
+     "id": "c2",
+     "title": "Future value of monthly additions",
+     "what": "Compute the future value of 60 end-of-month $150 deposits using the ordinary annuity formula."
+    },
+    {
+     "id": "c3",
+     "title": "Total balance after 60th deposit",
+     "what": "Add the two future values and round to the nearest cent."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ],
+    "c3": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Monthly rate = 0.042/12 = 0.0035.\n\nInitial $2,500 after 60 months:\n2500(1.0035)^60 \u2248 3083.064553\n\n60 end-of-month deposits of $150:\n150[((1.0035)^60 \u2212 1)/0.0035] \u2248 9995.392339\n\nTotal balance:\n3083.064553 + 9995.392339 = 13078.456892, which rounds to 13078.46.\n\nFINAL: 13078.46"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Monthly rate = 0.042/12 = 0.0035.\n\nInitial $2,500 after 60 months:\n2500(1.0035)^60 \u2248 3083.064553\n\n60 end-of-month deposits of $150:\n150[((1.0035)^60 \u2212 1)/0.0035] \u2248 9995.392339\n\nTotal balance:\n3083.064553 + 9995.392339 = 13078.456892, which rounds to 13078.46.\n\nFINAL: 13078.46"
+}

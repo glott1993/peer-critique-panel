@@ -1,0 +1,16 @@
+{
+ "task_id": "code-12",
+ "type": "code",
+ "condition": "a",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 5.8,
+ "tokens": 586,
+ "prompt_tokens": 224,
+ "completion_tokens": 362,
+ "cost": 0.01017,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Standard stack approach: push openers, and on a closer check that it matches the most recent unmatched opener.\n\n```python\ndef is_balanced(s: str) -> bool:\n    pairs = {')': '(', ']': '[', '}': '{'}\n    openers = set(pairs.values())\n    stack = []\n    for ch in s:\n        if ch in openers:\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n    return not stack\n```\n\nNotes:\n- Non-bracket characters are skipped entirely.\n- A closer with an empty stack or a mismatched top fails immediately (so `'([)]'` is False).\n- Any openers left over at the end mean unclosed brackets, so `not stack` gives the final verdict; the empty string yields True."
+}

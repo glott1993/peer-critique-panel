@@ -1,0 +1,18 @@
+{
+ "task_id": "code-17",
+ "type": "code",
+ "condition": "b",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 266.7,
+ "tokens": 42168,
+ "prompt_tokens": 12317,
+ "completion_tokens": 29851,
+ "cost": 0.80786,
+ "calls": 62,
+ "call_errors": 48,
+ "k": 12,
+ "majority_key": null,
+ "answer": "Step-by-step check:\n\n- `_is_simple`: uses `type(x) in _SIMPLE_TYPES` (exact types, so `int`/`str` subclasses conservatively fall to the `==` path), and rejects any self-unequal value (`x != x`), which catches `float('nan')` and `complex('nan')`. Correct.\n- Fast path `dict.fromkeys`: for these exact scalar types, hashing agrees with `==` (`1`/`True`/`1.0` share a hash and compare equal; `0.0`/`-0.0` likewise), and `dict` keeps the *first* inserted key, so order and choice of representative match a pure `==` scan.\n- Visible example 1: `[1,2,1,3,2]` \u2192 all simple \u2192 `dict.fromkeys` \u2192 `[1,2,3]` \u2713\n- Visible example 2: `[[1],[2],[1]]` \u2192 `list` not simple \u2192 `==` scan: `[1]` kept; `[2]!=[1]` kept; `[1]==[1]` skipped \u2192 `[[1],[2]]` \u2713\n- Other checks by hand: `[]`\u2192`[]`; `iter([\"a\",\"b\",\"a\"])`\u2192`[\"a\",\"b\"]`; dict elements \u2192 `[{\"a\":1},{\"b\":2}]`; `[1,True,1.0,\"1\"]`\u2192`[1,\"1\"]`; `[[1],1,[1],1]`\u2192`[[1],1]` (mixed input takes the general path, so `1 == [1]` is `False` and both survive) \u2713\n- Input is only read (`list(items)` copies), any iterable is accepted, and kept items are the original objects.\n\n```python\nfrom typing import Any, Iterable, List\n\n# Exact types whose hash/equality behaviour is guaranteed to agree with `==`.\n_SIMPLE_TYPES = (bool, int, float, complex, str, bytes, type(None))\n\n\ndef _is_simple(x: Any) -> bool:\n    \"\"\"True if x can be deduped by hashing without changing `==` semantics.\"\"\"\n    if type(x) not in _SIMPLE_TYPES:      # exact type, not subclasses\n        return False\n    if x != x:                            # NaN-like: not equal to itself\n        return False\n    return True\n\n\ndef dedupe_stable(items: Iterable[Any]) -> List[Any]:\n    \"\"\"\n    Return a new list with duplicates removed, keeping the first occurrence\n    of each value in its original order.\n\n    Equality is decided with `==`, so unhashable items such as lists, dicts\n    and sets are supported. When every element is a plain hashable scalar\n    (int/float/complex/bool/str/bytes/None, excluding NaN), an O(n) hash-based\n    fast path is used; otherwise a pure `==` scan is performed.\n    \"\"\"\n    seq = list(items)                     # works for any iterable; never mutates input\n\n    # Fast path: O(n) when hashing is guaranteed to agree with `==`.\n    if all(_is_simple(x) for x in seq):\n        return list(dict.fromkeys(seq))\n\n    # General path: relies only on `==`.\n    result: List[Any] = []\n    for item in seq:\n        for kept in result:\n            if item == kept:\n                break\n        else:\n            result.append(item)\n    return result\n\n\nif __name__ == \"__main__\":\n    assert dedupe_stable([1, 2, 1, 3, 2]) == [1, 2, 3]\n    assert dedupe_stable([[1], [2], [1]]) == [[1], [2]]\n    assert dedupe_stable([]) == []\n    assert dedupe_stable(iter([\"a\", \"b\", \"a\"])) == [\"a\", \"b\"]\n    assert dedupe_stable([{\"a\": 1}, {\"a\": 1}, {\"b\": 2}]) == [{\"a\": 1}, {\"b\": 2}]\n    assert dedupe_stable([1, True, 1.0, \"1\"]) == [1, \"1\"]\n    assert dedupe_stable([[1], 1, [1], 1]) == [[1], 1]\n    print(\"ok\")\n```\n\nNotes: because `==` decides equality, `1`/`True`/`1.0` collapse to the first one seen, while `float('nan')` values are always kept (even the same object twice), since `nan == nan` is `False`."
+}

@@ -1,0 +1,80 @@
+{
+ "task_id": "math-06",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 120.0, expected 120.0",
+ "error": null,
+ "seconds": 60.7,
+ "tokens": 27082,
+ "prompt_tokens": 20202,
+ "completion_tokens": 6880,
+ "cost": 0.03294,
+ "calls": 16,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute remaining fill time",
+     "what": "Both pumps fill at 1/12 + 1/9 = 7/36 tank per hour, so in 4 hours they fill 7/9 and leave 2/9; pump B needs (2/9) \u00f7 (1/9) = 2 hours = 120.0 minutes.\nFINAL: 120.0"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Working:\n\nRate of A = 1/12 tank/hour\nRate of B = 1/9 tank/hour\nCombined rate = 1/12 + 1/9 = 3/36 + 4/36 = 7/36 tank/hour\n\nIn 4 hours together: 4 \u00d7 7/36 = 28/36 = 7/9 tank filled.\n\nRemaining = 1 \u2212 7/9 = 2/9 tank.\n\nPump B alone finishes remaining at rate 1/9 tank/hour:\nTime = (2/9) \u00f7 (1/9) = 2 hours = 120 minutes.\n\nCheck: verify 7/9 + 2/9 = 1 (tank fully filled) \u2713\nCheck: verify (2/9)/(1/9) = 2 exactly, no rounding needed, so 120.0 is exact to one decimal place.\n\nFINAL: 120.0"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Working:\n\nRate of A = 1/12 tank/hour\nRate of B = 1/9 tank/hour\nCombined rate = 1/12 + 1/9 = 3/36 + 4/36 = 7/36 tank/hour\n\nIn 4 hours together: 4 \u00d7 7/36 = 28/36 = 7/9 tank filled.\n\nRemaining = 1 \u2212 7/9 = 2/9 tank.\n\nPump B alone finishes remaining at rate 1/9 tank/hour:\nTime = (2/9) \u00f7 (1/9) = 2 hours = 120 minutes.\n\nCheck: verify 7/9 + 2/9 = 1 (tank fully filled) \u2713\nCheck: verify (2/9)/(1/9) = 2 exactly, no rounding needed, so 120.0 is exact to one decimal place.\n\nFINAL: 120.0"
+}

@@ -1,0 +1,114 @@
+{
+ "task_id": "code-07",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 154.1,
+ "tokens": 76366,
+ "prompt_tokens": 49602,
+ "completion_tokens": 26764,
+ "cost": 0.14708,
+ "calls": 30,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Validate base",
+     "what": "Raise ValueError if base is not an integer in the range 2..36; keep the function signature int_to_base(n: int, base: int) -> str."
+    },
+    {
+     "id": "c2",
+     "title": "Handle sign and zero",
+     "what": "Return '0' for n == 0; otherwise record a leading '-' for negative n and convert abs(n)."
+    },
+    {
+     "id": "c3",
+     "title": "Convert to base digits",
+     "what": "Build the representation from digits 0-9 then lowercase a-z, and return the optional '-' sign followed by the digits."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "D",
+     "C"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "Here is the complete implementation of `int_to_base`:\n\n```python\nimport string\n\ndef int_to_base(n: int, base: int) -> str:\n    \"\"\"Convert an integer n to a string in the given base (2 <= base <= 36).\"\"\"\n    if not isinstance(base, int) or isinstance(base, bool) or not (2 <= base <= 36):\n        raise ValueError(f\"Base must be an integer between 2 and 36, got {base}\")\n\n    if n == 0:\n        return \"0\"\n\n    digits_lookup = string.digits + string.ascii_lowercase\n    sign = \"-\" if n < 0 else \"\"\n    value = abs(n)\n\n    digits = []\n    while value > 0:\n        value, rem = divmod(value, base)\n        digits.append(digits_lookup[rem])\n\n    return sign + \"\".join(reversed(digits))\n```\n\n### Details & Verification\n\n- **Base Validation**: Rejects non-integers, booleans, and values outside the range $2 \\le \\text{base} \\le 36$ by raising a `ValueError`.\n- **Zero Handling**: Intercepting `n == 0` upfront ensures standard `\"0\"` output across all bases, preventing the `while value > 0:` loop from terminating immediately and returning an empty string.\n- **Sign Handling**: Evaluating `sign = '-' if n < 0 else ''` followed by `value = abs(n)` isolates magnitude conversion. Python supports arbitrary-precision integers ([PEP 237](https://peps.python.org/pep-0237/)), avoiding two's-complement overflow issues found in fixed-width types (e.g., `abs(INT_MIN)` in C).\n- **Radix Conversion**: `digits_lookup` maps remainders $0 \\le r < 36$ to `'0'`\u2013`'9'` (indices 0\u20139) and `'a'`\u2013`'z'` (indices 10\u201335). Repeated integer division via `divmod(value, base)` isolates digits from least to most significant; reversing the list restores standard positional radix order (Knuth, *TAOCP* Vol. 2, \u00a74.1).\n- **Visible Examples**: `int_to_base(255, 16)` evaluates magnitude `255`, yielding `'ff'`; `int_to_base(-10, 2)` flags the negative sign, converts `10` to `'1010'`, and returns `'-1010'`."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Here is the complete implementation of `int_to_base`:\n\n```python\nimport string\n\ndef int_to_base(n: int, base: int) -> str:\n    \"\"\"Convert an integer n to a string in the given base (2 <= base <= 36).\"\"\"\n    if not isinstance(base, int) or isinstance(base, bool) or not (2 <= base <= 36):\n        raise ValueError(f\"Base must be an integer between 2 and 36, got {base}\")\n\n    if n == 0:\n        return \"0\"\n\n    digits_lookup = string.digits + string.ascii_lowercase\n    sign = \"-\" if n < 0 else \"\"\n    value = abs(n)\n\n    digits = []\n    while value > 0:\n        value, rem = divmod(value, base)\n        digits.append(digits_lookup[rem])\n\n    return sign + \"\".join(reversed(digits))\n```\n\n### Details & Verification\n\n- **Base Validation**: Rejects non-integers, booleans, and values outside the range $2 \\le \\text{base} \\le 36$ by raising a `ValueError`.\n- **Zero Handling**: Intercepting `n == 0` upfront ensures standard `\"0\"` output across all bases, preventing the `while value > 0:` loop from terminating immediately and returning an empty string.\n- **Sign Handling**: Evaluating `sign = '-' if n < 0 else ''` followed by `value = abs(n)` isolates magnitude conversion. Python supports arbitrary-precision integers ([PEP 237](https://peps.python.org/pep-0237/)), avoiding two's-complement overflow issues found in fixed-width types (e.g., `abs(INT_MIN)` in C).\n- **Radix Conversion**: `digits_lookup` maps remainders $0 \\le r < 36$ to `'0'`\u2013`'9'` (indices 0\u20139) and `'a'`\u2013`'z'` (indices 10\u201335). Repeated integer division via `divmod(value, base)` isolates digits from least to most significant; reversing the list restores standard positional radix order (Knuth, *TAOCP* Vol. 2, \u00a74.1).\n- **Visible Examples**: `int_to_base(255, 16)` evaluates magnitude `255`, yielding `'ff'`; `int_to_base(-10, 2)` flags the negative sign, converts `10` to `'1010'`, and returns `'-1010'`."
+}

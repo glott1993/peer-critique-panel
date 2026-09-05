@@ -1,0 +1,98 @@
+{
+ "task_id": "data-10",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got '2026-04-19', expected '2026-04-19'",
+ "error": null,
+ "seconds": 78.7,
+ "tokens": 83650,
+ "prompt_tokens": 62078,
+ "completion_tokens": 21572,
+ "cost": 0.11444,
+ "calls": 23,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute revenue per non-cancelled order",
+     "what": "Exclude cancelled orders (ORD-1523, ORD-1642, ORD-1356, ORD-1807, ORD-1717) and compute units\u00d7unit_price for each remaining order."
+    },
+    {
+     "id": "c2",
+     "title": "Group and sum by order_date",
+     "what": "Sum revenue for orders sharing the same date, since two dates (2026-04-12 and 2026-04-19... check all) could have multiple orders; verify 2026-04-12 sums to 890.65 (31.96+858.69), not just single order."
+    },
+    {
+     "id": "c3",
+     "title": "Identify max and confirm",
+     "what": "Compare all date-grouped totals; 2026-04-19 = 4483.83 is the maximum, exceeding the next highest (2026-05-17 = 2731.56) and the combined 2026-04-12 total (890.65)."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "B"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Excluding cancelled orders (ORD-1523, ORD-1642, ORD-1356, ORD-1807, ORD-1717), revenue = units \u00d7 unit_price by date:\n\n- 2026-04-12: ORD-1638 (1\u00d731.96=31.96) + ORD-1663 (9\u00d795.41=858.69) = 890.65\n- 2026-04-14: ORD-1743 15\u00d7103.11 = 1546.65\n- 2026-04-15: ORD-1238 28\u00d74.76 = 133.28\n- 2026-04-19: ORD-1408 39\u00d7114.97 = 4483.83\n- 2026-04-21: ORD-1574 4\u00d7101.77 = 407.08\n- 2026-05-05: ORD-1800 32\u00d712.78 = 408.96\n- 2026-05-17: ORD-1410 34\u00d780.34 = 2731.56\n- 2026-05-21: ORD-1124 31\u00d732.69 = 1013.39\n- 2026-05-27: ORD-1692 8\u00d787.06 = 696.48\n\nMaximum daily total is 4483.83 on 2026-04-19, well ahead of the runner-up (2026-05-17 at 2731.56).\n\nFINAL: 2026-04-19"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": []
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Excluding cancelled orders (ORD-1523, ORD-1642, ORD-1356, ORD-1807, ORD-1717), revenue = units \u00d7 unit_price by date:\n\n- 2026-04-12: ORD-1638 (1\u00d731.96=31.96) + ORD-1663 (9\u00d795.41=858.69) = 890.65\n- 2026-04-14: ORD-1743 15\u00d7103.11 = 1546.65\n- 2026-04-15: ORD-1238 28\u00d74.76 = 133.28\n- 2026-04-19: ORD-1408 39\u00d7114.97 = 4483.83\n- 2026-04-21: ORD-1574 4\u00d7101.77 = 407.08\n- 2026-05-05: ORD-1800 32\u00d712.78 = 408.96\n- 2026-05-17: ORD-1410 34\u00d780.34 = 2731.56\n- 2026-05-21: ORD-1124 31\u00d732.69 = 1013.39\n- 2026-05-27: ORD-1692 8\u00d787.06 = 696.48\n\nMaximum daily total is 4483.83 on 2026-04-19, well ahead of the runner-up (2026-05-17 at 2731.56).\n\nFINAL: 2026-04-19"
+}

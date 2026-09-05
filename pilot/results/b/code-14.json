@@ -1,0 +1,18 @@
+{
+ "task_id": "code-14",
+ "type": "code",
+ "condition": "b",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 145.4,
+ "tokens": 16388,
+ "prompt_tokens": 8407,
+ "completion_tokens": 7981,
+ "cost": 0.24156,
+ "calls": 39,
+ "call_errors": 25,
+ "k": 12,
+ "majority_key": null,
+ "answer": "**Verification**\n\nRe-reading the spec, the requirements are: split on whitespace, greedy packing to at most `width` chars with single-space joins, over-long words alone and unbroken, `[]` for empty/whitespace-only input, `ValueError` when `width < 1`. Nothing else (no type-checking requirement), so omitting the `isinstance` guard is right \u2014 adding it risks raising `TypeError` where only `ValueError` is specified.\n\nHand-tracing the visible examples:\n\n- `word_wrap('the quick brown fox', 10)`: `words = ['the','quick','brown','fox']`, `current='the'`. `'quick'`: 3+1+5=9 \u2264 10 \u2192 `current='the quick'`. `'brown'`: 9+1+5=15 > 10 \u2192 flush `'the quick'`, `current='brown'`. `'fox'`: 5+1+3=9 \u2264 10 \u2192 `current='brown fox'`. Final flush \u2192 `['the quick', 'brown fox']` \u2713\n- `word_wrap('a bb ccc', 3)`: `current='a'`. `'bb'`: 1+1+2=4 > 3 \u2192 flush `'a'`, `current='bb'`. `'ccc'`: 2+1+3=6 > 3 \u2192 flush `'bb'`, `current='ccc'`. Final flush \u2192 `['a','bb','ccc']` \u2713\n\nEdge cases: `''`/`'   '` \u2192 `split()` gives `[]` \u2192 returns `[]`. `width=0` or negative \u2192 `ValueError`. `'aaaa bb', 3` \u2192 `'aaaa'` can never combine (4+1+2 > 3), so \u2192 `['aaaa','bb']`, long word alone and unbroken. `width=1, 'a b'` \u2192 `['a','b']`. Newlines/tabs are handled by `str.split()`. No errors found.\n\n```python\ndef word_wrap(text: str, width: int) -> list:\n    \"\"\"Greedily pack whitespace-separated words into lines of at most `width` chars.\n\n    Words are split on any run of whitespace and joined by single spaces.\n    A word longer than `width` occupies a line by itself, unbroken.\n    Empty or whitespace-only text returns []. Raises ValueError if width < 1.\n    \"\"\"\n    if width < 1:\n        raise ValueError(\"width must be at least 1\")\n\n    words = text.split()\n    if not words:\n        return []\n\n    lines = []\n    current = words[0]\n    for word in words[1:]:\n        if len(current) + 1 + len(word) <= width:\n            current += \" \" + word\n        else:\n            lines.append(current)\n            current = word\n    lines.append(current)\n    return lines\n```"
+}

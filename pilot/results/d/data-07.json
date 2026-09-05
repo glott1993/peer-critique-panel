@@ -1,0 +1,101 @@
+{
+ "task_id": "data-07",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 61.31, expected 61.31",
+ "error": null,
+ "seconds": 54.6,
+ "tokens": 53432,
+ "prompt_tokens": 43922,
+ "completion_tokens": 9510,
+ "cost": 0.06336,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Average shipped price",
+     "what": "West shipped unit_prices are 69.62, 97.13, and 17.18; average = (69.62 + 97.13 + 17.18) / 3 = 61.31."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine the average `unit_price` of shipped orders in the West region, we filter the dataset for rows where `region == 'West'` and `status == 'shipped'`:\n\n1. `ORD-1195`: `unit_price` = 69.62 (`status` = shipped)\n2. `ORD-1209`: `unit_price` = 97.13 (`status` = shipped)\n3. `ORD-1728`: `unit_price` = 17.18 (`status` = shipped)\n\n(Note: `ORD-1666` is in the West region with `unit_price` = 25.81, but its status is `pending`, so it is excluded.)\n\nCalculation:\n- Sum of `unit_price` = 69.62 + 97.13 + 17.18 = 183.93\n- Count = 3\n- Average = 183.93 / 3 = 61.31\n\nVerification via Python:\n```python\nprices = [69.62, 97.13, 17.18]\nassert round(sum(prices) / len(prices), 2) == 61.31\n```\n\nFINAL: 61.31"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Draft only lists 3 West-region shipped rows but doesn't demonstrate it scanned all 20 rows for West region membership; need to confirm no other West rows exist (e.g. any West Anvil/Dowel/Crate entries missed) since only 4 West rows total appear in the data (1195, 1666, 1209, 1728) - this should be verified exhaustively, not just asserted."
+    },
+    {
+     "from": "A",
+     "problem": "Arithmetic should be double-checked: 69.62+97.13=166.75, +17.18=183.93 - this checks out, but the average calculation 183.93/3 should be verified to full precision before rounding."
+    },
+    {
+     "from": "A",
+     "problem": "Draft assumes simple average of unit_price per order is correct interpretation, but could be ambiguous whether a units-weighted average (i.e., total revenue / total units) was intended instead. Should flag this interpretation choice explicitly."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 2,
+   "answer": "Filter for region=='West': scanning all 20 rows yields exactly 4 West rows: ORD-1195(shipped,69.62), ORD-1666(pending,25.81), ORD-1209(shipped,97.13), ORD-1728(shipped,17.18). No other West rows exist in the data.\n\nShipped-only West rows: ORD-1195(69.62), ORD-1209(97.13), ORD-1728(17.18).\n\nSum = 69.62+97.13+17.18 = 183.93\nCount = 3\nAverage = 183.93/3 = 61.31\n\n```python\nrows = [(69.62,'shipped'),(25.81,'pending'),(97.13,'shipped'),(17.18,'shipped')]\nprices = [p for p,s in rows if s=='shipped']\nassert len(prices)==3\nassert round(sum(prices)/len(prices),2)==61.31\n```\n\nThe question explicitly asks for the average of unit_price (not a units-weighted/revenue-based average), so the simple mean of the three shipped unit_price values is the correct interpretation.\n\nFINAL: 61.31"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Filter for region=='West': scanning all 20 rows yields exactly 4 West rows: ORD-1195(shipped,69.62), ORD-1666(pending,25.81), ORD-1209(shipped,97.13), ORD-1728(shipped,17.18). No other West rows exist in the data.\n\nShipped-only West rows: ORD-1195(69.62), ORD-1209(97.13), ORD-1728(17.18).\n\nSum = 69.62+97.13+17.18 = 183.93\nCount = 3\nAverage = 183.93/3 = 61.31\n\n```python\nrows = [(69.62,'shipped'),(25.81,'pending'),(97.13,'shipped'),(17.18,'shipped')]\nprices = [p for p,s in rows if s=='shipped']\nassert len(prices)==3\nassert round(sum(prices)/len(prices),2)==61.31\n```\n\nThe question explicitly asks for the average of unit_price (not a units-weighted/revenue-based average), so the simple mean of the three shipped unit_price values is the correct interpretation.\n\nFINAL: 61.31"
+}
