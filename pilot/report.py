@@ -117,7 +117,7 @@ def main():
         lines.append(f"| {c} | {tok:,.0f} | ${cost:.4f} | {sec:.0f} | {calls:.1f} | {errs} |")
         summary["cost"][c] = {"mean_tokens": tok, "mean_cost": cost, "median_seconds": sec, "total_cost": sum(r["cost"] for r in rs)}
     if "b" in res:
-        ks = sorted({(r["type"], r.get("k")) for r in res["b"].values()})
+        ks = sorted({(r["type"], r.get("k") or 0) for r in res["b"].values() if not r.get("error")})
         lines.append("")
         lines.append("Condition b sample counts (k) by type: " + ", ".join(f"{t}: {k}" for t, k in ks))
     lines.append("")
