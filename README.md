@@ -2,7 +2,7 @@
 
 **Nothing picks a model. Nothing assigns the work. The hub never writes.**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22325883.svg)](https://doi.org/10.5281/zenodo.22325883)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22357227.svg)](https://doi.org/10.5281/zenodo.22357227)  v1.1: [10.5281/zenodo.22325883](https://doi.org/10.5281/zenodo.22325883)
 
 A working draft proposing what should happen *after* a panel of AI models is convened: the answer has to earn its release. Version 1.2 adds the results of the preregistered pilot. The current models from every major lab, grouped into class-matched tiers, decompose a request, bid on its parts, critique each other's drafts under seat anonymity with evidence required, and revise until they agree. A dedicated hub that never writes an answer interrogates the result within a question budget and enforces verifiable checks. Nothing ships until the panel agrees, the hub has no open questions, and every check passes. A persistent, version-stamped catalogue records who was challenged, corrected, and later shown wrong, and feeds the hub's questions.
 
@@ -40,8 +40,8 @@ Working draft v1.2, September 2026. The pilot has been run (September 5, 2026, a
   month        = {September},
   note         = {Working draft v1.2},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.22325883},
-  url          = {https://doi.org/10.5281/zenodo.22325883}
+  doi          = {10.5281/zenodo.22357227},
+  url          = {https://doi.org/10.5281/zenodo.22357227}
 }
 ```
 
