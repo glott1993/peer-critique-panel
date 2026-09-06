@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-37",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 548.0, expected 548.0 | ok: got 17765.0, expected 17765.0 | ok: got 4255.0, expected 4255.0",
+ "error": null,
+ "seconds": 22.7,
+ "tokens": 3233,
+ "prompt_tokens": 432,
+ "completion_tokens": 2801,
+ "cost": 0.02887,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\nLet x \u2261 4 (mod 16), x \u2261 2 (mod 7), x \u2261 9 (mod 11).\n\nx = 16k+4. Solve 16k+4\u22612 (mod7) \u2192 2k\u22615(mod7) \u2192 k\u22616(mod7), so k=7m+6, x=112m+100.\n\nSolve 112m+100\u22619(mod11) \u2192 2m\u22618(mod11) \u2192 m\u22614(mod11), so m=11n+4, x=1232n+548.\n\nSmallest positive x: **548** (check: 548=34\u00b716+4, 78\u00b77+2, 49\u00b711+9 \u2713)\n\n**Part B:**\n- 8% of 12,500 = 1,000\n- 20% of (52,000\u221212,500)=39,500 \u2192 7,900\n- 30% of (81,900\u221252,000)=29,900 \u2192 8,970\n\nTotal tax before credit = 1,000+7,900+8,970 = 17,870\n\nCredit reduction: 5% of (81,900\u221260,000)=21,900 \u2192 1,095\nCredit = 1,200\u22121,095 = 105 (\u22650, fine)\n\nTax owed = 17,870 \u2212 105 = **17,765.00**\n\n**Part C:**\nN=12,000. Using inclusion-exclusion for divisibility by 5,7,11:\n\nfloor(12000/5)=2400, /7=1714, /11=1090\n/35=342, /55=218, /77=155\n/385=31\n\nA = 2400+1714+1090\u2212342\u2212218\u2212155+31 = 4520\n\nNow subtract those divisible by 17 as well, using inclusion-exclusion with 17 combined:\n\n/85=141, /119=100, /187=64\n/595=20, /935=12, /1309=9\n/6545=1\n\nB = 141+100+64\u221220\u221212\u22129+1 = 265\n\nFinal count = A \u2212 B = 4520 \u2212 265 = **4255**\n\nFINAL: 548; 17765.00; 4255"
+}

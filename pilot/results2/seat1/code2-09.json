@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-09",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.1,
+ "tokens": 666,
+ "prompt_tokens": 291,
+ "completion_tokens": 375,
+ "cost": 0.00433,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef brackets_balanced(s: str) -> bool:\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n    openers = set(pairs.values())\n    closers = set(pairs.keys())\n    \n    i = 0\n    n = len(s)\n    in_string = False\n    \n    while i < n:\n        c = s[i]\n        if in_string:\n            if c == '\\\\':\n                # escaped char, skip next character too\n                i += 2\n                continue\n            elif c == '\"':\n                in_string = False\n                i += 1\n                continue\n            else:\n                i += 1\n                continue\n        else:\n            if c == '\"':\n                in_string = True\n                i += 1\n                continue\n            elif c in openers:\n                stack.append(c)\n                i += 1\n                continue\n            elif c in closers:\n                if not stack or stack[-1] != pairs[c]:\n                    return False\n                stack.pop()\n                i += 1\n                continue\n            else:\n                i += 1\n                continue\n    \n    if in_string:\n        return False\n    \n    return len(stack) == 0\n```"
+}

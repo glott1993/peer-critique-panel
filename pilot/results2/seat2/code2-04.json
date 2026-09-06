@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-04",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 19.8,
+ "tokens": 8651,
+ "prompt_tokens": 5342,
+ "completion_tokens": 3309,
+ "cost": 0.00504,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\n\ndef shortest_path(graph, src, dst):\n    if src == dst:\n        return [src]\n\n    start_path = (src,)\n    best = {src: (0, start_path)}\n    heap = [(0, start_path, src)]\n\n    while heap:\n        distance, path, node = heapq.heappop(heap)\n\n        if best.get(node) != (distance, path):\n            continue\n\n        if node == dst:\n            return list(path)\n\n        for neighbor, weight in graph.get(node, {}).items():\n            new_distance = distance + weight\n            new_path = path + (neighbor,)\n            candidate = (new_distance, new_path)\n\n            if neighbor not in best or candidate < best[neighbor]:\n                best[neighbor] = candidate\n                heapq.heappush(heap, (new_distance, new_path, neighbor))\n\n    return []\n```"
+}

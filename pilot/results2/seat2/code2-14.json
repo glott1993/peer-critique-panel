@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-14",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 38.0,
+ "tokens": 12782,
+ "prompt_tokens": 7173,
+ "completion_tokens": 5609,
+ "cost": 0.00817,
+ "calls": 3,
+ "call_errors": 2,
+ "answer": "```python\nfrom fractions import Fraction\n\n\ndef fraction_expr(s: str) -> str:\n    tokens = []\n    i = 0\n    n = len(s)\n\n    while i < n:\n        if s[i].isspace():\n            i += 1\n            continue\n\n        ch = s[i]\n\n        if ch in \"+-*()\":\n            tokens.append(ch)\n            i += 1\n            continue\n\n        if \"0\" <= ch <= \"9\":\n            start = i\n            while i < n and \"0\" <= s[i] <= \"9\":\n                i += 1\n\n            numerator = int(s[start:i])\n\n            if i < n and s[i] == \"/\":\n                i += 1\n                denom_start = i\n                while i < n and \"0\" <= s[i] <= \"9\":\n                    i += 1\n\n                if denom_start == i:\n                    raise ValueError(\"Malformed fraction\")\n\n                denominator = int(s[denom_start:i])\n                if denominator == 0:\n                    raise ValueError(\"Zero denominator\")\n\n                tokens.append((\"number\", Fraction(numerator, denominator)))\n            else:\n                tokens.append((\"number\", Fraction(numerator)))\n            continue\n\n        raise ValueError(\"Malformed input\")\n\n    if not tokens:\n        raise ValueError(\"Empty expression\")\n\n    pos = 0\n\n    def parse_primary():\n        nonlocal pos\n\n        if pos >= len(tokens):\n            raise ValueError(\"Expected operand\")\n\n        token = tokens[pos]\n\n        if token == \"(\":\n            pos += 1\n            value = parse_expression()\n            if pos >= len(tokens) or tokens[pos] != \")\":\n                raise ValueError(\"Missing closing parenthesis\")\n            pos += 1\n            return value\n\n        if isinstance(token, tuple) and token[0] == \"number\":\n            pos += 1\n            return token[1]\n\n        raise ValueError(\"Expected operand\")\n\n    def parse_factor():\n        nonlocal pos\n\n        if pos < len(tokens) and tokens[pos] == \"-\":\n            pos += 1\n            return -parse_primary()\n\n        return parse_primary()\n\n    def parse_term():\n        nonlocal pos\n\n        value = parse_factor()\n        while pos < len(tokens) and tokens[pos] == \"*\":\n            pos += 1\n            value *= parse_factor()\n        return value\n\n    def parse_expression():\n        nonlocal pos\n\n        value = parse_term()\n        while pos < len(tokens) and tokens[pos] in (\"+\", \"-\"):\n            operator = tokens[pos]\n            pos += 1\n            rhs = parse_term()\n            value = value + rhs if operator == \"+\" else value - rhs\n        return value\n\n    result = parse_expression()\n\n    if pos != len(tokens):\n        raise ValueError(\"Malformed expression\")\n\n    if result.denominator == 1:\n        return str(result.numerator)\n    return f\"{result.numerator}/{result.denominator}\"\n```"
+}

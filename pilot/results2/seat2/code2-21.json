@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-21",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 11.1,
+ "tokens": 5978,
+ "prompt_tokens": 4021,
+ "completion_tokens": 1957,
+ "cost": 0.00315,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef number_to_words(n: int) -> str:\n    if not isinstance(n, int) or isinstance(n, bool) or not 0 <= n <= 999999:\n        raise ValueError(\"n must be an integer between 0 and 999999\")\n\n    ones = [\n        \"zero\", \"one\", \"two\", \"three\", \"four\",\n        \"five\", \"six\", \"seven\", \"eight\", \"nine\",\n        \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n        \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\",\n    ]\n    tens = [\n        \"\", \"\", \"twenty\", \"thirty\", \"forty\",\n        \"fifty\", \"sixty\", \"seventy\", \"eighty\", \"ninety\",\n    ]\n\n    def under_one_thousand(value: int) -> str:\n        parts = []\n\n        if value >= 100:\n            parts.append(ones[value // 100])\n            parts.append(\"hundred\")\n            value %= 100\n\n        if value >= 20:\n            word = tens[value // 10]\n            if value % 10:\n                word += \"-\" + ones[value % 10]\n            parts.append(word)\n        elif value > 0:\n            parts.append(ones[value])\n\n        return \" \".join(parts)\n\n    if n == 0:\n        return \"zero\"\n\n    parts = []\n    thousands, remainder = divmod(n, 1000)\n\n    if thousands:\n        parts.append(under_one_thousand(thousands))\n        parts.append(\"thousand\")\n\n    if remainder:\n        parts.append(under_one_thousand(remainder))\n\n    return \" \".join(parts)\n```"
+}

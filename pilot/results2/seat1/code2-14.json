@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-14",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 22.9,
+ "tokens": 3255,
+ "prompt_tokens": 344,
+ "completion_tokens": 2911,
+ "cost": 0.0298,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here's the implementation using a straightforward tokenizer + recursive-descent parser over `fractions.Fraction`:\n\n```python\nimport re\nfrom fractions import Fraction\n\n\ndef fraction_expr(s: str) -> str:\n    def tokenize(text):\n        token_re = re.compile(r'\\d+/\\d+|\\d+|[()+\\-*]')\n        tokens = []\n        idx = 0\n        n = len(text)\n        while idx < n:\n            c = text[idx]\n            if c.isspace():\n                idx += 1\n                continue\n            m = token_re.match(text, idx)\n            if not m:\n                raise ValueError(f\"malformed expression: unexpected character {c!r}\")\n            tokens.append(m.group())\n            idx = m.end()\n        return tokens\n\n    tokens = tokenize(s)\n    pos = 0\n\n    def peek():\n        return tokens[pos] if pos < len(tokens) else None\n\n    def advance():\n        nonlocal pos\n        t = tokens[pos]\n        pos += 1\n        return t\n\n    def parse_atom():\n        t = peek()\n        if t == '(':\n            advance()\n            val = parse_expr()\n            if peek() != ')':\n                raise ValueError(\"malformed expression: expected ')'\")\n            advance()\n            return val\n        elif t is not None and re.fullmatch(r'\\d+(/\\d+)?', t):\n            advance()\n            if '/' in t:\n                num_s, den_s = t.split('/')\n                num = int(num_s)\n                den = int(den_s)\n                if den == 0:\n                    raise ValueError(\"zero denominator in fraction literal\")\n                return Fraction(num, den)\n            else:\n                return Fraction(int(t))\n        else:\n            raise ValueError(\"malformed expression: expected number or '('\")\n\n    def parse_factor():\n        if peek() == '-':\n            advance()\n            val = parse_factor()\n            return -val\n        return parse_atom()\n\n    def parse_term():\n        val = parse_factor()\n        while peek() == '*':\n            advance()\n            rhs = parse_factor()\n            val *= rhs\n        return val\n\n    def parse_expr():\n        val = parse_term()\n        while peek() in ('+', '-'):\n            op = advance()\n            rhs = parse_term()\n            if op == '+':\n                val += rhs\n            else:\n                val -= rhs\n        return val\n\n    if not tokens:\n        raise ValueError(\"empty expression\")\n\n    result = parse_expr()\n\n    if pos != len(tokens):\n        raise ValueError(\"malformed expression: unexpected trailing tokens\")\n\n    if result.numerator == 0:\n        return \"0\"\n    if result.denominator == 1:\n        return str(result.numerator)\n    return f\"{result.numerator}/{result.denominator}\"\n```\n\nThis handles integers, `n/d` fraction literals, `+`, `-`, `*`, parentheses, and unary minus on terms, using `Fraction` for exact arithmetic and automatic reduction to lowest terms, while raising `ValueError` on malformed input or zero denominators."
+}

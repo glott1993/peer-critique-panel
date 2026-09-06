@@ -1,0 +1,16 @@
+{
+ "task_id": "logic2-20",
+ "type": "logic",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 'dev', expected 'dev'",
+ "error": null,
+ "seconds": 54.9,
+ "tokens": 7264,
+ "prompt_tokens": 544,
+ "completion_tokens": 6720,
+ "cost": 0.06829,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Working:**\n\nFrom clue 9, red = house 4. From clue 12, Ben = house 3 (immediately left of red).\n\nTesting clue 4 (coffee immediately left of white house) with white constrained by clue 6 (not house 2): trying white = house 5 forces coffee = house 4.\n\nWorking through clues 3, 8, 2, 11, and 1 to fix drinks and colors, the consistent assignment is:\n\n- Drinks: 1\u2011juice, 2\u2011water, 3\u2011milk, 4\u2011coffee, 5\u2011tea  \n- Colors: 1\u2011yellow, 2\u2011blue, 3\u2011green, 4\u2011red, 5\u2011white  \n- Pets: 1\u2011fish, 2\u2011horse, 3\u2011dog, 4\u2011bird, 5\u2011cat  \n- People: 1\u2011Dev, 2\u2011Eli, 3\u2011Ben, 4\u2011Ada, 5\u2011Cleo  \n\nChecking all 13 clues confirms this is fully consistent.\n\nHouse 1 is yellow, and Dev lives there.\n\nFINAL: Dev"
+}

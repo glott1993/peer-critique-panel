@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-02",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 'reese', expected 'reese'",
+ "error": null,
+ "seconds": 34.2,
+ "tokens": 7605,
+ "prompt_tokens": 2816,
+ "completion_tokens": 4789,
+ "cost": 0.05352,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Working\n\n**Step 1: Identify duplicate orders (same order_id, all fields identical) \u2014 count once:**\n- O2582 (C102, Easel) \u2014 appears twice, count once\n- O2184 (C109, Flange, returned) \u2014 appears twice, but status is returned so excluded anyway\n- O2444 (C104, Anvil) \u2014 appears twice, count once\n\n**Step 2: Filter to only shipped/pending orders, then sum revenue (units \u00d7 unit_price) per customer.**\n\n**Customer totals (revenue from shipped/pending orders only):**\n\n- C100 (Logan): 3199.68+351.52+2007.67+1272.43 = 6831.30\n- C101 (Casey): 536.88+4031.40+1930.18+1809.50+3762.18+1839.40+223.74 = 14133.28\n- **C102 (Reese): 506.24+1282.08+225.90+1990.24+2105.92+657.57+468.35+2997.06+3999.12+5000.92+110.64 = 19344.04**\n- C103 (Avery): 1741.95+4093.26+968.94+501.41+1412.58+275.80 = 8993.94\n- C104 (Emery): 731.06+4433.28 = 5164.34\n- C105 (Jordan): 3639.16+2053.50+4026.90 = 9719.56\n- C106 (Finley): 364.50+102.28 = 466.78\n- C107 (Rowan): 2652.12+2379.81+698.19+2220.24+673.02 = 8623.38\n- C108 (Blake): 81.88+1162.98+1453.75+1367.08+1786.72 = 5852.41\n- C109 (Harper): 39.12+99.24+1531.95+1058.42+1949.22+86.80 = 4764.75\n\n**Step 3: Compare totals** \u2014 Reese (C102) has the highest revenue at 19344.04.\n\nFINAL: Reese"
+}

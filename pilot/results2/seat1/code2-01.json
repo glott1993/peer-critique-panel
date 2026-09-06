@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-01",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 1.4,
+ "tokens": 346,
+ "prompt_tokens": 274,
+ "completion_tokens": 72,
+ "cost": 0.00127,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef top_k_by_score(items, k):\n    sorted_items = sorted(items, key=lambda x: (-x[1], x[0]))\n    return [name for name, score in sorted_items[:k]]\n```"
+}

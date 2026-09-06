@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-21",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 22.8, expected 22.8",
+ "error": null,
+ "seconds": 47.8,
+ "tokens": 9458,
+ "prompt_tokens": 2831,
+ "completion_tokens": 6627,
+ "cost": 0.07193,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "## Working\n\n**Step 1: Remove duplicate order rows**\nIdentified exact duplicate order_id rows (count once each):\n- O2894 (C106, Dowel, 36, 78.86, shipped) \u2013 appears twice\n- O2256 (C103, Crate, 5, 27.44, shipped) \u2013 appears twice\n- O2210 (C108, Crate, 45, 68.62, pending) \u2013 appears twice\n\n**Step 2: Keep only shipped/pending orders**, compute revenue = units \u00d7 unit_price, and sum per customer.\n\n**Per-customer revenue totals:**\n\n| Customer | Revenue |\n|---|---|\n| C100 | 23,433.56 |\n| C101 | 5,879.44 |\n| C102 | 12,115.77 |\n| C103 | 17,483.93 |\n| C104 | 14,678.87 |\n| C105 | 3,748.42 |\n| C106 | 7,317.76 |\n| C107 | 8,388.73 |\n| C108 | 27,416.27 |\n\n**Step 3: Total revenue**\nSum = 23,433.56 + 5,879.44 + 12,115.77 + 17,483.93 + 14,678.87 + 3,748.42 + 7,317.76 + 8,388.73 + 27,416.27 = **120,462.75**\n\n**Step 4: Highest-revenue customer**\nC108 has the highest revenue: **27,416.27**\n\n**Step 5: Percentage**\n27,416.27 / 120,462.75 \u00d7 100 \u2248 22.76% \u2192 rounds to **22.8%**\n\nFINAL: 22.8"
+}

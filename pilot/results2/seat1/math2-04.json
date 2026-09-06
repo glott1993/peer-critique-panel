@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-04",
+ "type": "math",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 3298.43, expected 3298.43",
+ "error": null,
+ "seconds": 62.9,
+ "tokens": 7568,
+ "prompt_tokens": 366,
+ "completion_tokens": 7202,
+ "cost": 0.07275,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Working:**\n\nStarting balance: $1,200.00. For each month, apply the transaction, then (if balance < $1000) a $15 fee, then add 0.5% interest.\n\nSince the balance stays above $1,000 after every transaction throughout all 15 months, no monthly fee is ever triggered. Applying transactions and 0.5% interest sequentially:\n\n- M1: 1200+700=1900.00 \u2192 \u00d71.005 = 1909.50\n- M2: +1100=3009.50 \u2192 \u00d71.005 = 3024.5475\n- M3: \u2212900=2124.5475 \u2192 \u00d71.005 = 2135.1702375\n- M4: +1100=3235.1702375 \u2192 \u00d71.005 = 3251.3460886875\n- M5: +700=3951.3460886875 \u2192 \u00d71.005 = 3971.1028191309\n- M6: +300=4271.1028191309 \u2192 \u00d71.005 = 4292.4583332266\n- M7: \u2212400=3892.4583332266 \u2192 \u00d71.005 = 3911.9206248927\n- M8: \u2212250=3661.9206248927 \u2192 \u00d71.005 = 3680.2302280172\n- M9: \u2212900=2780.2302280172 \u2192 \u00d71.005 = 2794.1313791573\n- M10: \u2212250=2544.1313791573 \u2192 \u00d71.005 = 2556.8520360531\n- M11: +700=3256.8520360531 \u2192 \u00d71.005 = 3273.1362962333\n- M12: +300=3573.1362962333 \u2192 \u00d71.005 = 3591.0019777145\n- M13: +700=4291.0019777145 \u2192 \u00d71.005 = 4312.4569876031\n- M14: \u2212400=3912.4569876031 \u2192 \u00d71.005 = 3932.0192725411\n- M15: \u2212650=3282.0192725411 (\u22651000, no fee) \u2192 \u00d71.005 = 3298.4293689038\n\nRounded to the nearest cent: **$3298.43**\n\nFINAL: 3298.43"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-25",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 1893.49, expected 1893.49 | ok: got 10482.55, expected 10482.55 | ok: got 1255.0, expected 1255.0",
+ "error": null,
+ "seconds": 48.3,
+ "tokens": 7064,
+ "prompt_tokens": 477,
+ "completion_tokens": 6587,
+ "cost": 0.06682,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: Order Total Calculation\n\n**Tiered pricing for 449 units:**\n- First 100 units: 100 \u00d7 $5.00 = $500.00\n- Next 200 units (101\u2013300): 200 \u00d7 $4.25 = $850.00\n- Remaining 149 units (301\u2013449): 149 \u00d7 $3.50 = $521.50\n\n**Subtotal:** $500.00 + $850.00 + $521.50 = $1,871.50\n\nSince subtotal > $1,500, apply 5% discount:\n$1,871.50 \u00d7 0.95 = $1,777.925\n\nApply 6.5% sales tax:\n$1,777.925 \u00d7 1.065 = $1,893.490125\n\n**Total: $1,893.49**\n\n# Part B: Investment Account Balance\n\nEach period: balance = (balance + contribution) \u00d7 1.015 \u00d7 0.995 = (balance + contribution) \u00d7 1.009925\n\nStarting at $5,000, applying contributions [0, 400, 0, 0, 900, 600, 250, 400, 250, 900, 900, 0] in sequence:\n\n| Period | Contribution | Balance after growth & fee |\n|---|---|---|\n| 1 | 0 | 5049.625000 |\n| 2 | 400 | 5503.712528 |\n| 3 | 0 | 5558.336875 |\n| 4 | 0 | 5613.503369 |\n| 5 | 900 | 6578.149890 |\n| 6 | 600 | 7249.393028 |\n| 7 | 250 | 7573.824504 |\n| 8 | 400 | 8052.964712 |\n| 9 | 250 | 8385.371637 |\n| 10 | 900 | 9377.528950 |\n| 11 | 900 | 10379.533425 |\n| 12 | 0 | 10482.550294 |\n\n**Total: $10,482.55**\n\n# Part C: Divisibility Counting\n\n**Step 1: Count multiples of 6, 10, or 15 (up to 5000) using inclusion-exclusion.**\n\nSince LCM(6,10) = LCM(6,15) = LCM(10,15) = LCM(6,10,15) = 30:\n\n|S| = \u230a5000/6\u230b + \u230a5000/10\u230b + \u230a5000/15\u230b \u2212 2\u00b7\u230a5000/30\u230b\n   = 833 + 500 + 333 \u2212 2(166)\n   = 1666 \u2212 332 = **1334**\n\n**Step 2: Count numbers in S that are also divisible by 17** (to exclude them).\n\nNeed multiples of 17 that are also multiples of 6, 10, or 15 \u2014 i.e., multiples of 102, 170, or 255.\nAll pairwise and triple LCMs equal 510 (since 102=2\u00b73\u00b717, 170=2\u00b75\u00b717, 255=3\u00b75\u00b717).\n\nT = \u230a5000/102\u230b + \u230a5000/170\u230b + \u230a5000/255\u230b \u2212 3\u00b7\u230a5000/510\u230b + \u230a5000/510\u230b\n  = 49 + 29 + 19 \u2212 2(9)\n  = 97 \u2212 18 = **79**\n\n**Step 3: Subtract.**\n\nAnswer = 1334 \u2212 79 = **1255**\n\nFINAL: 1893.49; 10482.55; 1255"
+}

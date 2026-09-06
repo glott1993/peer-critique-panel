@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-29",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 9.1,
+ "tokens": 4830,
+ "prompt_tokens": 3237,
+ "completion_tokens": 1593,
+ "cost": 0.00256,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef count_islands(grid: list[str]) -> int:\n    if not grid:\n        return 0\n\n    rows = len(grid)\n    cols = len(grid[0])\n    visited = set()\n    islands = 0\n\n    for row in range(rows):\n        for col in range(cols):\n            if grid[row][col] != \"#\" or (row, col) in visited:\n                continue\n\n            islands += 1\n            stack = [(row, col)]\n            visited.add((row, col))\n\n            while stack:\n                current_row, current_col = stack.pop()\n\n                for delta_row, delta_col in (\n                    (-1, 0),\n                    (1, 0),\n                    (0, -1),\n                    (0, 1),\n                ):\n                    neighbor_row = current_row + delta_row\n                    neighbor_col = current_col + delta_col\n\n                    if (\n                        0 <= neighbor_row < rows\n                        and 0 <= neighbor_col < cols\n                        and grid[neighbor_row][neighbor_col] == \"#\"\n                        and (neighbor_row, neighbor_col) not in visited\n                    ):\n                        visited.add((neighbor_row, neighbor_col))\n                        stack.append((neighbor_row, neighbor_col))\n\n    return islands\n```"
+}

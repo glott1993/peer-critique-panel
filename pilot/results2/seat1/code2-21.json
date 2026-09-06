@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-21",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 10.0,
+ "tokens": 901,
+ "prompt_tokens": 312,
+ "completion_tokens": 589,
+ "cost": 0.00651,
+ "calls": 3,
+ "call_errors": 2,
+ "answer": "```python\ndef number_to_words(n: int) -> str:\n    if not (0 <= n <= 999999):\n        raise ValueError(\"n must be between 0 and 999999\")\n\n    ones = [\"zero\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\",\n            \"eight\", \"nine\", \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n            \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\"]\n    tens = [\"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\",\n            \"eighty\", \"ninety\"]\n\n    def three_digit_to_words(num: int) -> str:\n        # num is between 0 and 999\n        parts = []\n        hundreds_digit = num // 100\n        remainder = num % 100\n        if hundreds_digit > 0:\n            parts.append(ones[hundreds_digit] + \" hundred\")\n        if remainder > 0:\n            if remainder < 20:\n                parts.append(ones[remainder])\n            else:\n                tens_digit = remainder // 10\n                units_digit = remainder % 10\n                if units_digit > 0:\n                    parts.append(tens[tens_digit] + \"-\" + ones[units_digit])\n                else:\n                    parts.append(tens[tens_digit])\n        return \" \".join(parts)\n\n    if n == 0:\n        return \"zero\"\n\n    if n < 1000:\n        return three_digit_to_words(n)\n\n    thousands_part = n // 1000\n    remainder_part = n % 1000\n\n    words = []\n    words.append(three_digit_to_words(thousands_part) + \" thousand\")\n    if remainder_part > 0:\n        words.append(three_digit_to_words(remainder_part))\n\n    return \" \".join(words)\n```"
+}

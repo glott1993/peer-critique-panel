@@ -1,0 +1,16 @@
+{
+ "task_id": "logic2-14",
+ "type": "logic",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 'eli', expected 'eli'",
+ "error": null,
+ "seconds": 30.5,
+ "tokens": 3941,
+ "prompt_tokens": 546,
+ "completion_tokens": 3395,
+ "cost": 0.03504,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Working:**\n\nFrom clues 1 & 9, Dev's house = (red house \u2212 1) and Dev drinks coffee (both are \"immediately left of red\").\n\nFrom clues 5,7,13: Cleo owns fish, lives in the blue house, drinks water.\n\nTesting red = house 2 (so Dev = house 1, drinking coffee):\n- Cleo (blue, water) must be house 3 or 4 (not 1,2,5).\n- Trying Cleo = house 3: tea must be adjacent to house 3 (clue 10). Testing tea = house 4 \u2192 cat owner = house 5 (clue 4).\n- Remaining drinks milk/juice go to houses 2 and 5. Clue 6 (Ada immediately left of milk) forces milk = house 5, juice = house 2, Ada = house 4.\n- Clue 3: milk(5) next to dog owner \u2192 dog = house 4.\n- Clue 2: water(3) next to horse owner \u2192 horse = house 2 (since 4 is dog).\n- Remaining pet (bird) = house 1. Clue 8: bird owner = white house \u2192 house 1 white.\n- Colors: yellow=5, red=2, blue=3, white=1 \u2192 green=4.\n- Remaining person Eli fills house 2 (since Dev=1, Cleo=3, Ada=4, Ben=5).\n\nChecking all 13 clues confirms full consistency:\n\nHouse1: Dev, coffee, bird, white\nHouse2: Eli, juice, horse, red\nHouse3: Cleo, water, fish, blue\nHouse4: Ada, tea, dog, green\nHouse5: Ben, milk, cat, yellow\n\nAll constraints hold.\n\nFINAL: Eli"
+}

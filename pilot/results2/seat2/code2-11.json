@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-11",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 15.9,
+ "tokens": 7882,
+ "prompt_tokens": 5035,
+ "completion_tokens": 2847,
+ "cost": 0.00442,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom datetime import date, datetime\n\n\ndef reconcile(bank, ledger, window=2):\n    def parse_date(value):\n        try:\n            return date.fromisoformat(value)\n        except ValueError:\n            return datetime.fromisoformat(value).date()\n\n    bank_dates = [parse_date(item[1]) for item in bank]\n    ledger_dates = [parse_date(item[1]) for item in ledger]\n\n    bank_order = sorted(\n        range(len(bank)),\n        key=lambda i: (bank_dates[i], bank[i][0])\n    )\n\n    unmatched_ledger_indices = set(range(len(ledger)))\n    matches = []\n    matched_bank_indices = set()\n\n    for bank_index in bank_order:\n        bank_id, _, bank_amount = bank[bank_index]\n        candidates = []\n\n        for ledger_index in unmatched_ledger_indices:\n            _, _, ledger_amount = ledger[ledger_index]\n            if (\n                bank_amount == ledger_amount\n                and abs((bank_dates[bank_index] - ledger_dates[ledger_index]).days)\n                <= window\n            ):\n                candidates.append(ledger_index)\n\n        if candidates:\n            ledger_index = min(\n                candidates,\n                key=lambda i: (ledger_dates[i], ledger[i][0])\n            )\n            matches.append((bank_id, ledger[ledger_index][0]))\n            matched_bank_indices.add(bank_index)\n            unmatched_ledger_indices.remove(ledger_index)\n\n    unmatched_bank = [\n        bank[i][0] for i in range(len(bank))\n        if i not in matched_bank_indices\n    ]\n    unmatched_ledger = [\n        ledger[i][0] for i in range(len(ledger))\n        if i in unmatched_ledger_indices\n    ]\n\n    return matches, unmatched_bank, unmatched_ledger\n```"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-23",
+ "type": "multi4",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 17.0, expected 17.0 | ok: got '101/136', expected '101/136' | ok: got 105.01, expected 105.01 | ok: got 15155.86, expected 15155.86",
+ "error": null,
+ "seconds": 45.4,
+ "tokens": 6330,
+ "prompt_tokens": 499,
+ "completion_tokens": 5831,
+ "cost": 0.05931,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: 16^468 mod 191\n\nSince 191 is prime, by Fermat's Little Theorem, 16^190 \u2261 1 (mod 191).\n\n468 = 190\u00b72 + 88, so 16^468 \u2261 16^88 (mod 191).\n\nUsing repeated squaring mod 191:\n- 16^2 = 65\n- 16^4 = 65\u00b2 mod 191 = 23\n- 16^8 = 23\u00b2 mod 191 = 147\n- 16^16 = 147\u00b2 mod 191 = 26\n- 16^32 = 26\u00b2 mod 191 = 103\n- 16^64 = 103\u00b2 mod 191 = 104\n\n88 = 64+16+8, so:\n16^88 \u2261 104 \u00d7 26 \u00d7 147 (mod 191)\n104\u00d726 = 2704 \u2261 30 (mod 191)\n30\u00d7147 = 4410 \u2261 17 (mod 191)\n\n**Remainder = 17**\n\n# Part B: Probability at least two share a color\n\nTotal marbles = 18, total ways to choose 3 = C(18,3) = 816\n\nP(all different colors) = (7\u00d76\u00d75)/816 = 210/816\n\nP(at least two same color) = 1 \u2212 210/816 = 606/816\n\nSimplify (gcd = 6): 606/6 = 101, 816/6 = 136\n\n**Answer = 101/136**\n\n# Part C: Original price\n\nCombined multiplier: 1.18 \u00d7 1.25 \u00d7 0.85 \u00d7 1.12 \u00d7 1.25\n\n- 1.18 \u00d7 1.25 = 1.475\n- 1.475 \u00d7 0.85 = 1.25375\n- 1.25375 \u00d7 1.12 = 1.4042\n- 1.4042 \u00d7 1.25 = 1.75525\n\nOriginal price = 184.32 / 1.75525 = 105.010683...\n\n**Original price \u2248 $105.01**\n\n# Part D: Investment balance after 12 periods\n\nApplying each period: Balance \u2192 (Balance + contribution) \u00d7 1.025 \u00d7 0.995\n\n| Period | Contribution | Balance after period |\n|--------|-------------|----------------------|\n| 1 | 600 | 8770.925000 |\n| 2 | 250 | 9200.215884 |\n| 3 | 0 | 9383.070175 |\n| 4 | 0 | 9569.558695 |\n| 5 | 900 | 10677.641174 |\n| 6 | 250 | 11144.828042 |\n| 7 | 600 | 11978.256500 |\n| 8 | 0 | 12216.324347 |\n| 9 | 250 | 12714.092544 |\n| 10 | 600 | 13578.710133 |\n| 11 | 600 | 14460.511997 |\n| 12 | 400 | 15155.864673 |\n\n**Final balance \u2248 $15,155.86**\n\nFINAL: 17; 101/136; 105.01; 15155.86"
+}

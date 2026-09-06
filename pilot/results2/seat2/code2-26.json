@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-26",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 14.3,
+ "tokens": 7094,
+ "prompt_tokens": 4538,
+ "completion_tokens": 2556,
+ "cost": 0.00397,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom urllib.parse import unquote_plus\n\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n\n    for pair in qs.split(\"&\"):\n        if not pair:\n            continue\n\n        if \"=\" in pair:\n            key, value = pair.split(\"=\", 1)\n        else:\n            key, value = pair, \"\"\n\n        for text in (key, value):\n            i = 0\n            while i < len(text):\n                if text[i] == \"%\":\n                    if (\n                        i + 2 >= len(text)\n                        or text[i + 1] not in \"0123456789abcdefABCDEF\"\n                        or text[i + 2] not in \"0123456789abcdefABCDEF\"\n                    ):\n                        raise ValueError(\"malformed percent-escape\")\n                    i += 3\n                else:\n                    i += 1\n\n        decoded_key = unquote_plus(key)\n        decoded_value = unquote_plus(value)\n        result.setdefault(decoded_key, []).append(decoded_value)\n\n    return result\n```"
+}

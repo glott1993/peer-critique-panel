@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-16",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 19.4,
+ "tokens": 9779,
+ "prompt_tokens": 5968,
+ "completion_tokens": 3811,
+ "cost": 0.00577,
+ "calls": 2,
+ "call_errors": 1,
+ "answer": "```python\nimport re\n\n\n_VERSION_RE = re.compile(r\"(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\Z\")\n_COMPARATOR_RE = re.compile(\n    r\"(>=|<=|>|<|=)(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\Z\"\n)\n\n\ndef satisfies(version: str, spec: str) -> bool:\n    def parse_version(value: str) -> tuple[int, int, int]:\n        if not isinstance(value, str):\n            raise ValueError(\"version must be a string\")\n        match = _VERSION_RE.fullmatch(value)\n        if not match:\n            raise ValueError(f\"malformed version: {value!r}\")\n        return tuple(map(int, match.groups()))\n\n    if not isinstance(spec, str):\n        raise ValueError(\"spec must be a string\")\n\n    actual = parse_version(version)\n    text = spec.strip()\n    if not text:\n        raise ValueError(\"empty spec\")\n\n    if text.startswith(\"^\") or text.startswith(\"~\"):\n        if len(text) < 2:\n            raise ValueError(f\"malformed spec: {spec!r}\")\n\n        base = parse_version(text[1:])\n        lower = base\n\n        if text[0] == \"~\":\n            upper = (base[0], base[1] + 1, 0)\n        elif base[0] > 0:\n            upper = (base[0] + 1, 0, 0)\n        elif base[1] > 0:\n            upper = (0, base[1] + 1, 0)\n        else:\n            upper = (0, 0, base[2] + 1)\n\n        return lower <= actual < upper\n\n    tokens = text.split()\n    if len(tokens) == 1:\n        exact = _VERSION_RE.fullmatch(tokens[0])\n        if exact:\n            return actual == tuple(map(int, exact.groups()))\n\n    if not tokens:\n        raise ValueError(f\"malformed spec: {spec!r}\")\n\n    for token in tokens:\n        match = _COMPARATOR_RE.fullmatch(token)\n        if not match:\n            raise ValueError(f\"malformed spec: {spec!r}\")\n\n        operator = match.group(1)\n        target = tuple(map(int, match.groups()[1:]))\n\n        if operator == \">=\" and not (actual >= target):\n            return False\n        if operator == \">\" and not (actual > target):\n            return False\n        if operator == \"<=\" and not (actual <= target):\n            return False\n        if operator == \"<\" and not (actual < target):\n            return False\n        if operator == \"=\" and not (actual == target):\n            return False\n\n    return True\n```"
+}

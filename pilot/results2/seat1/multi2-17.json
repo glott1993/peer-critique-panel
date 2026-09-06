@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-17",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 89.0, expected 89.0 | ok: got 4166.86, expected 4166.86 | ok: got 4753469.0, expected 4753469.0",
+ "error": null,
+ "seconds": 31.5,
+ "tokens": 4734,
+ "prompt_tokens": 460,
+ "completion_tokens": 4274,
+ "cost": 0.04366,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: 46^783 mod 101\n\nSince 101 is prime, by Fermat's Little Theorem, 46^100 \u2261 1 (mod 101).\n783 = 7(100) + 83, so 46^783 \u2261 46^83 (mod 101).\n\nUsing repeated squaring:\n- 46^2 = 2116 \u2261 96\n- 46^4 = 96^2 = 9216 \u2261 25\n- 46^8 = 25^2 = 625 \u2261 19\n- 46^16 = 19^2 = 361 \u2261 58\n- 46^32 = 58^2 = 3364 \u2261 31\n- 46^64 = 31^2 = 961 \u2261 52\n\n83 = 64+16+2+1, so:\n46^83 \u2261 52\u00b758\u00b796\u00b746 (mod 101)\n- 52\u00b758 = 3016 \u2261 87\n- 87\u00b796 = 8352 \u2261 70\n- 70\u00b746 = 3220 \u2261 89\n\n**Remainder = 89**\n\n# Part B: FIFO COGS\n\nSales: 76, 73, 52, 92, 64, 57 (total 414 units)\n\n- **Sale 1 (76):** from Lot1 (159\u219283): 76\u00d711.86 = 901.36\n- **Sale 2 (73):** from Lot1 (83\u219210): 73\u00d711.86 = 865.78\n- **Sale 3 (52):** 10 from Lot1 + 42 from Lot2 (128\u219286): 10\u00d711.86 + 42\u00d713.61 = 118.60 + 571.62 = 690.22\n- **Sale 4 (92):** 86 from Lot2 + 6 from Lot3 (120\u2192114): 86\u00d713.61 + 6\u00d73.96 = 1170.46 + 23.76 = 1194.22\n- **Sale 5 (64):** from Lot3 (114\u219250): 64\u00d73.96 = 253.44\n- **Sale 6 (57):** 50 from Lot3 + 7 from Lot4 (126\u2192119): 50\u00d73.96 + 7\u00d79.12 = 198.00 + 63.84 = 261.84\n\nTotal COGS = 901.36+865.78+690.22+1194.22+253.44+261.84 = **$4,166.86**\n\n# Part C: Sum divisible by 7 but not 4 (809 to 9450)\n\n**Multiples of 7:** first = 812, last = 9450, n = (9450-812)/7+1 = 1235\nSum\u2087 = 1235\u00d7(812+9450)/2 = 1235\u00d75131 = 6,336,785\n\n**Multiples of 28 (divisible by both 7 and 4):** first = 812, last = 9436, n = (9436-812)/28+1 = 309\nSum\u2082\u2088 = 309\u00d7(812+9436)/2 = 309\u00d75124 = 1,583,316\n\nAnswer = 6,336,785 \u2212 1,583,316 = **4,753,469**\n\nFINAL: 89; 4166.86; 4753469"
+}

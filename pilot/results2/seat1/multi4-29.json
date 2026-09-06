@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-29",
+ "type": "multi4",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 26.0, expected 26.0 | ok: got 4893.75, expected 4893.77 | ok: got '17/22', expected '17/22' | ok: got 13515.0, expected 13515.0",
+ "error": null,
+ "seconds": 35.8,
+ "tokens": 5513,
+ "prompt_tokens": 663,
+ "completion_tokens": 4850,
+ "cost": 0.04983,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: 33^853 mod 211\n\nSince 211 is prime, by Fermat's Little Theorem, 33^210 \u2261 1 (mod 211).\n\n853 = 210\u00d74 + 13, so 33^853 \u2261 33^13 (mod 211)\n\nComputing via repeated squaring:\n- 33^2 = 1089 \u2261 34 (mod 211)\n- 33^4 = 34^2 = 1156 \u2261 101 (mod 211)\n- 33^8 = 101^2 = 10201 \u2261 73 (mod 211)\n\n33^13 = 33^8 \u00b7 33^4 \u00b7 33^1 = 73 \u00d7 101 \u00d7 33 (mod 211)\n- 73\u00d7101 = 7373 \u2261 199 (mod 211)\n- 199\u00d733 = 6567 \u2261 26 (mod 211)\n\n**Remainder = 26**\n\n# Part B: Account balance simulation\n\nTracking balance each month (transaction \u2192 fee if <2000 \u2192 \u00d71.005), rounding to cents each step:\n\nM1: 1200-250=950\u2192942\u2192946.71\nM2: +300=1246.71\u21921238.71\u21921244.90\nM3: -650=594.90\u2192586.90\u2192589.83\nM4: -400=189.83\u2192181.83\u2192182.74\nM5: +300=482.74\u2192474.74\u2192477.11\nM6: +300=777.11\u2192769.11\u2192772.96\nM7: -400=372.96\u2192364.96\u2192366.78\nM8: +1100=1466.78\u21921458.78\u21921466.07\nM9: +700=2166.07 (no fee)\u21922176.90\nM10: +700=2876.90\u21922891.28\nM11: +300=3191.28\u21923207.24\nM12: +700=3907.24\u21923926.78\nM13: +450=4376.78\u21924398.66\nM14: -250=4148.66\u21924169.40\nM15: +700=4869.40\u2192**4893.75**\n\n# Part C: Probability at least two marbles share a color\n\nTotal marbles: 12 (5R, 2G, 5B). Total ways to choose 3: C(12,3) = 220\n\nComplement (all different colors \u2014 one of each, since exactly 3 colors exist):\n5 \u00d7 2 \u00d7 5 = 50 ways\n\nP(complement) = 50/220 = 5/22\nP(at least two share) = 1 \u2212 5/22 = **17/22**\n\n# Part D: Tax calculation\n\nTax brackets on $68,250:\n- 8% on first 11,000 = 880\n- 20% on next 34,000 (11,000\u201345,000) = 6,800\n- 30% on remaining 23,250 (above 45,000) = 6,975\n\nTotal tax before credit = 880+6800+6975 = 14,655\n\nCredit reduction: income above 60,000 = 8,250 \u2192 8% \u00d7 8250 = 660\nCredit = 1800 \u2212 660 = 1,140 (\u22650, valid)\n\nTax owed = 14,655 \u2212 1,140 = **13,515.00**\n\nFINAL: 26; 4893.75; 17/22; 13515.00"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-05",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 25.7,
+ "tokens": 11481,
+ "prompt_tokens": 6651,
+ "completion_tokens": 4830,
+ "cost": 0.00713,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef evaluate(expr: str) -> float:\n    if not isinstance(expr, str):\n        raise ValueError(\"expression must be a string\")\n\n    tokens = []\n    i = 0\n    n = len(expr)\n\n    while i < n:\n        c = expr[i]\n\n        if c.isspace():\n            i += 1\n            continue\n\n        if c.isdigit() or c == \".\":\n            start = i\n            dots = 0\n            digits = 0\n\n            while i < n and (expr[i].isdigit() or expr[i] == \".\"):\n                if expr[i] == \".\":\n                    dots += 1\n                else:\n                    digits += 1\n                i += 1\n\n            if dots > 1 or digits == 0:\n                raise ValueError(\"malformed number\")\n\n            tokens.append((\"number\", float(expr[start:i])))\n            continue\n\n        if c in \"+-*/()\":\n            tokens.append((c, c))\n            i += 1\n            continue\n\n        raise ValueError(\"unknown character\")\n\n    if not tokens:\n        raise ValueError(\"empty expression\")\n\n    pos = 0\n\n    def parse_expression():\n        nonlocal pos\n        value = parse_term()\n\n        while pos < len(tokens) and tokens[pos][0] in (\"+\", \"-\"):\n            op = tokens[pos][0]\n            pos += 1\n            right = parse_term()\n            value = value + right if op == \"+\" else value - right\n\n        return value\n\n    def parse_term():\n        nonlocal pos\n        value = parse_unary()\n\n        while pos < len(tokens) and tokens[pos][0] in (\"*\", \"/\"):\n            op = tokens[pos][0]\n            pos += 1\n            right = parse_unary()\n\n            if op == \"*\":\n                value *= right\n            else:\n                value /= right\n\n        return value\n\n    def parse_unary():\n        nonlocal pos\n\n        if pos < len(tokens) and tokens[pos][0] == \"-\":\n            pos += 1\n            return -parse_unary()\n\n        return parse_primary()\n\n    def parse_primary():\n        nonlocal pos\n\n        if pos >= len(tokens):\n            raise ValueError(\"unexpected end of expression\")\n\n        token_type, token_value = tokens[pos]\n\n        if token_type == \"number\":\n            pos += 1\n            return token_value\n\n        if token_type == \"(\":\n            pos += 1\n            value = parse_expression()\n\n            if pos >= len(tokens) or tokens[pos][0] != \")\":\n                raise ValueError(\"unbalanced parentheses\")\n\n            pos += 1\n            return value\n\n        raise ValueError(\"malformed expression\")\n\n    result = parse_expression()\n\n    if pos != len(tokens):\n        raise ValueError(\"malformed expression\")\n\n    return float(result)\n```"
+}

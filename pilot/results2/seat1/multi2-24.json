@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-24",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 4509.3, expected 4509.3 | ok: got '2026-07-17', expected '2026-07-17' | ok: got 4283.0, expected 4283.0",
+ "error": null,
+ "seconds": 132.1,
+ "tokens": 7686,
+ "prompt_tokens": 538,
+ "completion_tokens": 7148,
+ "cost": 0.07256,
+ "calls": 2,
+ "call_errors": 1,
+ "answer": "# Part A: FIFO Cost of Goods Sold\n\n**Total units sold:** 86+98+66+52+80+73 = 455 units\n\n**Consuming lots in FIFO order (oldest first):**\n- Lot 1: 110 units @ $9.33 \u2192 fully used (110 units)\n- Lot 2: 152 units @ $12.18 \u2192 fully used (152 units, running total 262)\n- Lot 3: 88 units @ $12.48 \u2192 fully used (88 units, running total 350)\n- Lot 4: need 455-350 = 105 units @ $5.08 (partial use of 122-unit lot)\n\n**Cost calculation:**\n- 110 \u00d7 9.33 = 1026.30\n- 152 \u00d7 12.18 = 1851.36\n- 88 \u00d7 12.48 = 1098.24\n- 105 \u00d7 5.08 = 533.40\n\n**Total COGS = 1026.30+1851.36+1098.24+533.40 = $4509.30**\n\n# Part B: Business Days Calculation\n\n2026-01-01 is a Thursday \u2192 2026-03-16 is a **Monday**.\n\nCounting forward business days (Mon\u2013Fri), skipping the 4 holidays (2026-04-14, 2026-04-21, 2026-05-15, 2026-07-14):\n\nTracking cumulative business-day counts by month-end (starting count from 2026-03-17):\n- End of March: 11\n- End of April: 31\n- End of May: 51\n- End of June: 73\n- Continuing into July: Jul 1\u20133 (76), Jul 6\u201310 (81), Jul 13 (82), [Jul 14 holiday skipped], Jul 15\u201317 (85)\n\n**85th business day = 2026-07-17**\n\n# Part C: Inclusion-Exclusion Counting\n\n**Step 1: Count divisible by 5, 7, or 11 (up to 12000)**\n- \u230a12000/5\u230b=2400, \u230a12000/7\u230b=1714, \u230a12000/11\u230b=1090\n- \u230a12000/35\u230b=342, \u230a12000/55\u230b=218, \u230a12000/77\u230b=155\n- \u230a12000/385\u230b=31\n\nUnion = 2400+1714+1090\u2212342\u2212218\u2212155+31 = **4520**\n\n**Step 2: Count those also divisible by 19 (to subtract)**\nUsing lcm with 19:\n- lcm(19,5)=95 \u2192 \u230a12000/95\u230b=126\n- lcm(19,7)=133 \u2192 \u230a12000/133\u230b=90\n- lcm(19,11)=209 \u2192 \u230a12000/209\u230b=57\n- lcm(19,5,7)=665 \u2192 \u230a12000/665\u230b=18\n- lcm(19,5,11)=1045 \u2192 \u230a12000/1045\u230b=11\n- lcm(19,7,11)=1463 \u2192 \u230a12000/1463\u230b=8\n- lcm(19,5,7,11)=7315 \u2192 \u230a12000/7315\u230b=1\n\nUnion (div by 19 AND by 5,7,or 11) = (126+90+57) \u2212 (18+11+8) + 1 = 273\u221237+1 = **237**\n\n**Step 3: Final count**\n4520 \u2212 237 = **4283**\n\nFINAL: 4509.30; 2026-07-17; 4283"
+}

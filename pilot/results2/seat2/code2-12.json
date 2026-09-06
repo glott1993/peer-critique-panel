@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-12",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 6.3,
+ "tokens": 3328,
+ "prompt_tokens": 2598,
+ "completion_tokens": 730,
+ "cost": 0.0014,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef lcs_length(a: str, b: str) -> int:\n    if len(b) > len(a):\n        a, b = b, a\n\n    previous = [0] * (len(b) + 1)\n\n    for char_a in a:\n        current = [0]\n        for j, char_b in enumerate(b, start=1):\n            if char_a == char_b:\n                current.append(previous[j - 1] + 1)\n            else:\n                current.append(max(previous[j], current[-1]))\n        previous = current\n\n    return previous[-1]\n```"
+}

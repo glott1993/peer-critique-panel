@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-28",
+ "type": "math",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 2829387.0, expected 2829387.0",
+ "error": null,
+ "seconds": 7.4,
+ "tokens": 1014,
+ "prompt_tokens": 180,
+ "completion_tokens": 834,
+ "cost": 0.0087,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "## Working\n\n**Step 1: Sum of all multiples of 11 in [708, 9134]**\n\n- Smallest multiple of 11 \u2265 708: 65\u00d711 = 715\n- Largest multiple of 11 \u2264 9134: 830\u00d711 = 9130\n- Count of terms: 830 \u2212 65 + 1 = 766\n\nSum = 11 \u00d7 (65 + 66 + ... + 830)\nSum of k from 65 to 830 = (65+830)\u00d7766/2 = 895\u00d7383 = 342,785\n\nSum of multiples of 11 = 11 \u00d7 342,785 = **3,770,635**\n\n**Step 2: Sum of multiples of 44 (divisible by both 11 and 4) in [708, 9134]**\n\n- Smallest multiple of 44 \u2265 708: 17\u00d744 = 748\n- Largest multiple of 44 \u2264 9134: 207\u00d744 = 9108\n- Count of terms: 207 \u2212 17 + 1 = 191\n\nSum = 44 \u00d7 (17 + 18 + ... + 207)\nSum of k from 17 to 207 = (17+207)\u00d7191/2 = 224\u00d7191/2 = 21,392\n\nSum of multiples of 44 = 44 \u00d7 21,392 = **941,248**\n\n**Step 3: Subtract to exclude multiples of 44**\n\n3,770,635 \u2212 941,248 = **2,829,387**\n\nFINAL: 2829387"
+}

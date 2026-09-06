@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-19",
+ "type": "math",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 3554.19, expected 3554.19",
+ "error": null,
+ "seconds": 56.7,
+ "tokens": 7026,
+ "prompt_tokens": 368,
+ "completion_tokens": 6658,
+ "cost": 0.06732,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Working\n\nStarting balance: $1,200.00\n\nI need to track balance through 15 months, applying: transaction \u2192 fee check (only if balance < $1000) \u2192 0.5% interest.\n\nSince the balance stays well above $1,000 throughout (starting at $1,200 and generally growing), **no fee is ever triggered**. So each month simplifies to:\n\n**New balance = (Previous balance + transaction) \u00d7 1.005**\n\nTracking step by step:\n\n| Month | Transaction | After Txn | After Interest (\u00d71.005) |\n|-------|------------|-----------|--------------------------|\n| 1 | +1100 | 2300.0000 | 2311.5000 |\n| 2 | \u2212400 | 1911.5000 | 1921.0575 |\n| 3 | +450 | 2371.0575 | 2382.9128 |\n| 4 | +450 | 2832.9128 | 2847.0774 |\n| 5 | \u2212400 | 2447.0774 | 2459.3127 |\n| 6 | +1100 | 3559.3127 | 3577.1093 |\n| 7 | \u2212900 | 2677.1093 | 2690.4948 |\n| 8 | +1100 | 3790.4948 | 3809.4473 |\n| 9 | \u2212650 | 3159.4473 | 3175.2446 |\n| 10 | +1100 | 4275.2446 | 4296.6208 |\n| 11 | +300 | 4596.6208 | 4619.6039 |\n| 12 | +300 | 4919.6039 | 4944.2019 |\n| 13 | \u2212400 | 4544.2019 | 4566.9229 |\n| 14 | \u2212650 | 3916.9229 | 3936.5075 |\n| 15 | \u2212400 | 3536.5075 | **3554.1901** |\n\nSince balance never drops below $1,000 at any check point, no $12 fee is ever applied.\n\nFinal balance after month 15: **$3,554.19**\n\nFINAL: 3554.19"
+}

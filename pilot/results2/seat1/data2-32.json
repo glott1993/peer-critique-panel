@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-32",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 9.0, expected 9.0",
+ "error": null,
+ "seconds": 12.5,
+ "tokens": 4604,
+ "prompt_tokens": 2809,
+ "completion_tokens": 1795,
+ "cost": 0.02357,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Working:**\n\nI scanned all orders with status = \"cancelled\" and extracted the customer_id for each:\n\n- O2152 \u2192 C108\n- O2871 \u2192 C106\n- O2103 \u2192 C105\n- O2329 \u2192 C105\n- O2407 \u2192 C105\n- O2542 \u2192 C107\n- O2095 \u2192 C107\n- O2704 \u2192 C105\n- O2292 \u2192 C109\n- O2346 \u2192 C103\n- O2278 \u2192 C102\n- O2410 \u2192 C101\n- O2706 \u2192 C106\n- O2757 \u2192 C101 (duplicate row, counts once)\n- O2265 \u2192 C103\n- O2395 \u2192 C108\n- O2259 \u2192 C104\n- O2028 \u2192 C108\n- O2243 \u2192 C104\n\nDistinct customer set: {C108, C106, C105, C107, C109, C103, C102, C101, C104}\n\nThat's 9 distinct customers.\n\nFINAL: 9"
+}

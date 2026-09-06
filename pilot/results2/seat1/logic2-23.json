@@ -1,0 +1,16 @@
+{
+ "task_id": "logic2-23",
+ "type": "logic",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 'tea', expected 'tea'",
+ "error": null,
+ "seconds": 24.0,
+ "tokens": 3357,
+ "prompt_tokens": 532,
+ "completion_tokens": 2825,
+ "cost": 0.02931,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Solution Path:**\n\nFrom clues 4,7,10,9,1 we get a chain: tea \u2192 juice/fish \u2192 water/red \u2192 bird, occupying four consecutive houses. Testing n=1 gives:\n- House1: tea\n- House2: juice, fish (Eli, from clue 11)\n- House3: water, red\n- House4: bird\n\nClue 8 forces milk=horse, and since house4 already has bird, milk can't be there, so house4=coffee, house5=milk=horse.\n\nRemaining pets (cat,dog) go to houses 1,3. Clue 6 (cat immediately left of green) works only if cat=3, dog=1 \u2192 Cleo is in house1.\n\nThen green=house4, and remaining colors blue/white split between houses1,2. Clue 12 forces Dev to house5 (adjacent to coffee house4), leaving Ada in house3, Ben in house4.\n\nClue 3 requires blue adjacent to Ada(3): blue=house2, white=house1.\n\nFinal layout:\n- House1: Cleo, tea, dog, white\n- House2: Eli, juice, fish, blue\n- House3: Ada, water, cat, red\n- House4: Ben, coffee, bird, green\n- House5: Dev, milk, horse, yellow\n\nAll 12 clues check out.\n\nFINAL: tea"
+}

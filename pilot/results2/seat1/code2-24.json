@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-24",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.5,
+ "tokens": 578,
+ "prompt_tokens": 223,
+ "completion_tokens": 355,
+ "cost": 0.004,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef min_coins(coins, amount):\n    if amount == 0:\n        return 0\n    if amount < 0:\n        return -1\n\n    INF = float('inf')\n    dp = [0] + [INF] * amount\n\n    for i in range(1, amount + 1):\n        for c in coins:\n            if c <= i and dp[i - c] + 1 < dp[i]:\n                dp[i] = dp[i - c] + 1\n\n    return dp[amount] if dp[amount] != INF else -1\n```\n\nThis uses dynamic programming: `dp[i]` represents the minimum number of coins needed to make amount `i`. For each amount from 1 to the target, we try every coin denomination and take the best (minimum) result from using that coin plus the optimal solution for the remaining amount.\n\n- Time complexity: O(amount \u00d7 len(coins))\n- Space complexity: O(amount)\n\nThe function correctly handles:\n- `amount == 0` \u2192 returns 0\n- Impossible combinations \u2192 returns -1\n- Standard cases like `min_coins([1, 2, 5], 11) == 3` (5+5+1)"
+}

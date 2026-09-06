@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-47",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 'anvil', expected 'anvil'",
+ "error": null,
+ "seconds": 12.4,
+ "tokens": 4366,
+ "prompt_tokens": 2816,
+ "completion_tokens": 1550,
+ "cost": 0.02113,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Working:**\n\nGold-tier customers: C102 (Quinn), C103 (Parker), C105 (Emery), C106 (Logan).\n\nCollected all their orders (all statuses), removed the exact duplicate O2202 (C105, Bolt, 26 units, same date/price appears twice), then summed units per product:\n\n- **Anvil:** C102(27+7) + C103(42) + C106(40+9+39) = 164\n- **Bolt:** C102(31) + C103(6) + C105(26+45) + C106(7+42) = 157\n- **Crate:** C102(4+27+31) + C103(14) + C105(5) + C106(15) = 96\n- **Flange:** C105(21) + C106(44+22) = 87\n- **Dowel:** C103(25) + C105(1+1) + C106(26+25) = 78\n- **Easel:** C102(17) + C106(39+11) = 67\n\nHighest total units: Anvil (164).\n\nFINAL: Anvil"
+}

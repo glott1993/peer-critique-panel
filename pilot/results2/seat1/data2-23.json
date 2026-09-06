@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-23",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 'emery', expected 'emery'",
+ "error": null,
+ "seconds": 28.8,
+ "tokens": 6571,
+ "prompt_tokens": 2850,
+ "completion_tokens": 3721,
+ "cost": 0.04291,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Working:**\n\nCounting all orders (any status) per customer_id, treating the three duplicate order rows (O2311, O2431, O2192 \u2014 each appearing twice with identical fields) as a single order each:\n\n- C100: 1\n- C101: 7\n- C102: 14 (Bolt/Flange/Dowel/Easel orders \u2014 one O2192 duplicate removed)\n- C103: 6\n- C104: 4\n- C105: 8 (one O2311 duplicate removed)\n- C106: 1\n- C107: 6\n- C108: 7 (one O2431 duplicate removed)\n- C109: 6\n- C110: 13\n- C111: 7\n\nTotal = 80 unique orders (83 raw rows \u2212 3 duplicates), which checks out.\n\nThe maximum is C102 with 14 orders, corresponding to customer **Emery**.\n\nFINAL: Emery"
+}

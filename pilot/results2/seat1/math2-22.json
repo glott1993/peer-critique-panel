@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-22",
+ "type": "math",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 238.0, expected 238.0",
+ "error": null,
+ "seconds": 5.7,
+ "tokens": 916,
+ "prompt_tokens": 202,
+ "completion_tokens": 714,
+ "cost": 0.00754,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Solve the system:**\n\n- x \u2261 3 (mod 5)\n- x \u2261 0 (mod 7)\n- x \u2261 14 (mod 16)\n\nSince x \u2261 0 (mod 7), write x = 7k.\n\n**Step 1:** 7k \u2261 3 (mod 5) \u2192 2k \u2261 3 (mod 5). Inverse of 2 mod 5 is 3, so k \u2261 9 \u2261 4 (mod 5).\nThus k = 5m + 4, giving x = 7(5m+4) = 35m + 28.\n\n**Step 2:** 35m + 28 \u2261 14 (mod 16) \u2192 3m \u2261 -14 \u2261 2 (mod 16). Inverse of 3 mod 16 is 11 (3\u00b711=33\u22611), so m \u2261 22 \u2261 6 (mod 16).\n\nSmallest m = 6 \u2192 x = 35(6) + 28 = 238.\n\n**Check:**\n- 238 \u00f7 5 = 47 remainder 3 \u2713\n- 238 \u00f7 7 = 34 remainder 0 \u2713\n- 238 \u00f7 16 = 14 remainder 14 \u2713\n\nFINAL: 238"
+}

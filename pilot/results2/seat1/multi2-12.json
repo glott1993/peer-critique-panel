@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-12",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 1029.72, expected 1029.72 | ok: got 1113.0, expected 1113.0 | ok: got 2008.0, expected 2008.0",
+ "error": null,
+ "seconds": 43.8,
+ "tokens": 6134,
+ "prompt_tokens": 516,
+ "completion_tokens": 5618,
+ "cost": 0.05721,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: Account Balance After 15 Months\n\nStarting balance: $1,200.00\n\nProcessing each month (transaction \u2192 fee if balance < $1,500 \u2192 0.25% interest):\n\n| Month | Transaction | After Txn | After Fee | After Interest |\n|-------|------------|-----------|-----------|-----------------|\n| 1 | +1100 | 2300.00 | 2300.00 | 2305.75 |\n| 2 | -250 | 2055.75 | 2055.75 | 2060.889375 |\n| 3 | +300 | 2360.889375 | 2360.889375 | 2366.791598 |\n| 4 | -650 | 1716.791598 | 1716.791598 | 1721.083577 |\n| 5 | -650 | 1071.083577 | 1056.083577 | 1058.723786 |\n| 6 | -900 | 158.723786 | 143.723786 | 144.083096 |\n| 7 | +1100 | 1244.083096 | 1229.083096 | 1232.155804 |\n| 8 | -400 | 832.155804 | 817.155804 | 819.198693 |\n| 9 | +450 | 1269.198693 | 1254.198693 | 1257.334190 |\n| 10 | -900 | 357.334190 | 342.334190 | 343.190025 |\n| 11 | +700 | 1043.190025 | 1028.190025 | 1030.760500 |\n| 12 | -250 | 780.760500 | 765.760500 | 767.674902 |\n| 13 | -400 | 367.674902 | 352.674902 | 353.556589 |\n| 14 | +1100 | 1453.556589 | 1438.556589 | 1442.152980 |\n| 15 | -400 | 1042.152980 | 1027.152980 | 1029.720863 |\n\n**Balance after month 15: $1,029.72**\n\n# Part B: CRT Problem\n\nSolve x \u2261 11 (mod 19), x \u2261 9 (mod 16), x \u2261 8 (mod 13)\n\n**Step 1:** Combine first two: x = 19k+11 \u2261 9 (mod 16) \u2192 3k \u2261 14 (mod 16). Since 3\u207b\u00b9\u226111 (mod16), k \u2261 154 \u2261 10 (mod 16).\nSo x = 304m + 201.\n\n**Step 2:** Combine with x \u2261 8 (mod 13): 304 \u2261 5, 201 \u2261 6 (mod 13) \u2192 5m + 6 \u2261 8 \u2192 5m \u2261 2 (mod 13). Since 5\u207b\u00b9\u22618 (mod13), m \u2261 16 \u2261 3 (mod 13).\n\nSo x = 304(13n+3) + 201 = 3952n + 1113.\n\n**Check:** 1113 = 58\u00d719+11 \u2713; 1113 = 69\u00d716+9 \u2713; 1113 = 85\u00d713+8 \u2713\n\n**Smallest positive integer: 1113**\n\n# Part C: Divisibility Count 1\u20138000\n\n**Step 1: Count divisible by 6, 10, or 15 (inclusion-exclusion)**\n- |A6| = \u230a8000/6\u230b = 1333\n- |A10| = \u230a8000/10\u230b = 800\n- |A15| = \u230a8000/15\u230b = 533\n- All pairwise LCMs = 30 \u2192 each = \u230a8000/30\u230b = 266\n- Triple LCM = 30 \u2192 266\n\n|S| = 1333+800+533 \u2212 266\u2212266\u2212266 + 266 = 2666 \u2212 798 + 266 = **2134**\n\n**Step 2: Count of those also divisible by 17 (subtract these)**\n\nNeed count divisible by 17 AND (6 or 10 or 15) \u2014 i.e., divisible by 102, 170, or 255.\n\n- \u230a8000/102\u230b = 78\n- \u230a8000/170\u230b = 47\n- \u230a8000/255\u230b = 31\n- lcm(102,170)=lcm(102,255)=lcm(170,255)=510 \u2192 \u230a8000/510\u230b = 15 (each pair)\n- Triple lcm = 510 \u2192 15\n\n|B| = 78+47+31 \u2212 15\u221215\u221215 + 15 = 156 \u2212 45 + 15 = **126**\n\n**Step 3: Final count**\n\n2134 \u2212 126 = **2008**\n\nFINAL: 1029.72; 1113; 2008"
+}

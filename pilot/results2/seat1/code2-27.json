@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-27",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 22.0,
+ "tokens": 3000,
+ "prompt_tokens": 350,
+ "completion_tokens": 2650,
+ "cost": 0.0272,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef bowling_score(rolls):\n    # Validate roll values\n    for r in rolls:\n        if not isinstance(r, int) or isinstance(r, bool) or r < 0 or r > 10:\n            raise ValueError(\"Invalid roll value\")\n\n    n = len(rolls)\n    idx = 0\n    total = 0\n\n    for frame in range(10):\n        if idx >= n:\n            raise ValueError(\"Not enough rolls for a complete game\")\n\n        if frame < 9:\n            # Frames 1-9\n            if rolls[idx] == 10:\n                # Strike\n                if idx + 2 >= n:\n                    raise ValueError(\"Not enough rolls after a strike\")\n                total += 10 + rolls[idx + 1] + rolls[idx + 2]\n                idx += 1\n            else:\n                if idx + 1 >= n:\n                    raise ValueError(\"Not enough rolls in frame\")\n                two = rolls[idx] + rolls[idx + 1]\n                if two > 10:\n                    raise ValueError(\"Frame total exceeds 10\")\n                if two == 10:\n                    # Spare\n                    if idx + 2 >= n:\n                        raise ValueError(\"Not enough rolls after a spare\")\n                    total += 10 + rolls[idx + 2]\n                else:\n                    total += two\n                idx += 2\n        else:\n            # Frame 10 (final frame)\n            if rolls[idx] == 10:\n                # Strike in final frame, needs two bonus rolls\n                if idx + 2 >= n:\n                    raise ValueError(\"Not enough bonus rolls after final strike\")\n                total += 10 + rolls[idx + 1] + rolls[idx + 2]\n                idx += 3\n            else:\n                if idx + 1 >= n:\n                    raise ValueError(\"Not enough rolls in final frame\")\n                two = rolls[idx] + rolls[idx + 1]\n                if two > 10:\n                    raise ValueError(\"Frame total exceeds 10\")\n                if two == 10:\n                    # Spare in final frame, needs one bonus roll\n                    if idx + 2 >= n:\n                        raise ValueError(\"Not enough bonus roll after final spare\")\n                    total += 10 + rolls[idx + 2]\n                    idx += 3\n                else:\n                    total += two\n                    idx += 2\n\n    if idx != n:\n        raise ValueError(\"Too many rolls for a complete game\")\n\n    return total\n```"
+}

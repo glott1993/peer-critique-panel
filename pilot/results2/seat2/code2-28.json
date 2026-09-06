@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-28",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 10.3,
+ "tokens": 5510,
+ "prompt_tokens": 3731,
+ "completion_tokens": 1779,
+ "cost": 0.00288,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    if not isinstance(s, str):\n        return False\n\n    isbn = s.replace(\"-\", \"\").replace(\" \", \"\")\n\n    if len(isbn) == 10:\n        if any(c not in \"0123456789\" for c in isbn[:9]):\n            return False\n        if isbn[9] not in \"0123456789X\":\n            return False\n\n        digits = [int(c) for c in isbn[:9]]\n        digits.append(10 if isbn[9] == \"X\" else int(isbn[9]))\n        return sum((i + 1) * digit for i, digit in enumerate(digits)) % 11 == 0\n\n    if len(isbn) == 13:\n        if any(c not in \"0123456789\" for c in isbn):\n            return False\n\n        return sum(\n            int(digit) * (1 if i % 2 == 0 else 3)\n            for i, digit in enumerate(isbn)\n        ) % 10 == 0\n\n    return False\n```"
+}

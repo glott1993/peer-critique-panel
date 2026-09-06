@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-16",
+ "type": "multi4",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got '66/91', expected '66/91' | ok: got 960.0, expected 960.0 | ok: got 157.0, expected 157.0 | ok: got 21397.0, expected 21397.0",
+ "error": null,
+ "seconds": 22.2,
+ "tokens": 3489,
+ "prompt_tokens": 504,
+ "completion_tokens": 2985,
+ "cost": 0.03086,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A\n\nTotal marbles = 15, choose 3: C(15,3) = 455.\n\nP(all three different colors) = (5\u00b75\u00b75)/455 = 125/455 = 25/91.\n\nP(at least two share a color) = 1 \u2212 25/91 = **66/91**\n\n(gcd(66,91)=1, since 91=7\u00b713 and 66=2\u00b73\u00b711)\n\n# Part B\n\nNeed x \u2261 0 (mod 5), x \u2261 11 (mod 13), x \u2261 10 (mod 19).\n\nLet x = 5k. Then 5k \u2261 11 (mod 13). Since 5\u207b\u00b9 \u2261 8 (mod 13), k \u2261 11\u00b78 = 88 \u2261 10 (mod 13).\nSo k = 13m+10, x = 65m + 50.\n\nNow 65m+50 \u2261 10 (mod 19): 65\u22618, 50\u226112 (mod19), so 8m+12\u226110 \u2192 8m\u226117 (mod19).\nSince 8\u207b\u00b9\u226112 (mod19), m \u2261 17\u00b712 = 204 \u2261 14 (mod19).\n\nSo m = 19n+14, x = 65(19n+14)+50 = 1235n + 960.\n\nSmallest positive x (n=0): **x = 960**\n\nCheck: 960/5=192 (r0); 960=13\u00b773+11; 960=19\u00b750+10 \u2713\n\n# Part C\n\n163 is prime, so by Fermat: 29^162 \u2261 1 (mod 163).\n627 mod 162 = 627 \u2212 486 = 141, so need 29^141 mod 163.\n\nCompute successive squares mod 163:\n- 29^2 = 841 \u2261 26\n- 29^4 = 26^2 = 676 \u2261 24\n- 29^8 = 24^2 = 576 \u2261 87\n- 29^16 = 87^2 = 7569 \u2261 71\n- 29^32 = 71^2 = 5041 \u2261 151\n- 29^64 = 151^2 = 22801 \u2261 144\n- 29^128 = 144^2 = 20736 \u2261 35\n\n141 = 128+8+4+1, so:\n\n29^141 \u2261 35\u00b787\u00b724\u00b729 (mod163)\n\n35\u00b787 = 3045 \u2261 111\n111\u00b724 = 2664 \u2261 56\n56\u00b729 = 1624 \u2261 157\n\n**29^627 \u2261 157 (mod 163)**\n\n# Part D\n\nBracket tax on $81,900:\n- 12% of 12,500 = 1,500\n- 24% of (52,000\u221212,500)=39,500 \u2192 9,480\n- 35% of (81,900\u221252,000)=29,900 \u2192 10,465\n\nTotal bracket tax = 1,500+9,480+10,465 = 21,445\n\nCredit: 1,800 \u2212 8%\u00b7(81,900\u221260,000) = 1,800 \u2212 8%\u00b721,900 = 1,800 \u2212 1,752 = 48\n\nTax owed = 21,445 \u2212 48 = **21,397.00**\n\nFINAL: 66/91; 960; 157; 21397.00"
+}

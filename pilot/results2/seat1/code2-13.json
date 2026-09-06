@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-13",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 5.6,
+ "tokens": 909,
+ "prompt_tokens": 247,
+ "completion_tokens": 662,
+ "cost": 0.00711,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef edit_distance(a: str, b: str) -> int:\n    n, m = len(a), len(b)\n    # dp[i][j] = OSA distance between a[:i] and b[:j]\n    dp = [[0] * (m + 1) for _ in range(n + 1)]\n    \n    for i in range(n + 1):\n        dp[i][0] = i\n    for j in range(m + 1):\n        dp[0][j] = j\n    \n    for i in range(1, n + 1):\n        for j in range(1, m + 1):\n            cost = 0 if a[i-1] == b[j-1] else 1\n            dp[i][j] = min(\n                dp[i-1][j] + 1,      # deletion\n                dp[i][j-1] + 1,      # insertion\n                dp[i-1][j-1] + cost  # substitution\n            )\n            if i > 1 and j > 1 and a[i-1] == b[j-2] and a[i-2] == b[j-1]:\n                dp[i][j] = min(dp[i][j], dp[i-2][j-2] + 1)  # transposition\n    \n    return dp[n][m]\n```\n\nThis implements the Optimal String Alignment (OSA) distance using dynamic programming. The `dp[i][j]` represents the minimum edit distance between the first `i` characters of `a` and the first `j` characters of `b`, considering insertions, deletions, substitutions, and adjacent transpositions (each substring edited at most once, which is the defining restriction of OSA distance vs. true Damerau-Levenshtein distance).\n\n- **Base cases**: transforming an empty string to another requires only insertions/deletions.\n- **Recurrence**: standard Levenshtein transitions plus an additional check for transposing the last two characters when they match in swapped order.\n\nThis passes both examples:\n- `edit_distance('kitten', 'sitting') == 3` (via substitutions/insertions, no transpositions needed)\n- `edit_distance('ab', 'ba') == 1` (via a single transposition)"
+}

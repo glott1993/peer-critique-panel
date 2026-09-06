@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-07",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 6.8,
+ "tokens": 1194,
+ "prompt_tokens": 381,
+ "completion_tokens": 813,
+ "cost": 0.00889,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\ndef _parse_ip(ip: str) -> int:\n    parts = ip.split('.')\n    if len(parts) != 4:\n        raise ValueError(f\"Invalid IPv4 address: {ip!r}\")\n    value = 0\n    for part in parts:\n        if not re.fullmatch(r'\\d+', part):\n            raise ValueError(f\"Invalid octet: {part!r} in {ip!r}\")\n        num = int(part)\n        if num < 0 or num > 255:\n            raise ValueError(f\"Octet out of range: {part!r} in {ip!r}\")\n        value = (value << 8) | num\n    return value\n\n\ndef cidr_contains(cidr: str, ip: str) -> bool:\n    if '/' not in cidr:\n        raise ValueError(f\"Missing slash in CIDR: {cidr!r}\")\n    net_part, prefix_part = cidr.split('/', 1)\n\n    if not re.fullmatch(r'\\d+', prefix_part):\n        raise ValueError(f\"Invalid prefix length: {prefix_part!r}\")\n    prefix_len = int(prefix_part)\n    if prefix_len < 0 or prefix_len > 32:\n        raise ValueError(f\"Prefix length out of range: {prefix_len}\")\n\n    net_int = _parse_ip(net_part)\n    ip_int = _parse_ip(ip)\n\n    if prefix_len == 0:\n        mask = 0\n    else:\n        mask = (0xFFFFFFFF << (32 - prefix_len)) & 0xFFFFFFFF\n\n    return (net_int & mask) == (ip_int & mask)\n```"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-04",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 9.6,
+ "tokens": 1343,
+ "prompt_tokens": 343,
+ "completion_tokens": 1000,
+ "cost": 0.01069,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\ndef shortest_path(graph, src, dst):\n    if src == dst:\n        return [src]\n\n    heap = [(0, [src])]\n    visited = set()\n\n    while heap:\n        dist, path = heapq.heappop(heap)\n        node = path[-1]\n\n        if node in visited:\n            continue\n        visited.add(node)\n\n        if node == dst:\n            return path\n\n        for neighbor, weight in graph.get(node, {}).items():\n            if neighbor not in visited:\n                heapq.heappush(heap, (dist + weight, path + [neighbor]))\n\n    return []\n```\n\nThe algorithm is a Dijkstra variant where the priority queue holds `(distance, path)` tuples. Since Python compares tuples lexicographically, entries are ordered first by total weight, then\u2014when weights tie\u2014by the path itself (as a list of strings), which naturally gives the lexicographically smallest path among equal-weight options. The first time a node is popped from the heap it is guaranteed to have the smallest distance and, among ties, the smallest path, so it can be safely finalized (added to `visited`) and never reconsidered."
+}

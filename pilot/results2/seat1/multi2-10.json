@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-10",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 3910.4, expected 3910.4 | ok: got '41/56', expected '41/56' | ok: got 52.72, expected 52.72",
+ "error": null,
+ "seconds": 42.3,
+ "tokens": 6010,
+ "prompt_tokens": 566,
+ "completion_tokens": 5444,
+ "cost": 0.05557,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: FIFO Cost of Goods Sold\n\nProcessing sales sequentially against lots in order (1\u21928):\n\n**Sale 1 (48 units):** 48@$7.66 = $367.68 (Lot1 remaining: 13)\n\n**Sale 2 (84 units):** 13@$7.66=$99.58 + 61@$6.96=$424.56 + 10@$12.81=$128.10 = **$652.24** (Lot3 remaining: 62)\n\n**Sale 3 (89 units):** 62@$12.81=$794.22 + 27@$12.85=$346.95 = **$1141.17** (Lot4 remaining: 95)\n\n**Sale 4 (75 units):** 75@$12.85 = **$963.75** (Lot4 remaining: 20)\n\n**Sale 5 (87 units):** 20@$12.85=$257.00 + 67@$4.16=$278.72 = **$535.72** (Lot5 remaining: 55)\n\n**Sale 6 (57 units):** 55@$4.16=$228.80 + 2@$10.52=$21.04 = **$249.84**\n\n**Total COGS** = 367.68+652.24+1141.17+963.75+535.72+249.84 = **$3910.40**\n\n# Part B: Probability At Least Two Share a Color\n\nWith only 3 colors, \"at least two share a color\" is the complement of \"all three different colors.\"\n\nTotal ways: C(16,3) = 560\n\nWays for one of each color: 5\u00d76\u00d75 = 150\n\nP(all different) = 150/560 = 15/56\n\nP(at least two share) = 1 \u2212 15/56 = **41/56**\n\n(41 is prime, no common factors with 56 \u2014 already in lowest terms)\n\n# Part C: Original Price\n\nCombined multiplier: 1.25 \u00d7 0.85 \u00d7 1.18 \u00d7 1.25 \u00d7 1.18\n\nAs fractions: (5/4)\u00d7(17/20)\u00d7(59/50)\u00d7(5/4)\u00d7(59/50) = 1,479,425 / 800,000 = 59,177/32,000 = 1.84928125\n\nOriginal price: P = 97.50 / 1.84928125 = 3,120,000/59,177 \u2248 52.7232\n\n**P \u2248 $52.72**\n\n(Check: 52.72\u00d71.25\u00d70.85\u00d71.18\u00d71.25\u00d71.18 \u2248 97.49, matching within rounding)\n\nFINAL: 3910.40; 41/56; 52.72"
+}

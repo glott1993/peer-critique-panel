@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-01",
+ "type": "multi4",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 3178.09, expected 3178.09 | ok: got 1214928.0, expected 1214928.0 | ok: got 58.0, expected 58.0 | ok: got 9268.0, expected 9268.0",
+ "error": null,
+ "seconds": 48.3,
+ "tokens": 7198,
+ "prompt_tokens": 632,
+ "completion_tokens": 6566,
+ "cost": 0.06692,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: FIFO COGS\n\nProcessing sales sequentially against inventory lots:\n\n- Sale 1 (72 units): 72@$12.34 = $888.48\n- Sale 2 (49 units): 49@$12.34 = $604.66 (lot 1 now empty, 3 left... wait, lot1 had 124, used 72+49=121, 3 remain)\n- Sale 3 (120 units): 3@$12.34 + 117@$3.67 = $37.02+$429.39 = $466.41 (lot 2 has 11 left)\n- Sale 4 (76 units): 11@$3.67 + 65@$7.10 = $40.37+$461.50 = $501.87 (lot 3 has 89 left)\n- Sale 5 (63 units): 63@$7.10 = $447.30 (lot 3 has 26 left)\n- Sale 6 (33 units): 26@$7.10 + 7@$12.11 = $184.60+$84.77 = $269.37\n\nTotal COGS = 888.48+604.66+466.41+501.87+447.30+269.37 = **$3178.09**\n\n# Part B: Sum of multiples of 13 not divisible by 4, in [362,6506]\n\nMultiples of 13: n=28..500 \u2192 sum = 13*(28+500)*473/2 = 1,623,336\nMultiples of 52 (divisible by both 13 and 4): n=7..125 \u2192 sum = 52*(7+125)*119/2 = 408,408\n\nAnswer = 1,623,336 \u2212 408,408 = **1,214,928**\n\n# Part C: Product and digit sum\n\n22027\u00d71894 = 41,719,138\n41,719,138\u00d7664 = 27,701,507,632\n27,701,507,632\u00d72791 = 77,314,907,800,912\n\nDigit sum: 7+7+3+1+4+9+0+7+8+0+0+9+1+2 = **58**\n\n# Part D: Tax calculation\n\nTax brackets on $57,400:\n- 10% \u00d7 12,500 = 1,250\n- 22% \u00d7 (52,000\u221212,500)=22%\u00d739,500 = 8,690\n- 32% \u00d7 (57,400\u221252,000)=32%\u00d75,400 = 1,728\n\nTotal before credit = 1,250+8,690+1,728 = 11,668\n\nCredit: $2,400 (income $57,400 < $60,000, so no reduction)\n\nTax owed = 11,668 \u2212 2,400 = **$9,268.00**\n\nFINAL: 3178.09; 1214928; 58; 9268.00"
+}

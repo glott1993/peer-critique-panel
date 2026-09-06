@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-32",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got '2026-10-01', expected '2026-10-01' | ok: got 7035366.0, expected 7035366.0 | ok: got 13867.5, expected 13867.5",
+ "error": null,
+ "seconds": 43.7,
+ "tokens": 5942,
+ "prompt_tokens": 461,
+ "completion_tokens": 5481,
+ "cost": 0.05573,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: Business Days Calculation\n\nStarting from Tuesday, 2026-06-02, I counted forward day-by-day, skipping weekends and the five listed holidays.\n\n- June (after start): 19 business days (June 3\u201330, skipping 6/16)\n- July: 21 business days (skipping 7/14 and 7/30) \u2192 cumulative 40\n- August: 21 business days (no holidays) \u2192 cumulative 61\n- September: 20 business days (skipping 9/2 and 9/30) \u2192 cumulative 81\n- October: October 1 (Thursday) \u2192 cumulative **82**\n\n**Result: 2026-10-01**\n\n# Part B: Sum of Integers Divisible by 13 but not 6 (358 to 14817)\n\n**Multiples of 13 in range:**\n- First: 13\u00d728 = 364, Last: 13\u00d71139 = 14807\n- Count = 1112\n- Sum = 1112 \u00d7 (364+14807)/2 = 1112 \u00d7 7585.5 = 8,435,076\n\n**Multiples of 78 (\u00f713 and \u00f76) in range:**\n- First: 78\u00d75 = 390, Last: 78\u00d7189 = 14742\n- Count = 185\n- Sum = 185 \u00d7 (390+14742)/2 = 185 \u00d7 7566 = 1,399,710\n\n**Subtract:**\n8,435,076 \u2212 1,399,710 = **7,035,366**\n\n# Part C: Tax Calculation for Income $68,250\n\n**Tax before credit:**\n- 12% on first $14,000 = $1,680.00\n- 24% on next $46,000 (14,000\u219260,000) = $11,040.00\n- 35% on amount above $60,000: $8,250 \u00d7 0.35 = $2,887.50\n\nTotal tax before credit = 1,680 + 11,040 + 2,887.50 = **$15,607.50**\n\n**Credit adjustment:**\n- Base credit = $2,400\n- Reduction = 8% \u00d7 $8,250 (income above $60,000) = $660\n- Adjusted credit = 2,400 \u2212 660 = $1,740 (positive, so keep as is)\n\n**Tax owed:**\n15,607.50 \u2212 1,740 = **$13,867.50**\n\n---\n\nFINAL: 2026-10-01; 7035366; 13867.50"
+}

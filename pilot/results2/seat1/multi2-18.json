@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-18",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got '2027-02-26', expected '2027-02-26' | ok: got 27435.0, expected 27435.0 | ok: got 52.0, expected 52.0",
+ "error": null,
+ "seconds": 144.5,
+ "tokens": 8290,
+ "prompt_tokens": 450,
+ "completion_tokens": 7840,
+ "cost": 0.0793,
+ "calls": 2,
+ "call_errors": 1,
+ "answer": "# Part A: Business Days Calculation\n\n**Step 1:** Determine day of week for 2026-10-24.\nUsing date arithmetic from a known reference (2024-01-01 = Monday), 2026-10-24 falls on a **Saturday**.\n\n**Step 2:** Verify holiday weekdays.\nChecking each holiday against the calendar:\n- 2026-12-28 \u2192 Monday\n- 2027-01-15 \u2192 Friday\n- 2027-01-18 \u2192 Monday\n- 2027-01-28 \u2192 Thursday\n- 2027-02-05 \u2192 Friday\n- 2027-02-15 \u2192 Monday\n\nAll six holidays fall on weekdays, so all must be skipped.\n\n**Step 3:** Compute raw 84th weekday (ignoring holidays).\nStarting business day count from next weekday, 2026-10-26 (Monday) = day 1.\nUsing weeks/remainder: 84 = 16 weeks + 4th day of week (Mon=0) \u2192 position \"Thursday.\"\nAdding 115 calendar days to 2026-10-26 lands on **2027-02-18** (confirmed Thursday).\n\n**Step 4:** Adjust for holidays landing inside this window.\nAll 6 holidays (Dec 28 \u2013 Feb 15) fall within Oct 26 \u2192 Feb 18, so 6 extra business days must be added beyond Feb 18, with no further holidays in that extension.\n\nAdding 6 weekdays after 2027-02-18 (Thu): Feb19(Fri), Feb22(Mon), Feb23(Tue), Feb24(Wed), Feb25(Thu), Feb26(Fri).\n\n**Verification:** Total weekdays from 2026-10-26 to 2027-02-26 inclusive = 90; subtract 6 holidays = 84 \u2713.\n\n**Result: 2027-02-26**\n\n# Part B: Tax Calculation\n\nIncome = $96,300\n\n- Bracket 1: 11,000 \u00d7 12% = 1,320.00\n- Bracket 2: (45,000\u221211,000) \u00d7 24% = 34,000 \u00d7 0.24 = 8,160.00\n- Bracket 3: (96,300\u221245,000) \u00d7 35% = 51,300 \u00d7 0.35 = 17,955.00\n\nTax before credit = 1,320 + 8,160 + 17,955 = **27,435.00**\n\nCredit reduction: income above $50,000 = 46,300; 5% \u00d7 46,300 = 2,315\nCredit = max(1,200 \u2212 2,315, 0) = **0**\n\nTax owed = 27,435.00 \u2212 0 = **27,435.00**\n\n# Part C: Modular Exponentiation\n\n101 is prime \u2192 Fermat: 54^100 \u2261 1 (mod 101)\n871 mod 100 = 71 \u2192 need 54^71 mod 101\n\nCompute powers via repeated squaring:\n- 54^1 = 54\n- 54^2 = 88\n- 54^4 = 68\n- 54^8 = 79\n- 54^16 = 80\n- 54^32 = 37\n- 54^64 = 56\n\n71 = 64+4+2+1 \u2192 54^71 \u2261 56\u00d768\u00d788\u00d754 (mod 101)\n\n- 56\u00d768 = 3808 \u2261 71\n- 71\u00d788 = 6248 \u2261 87\n- 87\u00d754 = 4698 \u2261 52\n\n**Result: 52**\n\nFINAL: 2027-02-26; 27435.00; 52"
+}

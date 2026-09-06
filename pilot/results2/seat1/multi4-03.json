@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-03",
+ "type": "multi4",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 4391.2, expected 4391.2 | ok: got 2717.0, expected 2717.0 | ok: got '23/35', expected '23/35' | ok: got 11845946.0, expected 11845946.0",
+ "error": null,
+ "seconds": 39.6,
+ "tokens": 5755,
+ "prompt_tokens": 711,
+ "completion_tokens": 5044,
+ "cost": 0.05186,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A\n\nStarting balance: $2500.00. Each month: apply transaction \u2192 if balance < $1500, subtract $8 fee \u2192 add 0.25% interest.\n\nTracking through all 15 months (fee never triggered since balance stayed \u2265 $1500 after each transaction):\n\n- After M1: 2957.375000\n- After M2: 2563.768438\n- After M3: 2169.177859\n- After M4: 1522.975803\n- After M5: 2228.533243\n- After M6: 2685.229576\n- After M7: 2040.317650\n- After M8: 3148.168444\n- After M9: 3857.788865\n- After M10: 4970.183337\n- After M11: 6085.358796\n- After M12: 6802.322193\n- After M13: 5917.077998\n- After M14: 5280.245693\n- After M15: 4391.196307\n\n**Balance after month 15 \u2248 $4391.20**\n\n# Part B\n\nRate $22/hr; >8h\u21921.5x, >12h\u21922x per day (no weekly OT).\n\nPer\u2011day pay:\n- 12.5h \u2192 8(22)+4(33)+0.5(44)=176+132+22=330\n- 13h \u2192 176+132+44=352\n- 0 \u2192 0\n- 0 \u2192 0\n- 9.5h \u2192 176+1.5(33)=176+49.5=225.5\n- 8h \u2192 176\n- 12.5h \u2192 330\n- 6h \u2192 132\n- 10h \u2192 176+2(33)=242\n- 13h \u2192 352\n- 9.5h \u2192 225.5\n- 8h \u2192 176\n- 8h \u2192 176\n- 0 \u2192 0\n\nSum: 330+352+0+0+225.5+176+330+132+242+352+225.5+176+176+0 = **2717.00**\n\n# Part C\n\nTotal marbles = 7 (3R,2G,2B); choose 3 \u2192 C(7,3)=35.\n\n\"At least two share a color\" is complement of \"all three different colors\" (only possible as 1R+1G+1B, since only 3 colors exist).\n\nWays all different = 3\u00d72\u00d72 = 12 \u2192 P(all different)=12/35\n\nP(at least two share) = 1 \u2212 12/35 = **23/35**\n\n# Part D\n\nSum of multiples of 7 in [365,14115], minus sum of multiples of 42 (divisible by both 6 and 7) in same range.\n\nMultiples of 7: first=371 (7\u00d753), last=14112 (7\u00d72016), n=1964\nSum7 = 1964\u00d7(371+14112)/2 = 982\u00d714483 = 14,222,306\n\nMultiples of 42: first=378 (42\u00d79), last=14112 (42\u00d7336), n=328\nSum42 = 328\u00d7(378+14112)/2 = 164\u00d714490 = 2,376,360\n\nAnswer = 14,222,306 \u2212 2,376,360 = **11,845,946**\n\nFINAL: 4391.20; 2717.00; 23/35; 11845946"
+}

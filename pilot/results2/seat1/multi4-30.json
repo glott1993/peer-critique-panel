@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-30",
+ "type": "multi4",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 3.0, expected 3.0 | ok: got 3051167.0, expected 3051167.0 | ok: got 4706.75, expected 4706.75 | ok: got 1150.88, expected 1150.88",
+ "error": null,
+ "seconds": 33.4,
+ "tokens": 5055,
+ "prompt_tokens": 592,
+ "completion_tokens": 4463,
+ "cost": 0.04581,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: 28^283 mod 151\n\nSince 151 is prime, by Fermat's Little Theorem: 28^150 \u2261 1 (mod 151)\n283 mod 150 = 133, so we need 28^133 mod 151.\n\nUsing repeated squaring:\n- 28^2 \u2261 29\n- 28^4 \u2261 86\n- 28^8 \u2261 148\n- 28^16 \u2261 9\n- 28^32 \u2261 81\n- 28^64 \u2261 68\n- 28^128 \u2261 94\n\nSince 133 = 128 + 4 + 1:\n28^133 \u2261 94 \u00d7 86 \u00d7 28 (mod 151)\n94\u00d786 = 8084 \u2261 81 (mod 151)\n81\u00d728 = 2268 \u2261 **3** (mod 151)\n\n# Part B: Sum divisible by 7 but not 9 (i.e., not by 63)\n\n**Multiples of 7 in [434, 6947]:** 434 = 7\u00d762, 6944 = 7\u00d7992\nn = 931 terms, Sum = 931\u00d7(434+6944)/2 = 931\u00d73689 = 3,434,459\n\n**Multiples of 63 in [434, 6947]:** 441 = 63\u00d77, 6930 = 63\u00d7110\nn = 104 terms, Sum = 104\u00d7(441+6930)/2 = 52\u00d77371 = 383,292\n\n**Result:** 3,434,459 \u2212 383,292 = **3,051,167**\n\n# Part C: FIFO COGS\n\nTracking lot consumption sequentially:\n\n| Sale | Units | Source (units \u00d7 price) | Cost |\n|------|-------|------------------------|------|\n| 1 | 57 | 57\u00d78.14 (Lot1) | 463.98 |\n| 2 | 101 | 65\u00d78.14 + 36\u00d713.41 | 529.10+482.76=1011.86 |\n| 3 | 79 | 78\u00d713.41 + 1\u00d711.43 | 1045.98+11.43=1057.41 |\n| 4 | 67 | 67\u00d711.43 (Lot3) | 765.81 |\n| 5 | 70 | 15\u00d711.43 + 55\u00d712.12 | 171.45+666.60=838.05 |\n| 6 | 47 | 47\u00d712.12 (Lot4) | 569.64 |\n\nTotal COGS = 463.98+1011.86+1057.41+765.81+838.05+569.64 = **$4,706.75**\n\n# Part D: Tiered Pricing Order\n\n181 units:\n- First 100 units: 100\u00d76.40 = 640.00\n- Next 81 units (101\u2013181): 81\u00d75.44 = 440.64\n\nSubtotal = 640.00+440.64 = $1,080.64 (\u2264 $2,500, no discount)\n\nTax: 1,080.64 \u00d7 1.065 = 1,080.64 + 70.2416 = 1,150.8816\n\nTotal = **$1,150.88**\n\nFINAL: 3; 3051167; 4706.75; 1150.88"
+}

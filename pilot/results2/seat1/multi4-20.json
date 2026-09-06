@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-20",
+ "type": "multi4",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 6965079.0, expected 6965079.0 | ok: got 2520.63, expected 2520.62 | ok: got 2022.0, expected 2022.0 | ok: got 3170.65, expected 3170.65",
+ "error": null,
+ "seconds": 46.3,
+ "tokens": 6276,
+ "prompt_tokens": 670,
+ "completion_tokens": 5606,
+ "cost": 0.0574,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: Sum divisible by 11 but not 4, from 427 to 14294\n\n**Multiples of 11:** first is 429 (11\u00d739), last is 14289 (11\u00d71299) \u2192 1261 terms\nSum = 11 \u00d7 (39+1299)\u00d71261/2 = 11 \u00d7 843,609 = 9,279,699\n\n**Multiples of 44 (divisible by both 11 and 4):** first is 440 (44\u00d710), last is 14256 (44\u00d7324) \u2192 315 terms\nSum = 44 \u00d7 (10+324)\u00d7315/2 = 44 \u00d7 52,605 = 2,314,620\n\n**Result:** 9,279,699 \u2212 2,314,620 = **6,965,079**\n\n# Part B: Gross pay with daily OT rules\n\nPay per day (regular \u22648 @1x, 8\u201312 @1.5x, >12 @2x), rate $18.50:\n\n| Hours | Pay |\n|---|---|\n|12.5|277.500|\n|12.5|277.500|\n|8|148.000|\n|7.5|138.750|\n|9.5|189.625|\n|11|231.250|\n|9.5|189.625|\n|7.5|138.750|\n|8|148.000|\n|0|0.000|\n|9.5|189.625|\n|8|148.000|\n|8|148.000|\n|13|296.000|\n\nSum = 2520.625 \u2192 rounds to **$2520.63**\n\n# Part C: Divisible by 6, 10, or 15 but not 19 (1\u20138000)\n\nPairwise/triple lcm of {6,10,15} = 30 (all equal), so:\n|A\u222aB\u222aC| = \u230a8000/6\u230b+\u230a8000/10\u230b+\u230a8000/15\u230b \u2212 3\u230a8000/30\u230b + \u230a8000/30\u230b\n= 1333+800+533 \u2212 3(266) + 266 = 2134\n\nNow subtract those also divisible by 19 (using 19\u00d7 each modulus, since 19 is coprime to all):\n- 19&6: \u230a8000/114\u230b=70\n- 19&10: \u230a8000/190\u230b=42\n- 19&15: \u230a8000/285\u230b=28\n- 19&30 (all pairwise/triple): \u230a8000/570\u230b=14\n\nCount divisible by 19 and in S = (70+42+28) \u2212 3(14) + 14 = 140\u221242+14 = 112\n\n**Result:** 2134 \u2212 112 = **2022**\n\n# Part D: FIFO Cost of Goods Sold\n\nTotal units sold = 31+40+116+39+84+97 = 407\n\nCumulative inventory (FIFO order):\n- Lot1: 56 (cum 56)\n- Lot2: 114 (cum 170)\n- Lot3: 89 (cum 259)\n- Lot4: 107 (cum 366)\n- Lot5: need 407\u2212366 = 41 units from Lot5 (@10.04)\n\nCost:\n- 56 \u00d7 5.36 = 300.16\n- 114 \u00d7 10.90 = 1242.60\n- 89 \u00d7 6.32 = 562.48\n- 107 \u00d7 6.11 = 653.77\n- 41 \u00d7 10.04 = 411.64\n\nTotal = 300.16+1242.60+562.48+653.77+411.64 = **$3170.65**\n\nFINAL: 6965079; 2520.63; 2022; 3170.65"
+}

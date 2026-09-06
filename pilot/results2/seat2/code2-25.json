@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-25",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 18.6,
+ "tokens": 6878,
+ "prompt_tokens": 4395,
+ "completion_tokens": 2483,
+ "cost": 0.00386,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\n\ndef stable_matching(proposers, receivers):\n    receiver_rank = {\n        receiver: {proposer: rank for rank, proposer in enumerate(preferences)}\n        for receiver, preferences in receivers.items()\n    }\n\n    next_choice = {proposer: 0 for proposer in proposers}\n    free_proposers = list(proposers)\n    heapq.heapify(free_proposers)\n\n    receiver_matches = {}\n    proposer_matches = {}\n\n    while free_proposers:\n        proposer = heapq.heappop(free_proposers)\n        receiver = proposers[proposer][next_choice[proposer]]\n        next_choice[proposer] += 1\n\n        current = receiver_matches.get(receiver)\n\n        if current is None:\n            receiver_matches[receiver] = proposer\n            proposer_matches[proposer] = receiver\n        elif receiver_rank[receiver][proposer] < receiver_rank[receiver][current]:\n            receiver_matches[receiver] = proposer\n            proposer_matches[proposer] = receiver\n            del proposer_matches[current]\n            heapq.heappush(free_proposers, current)\n        else:\n            heapq.heappush(free_proposers, proposer)\n\n    return proposer_matches\n```"
+}

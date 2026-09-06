@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-10",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 13.7,
+ "tokens": 5759,
+ "prompt_tokens": 3841,
+ "completion_tokens": 1918,
+ "cost": 0.00307,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport calendar\nfrom datetime import date\n\n\ndef nth_weekday(year, month, weekday, n) -> str:\n    if not isinstance(weekday, int) or not 0 <= weekday <= 6:\n        raise ValueError(\"weekday must be an integer from 0 to 6\")\n\n    if not isinstance(n, int) or (n != -1 and not 1 <= n <= 5):\n        raise ValueError(\"n must be 1 through 5 or -1\")\n\n    first_day = date(year, month, 1)\n    days_in_month = calendar.monthrange(year, month)[1]\n\n    if n == -1:\n        day = days_in_month\n        last_day = date(year, month, day)\n        day -= (last_day.weekday() - weekday) % 7\n    else:\n        day = 1 + (weekday - first_day.weekday()) % 7 + 7 * (n - 1)\n        if day > days_in_month:\n            raise ValueError(\"the requested occurrence does not exist\")\n\n    return date(year, month, day).isoformat()\n```"
+}

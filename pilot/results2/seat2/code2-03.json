@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-03",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 12.2,
+ "tokens": 4866,
+ "prompt_tokens": 3321,
+ "completion_tokens": 1545,
+ "cost": 0.00252,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\n\ndef topo_order(nodes, edges):\n    all_nodes = set(nodes)\n\n    for a, b in edges:\n        all_nodes.add(a)\n        all_nodes.add(b)\n\n    adjacency = {node: set() for node in all_nodes}\n    indegree = {node: 0 for node in all_nodes}\n\n    for a, b in edges:\n        if b not in adjacency[a]:\n            adjacency[a].add(b)\n            indegree[b] += 1\n\n    ready = [node for node in all_nodes if indegree[node] == 0]\n    heapq.heapify(ready)\n\n    order = []\n\n    while ready:\n        node = heapq.heappop(ready)\n        order.append(node)\n\n        for neighbor in adjacency[node]:\n            indegree[neighbor] -= 1\n            if indegree[neighbor] == 0:\n                heapq.heappush(ready, neighbor)\n\n    if len(order) != len(all_nodes):\n        raise ValueError(\"Graph contains a cycle\")\n\n    return order\n```"
+}

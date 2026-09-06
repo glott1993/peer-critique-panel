@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-15",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 7.6,
+ "tokens": 1202,
+ "prompt_tokens": 381,
+ "completion_tokens": 821,
+ "cost": 0.00897,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\ndef json_pointer(doc, pointer: str):\n    if pointer == '':\n        return doc\n    if not pointer.startswith('/'):\n        raise ValueError(f\"Invalid JSON pointer: {pointer!r} must start with '/'\")\n\n    segments = pointer.split('/')[1:]\n    current = doc\n\n    for raw_seg in segments:\n        # RFC 6901 decoding: '~1' -> '/' must be decoded before '~0' -> '~'\n        seg = raw_seg.replace('~1', '/').replace('~0', '~')\n\n        if isinstance(current, dict):\n            if seg not in current:\n                raise ValueError(f\"Key {seg!r} not found in dict\")\n            current = current[seg]\n        elif isinstance(current, list):\n            if not re.fullmatch(r'\\d+', seg):\n                raise ValueError(f\"Invalid list index: {seg!r}\")\n            idx = int(seg)\n            if idx < 0 or idx >= len(current):\n                raise ValueError(f\"List index out of range: {idx}\")\n            current = current[idx]\n        else:\n            raise ValueError(\n                f\"Cannot index into non-dict/non-list value with segment {seg!r}\"\n            )\n\n    return current\n```"
+}

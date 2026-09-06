@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-38",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 10353.73, expected 10352.73",
+ "error": null,
+ "seconds": 38.9,
+ "tokens": 8507,
+ "prompt_tokens": 2840,
+ "completion_tokens": 5667,
+ "cost": 0.06235,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Step 1 \u2014 Map customers to regions**\n- South: C100, C103\n- West: C101, C104, C105, C107\n- North: C102, C106, C108\n\n**Step 2 \u2014 Filter orders**\nKeep only status = shipped or pending, remove exact duplicate rows (O2403 and O2288 each appear twice identically \u2192 counted once).\n\n**Step 3 \u2014 Sum revenue (units \u00d7 unit_price) by region**\n\nSouth (orders: O2732, O2331, O2481, O2579, O2142, O2160, O2806):\n199.40+4064.79+2097.29+90.60+4626.40+4046.70+4202.83 = **19,328.01**\n\nWest (orders: O2288, O2681, O2646, O2206, O2758, O2716, O2230, O2503, O2091, O2528, O2177, O2141, O2776, O2393, O2510, O2289, O2672, O2717, O2721):\nSum = **37,725.36**\n\nNorth (orders: O2151, O2403, O2225, O2314, O2641, O2121, O2356, O2462, O2138, O2107, O2777, O2196, O2781, O2120, O2216, O2855, O2217, O2851):\nSum = **27,371.63**\n\n**Step 4 \u2014 Compare**\nHighest = West ($37,725.36), Second = North ($27,371.63)\n\nDifference = 37,725.36 \u2212 27,371.63 = 10,353.73\n\nFINAL: 10353.73"
+}

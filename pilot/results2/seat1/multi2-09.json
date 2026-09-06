@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-09",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 260.0, expected 260.0 | ok: got 16250.74, expected 16250.74 | ok: got 429.64, expected 429.64",
+ "error": null,
+ "seconds": 216.3,
+ "tokens": 8260,
+ "prompt_tokens": 441,
+ "completion_tokens": 7819,
+ "cost": 0.07907,
+ "calls": 3,
+ "call_errors": 2,
+ "answer": "# Part A: Chinese Remainder Theorem\n\nNeed x \u2261 0 (mod 5), x \u2261 8 (mod 9), x \u2261 4 (mod 16)\n\nFrom x \u2261 4 (mod 16): x = 16k + 4\nSubstitute into mod 9: 16k + 4 \u2261 8 (mod 9) \u2192 7k \u2261 4 (mod 9) \u2192 k \u2261 7 (mod 9) (since 7\u00b74=28\u22611, inverse of 7 is 4)\nSo k = 9m + 7, giving x = 144m + 116\n\nSubstitute into mod 5: 144m + 116 \u2261 0 (mod 5) \u2192 4m + 1 \u2261 0 (mod 5) \u2192 m \u2261 1 (mod 5)\nSo m = 5n + 1, giving x = 720n + 260\n\nSmallest positive: **x = 260**\nCheck: 260/5=52 rem 0 \u2713; 260=28\u00b79+8 \u2713; 260=16\u00b716+4 \u2713\n\n# Part B: Sequential balance updates\n\nEach period: B \u2192 (B + contribution) \u00d7 1.025 \u00d7 0.995 = (B + contribution) \u00d7 1.019875\n\nStarting B = 8000, contributions = [400,600,400,0,0,600,600,400,900,400,250,900]\n\n| Period | B+contrib | \u00d71.019875 |\n|---|---|---|\n|1| 8400.00 | 8566.95000 |\n|2| 9166.95 | 9349.14313 |\n|3| 9749.14313 | 9942.90735 |\n|4| 9942.90735 | 10140.52264 |\n|5| 10140.52264 | 10342.06552 |\n|6| 10942.06552 | 11159.53907 |\n|7| 11759.53907 | 11993.25991 |\n|8| 12393.25991 | 12639.57595 |\n|9| 13539.57595 | 13808.67503 |\n|10| 14208.67503 | 14491.07244 |\n|11| 14741.07244 | 15034.05126 |\n|12| 15934.05126 | **16250.74053** |\n\nBalance after period 12: **$16,250.74**\n\n# Part C: Reverse the percentage changes\n\nCombined factor:\n0.90 \u00d7 1.25 = 1.125\n1.125 \u00d7 1.18 = 1.3275\n1.3275 \u00d7 0.85 = 1.128375\n1.128375 \u00d7 0.85 = 0.95911875\n\nSo: P \u00d7 0.95911875 = 412.08\nP = 412.08 / 0.95911875 = 429.6444...\n\nRounded to nearest cent: **$429.64**\n\nCheck: 429.64 \u00d7 0.95911875 \u2248 412.08 \u2713\n\nFINAL: 260; 16250.74; 429.64"
+}

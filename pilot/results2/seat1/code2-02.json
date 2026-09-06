@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-02",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.7,
+ "tokens": 515,
+ "prompt_tokens": 260,
+ "completion_tokens": 255,
+ "cost": 0.00307,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\ndef min_rooms(meetings):\n    if not meetings:\n        return 0\n    \n    meetings = sorted(meetings, key=lambda x: x[0])\n    heap = []  # min-heap of end times\n    \n    for start, end in meetings:\n        if heap and heap[0] <= start:\n            heapq.heappop(heap)\n        heapq.heappush(heap, end)\n    \n    return len(heap)\n```\n\nThis solution sorts meetings by start time, then uses a min-heap to track end times of meetings currently occupying rooms. For each meeting, if the earliest-ending meeting in a room has already ended (end <= current start), that room is freed up and reused. Otherwise, a new room is needed. The final heap size gives the minimum number of rooms required."
+}

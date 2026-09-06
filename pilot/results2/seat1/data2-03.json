@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-03",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 1568.66, expected 1568.66",
+ "error": null,
+ "seconds": 11.8,
+ "tokens": 4415,
+ "prompt_tokens": 2863,
+ "completion_tokens": 1552,
+ "cost": 0.02125,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Step 1: Identify Gold-tier customers**\nC102 (Jordan), C106 (Logan), C107 (Harper), C108 (Parker), C109 (Emery)\n\n**Step 2: Find shipped orders for these customers (dedupe exact duplicates \u2014 none found among these)**\n\n| Order | Cust | Units | Price | Revenue |\n|---|---|---|---|---|\n|O2852|C106|32|123.29|3945.28|\n|O2818|C106|15|15.62|234.30|\n|O2715|C108|38|81.95|3114.10|\n|O2052|C109|3|12.88|38.64|\n|O2022|C108|18|45.37|816.66|\n|O2481|C106|5|136.95|684.75|\n|O2701|C106|1|38.85|38.85|\n|O2789|C109|1|97.38|97.38|\n|O2249|C108|33|94.39|3114.87|\n|O2797|C108|41|64.98|2664.18|\n|O2733|C107|42|115.02|4830.84|\n|O2747|C106|8|53.07|424.56|\n|O2132|C102|22|112.30|2470.60|\n|O2529|C108|5|79.46|397.30|\n|O2794|C108|6|109.61|657.66|\n\n**Step 3: Sum revenue and count orders**\nTotal revenue = 23,529.97\nNumber of shipped orders = 15\n\n**Step 4: Average**\n23,529.97 / 15 = 1568.6646...\n\nFINAL: 1568.66"
+}

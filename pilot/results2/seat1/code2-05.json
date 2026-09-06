@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-05",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 57.4,
+ "tokens": 6594,
+ "prompt_tokens": 342,
+ "completion_tokens": 6252,
+ "cost": 0.0632,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\n\ndef _tokenize(s: str):\n    tokens = []\n    i = 0\n    n = len(s)\n    while i < n:\n        c = s[i]\n        if c.isspace():\n            i += 1\n            continue\n        if c in '+-*/()':\n            tokens.append(c)\n            i += 1\n            continue\n        if c.isdigit() or c == '.':\n            j = i\n            has_dot = False\n            while j < n and (s[j].isdigit() or (s[j] == '.' and not has_dot)):\n                if s[j] == '.':\n                    has_dot = True\n                j += 1\n            tokens.append(s[i:j])\n            i = j\n            continue\n        raise ValueError(f\"Unknown character in expression: {c!r}\")\n    return tokens\n\n\ndef evaluate(expr: str) -> float:\n    tokens = _tokenize(expr)\n    if not tokens:\n        raise ValueError(\"Empty expression\")\n\n    pos = [0]\n\n    def peek():\n        return tokens[pos[0]] if pos[0] < len(tokens) else None\n\n    def advance():\n        tok = tokens[pos[0]]\n        pos[0] += 1\n        return tok\n\n    num_re = re.compile(r'^\\d+(\\.\\d+)?$')\n\n    def parse_primary():\n        tok = peek()\n        if tok is None:\n            raise ValueError(\"Unexpected end of expression\")\n        if tok == '(':\n            advance()\n            val = parse_expr()\n            if peek() != ')':\n                raise ValueError(\"Unbalanced parentheses: expected ')'\")\n            advance()\n            return val\n        elif num_re.match(tok):\n            advance()\n            return float(tok)\n        else:\n            raise ValueError(f\"Unexpected token: {tok!r}\")\n\n    def parse_factor():\n        tok = peek()\n        if tok == '-':\n            advance()\n            return -parse_factor()\n        else:\n            return parse_primary()\n\n    def parse_term():\n        val = parse_factor()\n        while peek() in ('*', '/'):\n            op = advance()\n            right = parse_factor()\n            if op == '*':\n                val *= right\n            else:\n                if right == 0:\n                    raise ZeroDivisionError(\"division by zero\")\n                val /= right\n        return val\n\n    def parse_expr():\n        val = parse_term()\n        while peek() in ('+', '-'):\n            op = advance()\n            right = parse_term()\n            if op == '+':\n                val += right\n            else:\n                val -= right\n        return val\n\n    result = parse_expr()\n\n    if pos[0] != len(tokens):\n        raise ValueError(f\"Unexpected token at end of expression: {peek()!r}\")\n\n    return float(result)\n```"
+}

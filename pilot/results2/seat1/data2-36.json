@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-36",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 16.0, expected 16.0",
+ "error": null,
+ "seconds": 17.3,
+ "tokens": 5256,
+ "prompt_tokens": 2842,
+ "completion_tokens": 2414,
+ "cost": 0.02982,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Step 1: Identify South region customers**\nSouth: C100, C101, C102, C103, C105, C106, C107, C109\n(West: C104, C108; East: C110)\n\n**Step 2: Filter orders by South customer AND order_date between 2026-06-11 and 2026-07-11 inclusive (any status), counting duplicates only once**\n\nScanning all orders:\n\n- O2069 C100 2026-06-26 \u2713\n- O2708 C107 2026-06-20 \u2713\n- O2288 C100 2026-06-26 \u2713\n- O2449 C105 2026-07-10 \u2713\n- O2702 C107 2026-07-01 \u2713 (duplicate later in list, counted once)\n- O2881 C103 2026-06-11 \u2713\n- O2647 C101 2026-06-20 \u2713\n- O2276 C103 2026-06-17 \u2713\n- O2370 C102 2026-06-15 \u2713\n- O2622 C107 2026-06-14 \u2713\n- O2350 C105 2026-07-04 \u2713\n- O2851 C105 2026-06-15 \u2713\n- O2837 C107 2026-07-03 \u2713\n- O2472 C103 2026-06-18 \u2713\n- O2769 C109 2026-06-24 \u2713\n- O2476 C103 2026-06-22 \u2713\n\n(O2406 duplicate excluded - out of date range anyway; O2181 duplicate excluded - out of range)\n\n**Count: 16 orders**\n\nFINAL: 16"
+}

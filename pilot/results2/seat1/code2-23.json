@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 25.1,
+ "tokens": 3153,
+ "prompt_tokens": 344,
+ "completion_tokens": 2809,
+ "cost": 0.02878,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    \"\"\"\n    Parse an ISO 8601 duration string (date/time only, no weeks, no fractions)\n    into a total number of seconds, using:\n        1 year  = 365 days\n        1 month = 30 days\n        1 day   = 86400 seconds\n\n    Format: P[nY][nM][nD][T[nH][nM][nS]]\n    - Designators must appear in order Y, M, D, then (optionally) T followed\n      by H, M, S in that order.\n    - At least one component (Y/M/D/H/M/S) must be present.\n    - 'T' may appear only if at least one time component follows it.\n    - Values must be non-negative integers (no decimals).\n    - Must start with uppercase 'P'; lowercase or malformed strings are invalid.\n    \"\"\"\n    pattern = (\n        r'^P'\n        r'(?:(\\d+)Y)?'\n        r'(?:(\\d+)M)?'\n        r'(?:(\\d+)D)?'\n        r'(T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?'\n        r'$'\n    )\n    m = re.fullmatch(pattern, s)\n    if not m:\n        raise ValueError(f\"Invalid ISO duration: {s!r}\")\n\n    y, mo, d, tgroup, h, mi, se = m.groups()\n\n    # At least one component must be present overall\n    if all(x is None for x in (y, mo, d, h, mi, se)):\n        raise ValueError(f\"Invalid ISO duration: {s!r}\")\n\n    # 'T' must be followed by at least one time component\n    if tgroup is not None and all(x is None for x in (h, mi, se)):\n        raise ValueError(f\"Invalid ISO duration: {s!r}\")\n\n    total = 0\n    if y:\n        total += int(y) * 365 * 86400\n    if mo:\n        total += int(mo) * 30 * 86400\n    if d:\n        total += int(d) * 86400\n    if h:\n        total += int(h) * 3600\n    if mi:\n        total += int(mi) * 60\n    if se:\n        total += int(se)\n\n    return total\n```"
+}

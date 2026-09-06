@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-24",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 18718.32, expected 18718.32",
+ "error": null,
+ "seconds": 36.2,
+ "tokens": 8028,
+ "prompt_tokens": 2857,
+ "completion_tokens": 5171,
+ "cost": 0.05742,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Region assignments (from customers table):**\n- North: C100, C103, C104, C105, C108\n- West: C101, C102, C106\n- South: C107\n- East: C109\n\n**Processing orders:** filtered to status = shipped or pending, excluded cancelled/returned, and de-duplicated exact repeat rows (O2392 returned twice \u2014 irrelevant since returned anyway; O2001 shipped twice \u2014 counted once; O2345 shipped twice \u2014 counted once).\n\n**Region totals (revenue = units \u00d7 unit_price, summed):**\n\n- North: $50,735.49\n- West: $32,017.17\n- South: $3,289.66\n- East: $13,850.08\n\n**Highest region:** North ($50,735.49)\n**Second highest:** West ($32,017.17)\n\nDifference = 50,735.49 \u2212 32,017.17 = **18,718.32**\n\nFINAL: 18718.32"
+}

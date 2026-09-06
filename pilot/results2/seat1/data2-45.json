@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-45",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 1541.62, expected 1541.67",
+ "error": null,
+ "seconds": 22.0,
+ "tokens": 5854,
+ "prompt_tokens": 2819,
+ "completion_tokens": 3035,
+ "cost": 0.03599,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Working\n\n**Step 1: Identify Gold-tier customers**\nFrom Customers table: C100 (Harper), C103 (Rowan), C104 (Blake), C107 (Jordan)\n\n**Step 2: Filter orders**\n- Customer is Gold-tier (C100, C103, C104, C107)\n- Status = shipped\n- Remove exact duplicate rows (only duplicates found were O2441 and O2786, both status=pending, so they don't affect this shipped-only calculation)\n\n**Step 3: Qualifying shipped orders (Gold customers) with revenue = units \u00d7 unit_price**\n\n| Order | Cust | Units | Price | Revenue |\n|---|---|---|---|---|\n| O2447 | C103 | 13 | 54.62 | 709.06 |\n| O2034 | C100 | 42 | 24.43 | 1026.06 |\n| O2291 | C104 | 28 | 40.22 | 1126.16 |\n| O2077 | C104 | 34 | 55.98 | 1903.32 |\n| O2647 | C104 | 34 | 111.93 | 3805.62 |\n| O2584 | C103 | 22 | 126.36 | 2779.92 |\n| O2563 | C107 | 16 | 100.59 | 1609.44 |\n| O2472 | C103 | 38 | 76.08 | 2891.04 |\n| O2691 | C104 | 34 | 113.76 | 3867.84 |\n| O2187 | C104 | 19 | 9.48 | 180.12 |\n| O2046 | C104 | 11 | 36.84 | 405.24 |\n| O2737 | C107 | 9 | 87.98 | 791.82 |\n| O2872 | C103 | 19 | 10.74 | 204.06 |\n| O2642 | C107 | 36 | 4.00 | 144.00 |\n| O2052 | C103 | 35 | 91.99 | 3219.65 |\n| O2394 | C100 | 32 | 116.65 | 3732.80 |\n| O2465 | C107 | 3 | 98.00 | 294.00 |\n| O2325 | C107 | 23 | 19.93 | 458.39 |\n| O2013 | C104 | 41 | 3.47 | 142.27 |\n\n**Step 4: Sum and count**\n- Number of orders = 19\n- Total revenue = 29,290.81\n\n**Step 5: Average**\n29,290.81 / 19 = 1541.6216...\n\nFINAL: 1541.62"
+}

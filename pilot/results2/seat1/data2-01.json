@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-01",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got 5220.1, expected 5220.1",
+ "error": null,
+ "seconds": 8.7,
+ "tokens": 3927,
+ "prompt_tokens": 2823,
+ "completion_tokens": 1104,
+ "cost": 0.01669,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Step 1 \u2014 Identify South/Silver customers:**\nChecking the customer table: only C108 (Morgan) is South region + Silver tier.\n\n**Step 2 \u2014 Extract C108 orders with status shipped or pending (dedupe exact duplicates):**\n\n- O2725, Flange, 38\u00d758.49 = 2222.62 (shipped)\n- O2279, Dowel, 11\u00d750.00 = 550.00 (shipped)\n- O2864, Crate, 29\u00d75.67 = 164.43 (shipped) \u2014 duplicate row, counted once\n- O2445, Easel \u2014 returned, excluded\n- O2033, Anvil, 4\u00d7114.17 = 456.68 (shipped)\n- O2284, Dowel, 8\u00d727.61 = 220.88 (shipped)\n- O2247, Dowel, 12\u00d752.56 = 630.72 (pending)\n- O2094, Easel \u2014 returned, excluded\n- O2474, Crate, 2\u00d723.39 = 46.78 (pending)\n- O2330, Easel, 23\u00d723.31 = 536.13 (pending)\n- O2261, Crate \u2014 cancelled, excluded\n- O2441, Flange, 9\u00d743.54 = 391.86 (pending)\n\n**Step 3 \u2014 Sum:**\n2222.62+550.00+164.43+456.68+220.88+630.72+46.78+536.13+391.86 = 5220.10\n\nFINAL: 5220.10"
+}

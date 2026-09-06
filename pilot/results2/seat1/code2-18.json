@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-18",
+ "type": "code",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.0,
+ "tokens": 644,
+ "prompt_tokens": 285,
+ "completion_tokens": 359,
+ "cost": 0.00416,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom collections import deque\n\ndef sliding_max(xs, w):\n    if w < 1:\n        raise ValueError(\"w must be >= 1\")\n    n = len(xs)\n    if w > n:\n        return []\n    \n    dq = deque()  # stores indices, values in decreasing order\n    result = []\n    \n    for i, x in enumerate(xs):\n        # Remove indices out of window\n        while dq and dq[0] <= i - w:\n            dq.popleft()\n        # Remove smaller elements from back\n        while dq and xs[dq[-1]] <= x:\n            dq.pop()\n        dq.append(i)\n        \n        if i >= w - 1:\n            result.append(xs[dq[0]])\n    \n    return result\n```\n\nTesting against the examples:\n- `sliding_max([1, 3, -1, -3, 5, 3, 6, 7], 3)` \u2192 `[3, 3, 5, 5, 6, 7]` \u2713\n- `sliding_max([4, 4, 4], 2)` \u2192 `[4, 4]` \u2713"
+}

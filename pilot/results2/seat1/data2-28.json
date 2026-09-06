@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-28",
+ "type": "data",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "got -33396.63, expected -33396.63",
+ "error": null,
+ "seconds": 90.8,
+ "tokens": 7632,
+ "prompt_tokens": 2838,
+ "completion_tokens": 4794,
+ "cost": 0.05362,
+ "calls": 2,
+ "call_errors": 1,
+ "answer": "# Working\n\n**Gold-tier customers:** C105 (Avery), C106 (Morgan)\n**Silver-tier customers:** C100, C101, C102, C103, C107\n\nFiltering orders to date range 2026-04-01 through 2026-06-30, status = shipped or pending only (deduping exact duplicate rows, though the duplicates found were cancelled/returned and don't affect revenue anyway).\n\n**Gold revenue:**\n\nC105: O2284(45\u00d771.61=3222.45), O2003(7\u00d748.72=341.04), O2258(1\u00d73.66=3.66), O2899(38\u00d792.65=3520.70) \u2192 7087.85\nC106: O2345(22\u00d768.51=1507.22), O2660(31\u00d783.49=2588.19) \u2192 4095.41\n\n**Gold total = 11183.26**\n\n**Silver revenue:**\n\nC100: O2579(27\u00d733.34=900.18), O2829(2\u00d7139.45=278.90) \u2192 1179.08\n\nC101: O2359(1705.92), O2416(10.34), O2267(1908.46), O2375(3541.64), O2060(393.54), O2446(213.85), O2664(817.02) \u2192 8590.77\n\nC102: O2737(3050.49), O2342(1222.20), O2192(706.60), O2855(1129.26), O2070(3023.76), O2480(3340.40) \u2192 12472.71\n\nC103: O2506(3636.10), O2350(309.76), O2059(3642.53), O2013(395.70), O2223(3545.37), O2301(1693.02), O2693(965.20) \u2192 14187.68\n\nC107: O2814(5237.76), O2236(486.54), O2314(455.59), O2509(1969.76) \u2192 8149.65\n\n**Silver total = 1179.08+8590.77+12472.71+14187.68+8149.65 = 44579.89**\n\n**Difference = Gold \u2212 Silver = 11183.26 \u2212 44579.89 = \u221233396.63**\n\nFINAL: -33396.63"
+}

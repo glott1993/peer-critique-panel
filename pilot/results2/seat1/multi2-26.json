@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-26",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 1796.0, expected 1796.0 | ok: got '2027-02-25', expected '2027-02-25' | ok: got 8225280.0, expected 8225280.0",
+ "error": null,
+ "seconds": 49.7,
+ "tokens": 6861,
+ "prompt_tokens": 362,
+ "completion_tokens": 6499,
+ "cost": 0.06571,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: Integers divisible by 4, 6, or 9 but not 13 (1-5000)\n\n**Step 1: Count divisible by 4, 6, or 9 (inclusion-exclusion)**\n- |A|(\u00f74) = 1250, |B|(\u00f76) = 833, |C|(\u00f79) = 555\n- |A\u2229B|(\u00f712) = 416, |A\u2229C|(\u00f736) = 138, |B\u2229C|(\u00f718) = 277\n- |A\u2229B\u2229C|(\u00f736) = 138\n\n|S| = 1250+833+555 \u2212 416\u2212138\u2212277 + 138 = **1945**\n\n**Step 2: Subtract those also divisible by 13** (using LCMs with 13)\n- \u00f752: 96, \u00f778: 64, \u00f7117: 42\n- \u00f7156: 32, \u00f7468: 10, \u00f7234: 21\n- \u00f7468 (triple): 10\n\nCount = 96+64+42 \u2212 32\u221210\u221221 + 10 = **149**\n\n**Result:** 1945 \u2212 149 = **1796**\n\n# Part B: 84 business days after 2026-10-24\n\n2026-10-24 is a **Saturday** (verified via day-of-year calculation from Jan 1, 2026 = Thursday).\n\nCounting forward Mon\u2013Fri, skipping the 5 listed holidays (each confirmed to fall on a weekday: Thu, Tue, Wed, Thu, Tue respectively), I enumerate business days sequentially:\n\n- Reaches BD45 on 2026-12-31\n- Reaches BD66 on 2027-01-29\n- Reaches BD77 on 2027-02-15\n- 2027-02-16 (Tue) is a holiday \u2192 skipped\n- BD78: 2027-02-17, BD79: 2027-02-18, BD80: 2027-02-19\n- BD81: 2027-02-22, BD82: 2027-02-23, BD83: 2027-02-24, **BD84: 2027-02-25**\n\n**Result:** 2027-02-25\n\n# Part C: Sum of integers 296\u201312393 divisible by 7 but not by 4\n\n**Multiples of 7:** first = 301, last = 12390, n = (12390\u2212301)/7+1 = 1728\nSum\u2087 = 1728 \u00d7 (301+12390)/2 = 864 \u00d7 12691 = 10,965,024\n\n**Multiples of 28 (\u00f77 and \u00f74):** first = 308, last = 12376, n = (12376\u2212308)/28+1 = 432\nSum\u2082\u2088 = 432 \u00d7 (308+12376)/2 = 216 \u00d7 12684 = 2,739,744\n\n**Result:** 10,965,024 \u2212 2,739,744 = **8,225,280**\n\nFINAL: 1796; 2027-02-25; 8225280"
+}

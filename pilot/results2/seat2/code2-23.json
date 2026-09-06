@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 18.6,
+ "tokens": 9667,
+ "prompt_tokens": 5839,
+ "completion_tokens": 3828,
+ "cost": 0.00576,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\n\ndef parse_iso_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(\"duration must be a string\")\n\n    match = re.fullmatch(\n        r\"P(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)D)?\"\n        r\"(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?\",\n        s,\n    )\n    if match is None:\n        raise ValueError(\"invalid ISO 8601 duration\")\n\n    values = match.groups()\n\n    # At least one component is required.\n    if not any(values):\n        raise ValueError(\"duration must contain at least one component\")\n\n    # T is valid only when followed by a time component.\n    if \"T\" in s and not any(values[3:]):\n        raise ValueError(\"T must be followed by a time component\")\n\n    years, months, days, hours, minutes, seconds = (\n        int(value) if value is not None else 0\n        for value in values\n    )\n\n    return (\n        years * 365 * 86400\n        + months * 30 * 86400\n        + days * 86400\n        + hours * 3600\n        + minutes * 60\n        + seconds\n    )\n```"
+}

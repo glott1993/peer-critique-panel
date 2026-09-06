@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-38",
+ "type": "multi",
+ "condition": "seat1",
+ "correct": true,
+ "detail": "ok: got 8120.0, expected 8120.0 | ok: got 3462.14, expected 3462.14 | ok: got 60.0, expected 60.0",
+ "error": null,
+ "seconds": 49.0,
+ "tokens": 7240,
+ "prompt_tokens": 585,
+ "completion_tokens": 6655,
+ "cost": 0.06772,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "# Part A: Tax Calculation\n\n**Income = $57,400**\n\nTax brackets:\n- 8% on first $12,500: 0.08 \u00d7 12,500 = $1,000\n- 20% on $12,500\u2013$52,000: 0.20 \u00d7 39,500 = $7,900\n- 30% above $52,000: 0.30 \u00d7 (57,400 \u2212 52,000) = 0.30 \u00d7 5,400 = $1,620\n\n**Gross tax = 1,000 + 7,900 + 1,620 = $10,520**\n\nTax credit: $2,400, reduced by 5% of income above $60,000.\nSince 57,400 < 60,000, no reduction applies \u2192 credit = $2,400\n\n**Tax owed = 10,520 \u2212 2,400 = $8,120.00**\n\n# Part B: FIFO Cost of Goods Sold\n\nLots (in order): \n1) 111@11.46  2) 122@4.84  3) 48@9.95  4) 155@9.35  5) 152@11.18 ...\n\nSales (total 401 units): 44, 102, 56, 56, 57, 86\n\nTracking FIFO consumption:\n- Sale1 (44): 44 from Lot1 \u2192 remaining Lot1 = 67\n- Sale2 (102): 67 from Lot1 (empties) + 35 from Lot2 \u2192 remaining Lot2 = 87\n- Sale3 (56): 56 from Lot2 \u2192 remaining Lot2 = 31\n- Sale4 (56): 31 from Lot2 (empties) + 25 from Lot3 \u2192 remaining Lot3 = 23\n- Sale5 (57): 23 from Lot3 (empties) + 34 from Lot4 \u2192 remaining Lot4 = 121\n- Sale6 (86): 86 from Lot4 \u2192 remaining Lot4 = 35\n\nTotal usage per lot:\n- Lot1: 111 \u00d7 11.46 = 1,272.06\n- Lot2: 122 \u00d7 4.84 = 590.48\n- Lot3: 48 \u00d7 9.95 = 477.60\n- Lot4 (120 units used): 120 \u00d7 9.35 = 1,122.00\n\n**Total COGS = 1,272.06 + 590.48 + 477.60 + 1,122.00 = $3,462.14**\n\n# Part C: Large Multiplication\n\nStep 1: 91,740 \u00d7 8,195 = 751,809,300\nStep 2: \u00d7 680 = 511,230,324,000\nStep 3: \u00d7 9,158:\n\nVerification via alternate grouping:\n- 91,740 \u00d7 680 = 62,383,200\n- 8,195 \u00d7 9,158 = 75,049,810\n- 62,383,200 \u00d7 75,049,810 = 4,681,847,307,192,000 \u2713 (matches direct computation)\n\n**Result = 4,681,847,307,192,000**\n\nDigits: 4,6,8,1,8,4,7,3,0,7,1,9,2,0,0,0\n\nSum = 4+6+8+1+8+4+7+3+0+7+1+9+2+0+0+0 = **60**\n\nFINAL: 8120.00; 3462.14; 60"
+}
