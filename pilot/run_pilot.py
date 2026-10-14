@@ -180,14 +180,15 @@ def main():
         if not key:
             raise SystemExit("set OPENROUTER_API_KEY first (openrouter.ai -> Keys)")
         cfg = load_config(a.config) if not a.suggest_models else {"seats": [], "hub": "", "baseline": ""}
-        api = OpenRouterBackend(key, acc, provider_pins=cfg.get("provider_pins"))
+        api = OpenRouterBackend(key, acc, provider_pins=cfg.get("provider_pins"), reasoning=cfg.get("reasoning"))
         if a.suggest_models:
             suggest_models(api)
             return
 
     panel.ANSWER_TOKENS = int(cfg.get("answer_tokens", panel.ANSWER_TOKENS))
+    panel.JSON_TOKENS = int(cfg.get("json_tokens", panel.JSON_TOKENS))
     if a.ids:
-        keep = {l.strip() for l in open(a.ids) if l.strip()}
+        keep = {l.strip().lstrip("\ufeff") for l in open(a.ids, encoding="utf-8-sig") if l.strip()}
         tasks = [t for t in tasks if t["id"] in keep]
     if a.pick:
         want = {kv.split("=")[0]: int(kv.split("=")[1]) for kv in a.pick.split(",")}
@@ -276,8 +277,8 @@ def main():
                         rec_bd["k"] = kt; rec_bd["majority_key"] = out.get("majority_key"); rec_bd["answer"] = out.get("answer", ""); rec_bd["same_as_b"] = True
                         save_result(rec_bd)
                     acc.totals[(task["id"], cond)] = usage_b  # put back for the shared accounting below
-                elif cond == "c":
-                    out = run_panel_cond(task, cfg, api, ctx, True, catalogue, a.seed + zlib.crc32(task["id"].encode()) % 10000)
+                elif cond in ("c", "c2"):
+                    out = run_panel_cond(task, cfg, api, ctx, True, catalogue, a.seed + zlib.crc32(task["id"].encode()) % 10000 + (1 if cond == "c2" else 0))
                 elif cond == "d":
                     out = run_panel_cond(task, cfg, api, ctx, False, catalogue, a.seed + zlib.crc32(task["id"].encode()) % 10000)
                 else:
@@ -287,7 +288,7 @@ def main():
                 out, err = {"answer": ""}, f"{type(e).__name__}: {e}"[:500]
             usage = acc.take(task["id"], cond)
             rec = score_record(task, out, cond, usage, t0, err)
-            if cond in ("c", "d") and not err:
+            if cond in ("c", "c2", "d") and not err:
                 pre_ok, _ = checkers.score(task, out.get("pre_hub_answer", ""), task_bank.TEST_PRELUDE)
                 first_draft = next((e.get("draft") for e in (out.get("log") or []) if e.get("step") == 3 and "draft" in e), "")
                 draft_ok, _ = checkers.score(task, first_draft or "", task_bank.TEST_PRELUDE)
@@ -306,7 +307,10 @@ def main():
                 for fut in as_completed(futs):
                     r = fut.result()
                     flag = "ok " if r["correct"] else ("ERR" if r["error"] else "no ")
-                    print(f"   [{flag}] {r['task_id']:<8} {r['type']:<5} tokens {r['tokens']:>7}  ${r['cost']:.4f}  {r['seconds']:>6}s  {r['detail'][:70]}")
+                    print(f"   [{flag}] {r['task_id']:<8} {r['type']:<5} tokens {r['tokens']:>7}  ${r['cost']:.4f}  {r['seconds']:>6}s  {r['detail'][:70]}", flush=True)
+                    if cond in ("c", "c2", "d"):
+                        with open(cat_path, "w") as f:
+                            json.dump(catalogue, f, indent=1)
             with open(cat_path, "w") as f:
                 json.dump(catalogue, f, indent=1)
         allr = load_results(cond)

@@ -12,7 +12,8 @@ from dataclasses import dataclass, field
 import checkers
 
 LETTERS = "ABCDEFGHIJKL"
-ANSWER_TOKENS = 6000  # cap for calls that write or rewrite an answer; JSON-only steps keep 1500
+ANSWER_TOKENS = 6000  # cap for calls that write or rewrite an answer
+JSON_TOKENS = 5000    # cap for JSON-only steps (bids, critiques, votes, hub questions); reasoning models spend part of it thinking
 
 
 @dataclass
@@ -211,11 +212,11 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     for s in seats:
         touch(s)["runs"] += 1
 
-    def ask(s, user, temp, step, max_tokens=1500):
-        return api.chat(s.model, seat_system(s, N), user, temp, max_tokens=max_tokens, ctx=dict(ctx, step=step))
+    def ask(s, user, temp, step, max_tokens=None):
+        return api.chat(s.model, seat_system(s, N), user, temp, max_tokens=max_tokens or JSON_TOKENS, ctx=dict(ctx, step=step))
 
-    def ask_json(s, user, fb, temp, step, max_tokens=1500):
-        return parse_json(ask(s, user, temp, step, max_tokens), fb)
+    def ask_json(s, user, fb, temp, step, max_tokens=None):
+        return parse_json(ask(s, user, temp, step, max_tokens or JSON_TOKENS), fb)
 
     def pick(lst):
         return rng.choice(lst) if lst else None
@@ -337,7 +338,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     if cfg.get("hub"):
         hub_sys = P.hub_system(cfg["hub_budget"])
         remaining, qn, qa = cfg["hub_budget"], 0, []
-        raw = api.chat(cfg["hub"], hub_sys, P.hub_ask(req, answer, record_text(record), catalogue_digest(seats, cat), min(3, remaining), remaining), 0.3, ctx=dict(ctx, step="hub-ask"))
+        raw = api.chat(cfg["hub"], hub_sys, P.hub_ask(req, answer, record_text(record), catalogue_digest(seats, cat), min(3, remaining), remaining), 0.3, max_tokens=JSON_TOKENS, ctx=dict(ctx, step="hub-ask"))
         hq = parse_json(raw, {"questions": extract_questions(raw), "checks": []})
         for c in (hq.get("checks") if isinstance(hq.get("checks"), list) else [])[:4]:
             if not isinstance(c, dict):
@@ -381,7 +382,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
                         c["addressed"] = True
                 mechanical()  # re-run the visible examples on the corrected code
             under_review = [next(b for b in qa if b["n"] == o["n"]) for o in hub_open] + batch
-            rv_raw = api.chat(cfg["hub"], hub_sys, P.hub_review(req, answer, under_review, remaining), 0.3, ctx=dict(ctx, step="hub-review"))
+            rv_raw = api.chat(cfg["hub"], hub_sys, P.hub_review(req, answer, under_review, remaining), 0.3, max_tokens=JSON_TOKENS, ctx=dict(ctx, step="hub-review"))
             rv = parse_json(rv_raw, {"resolved": [b["n"] for b in under_review], "open": [], "questions": extract_questions(rv_raw)})
             resolved = {int(n) for n in (rv.get("resolved") or []) if str(n).isdigit()}
             hub_open = [{"n": int(o["n"]), "why": str(o.get("why") or ""), "q": next(b["q"] for b in under_review if b["n"] == int(o["n"]))}

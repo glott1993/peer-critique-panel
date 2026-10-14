@@ -17,8 +17,8 @@ RESULTS = sys.argv[sys.argv.index("--results") + 1] if "--results" in sys.argv e
 COND_NAMES = {"a": "single frontier model, one pass (temperature 0.3)", "a2": "single frontier model, one pass (temperature 0.7)",
               "a3": "single frontier model from another lab, one pass",
               "b": "same model, token-matched (k samples + self-critique)", "bd": "same model, dollar-matched (k samples + self-critique)",
-              "c": "panel with hub", "d": "panel without hub"}
-COND_ORDER = ("a", "a2", "a3", "b", "bd", "c", "d")
+              "c": "panel with hub", "c2": "panel with hub, second pass, hub reads the catalogue built by the first", "d": "panel without hub"}
+COND_ORDER = ("a", "a2", "a3", "b", "bd", "c", "c2", "d")
 
 
 def wilson(k, n, z=1.96):
@@ -102,7 +102,7 @@ def main():
 
     # paired differences
     lines += ["## Paired differences in accuracy (95% bootstrap interval, tasks present in both conditions)", ""]
-    pairs = [("c", "a"), ("c", "a2"), ("c", "a3"), ("c", "b"), ("c", "bd"), ("c", "d"), ("d", "b"), ("d", "bd"), ("b", "a"), ("bd", "a"), ("d", "a"), ("a2", "a"), ("a3", "a")]
+    pairs = [("c", "a"), ("c", "a2"), ("c", "a3"), ("c", "b"), ("c", "bd"), ("c", "d"), ("c2", "c"), ("c2", "d"), ("d", "b"), ("d", "bd"), ("b", "a"), ("bd", "a"), ("d", "a"), ("a2", "a"), ("a3", "a")]
     if seat_best:
         pairs += [("c", seat_best), ("d", seat_best), ("a", seat_best)] + [(seat_best, c2) for c2 in seat_conds if c2 != seat_best]
     for x, y in pairs:
@@ -141,7 +141,7 @@ def main():
         calls = statistics.mean(r.get("calls", 0) for r in rs); errs = sum(r.get("call_errors", 0) for r in rs)
         lines.append(f"| {c} | {tok:,.0f} | ${cost:.4f} | {sec:.0f} | {calls:.1f} | {errs} |")
         summary["cost"][c] = {"mean_tokens": tok, "mean_cost": cost, "median_seconds": sec, "total_cost": sum(r["cost"] for r in rs)}
-    for cnd in ("c", "d"):
+    for cnd in ("c", "c2", "d"):
         if cnd in res:
             rs = [r for r in res[cnd].values() if not r.get("error") and "pre_critique_correct" in r]
             if rs:
@@ -156,9 +156,9 @@ def main():
         lines.append("Condition b sample counts (k) by type: " + ", ".join(f"{t}: {k}" for t, k in ks))
     lines.append("")
 
-    # hub metrics
-    if "c" in res:
-        rs = [r for r in res["c"].values() if not r.get("error")]
+    # hub metrics, one block per hub condition (c, and c2 when the catalogue test has run)
+    for hub_cond in [x for x in ("c", "c2") if x in res]:
+        rs = [r for r in res[hub_cond].values() if not r.get("error")]
         wrong_pre = [r for r in rs if not r.get("pre_hub_correct")]
         right_pre = [r for r in rs if r.get("pre_hub_correct")]
         caught = [r for r in wrong_pre if r.get("hub_sent_back")]
@@ -167,7 +167,7 @@ def main():
         harmed = [r for r in right_pre if not r["correct"]]
         deadlock_c = [r for r in rs if not r.get("agreed")]
         shipped = [r for r in rs if r.get("shipped")]
-        lines += ["## What the hub did (condition c)", "",
+        lines += [f"## What the hub did (condition {hub_cond}{', second pass with the catalogue' if hub_cond == 'c2' else ''})", "",
                   f"- Answers submitted to the hub: {len(rs)}; wrong before the hub: {len(wrong_pre)}; right before the hub: {len(right_pre)}",
                   f"- Catch rate: {len(caught)}/{len(wrong_pre)} wrong answers were sent back" + (f" ({pct(len(caught) / len(wrong_pre))})" if wrong_pre else ""),
                   f"- Repair rate: {len(fixed)}/{len(wrong_pre)} wrong answers ended right after interrogation" + (f" ({pct(len(fixed) / len(wrong_pre))})" if wrong_pre else ""),
@@ -176,7 +176,7 @@ def main():
                   f"- Panel deadlocks (no agreement within the round budget): {len(deadlock_c)}/{len(rs)}" + (f" ({pct(len(deadlock_c) / len(rs))})" if rs else ""),
                   f"- Released with all three gates met: {len(shipped)}/{len(rs)}; the rest shipped with a flag",
                   f"- Mean hub questions per item: {statistics.mean(r.get('hub_questions', 0) for r in rs):.1f}" if rs else "", ""]
-        summary["hub"] = {"n": len(rs), "wrong_pre": len(wrong_pre), "caught": len(caught), "fixed": len(fixed), "right_pre": len(right_pre), "false_alarm": len(false_alarm), "harmed": len(harmed), "deadlock": len(deadlock_c), "shipped": len(shipped)}
+        summary.setdefault("hub", {})[hub_cond] = {"n": len(rs), "wrong_pre": len(wrong_pre), "caught": len(caught), "fixed": len(fixed), "right_pre": len(right_pre), "false_alarm": len(false_alarm), "harmed": len(harmed), "deadlock": len(deadlock_c), "shipped": len(shipped)}
         # accuracy of shipped vs flagged
         if shipped and len(shipped) < len(rs):
             flagged = [r for r in rs if not r.get("shipped")]

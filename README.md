@@ -12,7 +12,7 @@ The paper positions the design against AI safety via debate, multi-agent debate,
 
 | Path | What it is |
 | --- | --- |
-| `proposal/tiered-peer-critique-proposal.pdf` | The paper (working draft v1.1). Same content as the HTML. |
+| `proposal/tiered-peer-critique-proposal.pdf` | The paper (working draft v1.2). Same content as the HTML. |
 | `proposal/tiered-peer-critique-proposal.html` | Single-file, styled, printable version of the paper. |
 | `prototype/peer-critique-panel.html` | A single-file browser prototype of the six-step protocol: decompose, bid, critique, revise, interrogate, release. Includes a single-model baseline on the same request and a persistent catalogue. |
 | `pilot/` | The compute-matched evaluation described in the paper: 64 original checkable tasks, five conditions, every model call, and the report. See `pilot/README.md` and `pilot/results/report.md`. |
@@ -29,6 +29,8 @@ Nothing leaves your browser except the calls to the model API you chose. The cat
 ## Status
 
 Working draft v1.2, September 2026. The pilot has been run (September 5, 2026, about $34 of model calls). In one line: on 64 checkable tasks, every answered item was right in every condition, so neither preregistered test was passed at this sample size (panel minus compute-matched single model +3.1 points, interval [0, +7.8]; hub minus no hub, 0.0); what separated the conditions was whether an answer came back at all: the single frontier endpoint declined 8 of 20 coding prompts at both temperatures, twelve samples reduced that to 2, and the four-lab panel answered all 64. Full numbers and the readout are in `pilot/results/report.md`; the paper's *Pilot results* section says what they do and do not show. Comments, objections, and pointers to prior work I have missed are welcome as GitHub Issues.
+
+Pilot 2, on a harder 240-task set, is in progress (October 2026): the frontier baseline and the task set are in `pilot/results2/` and `pilot/tasks/`; the seat-alone and panel runs follow. The September runs were interrupted by an account suspension and the compute that held them was lost; `pilot/README.md` ("Pilot 2, second attempt") says what survived and how the rest is being rerun.
 
 ## Cite
 

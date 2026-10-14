@@ -94,3 +94,115 @@ python report.py --results results2
 ```
 
 Add `--limit 30` to every run for a 120-task version at about 60% of the cost; the same subset is used in every condition. Status line: `pgrep -f run_pilot.py >/dev/null && echo running || echo stopped; ls results2/*/ | grep -c json; grep -l '"error": "' results2/*/*.json 2>/dev/null | wc -l`.
+
+The runbook above is the September 2026 plan as it was run in a GitHub Codespace. The section below replaces it.
+
+## Pilot 2, second attempt (October 2026)
+
+### What happened and what survived
+
+The GitHub account was suspended by automated abuse detection on September 6, 2026, in the middle of the panel run, and reinstated on October 14. The Codespace that held the September runs was deleted by GitHub's 30-day retention while the account was locked, and a deleted codespace cannot be reopened. The last commit before the suspension (September 6, 01:22 UTC) saved:
+
+- `tasks/pilot2_tasks.json`: the 240-task level 3 set (40 math, 40 three-part composites, 40 four-part composites, 50 data, 30 code, 40 five-house logic puzzles).
+- `results2/a`: the frontier baseline (Claude Opus 5, one pass) on all 240: 230 right, 4 wrong, 6 refused (all code, empty content-filter replies from Anthropic's own endpoint). This condition is kept: its code path is untouched by the fixes below (one call, no JSON steps, and the baseline is exempt from the reasoning budget), every call finished with `stop`, and none of its misses were truncations.
+- `results2/seat1` (Claude Sonnet 5 alone) and `results2/seat2` (GPT-5.6 Luna Pro alone): partial, and from before the reasoning fix (34 of Sonnet's 240 came back empty; GPT reached 162 of 240). Both are deleted before the rerun so that all four seats run under one harness version.
+- `results2/calls.jsonl`: every call from those runs, with tokens and cost.
+
+Lost with the Codespace: Gemini 3.8 Flash and DeepSeek V4 Pro alone, the rest of GPT's run, the 108-task subset, and the partial panel run.
+
+The harness fixes made on September 6 to 8 lived only on that Codespace and in a zip saved to the author's PC. The October 14 commit restores them: a per-model reasoning budget sent through OpenRouter (`reasoning` in `config.json`, longest model prefix wins, the frontier baseline exempt), a 5,000-token cap on JSON-only steps (`json_tokens`; the old 1,500 was spent entirely on thinking by Sonnet 5 and DeepSeek V4, which then returned nothing and collapsed the panel on 89 of 108 tasks), empty replies charged at their real cost and retried, condition `c2` (a second pass of the panel with hub whose hub reads the catalogue the first pass built), the catalogue saved after every task, and `select_subset.py --out` (PowerShell's `>` writes UTF-16, which the id reader could not use).
+
+### Rules
+
+- The harness never runs in GitHub Codespaces again. The account was restricted for it once, and GitHub's reinstatement notice says a repeat may be permanent. Runs happen on a local machine; the Razer Blade 18 is the one in use.
+- The OpenRouter key lives in an environment variable set by hand in a terminal. It is never typed into a chat, a file, or a commit.
+- Every stage is resumable: results are written per task, errored tasks retry on the next run, and a stopped run continues from where it was. Rerunning a finished stage costs nothing.
+- Calibration precedes spend: the four seats and the subset come first, then a priced trial of the panel, then the panel runs.
+
+### Setup on the Razer (Windows)
+
+Code projects with a git repository live in `C:\Users\gmagi\code`. Claude Code on the PC runs these lines in its shell (Git Bash); the PowerShell forms are given where they differ. If `python` is not on the path, `py -3` is the same thing.
+
+```
+cd /c/Users/gmagi/code
+git clone https://github.com/glott1993/peer-critique-panel
+cd peer-critique-panel/pilot
+python -m venv .venv
+source .venv/Scripts/activate            # PowerShell: .\.venv\Scripts\Activate.ps1 (if scripts are blocked: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned)
+python -m pip install -r requirements.txt
+```
+
+The key, typed by the author in a PowerShell window (not in Claude Code), then a new terminal so it takes effect:
+
+```
+setx OPENROUTER_API_KEY "the-key"
+```
+
+Check in the new terminal: `echo ${#OPENROUTER_API_KEY}` (PowerShell: `$env:OPENROUTER_API_KEY.Length`) prints 73.
+
+Offline check, no API calls and no cost; expect six tasks per condition and a clean exit:
+
+```
+python run_pilot.py --mock --tasks tasks/pilot2_tasks.json --results results2-mock --conditions a,seat1,c,c2,d --limit 1 --workers 4
+rm -rf results2-mock                     # PowerShell: Remove-Item -Recurse -Force results2-mock
+```
+
+Live smoke test, six Gemini calls, a few cents; expect six `[ok ]` or `[no ]` lines and no `ERR`:
+
+```
+python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2-smoke --conditions seat3 --limit 1 --workers 1
+rm -rf results2-smoke
+```
+
+Status line, from `pilot/` (files written so far, then tasks that ended in an error):
+
+```
+ls results2/*/ | grep -c json; grep -l '"error": "' results2/*/*.json 2>/dev/null | wc -l
+```
+
+### Stages and costs
+
+Bring the OpenRouter balance to about $300 before stage 3 and set the key's spending limit to match. Prices are per the ids pinned in `config.json`; `results2/calls.jsonl` records what each call actually cost.
+
+**Stage 1, the four seats alone (about $15; an hour or two).** The September seat1 and seat2 folders go first so the four seats share one harness version.
+
+```
+rm -rf results2/seat1 results2/seat2     # PowerShell: Remove-Item -Recurse -Force results2\seat1, results2\seat2
+python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions seat1,seat2,seat3,seat4 --workers 3
+python report.py --results results2
+```
+
+Done when the status line reads 1200 files (a's 240 plus four seats of 240) and the error count is about 6 (a's refusals, which stay). The report's per-seat accuracy should land near September's 86 to 93%. A seat far below that means empty replies, not a weak model: read the error text (`grep -ho '"error": "[^"]*' results2/seat*/*.json | sort | uniq -c`) before going on.
+
+**Stage 2, the subset (free).** Every task at least one seat missed, plus 30 the seats all got right so harm can be measured.
+
+```
+python select_subset.py --results results2 --conds seat1,seat2,seat3,seat4 --extra 30 --out results2/subset.txt
+```
+
+It reports the counts; September's version came to 78 + 30 = 108.
+
+**Stage 3, a priced trial of the panel (about $10).** Two tasks per type from the subset, with a fresh catalogue.
+
+```
+rm -f results2/catalogue.json            # PowerShell: Remove-Item -Force results2\catalogue.json
+python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions c --ids results2/subset.txt --limit 2 --workers 2
+```
+
+The last line of the output gives the trial's total cost. Divide by the number of tasks run and multiply by the subset size for condition c; budget about the same again for c2 and 60% of it for d. Stop here if the total is over $300 and decide; the trial's results count toward c and are not rerun.
+
+**Stage 4, the panel runs: c, then c2, then d, each on the whole subset (roughly $150 to $250 in all; the trial gives the real number).**
+
+```
+python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions c --ids results2/subset.txt --workers 3
+python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions c2 --ids results2/subset.txt --workers 3
+python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions d --ids results2/subset.txt --workers 3
+python report.py --results results2
+```
+
+c2 runs right after c and before d because condition d also writes to the shared catalogue (its critique rounds update the per-seat tallies), and the c2 test is about the catalogue that c built. Each run is done when its folder holds as many files as `subset.txt` has lines and the error count has not grown; a stopped run is restarted with the same line.
+
+**Stage 5.** Commit the results (`git add -A && git commit -m "Pilot 2 results" && git push` from the repository root) and write v1.3 from `results2/report.md`.
+
+The matched single-model baselines (b and bd, about $50 on the subset) are optional for this pilot: its question is whether critique plus a hub lifts four mid-class seats above the best of them alone and toward the frontier model's one pass (condition a). Run them afterwards only if the panel result makes the comparison worth paying for.
+

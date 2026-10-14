@@ -43,9 +43,14 @@ class Accounting:
             return self.totals.pop((task, condition), {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0, "cost": 0.0, "errors": 0})
 
 
+class _EmptyReply(RuntimeError):
+    pass
+
+
 class OpenRouterBackend:
-    def __init__(self, api_key, accounting, max_retries=6, timeout=180, title="Peer-critique pilot", provider_pins=None):
+    def __init__(self, api_key, accounting, max_retries=6, timeout=180, title="Peer-critique pilot", provider_pins=None, reasoning=None):
         self.provider_pins = provider_pins or {}  # {"anthropic/": {"order": ["anthropic"], "allow_fallbacks": False}}
+        self.reasoning = reasoning or {}  # {"default": {"effort": "low"}, "anthropic/claude-opus-5": None}; longest matching prefix wins
         import requests  # imported here so --mock works without it
         self.requests = requests
         self.key = api_key
@@ -63,6 +68,10 @@ class OpenRouterBackend:
         for prefix, prefs in self.provider_pins.items():
             if model.startswith(prefix):
                 body["provider"] = prefs
+        matches = [k for k in self.reasoning if k != "default" and model.startswith(k)]
+        rsn = self.reasoning[max(matches, key=len)] if matches else self.reasoning.get("default")
+        if rsn:
+            body["reasoning"] = rsn
         delay = 1.5
         last_err = None
         for attempt in range(self.max_retries + 1):
@@ -94,11 +103,14 @@ class OpenRouterBackend:
                 finish = choice.get("finish_reason")
                 served_by = data.get("provider")
                 if not text.strip() or finish in ("content_filter", "error"):
-                    raise RuntimeError(f"empty reply (finish={finish}, provider={served_by})")
+                    self.acc.record(ctx, model, usage, float(cost), time.time() - t0, False, f"empty reply (finish={finish}, provider={served_by})", finish=f"{finish} via {served_by}")
+                    raise _EmptyReply(f"empty reply (finish={finish}, provider={served_by})")
                 self.acc.record(ctx, model, usage, float(cost), time.time() - t0, True, finish=f"{finish} via {served_by}")
                 return text
             except ValueError:
                 raise
+            except _EmptyReply as e:  # already recorded with its real usage; retry
+                last_err = e
             except Exception as e:  # transient: retry with backoff
                 last_err = e
                 self.acc.record(ctx, model, {}, 0.0, time.time() - t0, False, str(e)[:200])
