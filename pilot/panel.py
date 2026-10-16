@@ -212,17 +212,48 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     for s in seats:
         touch(s)["runs"] += 1
 
+    # A call that gives up after the backend's retries (its RuntimeError) is a decline: the panel routes around it
+    # instead of failing the task. Seats that decline abstain on JSON steps and hand drafts, revisions and replies to
+    # another seat; a hub that declines leaves the answer flagged. Configuration errors (ValueError) still propagate.
+    declined = []
+    declined_letters = set()
+
+    def note_decline(who, step, err):
+        declined.append({"who": who, "step": step, "error": str(err)[:160]})
+        if who != "hub":
+            declined_letters.add(who)
+
     def ask(s, user, temp, step, max_tokens=None):
         mt = max_tokens or JSON_TOKENS
         # json_step marks the short JSON-only calls (decompose, bid, compare, critique, vote); the backend may
         # apply a different reasoning setting to them. Answer-writing calls at ANSWER_TOKENS keep the seat's normal one.
         return api.chat(s.model, seat_system(s, N), user, temp, max_tokens=mt, ctx=dict(ctx, step=step), json_step=(mt <= JSON_TOKENS))
 
+    def ask_safe(s, user, temp, step, max_tokens=None):
+        """ask, but a decline returns None and is recorded."""
+        try:
+            return ask(s, user, temp, step, max_tokens)
+        except RuntimeError as e:
+            note_decline(s.letter, step, e)
+            t = touch(s); t["declined"] = t.get("declined", 0) + 1
+            return None
+
     def ask_json(s, user, fb, temp, step, max_tokens=None):
-        return parse_json(ask(s, user, temp, step, max_tokens or JSON_TOKENS), fb)
+        """JSON step where the fallback is the abstaining answer (no bids, no challenges, keep X, no changes)."""
+        return parse_json(ask_safe(s, user, temp, step, max_tokens or JSON_TOKENS), fb)
+
+    def ask_json2(s, user, fb, temp, step, max_tokens=None):
+        """JSON step where the caller handles a decline itself: returns None instead of the fallback."""
+        raw = ask_safe(s, user, temp, step, max_tokens or JSON_TOKENS)
+        return None if raw is None else parse_json(raw, fb)
 
     def pick(lst):
         return rng.choice(lst) if lst else None
+
+    def willing(lst):
+        """The seats in lst that have not declined in this task; all of lst if every one has."""
+        w = [s for s in lst if s.letter not in declined_letters]
+        return w or list(lst)
 
     # 1. Decomposition
     proposer = pick(seats)
@@ -244,7 +275,7 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     for c in comps:
         if not bidders[c["id"]]:
             load = lambda s: sum(1 for x in comps if s in bidders[x["id"]])
-            bidders[c["id"]] = [sorted(seats, key=load)[0]]
+            bidders[c["id"]] = [sorted(willing(seats), key=load)[0]]
         lst = bidders[c["id"]][:]
         rng.shuffle(lst)
         bidders[c["id"]] = lst[:2]
@@ -254,8 +285,19 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     jobs = []
     for c in comps:
         for s in bidders[c["id"]]:
-            jobs.append(lambda c=c, s=s: {"c": c, "s": s, "text": ask(s, P.draft(req, c), 0.8, "draft", ANSWER_TOKENS)})
-    drafts = pool(jobs)
+            jobs.append(lambda c=c, s=s: {"c": c, "s": s, "text": ask_safe(s, P.draft(req, c), 0.8, "draft", ANSWER_TOKENS)})
+    drafts = [d for d in pool(jobs) if d["text"] is not None]
+    for c in comps:  # a component whose every bidder declined goes to another seat; the task fails only if no seat will draft it
+        if any(d["c"] is c for d in drafts):
+            continue
+        tried = {s.letter for s in bidders[c["id"]]}
+        for s in sorted(willing(seats), key=lambda s: (s.letter in tried, sum(1 for d in drafts if d["s"] is s))):
+            text = ask_safe(s, P.draft(req, c), 0.8, "draft", ANSWER_TOKENS)
+            if text is not None:
+                drafts.append({"c": c, "s": s, "text": text})
+                break
+        else:
+            raise RuntimeError(f"every seat declined to draft component {c['id']}: " + "; ".join(f"{d['who']} at {d['step']}" for d in declined))
     per = {}
     for d in drafts:
         per.setdefault(d["c"]["id"], []).append(d)
@@ -279,7 +321,15 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     if len(comps) == 1:
         answer = chosen[comps[0]["id"]]["text"]
     else:
-        answer = ask(assembler, P.assemble(req, [{"c": c, "text": chosen[c["id"]]["text"]} for c in comps]), 0.5, "assemble", ANSWER_TOKENS)
+        parts = [{"c": c, "text": chosen[c["id"]]["text"]} for c in comps]
+        answer = None
+        for s in [assembler] + [x for x in willing(loads) if x is not assembler]:
+            answer = ask_safe(s, P.assemble(req, parts), 0.5, "assemble", ANSWER_TOKENS)
+            if answer is not None:
+                assembler = s
+                break
+        if answer is None:  # no seat would stitch the parts: ship them in order so the panel still answers
+            answer = "\n\n".join(f"{p['c']['title']}\n{p['text']}" for p in parts)
     author = chosen[comps[0]["id"]]["s"] if len(comps) == 1 else assembler
     log.append({"step": 3, "author": author.letter, "draft": answer})
 
@@ -305,7 +355,14 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
         rounds_used = rnd
         if challenges:
             reviser = pick([s for s in seats if s is not author]) or author
-            r = ask_json(reviser, P.revise(req, answer, challenges), {"answer": answer, "accepted": [], "rejected": []}, 0.5, "revise", ANSWER_TOKENS)
+            r = None
+            for s in [reviser] + [x for x in willing([x for x in seats if x is not author]) if x is not reviser]:
+                r = ask_json2(s, P.revise(req, answer, challenges), {"answer": answer, "accepted": [], "rejected": []}, 0.5, "revise", ANSWER_TOKENS)
+                if r is not None:
+                    reviser = s
+                    break
+            if r is None:  # every seat declined to revise: the draft stands and the challenges stay open
+                r = {"answer": answer, "accepted": [], "rejected": []}
             if isinstance(r.get("answer"), str) and len(r["answer"].strip()) > 20:
                 answer = r["answer"].strip()
             acc = [int(n) for n in (r.get("accepted") or []) if str(n).isdigit() and 1 <= int(n) <= len(challenges)]
@@ -319,14 +376,17 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
                 record["rejected"].append(dict(ch, why=x["why"]))
             author = reviser
             log.append({"step": 4, "round": rnd, "reviser": reviser.letter, "accepted": len(acc), "rejected": len(rej), "answer": answer})
-        votes = pool([(lambda s=s: (s, ask_json(s, P.vote(req, answer), {"ready": False, "objection": "vote could not be read"}, 0.3, "vote"))) for s in seats])
+        votes = pool([(lambda s=s: (s, ask_json2(s, P.vote(req, answer), {"ready": False, "objection": "vote could not be read"}, 0.3, "vote"))) for s in seats])
+        abstained = [s for s, v in votes if v is None]  # a seat that declined to vote abstains; an unreadable vote still counts as an objection
+        votes = [(s, v) for s, v in votes if v is not None]
+        voters = [s for s, _ in votes]
         ready_w = sum(s.weight for s, v in votes if v.get("ready") is True)
-        total_w = sum(s.weight for s in seats)
-        frontier = [s for s in seats if s.tier_class == "frontier"]
+        total_w = sum(s.weight for s in voters)
+        frontier = [s for s in voters if s.tier_class == "frontier"]
         frontier_ok = all(next((v for s2, v in votes if s2 is s), {}).get("ready") is True for s in frontier)
-        agreed = (frontier_ok and ready_w / total_w >= 0.66) if cfg.get("tier") in ("apex", "god") else all(v.get("ready") is True for _, v in votes)
+        agreed = bool(votes) and ((frontier_ok and ready_w / total_w >= 0.66) if cfg.get("tier") in ("apex", "god") else all(v.get("ready") is True for _, v in votes))
         record["objections"] = [{"from": s, "objection": str(v.get("objection") or "")} for s, v in votes if v.get("ready") is not True]
-        log.append({"step": 4, "round": rnd, "votes": {s.letter: (v.get("ready") is True) for s, v in votes}, "agreed": agreed})
+        log.append({"step": 4, "round": rnd, "votes": {s.letter: (v.get("ready") is True) for s, v in votes}, "agreed": agreed, **({"abstained": [s.letter for s in abstained]} if abstained else {})})
         if agreed:
             break
         if rnd < cfg["rounds"]:
@@ -341,8 +401,19 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     if cfg.get("hub"):
         hub_sys = P.hub_system(cfg["hub_budget"])
         remaining, qn, qa = cfg["hub_budget"], 0, []
-        raw = api.chat(cfg["hub"], hub_sys, P.hub_ask(req, answer, record_text(record), catalogue_digest(seats, cat), min(3, remaining), remaining), 0.3, max_tokens=JSON_TOKENS, ctx=dict(ctx, step="hub-ask"), json_step=True)
-        hq = parse_json(raw, {"questions": extract_questions(raw), "checks": []})
+        hub_down = None  # set when a hub call gives up: the interrogation stops and the answer ships flagged, as a deadlock does
+
+        def hub_call(user, step):
+            nonlocal hub_down
+            try:
+                return api.chat(cfg["hub"], hub_sys, user, 0.3, max_tokens=JSON_TOKENS, ctx=dict(ctx, step=step), json_step=True)
+            except RuntimeError as e:
+                hub_down = f"{step}: {str(e)[:160]}"
+                note_decline("hub", step, e)
+                return None
+
+        raw = hub_call(P.hub_ask(req, answer, record_text(record), catalogue_digest(seats, cat), min(3, remaining), remaining), "hub-ask")
+        hq = parse_json(raw, {"questions": extract_questions(raw), "checks": []}) if raw is not None else {"questions": [], "checks": []}
         for c in (hq.get("checks") if isinstance(hq.get("checks"), list) else [])[:4]:
             if not isinstance(c, dict):
                 continue
@@ -367,12 +438,18 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
         if failing0 and not questions:  # a failed check is itself a question
             questions = ["A check computed outside the panel failed. Which figure or example is wrong, and what is the corrected answer?"]
         sent_back = bool(questions) or bool(failing0)
-        while questions and remaining > 0:
+        while questions and remaining > 0 and not hub_down:
             batch = [{"n": (qn := qn + 1), "q": q} for q in questions[:min(3, remaining)]]
             remaining -= len(batch)
             qa.extend(batch)
             failing = [f"{c['expr']} = {c['value']}, but the answer claims {c['claimed']}" if c["kind"] == "arithmetic" else f"running the visible examples failed: {c['value']}" for c in checks if c["valid"] and not c["ok"] and not c["addressed"]]
-            pr = ask_json(author, P.panel_reply(req, answer, batch, failing), {"replies": [], "correctedAnswer": None}, 0.4, "panel-reply", ANSWER_TOKENS)
+            pr = None
+            for s in [author] + [x for x in willing(seats) if x is not author]:  # the author answers the hub; if it declines, another seat does
+                pr = ask_json2(s, P.panel_reply(req, answer, batch, failing), {"replies": [], "correctedAnswer": None}, 0.4, "panel-reply", ANSWER_TOKENS)
+                if pr is not None:
+                    break
+            if pr is None:
+                pr = {"replies": [], "correctedAnswer": None}
             replies = pr.get("replies") if isinstance(pr.get("replies"), list) else []
             for i, b in enumerate(batch):
                 r = next((x for x in replies if isinstance(x, dict) and str(x.get("n")) == str(b["n"])), replies[i] if i < len(replies) and isinstance(replies[i], dict) else None)
@@ -385,7 +462,12 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
                         c["addressed"] = True
                 mechanical()  # re-run the visible examples on the corrected code
             under_review = [next(b for b in qa if b["n"] == o["n"]) for o in hub_open] + batch
-            rv_raw = api.chat(cfg["hub"], hub_sys, P.hub_review(req, answer, under_review, remaining), 0.3, max_tokens=JSON_TOKENS, ctx=dict(ctx, step="hub-review"), json_step=True)
+            rv_raw = hub_call(P.hub_review(req, answer, under_review, remaining), "hub-review")
+            if rv_raw is None:  # the hub went silent mid-interrogation: everything under review stays open
+                hub_open = [{"n": b["n"], "why": "the hub did not answer", "q": b["q"]} for b in under_review]
+                questions = []
+                log.append({"step": 5, "asked": [b["q"] for b in batch], "replies": [b.get("reply") for b in batch], "open": [o["why"] for o in hub_open], "corrected": hub_corrected, "hub_down": hub_down})
+                break
             rv = parse_json(rv_raw, {"resolved": [b["n"] for b in under_review], "open": [], "questions": extract_questions(rv_raw)})
             resolved = {int(n) for n in (rv.get("resolved") or []) if str(n).isdigit()}
             hub_open = [{"n": int(o["n"]), "why": str(o.get("why") or ""), "q": next(b["q"] for b in under_review if b["n"] == int(o["n"]))}
@@ -393,6 +475,8 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
             questions = [str(q) for q in (rv.get("questions") or []) if q] if remaining > 0 else []
             log.append({"step": 5, "asked": [b["q"] for b in batch], "replies": [b.get("reply") for b in batch], "open": [o["why"] for o in hub_open], "corrected": hub_corrected})
         hub_qs = qn
+        if hub_down and not hub_open:  # the hub never reviewed the answer: it ships with that flag, not as cleared
+            hub_open = [{"n": 0, "why": "the hub did not answer (" + hub_down + ")", "q": "hub interrogation"}]
         record["hub_open"] = hub_open
         hub_clear = not hub_open and not questions
     else:
@@ -405,4 +489,4 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     return {"answer": answer, "pre_hub_answer": pre_hub_answer, "agreed": agreed, "rounds_used": rounds_used, "gates": gates, "shipped": shipped,
             "hub_questions": hub_qs, "hub_open": len(hub_open), "hub_sent_back": sent_back, "hub_corrected": hub_corrected,
             "checks": [{k: v for k, v in c.items() if k != "addressed"} for c in checks], "author": author.letter,
-            "seats": {s.letter: s.model for s in seats}, "log": log}
+            "seats": {s.letter: s.model for s in seats}, "declined": declined, "log": log}

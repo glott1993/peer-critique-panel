@@ -147,10 +147,11 @@ class MockBackend:
     """Offline stand-in. Correctness per model is a fixed probability so the
     scoring, gating, and reporting code paths all get exercised."""
 
-    def __init__(self, tasks, accounting, quality=None, seed=1):
+    def __init__(self, tasks, accounting, quality=None, seed=1, fail=None):
         self.tasks = {t["id"]: t for t in tasks}
         self.acc = accounting
         self.quality = quality or {}
+        self.fail = fail or {}  # {model: {step, ...}}: calls at these steps give up, as the live backend does after its retries
         self.rng = random.Random(seed)
         self.lock = threading.Lock()
 
@@ -181,6 +182,9 @@ class MockBackend:
 
     def chat(self, model, system, user, temperature=0.5, max_tokens=1500, ctx=None, json_step=False):
         task = self.tasks.get((ctx or {}).get("task"))
+        if (ctx or {}).get("step") in self.fail.get(model, ()):
+            self.acc.record(ctx, model, {"prompt_tokens": max(1, len(user) // 4), "completion_tokens": 0}, 0.0, 0.01, False, "empty reply (finish=length, provider=mock)", finish="length via mock")
+            raise RuntimeError(f"{model}: gave up after 6 retries: empty reply (finish=length, provider=mock)")
         u = user
         with self.lock:
             r = self.rng.random()

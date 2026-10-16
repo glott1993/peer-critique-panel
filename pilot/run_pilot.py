@@ -158,6 +158,7 @@ def main():
     ap.add_argument("--ids", default="", help="file with one task id per line; only those tasks run")
     ap.add_argument("--dry-run", action="store_true", help="1 task per type")
     ap.add_argument("--mock", action="store_true", help="offline mock backend")
+    ap.add_argument("--mock-fail", default="", help='with --mock: calls that give up, e.g. "mock/seat-2:draft,vote;mock/hub:hub-ask"')
     ap.add_argument("--workers", type=int, default=0)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--suggest-models", action="store_true")
@@ -174,7 +175,8 @@ def main():
     if a.mock:
         cfg = {"seats": [{"model": "mock/seat-1"}, {"model": "mock/seat-2"}, {"model": "mock/seat-3"}], "hub": "mock/hub", "baseline": "mock/frontier", "baseline_alt": "mock/frontier-other",
                "rounds": 2, "hub_budget": 4, "dissenter": True, "tier": "mid", "task_workers": 4}
-        api = MockBackend(tasks, acc, quality={"frontier": 0.75, "hub": 0.9, "seat": 0.6}, seed=a.seed)
+        fail = {m.strip(): {s.strip() for s in steps.split(",") if s.strip()} for m, _, steps in (part.partition(":") for part in a.mock_fail.split(";") if part.strip())}
+        api = MockBackend(tasks, acc, quality={"frontier": 0.75, "hub": 0.9, "seat": 0.6}, seed=a.seed, fail=fail)
     else:
         key = os.environ.get("OPENROUTER_API_KEY")
         if not key:
@@ -294,7 +296,7 @@ def main():
                 draft_ok, _ = checkers.score(task, first_draft or "", task_bank.TEST_PRELUDE)
                 rec.update({"pre_hub_correct": bool(pre_ok), "pre_critique_correct": bool(draft_ok), "agreed": out.get("agreed"), "rounds_used": out.get("rounds_used"), "gates": out.get("gates"), "shipped": out.get("shipped"),
                             "hub_questions": out.get("hub_questions"), "hub_open": out.get("hub_open"), "hub_sent_back": out.get("hub_sent_back"), "hub_corrected": out.get("hub_corrected"),
-                            "checks": out.get("checks"), "author": out.get("author"), "seats": out.get("seats"), "log": out.get("log")})
+                            "checks": out.get("checks"), "author": out.get("author"), "seats": out.get("seats"), "declined": out.get("declined"), "log": out.get("log")})
             if cond == "b":
                 rec.update({"k": out.get("k"), "majority_key": out.get("majority_key")})
             rec["answer"] = out.get("answer", "")
