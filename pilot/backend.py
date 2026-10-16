@@ -48,9 +48,10 @@ class _EmptyReply(RuntimeError):
 
 
 class OpenRouterBackend:
-    def __init__(self, api_key, accounting, max_retries=6, timeout=180, title="Peer-critique pilot", provider_pins=None, reasoning=None):
+    def __init__(self, api_key, accounting, max_retries=6, timeout=180, title="Peer-critique pilot", provider_pins=None, reasoning=None, reasoning_json=None):
         self.provider_pins = provider_pins or {}  # {"anthropic/": {"order": ["anthropic"], "allow_fallbacks": False}}
         self.reasoning = reasoning or {}  # {"default": {"effort": "low"}, "anthropic/claude-opus-5": None}; longest matching prefix wins
+        self.reasoning_json = reasoning_json or {}  # same shape; used instead of `reasoning` on JSON-capped steps for the models it names (e.g. {"deepseek/": {"effort": "none"}})
         import requests  # imported here so --mock works without it
         self.requests = requests
         self.key = api_key
@@ -60,7 +61,24 @@ class OpenRouterBackend:
         self.headers = {"Authorization": "Bearer " + api_key, "Content-Type": "application/json", "X-Title": title}
         self.include_usage = True  # OpenRouter usage accounting; switched off automatically if the API rejects it
 
-    def chat(self, model, system, user, temperature=0.5, max_tokens=1500, ctx=None):
+    @staticmethod
+    def _lookup(table, model):
+        matches = [k for k in table if k != "default" and model.startswith(k)]
+        return table[max(matches, key=len)] if matches else table.get("default")
+
+    def _reasoning_for(self, model, json_step):
+        """The reasoning setting for one call. On a JSON-capped step, `reasoning_json` wins when it names the
+        model's prefix (or has a default); otherwise `reasoning` applies. None means no reasoning parameter is sent.
+        Why: a reasoning model can spend the whole JSON cap thinking and return nothing (DeepSeek V4 Pro did, on
+        44% of its critique, vote, compare and bid calls at 5,000 tokens with effort low), while the same model
+        at the answer cap writes fine. Turning thinking off for the short steps only keeps its answers as they were."""
+        if json_step:
+            matches = [k for k in self.reasoning_json if k != "default" and model.startswith(k)]
+            if matches or "default" in self.reasoning_json:
+                return self._lookup(self.reasoning_json, model)
+        return self._lookup(self.reasoning, model)
+
+    def chat(self, model, system, user, temperature=0.5, max_tokens=1500, ctx=None, json_step=False):
         body = {"model": model, "temperature": temperature, "max_tokens": max_tokens,
                 "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
         if self.include_usage:
@@ -68,8 +86,7 @@ class OpenRouterBackend:
         for prefix, prefs in self.provider_pins.items():
             if model.startswith(prefix):
                 body["provider"] = prefs
-        matches = [k for k in self.reasoning if k != "default" and model.startswith(k)]
-        rsn = self.reasoning[max(matches, key=len)] if matches else self.reasoning.get("default")
+        rsn = self._reasoning_for(model, json_step)
         if rsn:
             body["reasoning"] = rsn
         delay = 1.5
@@ -162,7 +179,7 @@ class MockBackend:
             val = exp if good else ("Wednesday" if exp != "Wednesday" else "Friday")
         return f"Working shown here.\nFINAL: {val}"
 
-    def chat(self, model, system, user, temperature=0.5, max_tokens=1500, ctx=None):
+    def chat(self, model, system, user, temperature=0.5, max_tokens=1500, ctx=None, json_step=False):
         task = self.tasks.get((ctx or {}).get("task"))
         u = user
         with self.lock:

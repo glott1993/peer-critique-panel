@@ -112,6 +112,8 @@ Lost with the Codespace: Gemini 3.8 Flash and DeepSeek V4 Pro alone, the rest of
 
 The harness fixes made on September 6 to 8 lived only on that Codespace and in a zip saved to the author's PC. The October 14 commit restores them: a per-model reasoning budget sent through OpenRouter (`reasoning` in `config.json`, longest model prefix wins, the frontier baseline exempt), a 5,000-token cap on JSON-only steps (`json_tokens`; the old 1,500 was spent entirely on thinking by Sonnet 5 and DeepSeek V4, which then returned nothing and collapsed the panel on 89 of 108 tasks), empty replies charged at their real cost and retried, condition `c2` (a second pass of the panel with hub whose hub reads the catalogue the first pass built), the catalogue saved after every task, and `select_subset.py --out` (PowerShell's `>` writes UTF-16, which the id reader could not use).
 
+The October 15 fix, found by the stage 3 trial on the Razer: DeepSeek V4 Pro accepts `reasoning.effort: low` but does not bound its thinking by it. On the JSON-only steps (bid, compare, critique, vote) it spent the whole 5,000-token cap thinking and returned nothing on 58 of 133 calls, and six of the trial's twelve tasks died after the six retries; the other four models had no call errors at all. `reasoning_json` in `config.json` now gives a separate reasoning setting, by model prefix, for the steps capped at `json_tokens`; for `deepseek/` it is `{"effort": "none"}`, which turns thinking off for those steps only. A twelve-call probe on two of the failed tasks: with thinking on, three of four calls burned the cap; with it off, every call returned its JSON in 16 to 590 tokens and a few seconds. Answer-writing steps (draft, assemble, revise, panel reply) keep the seat's normal reasoning, so the seats answer in the panel as they did alone in stage 1. The trial's `results2/c` folder and the catalogue were cleared and condition c started fresh under this version, so all of c shares one harness.
+
 ### Rules
 
 - The harness never runs in GitHub Codespaces again. The account was restricted for it once, and GitHub's reinstatement notice says a repeat may be permanent. Runs happen on a local machine; the Razer Blade 18 is the one in use.
@@ -189,7 +191,7 @@ rm -f results2/catalogue.json            # PowerShell: Remove-Item -Force result
 python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2 --conditions c --ids results2/subset.txt --limit 2 --workers 2
 ```
 
-The last line of the output gives the trial's total cost. Divide by the number of tasks run and multiply by the subset size for condition c; budget about the same again for c2 and 60% of it for d. Stop here if the total is over $300 and decide; the trial's results count toward c and are not rerun.
+The last line of the output gives the trial's total cost. Divide by the number of tasks run and multiply by the subset size for condition c; budget about the same again for c2 and 60% of it for d. Stop here if the total is over $300 and decide; the trial's results count toward c and are not rerun. If tasks end in `[ERR]`, read the error text before projecting: a seat that burns its whole cap thinking on JSON steps is a reasoning setting to fix (`reasoning_json`), not a weak model, and after a harness change the trial is cleared and c starts fresh.
 
 **Stage 4, the panel runs: c, then c2, then d, each on the whole subset (roughly $150 to $250 in all; the trial gives the real number).**
 

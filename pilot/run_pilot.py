@@ -180,7 +180,7 @@ def main():
         if not key:
             raise SystemExit("set OPENROUTER_API_KEY first (openrouter.ai -> Keys)")
         cfg = load_config(a.config) if not a.suggest_models else {"seats": [], "hub": "", "baseline": ""}
-        api = OpenRouterBackend(key, acc, provider_pins=cfg.get("provider_pins"), reasoning=cfg.get("reasoning"))
+        api = OpenRouterBackend(key, acc, provider_pins=cfg.get("provider_pins"), reasoning=cfg.get("reasoning"), reasoning_json=cfg.get("reasoning_json"))
         if a.suggest_models:
             suggest_models(api)
             return
