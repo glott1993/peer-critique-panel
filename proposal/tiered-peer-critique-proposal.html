@@ -295,6 +295,31 @@
     table.res td:nth-child(4)::before { content: "Cost per item: "; font-family: var(--sans); font-weight: 600; }
   }
 
+  /* Results tables (pilot 2): plain grid, scrolls sideways on narrow screens */
+  .scroll { overflow-x: auto; margin: 6px 0 16px; }
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+    line-height: 1.35;
+  }
+  table.data th, table.data td {
+    text-align: left;
+    vertical-align: top;
+    padding: 7px 8px 7px 0;
+    border-bottom: 1px solid var(--tint);
+  }
+  table.data th {
+    font-family: var(--sans);
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--slate);
+    border-bottom: 2px solid var(--ink);
+  }
+  table.data td:first-child { font-family: var(--sans); font-weight: 600; }
+  @media print { table.data { font-size: 8.5pt; } table.data tr { break-inside: avoid; } }
+
   ol.refs {
     padding-left: 28px;
     margin: 0;
@@ -329,7 +354,7 @@
     <h1>A Tiered Peer-Critique Architecture for AI Answers</h1>
     <p class="sub">Every major lab's models sit on a panel and argue it out. A hub that never writes asks the questions.</p>
     <p class="draft">George W. Lott</p>
-    <p class="draft">Working draft v1.2, September 2026, with pilot results. This version: DOI <a href="https://doi.org/10.5281/zenodo.22357227" style="color:inherit">10.5281/zenodo.22357227</a>. Supersedes v1.1, <a href="https://doi.org/10.5281/zenodo.22325883" style="color:inherit">10.5281/zenodo.22325883</a>.</p>
+    <p class="draft">Working draft v1.3, October 2026, with results of a second pilot. This version: DOI pending. Supersedes v1.2, <a href="https://doi.org/10.5281/zenodo.22357227" style="color:inherit">10.5281/zenodo.22357227</a>, and v1.1, <a href="https://doi.org/10.5281/zenodo.22325883" style="color:inherit">10.5281/zenodo.22325883</a>.</p>
     <div class="rules">
       <div>Nothing picks a model.</div>
       <div>Nothing assigns the work.</div>
@@ -340,7 +365,7 @@
   <h2>Summary</h2>
   <p class="lead">No single AI model is best at everything, and none is reliable at knowing its own weak spots. Convening a panel is now a shipped feature. This proposal is about what happens after the panel is convened: the answer has to earn its release.</p>
   <p>Every request runs through the current publicly available models from every major lab, always the latest live version of each, sorted into class tiers. The models break the request down, bid on its parts, challenge each other's drafts, and revise until they agree. A dedicated hub that never writes an answer questions the result until nothing is left open, releases it with a note on where the panel split, and keeps a running catalogue of who was challenged, who was corrected, and who was later proven wrong, so the same class of mistake is caught sooner next time.</p>
-  <p>Where an answer can be checked, this should beat the best single model by a measurable margin. Where it can't, the design says so rather than pretending otherwise. A compute-matched pilot that could show either result is specified at the end, and its results are reported there: on 64 checkable tasks it could not separate the conditions on correctness, because every answered item was right in every condition, and it did separate them on whether an answer arrived at all.</p>
+  <p>Where an answer can be checked, this should beat the best single model by a measurable margin. Where it can't, the design says so rather than pretending otherwise. Two pilots that could show either result are specified at the end, and their results are reported there. The first, on 64 checkable tasks, could not separate the conditions on correctness because every answered item was right. The second, on 104 harder tasks, found a mid-priced panel with a frontier hub 4.8 points below one pass of the frontier model and 1.0 point below the same panel without the hub, both intervals including zero; the hub's net effect on right answers was zero in one run and minus four in the next, and the model that served as the hub, writing alone, outscored the panel it interrogated.</p>
 
   <h2>What this proposal adds</h2>
   <p>Debate between models, councils of models, and judges of models all exist; the prior-work section says where. These six elements are what the design contributes, each named against its nearest neighbor.</p>
@@ -391,6 +416,7 @@
   <p>What is the source. Why did seat B disagree. What happens if X. It keeps asking until nothing is left open, within a question budget, so interrogation neither loops forever nor turns into a rubber stamp.</p>
   <h3>What it must be</h3>
   <p>At least the class of the highest tier in play. A questioner weaker than the panel it examines gets talked past by confident wrong answers, which is what the weak-judge experiments found once the capability gap widens <span class="cite">[4, 5]</span>. Two things narrow that gap: the hub can enforce checks it doesn't need to understand (run the code, fetch the source, recompute the figure), the way a clerk enforces procedure, and the catalogue hands it patterned questions drawn from past failures.</p>
+  <p>It also needs a rule for the case where it cannot answer. In the second pilot's second pass the hub gave up on 4 of 104 tasks, once on a content filter and three times at its reply cap; a hub that does not answer can neither block release nor grant it, so the answer ships flagged, as a deadlock does. And its budget is a setting that shapes the result: at six questions the hub used all six on three quarters of the tasks, so the release conditions never stopped it; a hub that asks until its budget is gone is adding rounds, not interrogating.</p>
   <h3>Where it comes from</h3>
   <p>Every lab has a model on the panel, so the hub is either supplied by a rotating lab or trained for the role. Either way, it keeps the catalogue.</p>
 
@@ -414,6 +440,7 @@
   </ul>
   <div class="flag">
     <p><strong>Deadlock.</strong> If the panel can't agree, or a hub question can't be answered because no source exists, within the round or time limit, lower tiers may escalate to the next tier up where the plan allows. At the Apex tier there is nothing above, so the best draft ships with the dispute flagged to the user.</p>
+    <p>A seat that declines a step after winning its bid abstains, and an abstention is not an objection; its draft, revision or reply passes to another seat. A hub that declines leaves the answer flagged. Nothing in the protocol lets one participant's silence end the request. And no revision or correction replaces the standing answer unless it carries the answer format the request asks for; a text that has lost it is refused and the standing answer kept, with the refusal recorded.</p>
   </div>
 
   <h2>Guarding against shared blind spots</h2>
@@ -430,7 +457,7 @@
   </div>
 
   <h2>The catalogue</h2>
-  <p>The hub records who bid on what, who was challenged on what, where the panel split, what was corrected, and what was later found wrong. It uses that record to spot the same class of inaccuracy sooner and to sharpen its own questions.</p>
+  <p>The hub records who bid on what, who was challenged on what, where the panel split, what was corrected, and what was later found wrong. It uses that record to spot the same class of inaccuracy sooner and to sharpen its own questions. As implemented in the pilot harness the catalogue is a per-seat digest of counts and recent challenge snippets, not a record of specific failures; the second pilot tested that digest and nothing more.</p>
   <dl>
     <dt>Two layers</dt>
     <dd>A global record of patterns across all users, and a private per-user layer.</dd>
@@ -443,7 +470,7 @@
   </dl>
 
   <h2>Where the gain lives</h2>
-  <p>Where an answer can be checked (math, code, lookups, data work), the panel should beat the best single model by a measurable margin, and the verifiable-checks rule is what makes the gain stick. On open-ended judgment, writing, and taste, the evidence points the other way: consensus flattens answers, and models tend to cave under critique even when they were right. There, the panel's honest output is the split note, not a better paragraph.</p>
+  <p>Where an answer can be checked (math, code, lookups, data work), the panel should beat the best single model by a measurable margin, and the verifiable-checks rule is what makes the gain stick. The second pilot did not find that margin at the mid tier on checkable tasks, and its checks, written by the hub, failed on right answers seven times out of ten. The design's claim now rests on the frontier tier, which has not been run, and on a check rule that verifies its own expressions. On open-ended judgment, writing, and taste, the evidence points the other way: consensus flattens answers, and models tend to cave under critique even when they were right. There, the panel's honest output is the split note, not a better paragraph.</p>
   <p>The cost is real. A panel of N models over R rounds spends tens of times the tokens of a single answer and takes minutes rather than seconds. That is acceptable at the Apex tier and needs a strict round budget at the light tier.</p>
   <p>One benchmark rule applies before anything is priced: each tier is measured against a single frontier-class model, not against a single model of its own class. A panel of light-class models will not generally beat one frontier model, and a tier that can't should be priced and described accordingly.</p>
 
@@ -507,8 +534,8 @@
     <li>That debate, councils, or model judges are new. They are not.</li>
     <li>That the panel beats a single model on open-ended work. The evidence says it flattens such answers, and the design's output there is the split note.</li>
     <li>That shared blind spots are solved. They are discounted and checked, not removed.</li>
-    <li>That this is cheaper by tokens. It is slower and spends several times the tokens; by dollars, in the pilot, four mid-class seats plus a frontier hub cost less per item than twelve samples of the frontier model.</li>
-    <li>That the pilot below shows the panel is more accurate. It does not. It shows the panel answered when a single frontier endpoint declined, and that neither preregistered test was passed at this sample size.</li>
+    <li>That this is cheaper. It is slower and spends tens of times the tokens. In the first pilot four mid-class seats plus a frontier hub cost less per item by dollars than twelve samples of the frontier model; in the second, the same panel cost seven times the frontier model's one pass, and the matched condition was not run.</li>
+    <li>That the pilots show the panel is more accurate. They do not. The first showed the panel answered when a single frontier endpoint declined. The second, on harder tasks, found the panel below the frontier model's one pass and below its own best seat, with intervals that include zero, and found the hub's net effect on accuracy zero in one run and negative in the other. Neither preregistered test has been passed.</li>
   </ul>
 
   <h2>Products and systems today</h2>
@@ -532,13 +559,14 @@
   <h2>Known risks</h2>
   <ul class="plain">
     <li><strong>Incentives and terms of service.</strong> A catalogue that scores each lab's models against the others is a public scorecard, and some labs restrict using their outputs to evaluate or improve competitors. Expect friction, and expect the choice of who supplies the hub to matter.</li>
-    <li><strong>The question budget is a tuning problem.</strong> Too small and the hub is a rubber stamp; too large and the Apex tier never ships.</li>
+    <li><strong>The question budget is a tuning problem.</strong> Too small and the hub is a rubber stamp; too large and the Apex tier never ships. At a budget of six, the hub in the second pilot asked 5.1 questions per item, used all six on 79 of 104 tasks, and sent back 92% of right answers.</li>
     <li><strong>Deference.</strong> Even with seats instead of names, models can often recognize each other's style. Anonymized critique reduces caving; it doesn't eliminate it. Kraidia and colleagues study persuasion-driven adversarial influence in multi-agent debate <span class="cite">[20]</span> and are the reference for this risk; the designated dissenter and the verifiable-checks rule are the answer to it.</li>
     <li><strong>Moving targets.</strong> Always-latest versions mean behavior shifts without notice. The version stamps in the catalogue are the defense, and they have to be checked, not assumed.</li>
   </ul>
 
   <h2>Pilot design</h2>
-  <p>Everything above rests on two claims that can be tested cheaply: that the panel beats the best single model where answers can be checked, and that the hub catches what the panel misses. The pilot is built to be argued with, so the metrics are fixed before the first run.</p>
+  <p>Everything above rests on two claims that can be tested cheaply: that the panel beats the best single model where answers can be checked, and that the hub catches what the panel misses. The pilots are built to be argued with, so the metrics are fixed before the first run.</p>
+  <h3>Pilot 1</h3>
   <dl>
     <dt>Tasks</dt>
     <dd>64 freshly written items across three checkable types: 24 arithmetic and word problems with a numeric answer, 20 data-table questions with a computed answer, and 20 short coding tasks with hidden unit tests. The answers are produced by the same code that writes the prompts, so the key is right by construction, and no public benchmark item is used, so contamination is not in play. Factual lookups that must cite a resolvable source are deferred until web-enabled seats are in place.</dd>
@@ -551,8 +579,24 @@
     <dt>Status</dt>
     <dd>Run on September 5, 2026. Results follow.</dd>
   </dl>
+  <h3>Pilot 2</h3>
+<p>The first pilot's task set was too easy to separate the conditions, so the second was built to be harder and larger, and to measure three things the first could not: what critique does on its own, what the hub does to answers that were already wrong, and what the flag is worth.</p>
+<dl>
+  <dt>Tasks</dt>
+  <dd>240 freshly written items in six checkable types, all with keys produced by the code that writes the prompts and none from a public benchmark: 40 multi-step exact computations (longer simulations, four-factor products, four-divisor counts, business-day dates across six holidays); 40 three-part composites and 40 four-part composites, each part an independent problem, where only a fully correct answer counts; 50 data questions over 80-row tables that need a join, with duplicate rows to be counted once; 30 coding tasks with larger hidden test sets; and 40 five-house logic puzzles, each with a unique solution proven by exhaustive search. Factual lookups with a required source are still deferred.</dd>
+  <dt>Conditions</dt>
+  <dd>(a) The frontier model, Claude Opus 5, one pass at temperature 0.3. Each of the four seats alone, one pass. (c) The panel with the hub, at the mid tier, the prototype's six steps prompt for prompt. (c2) The panel with the hub a second time, where the hub reads the catalogue the first pass built, to test whether the catalogue sharpens its questions. (d) The panel with the hub removed. The compute-matched single-model conditions (b, token-matched, and bd, dollar-matched) were specified but not run; see the readout.</dd>
+  <dt>The subset</dt>
+  <dd>The frontier model and the four seats ran all 240 tasks. The three panel conditions ran a 104-task subset chosen from the seats' results: every task that at least one seat missed on its own (74) plus 30 that all four seats got right, so that harm done to right answers could be measured. The same 104 tasks ran in c, c2 and d, and every paired comparison below uses the other conditions' results on those same 104.</dd>
+  <dt>New measures</dt>
+  <dd>Accuracy of the panel's first draft before any critique, so critique's contribution is separated from the hub's; accuracy after critique and before the hub; items with no answer counted separately from wrong answers, with the serving provider logged per call; declines, where a seat or the hub gave up on a step, recorded per task; flags split by the gate that raised them; and the hub's checks, counted and scored.</dd>
+  <dt>What would falsify the design</dt>
+  <dd>Unchanged: if (c) does not beat (b), the panel is not earning its cost; if (c) does not beat (d), the hub is decoration.</dd>
+  <dt>Status</dt>
+  <dd>The frontier baseline was run in early September 2026 (committed September 6) and kept. The seats and the three panel conditions ran October 14 to 17, 2026, on a local machine, after a GitHub account suspension cost the September panel runs (the repository README has the account). One answer key was found wrong after the runs and corrected before scoring (see *What the pilot showed about the pilot*).</dd>
+</dl>
 
-  <h2>Pilot results</h2>
+  <h2>Pilot 1 results</h2>
   <p>Setup: OpenRouter; seats Claude Sonnet 5, GPT-5.6 Luna Pro, Gemini 3.8 Flash, and DeepSeek V4 Pro (0813), one per lab; Claude Opus 5 as the hub and as the single-model baseline; three rounds, a six-question hub budget, a designated dissenter; 64 tasks. A supplementary one-pass condition at the sampling temperature (0.7) was added after the run to test whether the refusals described below depended on temperature. Total spend for all conditions was about $34. The harness, every model call, and every result are in the repository.</p>
   <table class="delta res">
     <thead><tr><th>Condition</th><th>Correct of 64 (95% interval)</th><th>No answer</th><th>Cost per item</th></tr></thead>
@@ -569,7 +613,7 @@
   <ul class="plain">
     <li><strong>Test 1, the panel earns its cost against a compute-matched single model: not shown.</strong> The point estimate favors the panel by 3.1 points and the interval includes zero.</li>
     <li><strong>Test 2, the hub adds value: not testable in this run.</strong> The panel was right before the hub saw it on all 64 tasks, so the hub's catch rate is undefined. It asked 3.5 questions per item, sent back 56 of 64 right answers, and never turned a right answer wrong.</li>
-    <li><strong>Every answered item was right, in every condition.</strong> The single frontier model's misses were not wrong answers. On 8 of the 20 coding prompts (plain tasks: base conversion, a CSV splitter, a range parser) the lab's own endpoint returned an empty, content-filtered reply on every one of seven attempts, at both temperatures. Twelve samples got around it on all but 2 prompts. The panel answered all 64, with a seat from the same lab on it. This is the robustness the bidding rule was designed for, arrived at from the wrong direction: nothing assigns the work, so a seat that declines a component is simply outbid.</li>
+    <li><strong>Every answered item was right, in every condition.</strong> The single frontier model's misses were not wrong answers. On 8 of the 20 coding prompts (plain tasks: base conversion, a CSV splitter, a range parser) the lab's own endpoint returned an empty, content-filtered reply on every one of seven attempts, at both temperatures. Twelve samples got around it on all but 2 prompts. The panel answered all 64, with a seat from the same lab on it. This is the robustness the bidding rule was designed for, arrived at from the wrong direction: nothing assigns the work, so a seat that declines a component is simply outbid. The second pilot found three more places a participant can drop out after the bid: in a draft or revision, in a vote or critique, and at the hub itself. The decline rule under Release conditions covers them.</li>
     <li><strong>Deadlocks ran 12.5% with the hub and 14.1% without.</strong> Unanimity within three rounds fails about one time in seven even when every seat is right, and at this difficulty the flag carried no information: flagged and unflagged answers were all correct.</li>
     <li><strong>Cost.</strong> By tokens the panel with hub spent 5.6 times the compute-matched single model. By dollars it cost less per item ($0.18 against $0.21), because mid-class tokens are several times cheaper than frontier tokens. Matching compute by tokens was the wrong currency for tiers priced by class; the next version matches by dollars as well.</li>
   </ul>
@@ -579,8 +623,174 @@
     <li>Three harness faults would each have biased the comparison against the single model, and each was found in the dry runs or the first pass and fixed before the numbers above: a token cap that truncated long answers, empty replies counted as answers, and a fallback host that returned filtered replies. Provider routing is now pinned to each lab's own endpoint and recorded per call.</li>
     <li>Rate limits on a new account distorted wall-clock time, not results: 1,525 retried calls in the compute-matched condition, none in the panel conditions.</li>
   </ul>
-  <h3>Next pilot</h3>
-  <p>Tasks calibrated to 60 to 80% single-model accuracy; at least 200 items; a dollar-matched baseline alongside the token-matched one; a sweep of the hub budget; a frontier-tier panel; factual lookups with web-enabled seats; and a replication of the refusal finding across accounts and days, since an endpoint's classifier can change without notice.</p>
+  <p>The next pilot this version called for (tasks calibrated to 60 to 80% single-model accuracy, at least 200 items, a dollar-matched baseline, a hub-budget sweep, a frontier-tier panel, web-enabled seats, a replication of the refusal finding) was partly run as Pilot 2: the harder and larger task set and the replication on a second task set were done; the matched baselines, the budget sweep, the frontier tier and the web-enabled seats were not.</p>
+
+  <h2>Pilot 2 results</h2>
+  <p>Every number in this section is taken from the report the harness generates from the per-task records (<code>pilot/results2/report.md</code> in the repository), regenerated after the answer-key correction described under <em>What the pilot showed about the pilot</em>; a stage-by-stage analysis of the records, with every figure's source, is beside it (<code>proposal/v1.3-analysis-notes.md</code>). Intervals in square brackets are 95% intervals: Wilson for a single accuracy, bootstrap for a paired difference. "Points" means percentage points. Fisher's exact test p-values are one-sided unless marked two-sided.</p>
+<p>Setup: OpenRouter; seats Claude Sonnet 5, GPT-5.6 Luna Pro, Gemini 3.8 Flash and DeepSeek V4 Pro (0813), one per lab; Claude Opus 5 as the hub and as the frontier baseline; three rounds, a six-question hub budget, a designated dissenter; a 16,000-token cap on calls that write an answer and a 5,000-token cap on the JSON-only steps (decompose, bid, compare, critique, vote, and both hub calls); reasoning effort set low for the seats, with Claude Opus 5 (hub and baseline) exempt and DeepSeek's thinking turned off on the JSON-only steps only; seat temperatures inside the panel fixed by the harness, not the config (among them 0.8 for drafts, 0.6 for critiques, 0.5 for revisions, 0.3 for votes, 0.4 for replies to the hub; the hub at 0.3); Anthropic's models pinned to Anthropic's own endpoint, the other three labs served by whichever host OpenRouter chose (DeepSeek by eighteen different hosts over the runs). Per-task cost records total about $144 for the eight conditions: about $14 for the baseline, $17 for the four seats alone, $44 for the panel with hub, $46 for its second pass, and $22 for the panel without the hub; the calls log, which also holds the cleared trial and the attempts that ended in an error, totals about $171. The harness, every model call, every result and the catalogue are in the repository.</p>
+<p>One labelling caveat applies to everything below. The four seats were matched by price band, not by each lab's line-up. Claude Sonnet 5 and GPT-5.6 Luna Pro each sit a class below a frontier model from the same lab (Claude Opus 5, GPT-6 Astra). Gemini 3.8 Flash was Google's newest model when the seats were chosen in September 2026, with only an older Pro generation above it; Google's frontier model, Gemini 4 Argon, went on release in the first half of October 2026 at roughly three to five times Flash's price, days before the seat runs, so for this pilot Flash is the lab's mid-priced model and sits a class below a frontier model that did not exist when the seats were picked. DeepSeek V4 Pro is DeepSeek's top model, offered at a mid-tier price. So the "mid tier" in this pilot held three mid-class models and one lab's best, and the comparisons against "the best seat alone" are partly comparisons against a frontier-of-lab model.</p>
+<h3>Accuracy, no-answer items and cost</h3>
+<div class="scroll"><table class="data">
+<thead><tr><th>Condition</th><th>Tasks</th><th>Correct (95% interval)</th><th>No answer</th><th>Cost per task</th></tr></thead>
+<tbody>
+<tr><td>Frontier model (Opus 5), one pass, temperature 0.3</td><td>240</td><td>231 = 96.2% [93.0%, 98.0%]</td><td>6, all code</td><td>$0.0599</td></tr>
+<tr><td>Seat alone: Claude Sonnet 5</td><td>240</td><td>212 = 88.3% [83.7%, 91.8%]</td><td>0</td><td>$0.0258</td></tr>
+<tr><td>Seat alone: GPT-5.6 Luna Pro</td><td>240</td><td>211 = 87.9% [83.2%, 91.5%]</td><td>0</td><td>$0.0052</td></tr>
+<tr><td>Seat alone: Gemini 3.8 Flash</td><td>240</td><td>208 = 86.7% [81.8%, 90.4%]</td><td>0</td><td>$0.0080</td></tr>
+<tr><td>Seat alone: DeepSeek V4 Pro</td><td>240</td><td>234 = 97.5% [94.7%, 98.8%]</td><td>5 (3 code, 1 three-part, 1 four-part)</td><td>$0.0314</td></tr>
+<tr><td>Panel with hub (c)</td><td>104</td><td>96 = 92.3% [85.6%, 96.1%]</td><td>0</td><td>$0.4215</td></tr>
+<tr><td>Panel with hub, second pass with the catalogue (c2)</td><td>104</td><td>93 = 89.4% [82.0%, 94.0%]</td><td>0</td><td>$0.4447</td></tr>
+<tr><td>Panel without hub (d)</td><td>104</td><td>97 = 93.3% [86.8%, 96.7%]</td><td>0</td><td>$0.2131</td></tr>
+</tbody></table></div>
+<p>A no-answer item is one where every attempt (seven per task) returned an empty or filtered reply or failed outright, and it is counted as wrong in the accuracy column. On answered items the frontier model was right on 231 of 234 (98.7%) and DeepSeek V4 Pro on 234 of 235 (99.6%). The frontier model's six were content-filter refusals from Anthropic's own endpoint, all on code, the same failure the first pilot found on a different task set. DeepSeek's five were empty replies that ran to the answer cap on every attempt, served by third-party hosts.</p>
+<p>The subset's accuracies are not comparable to the all-240 figures above them: by construction, 74 of the 104 tasks were missed by at least one seat. On the subset the frontier model's one pass scored 101 of 104 (97.1%) and DeepSeek alone 98 of 104 (94.2%); the other three seats, whose misses built the subset, scored 76, 75 and 72. The comparisons that matter are paired, on the same tasks, and they follow.</p>
+<h3>Accuracy by task type on the 104-task subset</h3>
+<div class="scroll"><table class="data">
+<thead><tr><th>Type (tasks)</th><th>Frontier one pass</th><th>Best seat alone (DeepSeek)</th><th>Panel with hub (c)</th><th>Second pass (c2)</th><th>Panel without hub (d)</th></tr></thead>
+<tbody>
+<tr><td>Code (14)</td><td>13 = 92.9%</td><td>11 = 78.6%</td><td>13 = 92.9% [68.5%, 98.7%]</td><td>13 = 92.9% [68.5%, 98.7%]</td><td>14 = 100.0% [78.5%, 100.0%]</td></tr>
+<tr><td>Data (18)</td><td>18 = 100.0%</td><td>18 = 100.0%</td><td>17 = 94.4% [74.2%, 99.0%]</td><td>17 = 94.4% [74.2%, 99.0%]</td><td>18 = 100.0% [82.4%, 100.0%]</td></tr>
+<tr><td>Logic (7)</td><td>7 = 100.0%</td><td>7 = 100.0%</td><td>7 = 100.0% [64.6%, 100.0%]</td><td>6 = 85.7% [48.7%, 97.4%]</td><td>5 = 71.4% [35.9%, 91.8%]</td></tr>
+<tr><td>Math (15)</td><td>15 = 100.0%</td><td>15 = 100.0%</td><td>15 = 100.0% [79.6%, 100.0%]</td><td>15 = 100.0% [79.6%, 100.0%]</td><td>15 = 100.0% [79.6%, 100.0%]</td></tr>
+<tr><td>Three-part composite (22)</td><td>21 = 95.5%</td><td>21 = 95.5%</td><td>22 = 100.0% [85.1%, 100.0%]</td><td>21 = 95.5% [78.2%, 99.2%]</td><td>22 = 100.0% [85.1%, 100.0%]</td></tr>
+<tr><td>Four-part composite (28)</td><td>27 = 96.4%</td><td>26 = 92.9%</td><td>22 = 78.6% [60.5%, 89.8%]</td><td>21 = 75.0% [56.6%, 87.3%]</td><td>23 = 82.1% [64.4%, 92.1%]</td></tr>
+<tr><td>All (104)</td><td>101 = 97.1%</td><td>98 = 94.2%</td><td>96 = 92.3% [85.6%, 96.1%]</td><td>93 = 89.4% [82.0%, 94.0%]</td><td>97 = 93.3% [86.8%, 96.7%]</td></tr>
+</tbody></table></div>
+<p>On the 30 tasks every seat had got right alone, the panel with hub was right on all 30, the second pass on 29 and the panel without hub on 28; the frontier model's one pass on 29 (a code refusal) and DeepSeek on 30. On the 74 tasks at least one seat had missed: panel with hub 66, second pass 64, panel without hub 69, frontier 72, DeepSeek 68.</p>
+<h3>Paired differences</h3>
+<p>Over the 104 tasks, 95% bootstrap intervals (5,000 draws, seed 0):</p>
+<div class="scroll"><table class="data">
+<thead><tr><th>Comparison</th><th>Difference</th><th>Interval</th></tr></thead>
+<tbody>
+<tr><td>Panel with hub minus frontier one pass (c minus a)</td><td>-4.8 points</td><td>[-10.6, +1.0]</td></tr>
+<tr><td>Panel without hub minus frontier one pass (d minus a)</td><td>-3.8</td><td>[-9.6, +1.9]</td></tr>
+<tr><td>Second pass minus frontier one pass (c2 minus a)</td><td>-7.7</td><td>[-14.4, -1.9]</td></tr>
+<tr><td>Panel with hub minus panel without (c minus d)</td><td>-1.0</td><td>[-7.7, +5.8]</td></tr>
+<tr><td>Second pass minus first (c2 minus c)</td><td>-2.9</td><td>[-10.6, +3.8]</td></tr>
+<tr><td>Second pass minus panel without hub (c2 minus d)</td><td>-3.8</td><td>[-11.5, +3.8]</td></tr>
+<tr><td>Panel with hub minus best seat alone (c minus seat4)</td><td>-1.9</td><td>[-8.7, +4.8]</td></tr>
+<tr><td>Panel without hub minus best seat alone (d minus seat4)</td><td>-1.0</td><td>[-7.7, +5.8]</td></tr>
+<tr><td>Second pass minus best seat alone (c2 minus seat4)</td><td>-4.8</td><td>[-11.5, +1.0]</td></tr>
+</tbody></table></div>
+<p>Every point estimate is against the panel. One interval excludes zero: the second pass against the frontier model's one pass. Over all 240 tasks: frontier one pass minus DeepSeek V4 Pro alone, -1.2 [-4.6, +1.7]; DeepSeek minus Claude Sonnet 5, +9.2 [+5.0, +13.8]; DeepSeek minus GPT-5.6 Luna Pro, +9.6 [+5.0, +14.2]; DeepSeek minus Gemini 3.8 Flash, +10.8 [+6.7, +15.4]. The last three intervals exclude zero.</p>
+<p>By type, the four-part composites carry the loss in every run: panel with hub minus frontier one pass -17.9 points [-32.1, -3.6] over the 28, second pass minus frontier -21.4 [-35.7, -7.1]. The other types are within a task or two of the single models in every direction. These are two of 48 type-level intervals the pilot produces, so the type is a lead, not a finding; what makes it worth following is that the records say where in the pipeline the composites were lost (next section).</p>
+<h3>Where the right answers were lost</h3>
+<p>The panel's first draft is the assembled answer before any seat has challenged it; "before the hub" is the answer after the three rounds of critique and revision. In d there is no hub, so that is the final answer. Stage by stage:</p>
+<div class="scroll"><table class="data">
+<thead><tr><th></th><th>Panel with hub (c)</th><th>Second pass (c2)</th><th>Panel without hub (d)</th></tr></thead>
+<tbody>
+<tr><td>First draft right</td><td>100 of 104 (96.2%)</td><td>96 of 104 (92.3%)</td><td>96 of 104 (92.3%)</td></tr>
+<tr><td>Critique and revision: wrong drafts fixed</td><td>3 of 4</td><td>5 of 8</td><td>6 of 8</td></tr>
+<tr><td>Critique and revision: right drafts broken</td><td>7 of 100</td><td>4 of 96</td><td>5 of 96</td></tr>
+<tr><td>Right before the hub</td><td>96</td><td>97</td><td>97 (final)</td></tr>
+<tr><td>Hub: wrong answers repaired</td><td>4 of 8</td><td>0 of 7</td><td></td></tr>
+<tr><td>Hub: right answers broken</td><td>4 of 96</td><td>4 of 97</td><td></td></tr>
+<tr><td>Final</td><td>96</td><td>93</td><td>97</td></tr>
+</tbody></table></div>
+<p>Read as a sequence: in c the first draft was right on 100, critique took it to 96, and the hub left it at 96. In c2 the first draft was right on 96, critique took it to 97, and the hub took it to 93. In d critique took 96 to 97. All four of the hub's repairs in c were answers that critique had just broken (right at the draft, wrong before the hub); in neither run did the hub repair an answer that had been wrong from the first draft (c had one, c2 three), and the four it broke in c2 included two whose values were right and whose reply to the hub had dropped the required <code>FINAL:</code> line.</p>
+<p>Twenty right first drafts ended wrong across the three runs (c 7, c2 8, d 5). Thirteen are a changed figure, two are code that stopped running, and five are format losses: a revision or a reply to the hub whose values were right but which no longer carried the <code>FINAL:</code> line the request asks for (one of them had it at the end of a prose line). Six of the panel's 26 wrong answers across the three runs are format losses of this kind, against one among the 93 wrong answers of the five single-model conditions. The scoring rule is the same for every condition; the exposure is not, because the panel rewrites each answer three to six times. The harness now refuses a revision or correction that drops the format the standing answer had; the records here predate that rule and are reported as scored.</p>
+<p>On the composites, where the panel lost ground in every run, the parts can be scored stage by stage against the keys. Of the 20 wrong final parts across the three runs (over 19 tasks), 5 were already wrong when the parts were first stitched together and 15 went wrong afterwards: 7 in a revision, 6 in a reply to the hub, 2 as format losses in a reply to the hub. Four of the five early-wrong parts were repaired by a revision and then broken again by a later one. The composites were not lost in decomposition, bidding or stitching; they were lost in the rounds after the draft.</p>
+<p>The seat that wrote each break is in the records. Of the twenty right first drafts that ended wrong, the first wrong text was written by Claude Sonnet 5 eight times, Gemini 3.8 Flash six, GPT-5.6 Luna Pro four and DeepSeek V4 Pro twice; the right draft had been written by DeepSeek seven times, Sonnet seven, GPT three and Gemini three. Across the three runs DeepSeek wrote 77 first drafts, all of them right, and its revisions turned 5 right answers wrong and 17 wrong answers right; Sonnet's revisions turned 16 right answers wrong and 10 wrong ones right, GPT's 12 and 14, Gemini's 16 and 6. DeepSeek also raised more challenges than the other three seats together (1,753 against 1,599), and the catalogue counts 1,306 of them as overruled by a reviser, against 167 to 401 for the others. Every one of the hub's eight harms was done by the seat that had written the right answer and was then asked to defend it; seven of the eight were four-part composites, and the questions that preceded them asked for full ledgers, day-by-day listings or month-by-month recomputations of parts that were already right.</p>
+<h3>What the hub did</h3>
+<div class="scroll"><table class="data">
+<thead><tr><th></th><th>Panel with hub (c)</th><th>Second pass with the catalogue (c2)</th></tr></thead>
+<tbody>
+<tr><td>Answers submitted to the hub</td><td>104</td><td>104</td></tr>
+<tr><td>Wrong before the hub</td><td>8</td><td>7</td></tr>
+<tr><td>Right before the hub</td><td>96</td><td>97</td></tr>
+<tr><td>Catch rate: wrong answers sent back</td><td>8 of 8 (100.0%)</td><td>6 of 7 (85.7%)</td></tr>
+<tr><td>Repair rate: wrong answers that ended right</td><td>4 of 8 (50.0%)</td><td>0 of 7 (0.0%)</td></tr>
+<tr><td>False alarms: right answers sent back</td><td>88 of 96 (91.7%)</td><td>86 of 97 (88.7%)</td></tr>
+<tr><td>Harm: right answers that ended wrong</td><td>4 of 96 (4.2%)</td><td>4 of 97 (4.1%)</td></tr>
+<tr><td>Net change in right answers through the hub</td><td>0</td><td>-4</td></tr>
+<tr><td>Hub questions per task (budget 6)</td><td>mean 5.1; all 6 used on 79 of 104</td><td>mean 4.7; all 6 used on 71 of 104</td></tr>
+<tr><td>Tasks where the hub asked nothing</td><td>8</td><td>12 (3 of them hub declines)</td></tr>
+<tr><td>Checks the hub ordered, run outside the panel</td><td>286 on 96 tasks</td><td>263 on 89 tasks</td></tr>
+<tr><td>Checks that failed (valid expression, wrong value)</td><td>5 on 4 tasks</td><td>5 on 5 tasks</td></tr>
+<tr><td>Panel deadlocks (no agreement within three rounds)</td><td>42 of 104 (40.4%)</td><td>47 of 104 (45.2%)</td></tr>
+<tr><td>Released with all three gates met</td><td>52 of 104</td><td>41 of 104</td></tr>
+<tr><td>Accuracy when all three gates were met</td><td>51 of 52 (98.1%)</td><td>40 of 41 (97.6%)</td></tr>
+<tr><td>Accuracy when shipped with a flag</td><td>45 of 52 (86.5%)</td><td>53 of 63 (84.1%)</td></tr>
+</tbody></table></div>
+<p>Deadlocks in the panel without the hub: 53 of 104 (51.0%); its accuracy when agreed 49 of 51 (96.1%), when deadlocked 48 of 53 (90.6%).</p>
+<p>The flag, split by the gate that raised it. In c the 52 flags were 42 deadlocks, 23 tasks with a hub question still open and 2 failed checks, overlapping; the 7 wrong flagged answers were all deadlocks, and the 10 tasks flagged by the hub's gate alone (the panel had agreed) were all right. In c2 the 63 flags were 47 deadlocks, 32 open questions and 2 failed checks; the 10 wrong flagged answers were all deadlocks, the 15 tasks flagged by the hub's gate alone were all right, and the one task flagged by a failed check alone was right. Flagged against unflagged: c 7 of 52 wrong against 1 of 52, Fisher p = 0.030 (two-sided 0.060); c2 10 of 63 against 1 of 41, p = 0.026 (two-sided 0.047). Deadlocked against agreed: c 7 of 42 against 1 of 62, p = 0.007; c2 10 of 47 against 1 of 57, p = 0.001; d 5 of 53 against 2 of 51, p = 0.23.</p>
+<p>The checks. Of the ten failed checks across the two runs, seven were on answers that were right: the hub wrote an expression that did not compute what the answer claimed (a division for a count, a floating-point identity for a modular remainder, a weight sum against the wrong total). A failed check blocked a release four times, three of them of right answers. At most once did a failed check change an outcome: in c one wrong answer was handed two failed checks together with the hub's questions and the correction ended right, and the record cannot separate the checks' share from the questions'. Every code task got its visible-examples check; it failed once, on an answer that was wrong before and after.</p>
+<p>Declines. In c two seat calls gave up (DeepSeek, once at a revision and once at a vote) and the panel routed around them. In c2 eleven calls on seven tasks gave up, seven by DeepSeek and four by the hub (three at its opening question, one at review); the four hub declines shipped flagged and three of the four ended right. None in d. Behind the four hub declines are 72 attempts on which the hub overran its 5,000-token cap (34 in c, 38 in c2), 44 of them absorbed by a retry; the hub is Claude Opus 5 with no reasoning budget set, and the cap applies to its JSON reply.</p>
+<h3>Cost per task</h3>
+<div class="scroll"><table class="data">
+<thead><tr><th>Condition</th><th>Mean tokens</th><th>Mean cost</th><th>Median seconds</th><th>Calls per task</th><th>Call errors (retried)</th></tr></thead>
+<tbody>
+<tr><td>Frontier one pass (a)</td><td>3,147</td><td>$0.0599</td><td>16</td><td>1.2</td><td>49</td></tr>
+<tr><td>Panel with hub (c)</td><td>184,517</td><td>$0.4215</td><td>323</td><td>39.1</td><td>72</td></tr>
+<tr><td>Second pass (c2)</td><td>188,747</td><td>$0.4447</td><td>332</td><td>39.4</td><td>143</td></tr>
+<tr><td>Panel without hub (d)</td><td>150,111</td><td>$0.2131</td><td>244</td><td>33.4</td><td>34</td></tr>
+<tr><td>Claude Sonnet 5 alone</td><td>3,337</td><td>$0.0258</td><td>14</td><td>1.0</td><td>1</td></tr>
+<tr><td>GPT-5.6 Luna Pro alone</td><td>10,579</td><td>$0.0052</td><td>15</td><td>1.0</td><td>0</td></tr>
+<tr><td>Gemini 3.8 Flash alone</td><td>2,928</td><td>$0.0080</td><td>12</td><td>1.0</td><td>3</td></tr>
+<tr><td>DeepSeek V4 Pro alone</td><td>10,721</td><td>$0.0314</td><td>57</td><td>1.3</td><td>69</td></tr>
+</tbody></table></div>
+<h3>Readout</h3>
+<ul class="plain">
+  <li><strong>The result in one sentence.</strong> The hub was Claude Opus 5 and the baseline was Claude Opus 5. Writing alone, in one pass, it outscored the panel it was forbidden to write for: 101 of 104 against 96 with the hub and 97 without it. The pilot's question was whether critique and a hub lift four mid-priced seats above the best of them alone; the answer on these tasks is no (96 and 97 against 98), and every one of the nine paired point estimates is against the panel.</li>
+  <li><strong>Test 1, the panel earns its cost against a compute-matched single model: not run, and the plain reading is that it would not have passed.</strong> Conditions b and bd were left for after the panel runs, to be paid for only if the panel result made them worth it. A compute-matched frontier condition is given more samples and a self-critique pass on top of the one pass the panel did not beat, so there is no reading on which this panel passes test 1.</li>
+  <li><strong>Test 2, the hub adds value: not passed.</strong> The panel without the hub scored one task higher than the panel with it, -1.0 point [-7.7, +5.8]; with the catalogue the gap grew to -3.8 [-11.5, +3.8]. The intervals include zero, so the pilot does not show the hub is decoration either; it shows that at 104 tasks a hub effect, if there is one, is smaller than the pilot can see.</li>
+  <li><strong>Underpowered, and sized by budget.</strong> At 104 tasks a paired difference smaller than roughly six to eight points cannot be distinguished from zero, and every between-condition difference the pilot measured is between one and five points. The pilot was sized by what the runs would cost, not by the effect it needed to see. Two runs of the same condition (c and c2) differ on 15 of 104 tasks, and their first drafts, which no critique or hub has touched, already differ on 10; the stage-level noise is of the same order as every effect.</li>
+  <li><strong>The hub is not interrogating; it is adding rounds.</strong> It sent back 96 of 104 answers in c and 92 in c2, used all six questions on three quarters of the tasks in c and two thirds in c2, and its catch rate equals its send-back rate: a hub that returns 92% of right answers catches wrong ones by the same motion. It repaired four answers in c, all four of them answers critique had just broken, and none in c2; it broke four each time. Net, zero and minus four. The release conditions did not operate as a stopping rule: with the budget exhausted on most tasks and the panel deadlocked on 40 to 51% of them, half the answers shipped flagged.</li>
+  <li><strong>What the flag is worth.</strong> Answers released with all three gates met were right 98.1% of the time in c and 97.6% in c2; flagged answers 86.5% and 84.1%, and the gap passes a one-sided Fisher test at 0.05 in both runs (p = 0.030 and 0.026; two-sided 0.060 and 0.047). But every wrong flagged answer in both runs was a deadlock. The hub's own gate added 10 and 15 flags on answers the panel had agreed on, all of them right, and the check gate added one, right. The information in the flag is the agreement gate's, which the panel without the hub also has; there the deadlock split points the same way and does not reach significance (p = 0.23). The first pilot's flag told the user nothing; this one tells the user that a deadlocked panel is more often wrong, which is a finding about agreement, not about interrogation.</li>
+  <li><strong>The checks were wrong more often than the answers they checked.</strong> Seven of the ten failed arithmetic and code checks were on right answers, three of the four releases a check blocked were right, and at most one outcome was changed by a check. The verifiable-checks rule is the design's mechanical safeguard; as run, with the hub writing the expressions, it was a source of false alarms.</li>
+  <li><strong>The catalogue got the weakest possible test, and the comparison is confounded.</strong> The catalogue the hub reads is four lines, one per seat: run counts, how often the seat's drafts were corrected, its challenges overruled, its checks failed, and up to three recent challenge snippets. Nothing in it is about the task at hand. The first pass's hub read it too, because the file rebuilds from the first task of the run, so c against c2 is a small digest against a fuller one, not none against some; and the two runs also differ in the harness version (c was run mostly before the decline rule, with most of its tasks re-run after give-ups; c2 entirely after it) and in the random seed that picks the proposer, dissenter and revisers. The second pass scored 2.9 points below the first, [-10.6, +3.8], within the noise. The reading is that the catalogue made no visible difference and that this pilot could not have seen one.</li>
+  <li><strong>Critique on its own was a wash, and the breaks have an author.</strong> Across the three runs critique and revision fixed 14 wrong first drafts and broke 16 right ones. DeepSeek's revisions were the panel's net gain (17 fixes against 5 breaks); Sonnet's and Gemini's were net losses (10 against 16, and 6 against 16), GPT's about even (14 against 12). Weighted agreement was not in play at the mid tier (every seat's vote counts the same), and the records show why it would need to be: the weaker seats on these tasks were overturning the strongest seat's right answers.</li>
+  <li><strong>The composites were lost after the draft, not in it.</strong> The one task type built for decomposition, bidding and stitching is the type the panel lost most; but of its 20 wrong parts, 15 went wrong in a later revision or hub reply, and four of the other five were repaired and broken again. Decomposition, bidding and stitching did their job; the rounds that followed undid it.</li>
+  <li><strong>The best seat alone matched the frontier model.</strong> DeepSeek V4 Pro scored 97.5% on all 240 tasks, 1.2 points above the frontier model's one pass with the interval including zero, and 9 to 11 points above each of the other three seats with every interval excluding zero. See the labelling caveat: it is that lab's top model at a mid-tier price. Note also that the subset is biased in the panel's favour on this comparison: all six of DeepSeek's own misses are in it by construction, so 98 of 104 is a pessimistic reading of a re-run, while the panel got fresh draws. The comparison most favourable to the panel still came out against it.</li>
+  <li><strong>Cost.</strong> By dollars the panel with hub cost seven times the frontier model's one pass per task and thirteen times the best seat alone; the panel without the hub, three and a half times the frontier one pass. By tokens the panel with hub spent 59 times the one pass, and by wall clock it took 323 seconds against 16. The first pilot's point that a mid-class panel can be cheaper by dollars than a matched frontier condition has no comparison here, because that condition was not run.</li>
+  <li><strong>The panel answered every task, but that is a cheaper property than it looks.</strong> The frontier endpoint declined 6 of the 30 code tasks on every attempt, as it had declined 8 of 20 in the first pilot: a second task set, run within days of the first on the same account. DeepSeek alone returned nothing on 5 of 240. All three panel conditions answered all 104, including the tasks where a seat or the hub gave up partway. But Sonnet, GPT and Gemini alone each answered all 240; the cheap fix for one endpoint's refusals is a second single model at under a cent a task, not a panel.</li>
+</ul>
+<h3>What the pilot showed about the pilot</h3>
+<ul class="plain">
+  <li><strong>The task set was still too easy for the frontier model.</strong> The target was 50 to 85% single-model accuracy. The frontier model scored 96.2% on all 240 and the four seats 86.7% to 97.5%. The subset mechanism concentrated the tasks at least one seat missed, but the hub still had only 8 and 7 wrong answers to work with, which is why its repair and harm rates rest on single digits.</li>
+  <li><strong>Run-to-run noise is as large as every difference between conditions.</strong> The first and second panel-with-hub runs differ on 15 of 104 tasks (9 right to wrong, 6 wrong to right); the panel with and without the hub on 13; the second pass and the panel without the hub on 16. Their first drafts differ on 10, 8 and 12, and most draft-stage differences do not survive to the final answer: each stage adds its own noise rather than passing the draft's through. Every between-condition difference is between one and five points, so none can be separated from the noise at 104 tasks. A pilot that wants to see a three-point effect needs several times the tasks, or the same condition run more than once so the noise is measured rather than assumed.</li>
+  <li><strong>One answer key was wrong.</strong> The generator for one kind of math part charged a whole tax bracket even when the income fell below its top. Of the 240 tasks only one part of one three-part composite was affected; every condition, single-model and panel, gave the correct figure and was scored wrong. It was found by scoring the composites part by part after the runs, the key was corrected, the generator fixed (regenerating the task set with the fix reproduces the corrected file exactly), and the eight stored records rescored; the correction moved a single task in every condition and no paired difference between the panel and the single models. The scan that found it (every non-code part on which five or more conditions were scored wrong on the same value) found no other case.</li>
+  <li><strong>The harness accepted malformed replacements.</strong> A revision, or a corrected answer sent with a reply to the hub, replaced the panel's answer unchecked. Six of the panel's 26 wrong answers are right values that had lost the request's <code>FINAL:</code> line this way, two of them counted as hub harm. The single-model conditions, which never rewrite, lost one answer of 93 to the same rule. The harness now refuses a replacement that has lost the format the standing answer had, keeps the standing text, and records the refusal; the records in this pilot predate the rule and are reported as scored, with the six listed.</li>
+  <li><strong>Two more budget faults were found, both counting against the panel, and a third place a participant can drop out.</strong> First, in the priced trial: DeepSeek V4 Pro accepts a low reasoning-effort setting but does not bound its thinking by it, so on the JSON-only steps it spent the whole 5,000-token cap thinking and returned nothing on 62 of 133 calls, and six of the trial's twelve tasks died after six retries each; the other four models had no call errors. Thinking is now turned off for that model on those steps only; answer-writing steps keep the seat's normal reasoning. The trial's results were cleared and condition c started fresh. Second, in the full run of c: six of 104 tasks ended in an error because one model gave up after its retries and the harness ended the task, although the paper says the panel routes around a seat that declines. Four were DeepSeek calls at the 16,000-token answer cap that returned nothing six times (three replies to the hub and one revision); one was a content-filter refusal by the hub; one was the hub overrunning its 5,000-token cap. The fix is the decline rule, described under *Lines elsewhere in the paper*, and the six tasks were retried under it; tasks completed before the fix were unchanged, since the new code runs only when a call gives up. Third: the hub's 5,000-token cap, with no reasoning budget, was overrun on 72 attempts across the two hub runs. It is a setting that touched the hub conditions only, and it should be fixed before another dollar is spent on them.</li>
+  <li><strong>Most of condition c's tasks ran more than once.</strong> The calls log shows that the first full run of c stalled for about seven hours when the machine slept and then lost the network, which ended about 75 tasks at their first call; roughly 78 of the 104 kept c records are a second or third run of their task (c2 and d ran every task once). The re-runs were not conditioned on correctness, and the records keep the last run; but "the second run reads the catalogue the first built" sits beside the fact that the first run was itself mostly re-runs.</li>
+  <li><strong>A seat that returns nothing can be a budget setting, not a weak model.</strong> This is the third time the pilot has found it: a 1,500-token JSON cap in September that Sonnet 5 and DeepSeek V4 spent entirely on thinking and collapsed the panel on 89 of 108 tasks; the DeepSeek reasoning setting above; and the answer cap on long replies. The per-step budgets are part of the design, not a harness detail, and the paper should say so. The same holds for the settings that shape the single-model results: September's harness, under the earlier caps, had DeepSeek alone at 92.9% and a 108-task subset (those seat runs were lost with the Codespace; the figures survive only in the author's notes); October's, with the budgets fixed, has 97.5% and 104. That is a four-point move from settings alone, larger than any difference between conditions in this pilot.</li>
+  <li><strong>The tiers were matched by price, not by class.</strong> The paper defines the mid tier as "Sonnet-class and equivalents". The pilot filled DeepSeek's seat with that lab's top model because it is priced at the mid tier, and that seat turned out to be the strongest on the panel and the equal of the frontier baseline. The pilot therefore does not measure a panel of four mid-class models, and v1.3 should say the seats were matched by price band and let the reader weigh the DeepSeek result accordingly. (Google's position moved during the pilot: Gemini 3.8 Flash was its newest model when the seats were chosen, and the frontier Gemini 4 Argon arrived days before the seat runs; the price-band framing holds either way.)</li>
+  <li><strong>The baseline and the panel ran six weeks apart.</strong> The frontier baseline is the September run, kept because its code path (one call, no JSON steps, exempt from the reasoning budget) was untouched by the fixes, every call finished normally, and none of its misses were truncations. The seats and the panel ran in October on a local machine, after a GitHub account suspension deleted the Codespace that held the September panel runs. Model versions were pinned by id throughout, but an endpoint's behavior can change without notice, and the paper's own moving-targets risk applies to its pilot.</li>
+</ul>
+<h3>What this pilot does and does not show</h3>
+<p>It shows:</p>
+<ul class="plain">
+  <li>Four mid-priced seats with critique and a frontier hub did not beat one pass of the frontier model on 104 tasks weighted toward the ones the seats miss, and did not beat the best of the four seats alone. The point estimates are 4.8 and 1.9 points against the panel with the intervals including zero; the second hub pass sits 7.7 points below the frontier model with an interval that excludes zero.</li>
+  <li>Removing the hub did not lower accuracy: the panel without it scored one task higher. The hub, as configured, caught wrong answers by sending back nearly everything, repaired 4 of 15 wrong answers across two runs (all four of them answers critique had just broken), broke 8 right ones (two by a lost format line), and changed the count of right answers by 0 and then -4.</li>
+  <li>The flag separates wrong answers from right ones at p = 0.03 in both hub runs, and the whole of that information is the agreement gate's: every wrong flagged answer was a deadlock, and the hub's own gate flagged 25 right answers and no wrong one.</li>
+  <li>The hub's checks failed on right answers seven times out of ten and changed at most one outcome.</li>
+  <li>A second pass with the catalogue did not improve on the first, and the pilot could not have seen it if it had.</li>
+  <li>Critique and revision across three runs fixed 14 wrong first drafts and broke 16 right ones; the gains came mostly from one seat's revisions and the losses mostly from two others'.</li>
+  <li>The composites were lost in the rounds after the draft, not in decomposition, bidding or stitching.</li>
+  <li>Run-to-run variation between two runs of the same condition was 15 of 104 tasks, the size of every difference the pilot measured.</li>
+  <li>The panel with hub cost seven times the frontier one pass per task, with no accuracy gain to set against it.</li>
+  <li>The panel answered every task, including six code tasks the frontier endpoint refused and five tasks the best seat returned nothing on, which repeats the first pilot's finding on a second task set; so did three of the four seats alone.</li>
+</ul>
+<p>It does not show:</p>
+<ul class="plain">
+  <li>That the hub is decoration. The c minus d interval runs from -7.7 to +5.8 points, and the hub saw eight wrong answers.</li>
+  <li>That the panel with the hub is less accurate than the frontier model. That interval includes zero, though the point estimate and both hub runs sit on that side, and the second run's interval does not.</li>
+  <li>Anything about test 1, since the compute-matched conditions were not run.</li>
+  <li>Anything about a frontier-tier panel, other hub budgets or round budgets, weighted agreement, open-ended tasks, or factual lookups.</li>
+  <li>Whether DeepSeek's result reflects a mid-tier model, since it is not one.</li>
+</ul>
+<h3>The six contributions against the records</h3>
+<p>The paper claims six contributions. What the records of this pilot say about each:</p>
+<ol class="adds">
+  <li><strong>A hub that never writes.</strong> Run as a frontier model interrogating a mid-priced panel, the hub's net effect on right answers was zero and then minus four, and the same model writing alone outscored the panel it interrogated. The design's bet that questions beat a draft did not hold on checkable tasks at this tier.</li>
+  <li><strong>Bidding, not routing.</strong> Bids were placed and every component was drafted by a bidder; no seat declined a draft in the kept runs. The first assembled drafts were right on 100, 96 and 96 of 104, as good as the best seat alone on the same tasks. Bidding did its job; nothing in the pilot tests it against routing.</li>
+  <li><strong>Seat-anonymous, evidence-required critique with a designated dissenter.</strong> Critique fixed 14 and broke 16. The evidence requirement did not stop revisers from accepting wrong challenges (several of the twenty breaks follow a challenge whose figure was itself wrong), and seat anonymity did not stop the weaker seats from overturning the stronger one.</li>
+  <li><strong>Release conditions instead of a round count.</strong> The conditions did not operate as a stopping rule: the hub used its whole budget on most tasks, the panel deadlocked on 40 to 51%, and half the answers shipped flagged. The verifiable-checks part of the rule produced more false alarms than catches.</li>
+  <li><strong>The failure catalogue.</strong> Given the weakest possible test: a four-line digest of per-seat counts, read by both hub runs, with no task-level content. No effect was visible and none could have been.</li>
+  <li><strong>Cross-lab tiers with weighted agreement.</strong> The tiers were matched by price, not class, and weighted agreement was not in play at a single tier. The records give the first evidence that it would matter: the strongest seat's right answers were overturned by the others' revisions.</li>
+</ol>
+<h3>Next pilot</h3>
+<p>In this order. First, what is free: the stage-by-stage analysis in <code>proposal/v1.3-analysis-notes.md</code> has been done on these records and belongs in the paper before any new run. Second, the hub's budget and the format guard: give the hub a reasoning budget or a larger reply cap, and keep the rule that refuses a revision or correction that drops the answer format; both touched the panel conditions only, and a rerun under them is not comparable with these records on the affected tasks without saying so. Third, measure the noise directly: run condition c twice under identical settings on the same 104 tasks before any new condition, about $45. Fourth, test what the records point at: a hub budget below six, so the hub asks rather than exhausts; a check rule that only blocks release when the check's expression is itself verified; and a reviser who must show the figure a challenge disputes before changing it. Fifth, the compute-matched conditions b and bd, about $50 on the same 104, which would confirm what the one pass already shows and are the lowest priority for that reason. A frontier-tier panel needs an argument first: critique and a hub did not help four seats one class below the hub, so the paper has to say why they would help seats of the hub's own class, and what result would falsify that, before the $150 to $500 it would cost. Label every seat by price band and by position in its lab's line-up, and pick DeepSeek's mid-class model if the mid tier is what is being measured. Replicate the refusal finding on a second account and on a later date; both pilots' baselines ran in the same week.</p>
 
   <h2>References</h2>
   <ol class="refs">
@@ -613,8 +823,8 @@
   <p class="refnote">Entries without an author list or identifier are cited by title and year; the working draft will fill them in before any formal submission.</p>
 
   <footer>
-    <p>Working draft v1.2, September 2026. Drafted with Claude (Anthropic). Text licensed CC BY 4.0; the accompanying prototype and pilot harness are MIT licensed.</p>
-    <p>Cite as: George W. Lott. A Tiered Peer-Critique Architecture for AI Answers. Working draft v1.2, Zenodo, 2026. https://doi.org/10.5281/zenodo.22357227. Version 1.1: https://doi.org/10.5281/zenodo.22325883</p>
+    <p>Working draft v1.3, October 2026. Drafted with Claude (Anthropic). Text licensed CC BY 4.0; the accompanying prototype and pilot harness are MIT licensed.</p>
+    <p>Cite as: George W. Lott. A Tiered Peer-Critique Architecture for AI Answers. Working draft v1.3, Zenodo, 2026. DOI pending. Version 1.2: https://doi.org/10.5281/zenodo.22357227. Version 1.1: https://doi.org/10.5281/zenodo.22325883</p>
   </footer>
 
 </div>
