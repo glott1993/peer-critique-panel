@@ -155,7 +155,7 @@ def gen_math(rng, n_target, level):
     def tax_credit():
         b1, b2 = rng.choice([(11000, 45000), (12500, 52000), (14000, 60000)]); r1, r2, r3 = rng.choice([(10, 22, 32), (8, 20, 30), (12, 24, 35)])
         inc = rng.choice([57400, 68250, 81900, 96300]); credit = rng.choice([1200, 1800, 2400]); phase = rng.choice([50000, 60000]); rate = rng.choice([5, 8])
-        tax = b1 * r1 / 100 + (b2 - b1) * r2 / 100 + max(0, inc - b2) * r3 / 100
+        tax = b1 * r1 / 100 + max(0, min(inc, b2) - b1) * r2 / 100 + max(0, inc - b2) * r3 / 100
         cr = max(0.0, credit - max(0, inc - phase) * rate / 100)
         owed = max(0.0, tax - cr)
         return num_task(nid(), f"In the country of Veld, income tax is {r1}% on the first ${b1:,}, {r2}% from ${b1:,} up to ${b2:,}, and {r3}% above ${b2:,}. A tax credit of ${credit:,} is then subtracted, but the credit is reduced by {rate}% of any income above ${phase:,} (it cannot go below zero, and the tax owed cannot go below zero). How much tax is owed on an income of ${inc:,}? Give the amount in dollars to the nearest cent.", round(owed, 2), 2, ["percent"])
