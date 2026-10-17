@@ -64,6 +64,145 @@ def pct(x):
     return f"{100 * x:.1f}%"
 
 
+def fisher_exact(a, b, c, d):
+    """Fisher's exact test on the 2x2 table [[a, b], [c, d]] (rows: two groups; columns: wrong, right).
+    Returns (p one-sided that group 1 has more wrong than chance, p two-sided, odds ratio). Two-sided p sums the
+    probabilities of every table at most as likely as the observed one, as R's fisher.test does. No scipy needed."""
+    n = a + b + c + d
+    r1, c1 = a + b, a + c
+    if n == 0 or r1 == 0 or r1 == n or c1 == 0 or c1 == n:
+        return (1.0, 1.0, float("nan"))
+    lo, hi = max(0, c1 - (n - r1)), min(r1, c1)
+    tot = math.comb(n, c1)
+    probs = {x: math.comb(r1, x) * math.comb(n - r1, c1 - x) / tot for x in range(lo, hi + 1)}
+    p_obs = probs[a]
+    one_sided = sum(p for x, p in probs.items() if x >= a)
+    two_sided = min(1.0, sum(p for p in probs.values() if p <= p_obs * (1 + 1e-9)))
+    odds = (a * d) / (b * c) if b * c else float("inf")
+    return (one_sided, two_sided, odds)
+
+
+def panel_stage_lines(res):
+    """Added for v1.3: stage-by-stage lines for the panel conditions (c, c2, d). Everything here is computed from fields
+    the per-task records already carry: pre_critique_correct (first draft), pre_hub_correct, correct, agreed, gates, shipped,
+    hub_questions and checks. Task ids are listed for every count so the lines can be spot-checked against the records."""
+    panel = [c for c in ("c", "c2", "d") if c in res and any("pre_critique_correct" in r for r in res[c].values())]
+    if not panel:
+        return []
+    ok = {c: {t: r for t, r in res[c].items() if not r.get("error") and "pre_critique_correct" in r} for c in panel}
+
+    def ids(lst):
+        lst = list(lst)  # callers pass generators, which are always truthy
+        return ", ".join(sorted(lst)) if lst else "none"
+
+    out = ["## Panel stages, flags and checks (added for v1.3)", "",
+           "First draft = the assembled answer before any critique (pre_critique_correct); pre-hub = after critique and revision (pre_hub_correct); final = correct. "
+           "In d there is no hub, so pre-hub and final coincide.", ""]
+    # first-draft accuracy and the three stages
+    out.append("### First draft, after critique, final")
+    out.append("")
+    for c in panel:
+        rs = ok[c]
+        d = sum(1 for r in rs.values() if r["pre_critique_correct"]); p = sum(1 for r in rs.values() if r["pre_hub_correct"]); f = sum(1 for r in rs.values() if r["correct"])
+        out.append(f"- {c}: first draft right {d}/{len(rs)} ({pct(d / len(rs)) if rs else '-'}); after critique {p}; final {f}. Wrong first drafts: {ids(t for t, r in rs.items() if not r['pre_critique_correct'])}")
+    out.append("")
+    # critique-only flips (first draft -> pre-hub) and hub flips (pre-hub -> final)
+    out.append("### Critique alone (first draft to pre-hub) and the hub alone (pre-hub to final)")
+    out.append("")
+    for c in panel:
+        rs = ok[c]
+        rw = [t for t, r in rs.items() if r["pre_critique_correct"] and not r["pre_hub_correct"]]
+        wr = [t for t, r in rs.items() if not r["pre_critique_correct"] and r["pre_hub_correct"]]
+        out.append(f"- {c} critique: right first draft to wrong pre-hub {len(rw)} ({ids(rw)}); wrong first draft to right pre-hub {len(wr)} ({ids(wr)}); net {len(wr) - len(rw):+d}")
+        if c != "d":
+            hrw = [t for t, r in rs.items() if r["pre_hub_correct"] and not r["correct"]]
+            hwr = [t for t, r in rs.items() if not r["pre_hub_correct"] and r["correct"]]
+            out.append(f"- {c} hub: right pre-hub to wrong final {len(hrw)} ({ids(hrw)}); wrong pre-hub to right final {len(hwr)} ({ids(hwr)}); net {len(hwr) - len(hrw):+d}")
+    out.append("")
+    # pairwise flips, first draft and final
+    out.append("### Pairwise flips between panel conditions (tasks present in both)")
+    out.append("")
+    for i, x in enumerate(panel):
+        for y in panel[i + 1:]:
+            common = sorted(set(ok[x]) & set(ok[y]))
+            if not common:
+                continue
+            drw = [t for t in common if ok[x][t]["pre_critique_correct"] and not ok[y][t]["pre_critique_correct"]]
+            dwr = [t for t in common if not ok[x][t]["pre_critique_correct"] and ok[y][t]["pre_critique_correct"]]
+            frw = [t for t in common if ok[x][t]["correct"] and not ok[y][t]["correct"]]
+            fwr = [t for t in common if not ok[x][t]["correct"] and ok[y][t]["correct"]]
+            out.append(f"- {x} vs {y} over {len(common)}: first draft differs on {len(drw) + len(dwr)} (right in {x} only: {ids(drw)}; right in {y} only: {ids(dwr)}); "
+                       f"final differs on {len(frw) + len(fwr)} (right in {x} only: {ids(frw)}; right in {y} only: {ids(fwr)})")
+    out.append("")
+    # deadlocked vs agreed
+    out.append("### Accuracy by agreement")
+    out.append("")
+    for c in panel:
+        rs = ok[c]
+        dl = {t: r for t, r in rs.items() if not r.get("agreed")}; ag = {t: r for t, r in rs.items() if r.get("agreed")}
+        kd = sum(r["correct"] for r in dl.values()); ka = sum(r["correct"] for r in ag.values())
+        p1, p2, odds = fisher_exact(len(dl) - kd, kd, len(ag) - ka, ka)
+        out.append(f"- {c}: deadlocked {kd}/{len(dl)}" + (f" ({pct(kd / len(dl))})" if dl else "") + f", agreed {ka}/{len(ag)}" + (f" ({pct(ka / len(ag))})" if ag else "")
+                   + f"; Fisher's exact p = {p1:.4f} one-sided (deadlocked more often wrong), {p2:.4f} two-sided, odds ratio {odds:.2f}. Wrong when deadlocked: {ids(t for t, r in dl.items() if not r['correct'])}; wrong when agreed: {ids(t for t, r in ag.items() if not r['correct'])}")
+    out.append("")
+    # flagged releases by reason, and Fisher flagged vs unflagged
+    out.append("### Flagged releases by reason (a task can fail more than one gate)")
+    out.append("")
+    for c in panel:
+        rs = ok[c]
+        flagged = {t: r for t, r in rs.items() if not r.get("shipped")}; shipped = {t: r for t, r in rs.items() if r.get("shipped")}
+        fw = sum(1 for r in flagged.values() if not r["correct"]); sw = sum(1 for r in shipped.values() if not r["correct"])
+        p1, p2, odds = fisher_exact(fw, len(flagged) - fw, sw, len(shipped) - sw)
+        out.append(f"- {c}: flagged {len(flagged)} ({fw} wrong), all gates met {len(shipped)} ({sw} wrong); Fisher's exact p = {p1:.4f} one-sided (flagged more often wrong), {p2:.4f} two-sided, odds ratio {odds:.2f}")
+        # the agreement gate is read from the record's own `agreed` field (the same field "Accuracy by agreement" uses); the
+        # other two from `gates`, which the harness always writes; a record without gates can only be flagged for deadlock
+        reasons = [("deadlock", lambda r: not r.get("agreed")), ("hub questions open", lambda r: not (r.get("gates") or {}).get("hub_clear", True)), ("failed check", lambda r: not (r.get("gates") or {}).get("checks_ok", True))]
+        for name, bad in reasons:
+            lst = {t: r for t, r in flagged.items() if bad(r)}
+            if lst:
+                k = sum(r["correct"] for r in lst.values())
+                out.append(f"    - {name}: {len(lst)} tasks, {k} right ({pct(k / len(lst))}); wrong: {ids(t for t, r in lst.items() if not r['correct'])}")
+        combos = {}
+        for t, r in flagged.items():
+            key = "+".join(name for name, bad in reasons if bad(r)) or "no gate recorded"
+            combos.setdefault(key, []).append(t)
+        if len(combos) > 1:
+            out.append("    - overlaps: " + "; ".join(f"{key} only: {len(lst)} ({sum(rs[t]['correct'] for t in lst)} right)" if "+" not in key else f"{key}: {len(lst)} ({sum(rs[t]['correct'] for t in lst)} right)" for key, lst in sorted(combos.items(), key=lambda kv: -len(kv[1]))))
+    out.append("")
+    # hub questions used
+    hubc = [c for c in panel if any(r.get("hub_questions") for r in ok[c].values())]
+    if hubc:
+        out.append("### Hub questions used")
+        out.append("")
+        for c in hubc:
+            rs = ok[c]
+            dist = {}
+            for r in rs.values():
+                dist[r.get("hub_questions") or 0] = dist.get(r.get("hub_questions") or 0, 0) + 1
+            top = max(dist)
+            at = [t for t, r in rs.items() if (r.get("hub_questions") or 0) == top]
+            out.append(f"- {c}: questions per task {dict(sorted(dist.items()))}; mean {statistics.mean((r.get('hub_questions') or 0) for r in rs.values()):.2f}; at the most used ({top}): {len(at)} tasks, {sum(rs[t]['correct'] for t in at)} right; "
+                       f"no question asked: {ids(t for t, r in rs.items() if not r.get('hub_questions'))}")
+        out.append("")
+    # checks run and failed
+    chk = [c for c in panel if any(r.get("checks") for r in ok[c].values())]
+    if chk:
+        out.append("### Checks ordered by the hub and run outside the panel")
+        out.append("")
+        for c in chk:
+            rs = ok[c]
+            allc = [(t, x) for t, r in rs.items() for x in (r.get("checks") or [])]
+            kinds = {}
+            for _, x in allc:
+                k = (x.get("kind"), "valid" if x.get("valid") else "invalid", "pass" if x.get("ok") else "fail")
+                kinds[k] = kinds.get(k, 0) + 1
+            failed = [(t, x) for t, x in allc if x.get("valid") and not x.get("ok")]
+            out.append(f"- {c}: {len(allc)} checks on {len({t for t, _ in allc})} tasks; " + "; ".join(f"{k[0]} {k[1]} {k[2]}: {v}" for k, v in sorted(kinds.items(), key=str))
+                       + f". Failed: {len(failed)} on {len({t for t, _ in failed})} tasks" + (" (" + "; ".join(f"{t} {x.get('kind')}: pre-hub {'right' if rs[t]['pre_hub_correct'] else 'wrong'}, final {'right' if rs[t]['correct'] else 'wrong'}, release {'blocked' if not (rs[t].get('gates') or {}).get('checks_ok', True) else 'not blocked'}" for t, x in failed) + ")" if failed else ""))
+        out.append("")
+    return out
+
+
 def main():
     res = load()
     if not res:
@@ -200,6 +339,8 @@ def main():
     if any(errs.values()):
         lines.append("Items that failed with an error (excluded from hub metrics, counted as wrong in accuracy; rerun to retry): " + ", ".join(f"{c}: {n}" for c, n in errs.items() if n))
         lines.append("")
+
+    lines += panel_stage_lines(res)
 
     os.makedirs(RESULTS, exist_ok=True)
     with open(os.path.join(RESULTS, "report.md"), "w") as f:
