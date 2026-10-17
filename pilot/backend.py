@@ -147,11 +147,12 @@ class MockBackend:
     """Offline stand-in. Correctness per model is a fixed probability so the
     scoring, gating, and reporting code paths all get exercised."""
 
-    def __init__(self, tasks, accounting, quality=None, seed=1, fail=None):
+    def __init__(self, tasks, accounting, quality=None, seed=1, fail=None, malformed=None):
         self.tasks = {t["id"]: t for t in tasks}
         self.acc = accounting
         self.quality = quality or {}
         self.fail = fail or {}  # {model: {step, ...}}: calls at these steps give up, as the live backend does after its retries
+        self.malformed = malformed or {}  # {model: {step, ...}}: revisions ("revise") or hub replies ("panel-reply") at these steps drop the answer format
         self.rng = random.Random(seed)
         self.lock = threading.Lock()
 
@@ -180,6 +181,12 @@ class MockBackend:
             val = exp if good else ("Wednesday" if exp != "Wednesday" else "Friday")
         return f"Working shown here.\nFINAL: {val}"
 
+    def _strip_format(self, text, model, step, ctx):
+        """For --mock-malformed: the same answer with its FINAL line or code fences removed, as a live seat sometimes does."""
+        if (ctx or {}).get("step") != step or step not in self.malformed.get(model, ()):
+            return text
+        return text.replace("FINAL:", "Answer:").replace("```python", "").replace("```", "")
+
     def chat(self, model, system, user, temperature=0.5, max_tokens=1500, ctx=None, json_step=False):
         task = self.tasks.get((ctx or {}).get("task"))
         if (ctx or {}).get("step") in self.fail.get(model, ()):
@@ -204,7 +211,7 @@ class MockBackend:
             else:
                 out = json.dumps({"challenges": [], "verdict": "ready"})
         elif "Revise the draft" in u:
-            out = json.dumps({"answer": self._answer(task, model), "accepted": [1], "rejected": []})
+            out = json.dumps({"answer": self._strip_format(self._answer(task, model), model, "revise", ctx), "accepted": [1], "rejected": []})
         elif "Is this ready to submit to the hub" in u:
             out = json.dumps({"ready": r < 0.85, "objection": "" if r < 0.85 else "one figure still unsupported"})
         elif "Ask your questions now" in u:
@@ -215,7 +222,7 @@ class MockBackend:
             else:
                 out = json.dumps({"questions": [], "checks": []})
         elif "The hub asks:" in u:
-            corrected = self._answer(task, model) if r < 0.5 else None
+            corrected = self._strip_format(self._answer(task, model), model, "panel-reply", ctx) if r < 0.5 else None
             out = json.dumps({"replies": [{"n": 1, "reply": "Recomputed; see the figure."}], "correctedAnswer": corrected})
         elif "Which are now resolved" in u:
             nums = [int(x) for x in re.findall(r"^(\d+)\. Q:", u, re.M)]

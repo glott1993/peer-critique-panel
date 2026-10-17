@@ -200,12 +200,12 @@ First draft = the assembled answer before any critique (pre_critique_correct); p
     - deadlock: 42 tasks, 35 right (83.3%); wrong: code2-27, data2-49, multi4-05, multi4-06, multi4-24, multi4-28, multi4-37
     - hub questions open: 23 tasks, 19 right (82.6%); wrong: code2-27, data2-49, multi4-28, multi4-37
     - failed check: 2 tasks, 1 right (50.0%); wrong: code2-27
-    - overlaps: deadlock only: 28 (25 right); deadlock+hub questions open: 12 (9 right); hub questions open only: 10 (10 right); deadlock+hub questions open+failed check: 1 (0 right); deadlock+failed check: 1 (1 right)
+    - overlaps: deadlock only: 28 (25 right); deadlock+hub questions open: 12 (9 right); hub questions open only: 10 (10 right); deadlock+failed check: 1 (1 right); deadlock+hub questions open+failed check: 1 (0 right)
 - c2: flagged 63 (10 wrong), all gates met 41 (1 wrong); Fisher's exact p = 0.0263 one-sided (flagged more often wrong), 0.0467 two-sided, odds ratio 7.55
     - deadlock: 47 tasks, 37 right (78.7%); wrong: code2-14, data2-34, multi2-34, multi4-05, multi4-11, multi4-25, multi4-34, multi4-35, multi4-38, multi4-39
     - hub questions open: 32 tasks, 29 right (90.6%); wrong: multi2-34, multi4-11, multi4-39
     - failed check: 2 tasks, 2 right (100.0%); wrong: none
-    - overlaps: deadlock only: 29 (22 right); deadlock+hub questions open: 17 (14 right); hub questions open only: 15 (15 right); failed check only: 1 (1 right); deadlock+failed check: 1 (1 right)
+    - overlaps: deadlock only: 29 (22 right); deadlock+hub questions open: 17 (14 right); hub questions open only: 15 (15 right); deadlock+failed check: 1 (1 right); failed check only: 1 (1 right)
 - d: flagged 53 (5 wrong), all gates met 51 (2 wrong); Fisher's exact p = 0.2346 one-sided (flagged more often wrong), 0.4374 two-sided, odds ratio 2.55
     - deadlock: 53 tasks, 48 right (90.6%); wrong: multi4-19, multi4-24, multi4-31, multi4-33, multi4-39
 

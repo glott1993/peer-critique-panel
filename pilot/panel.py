@@ -199,6 +199,25 @@ def norm_comps(lst, req):
     return out or [{"id": "c1", "title": "Whole request", "what": req[:300]}]
 
 
+def well_formed(task, text):
+    """Does the text carry the answer format the request asks for: a code block for a code task, a FINAL line otherwise?
+    With no task (the prototype's free-form use) anything passes."""
+    if task is None or not isinstance(text, str):
+        return True
+    if task.get("answer_type") == "code":
+        return checkers.extract_code(text) is not None
+    return checkers.extract_final(text) is not None
+
+
+def keeps_format(task, old, new):
+    """May `new` replace `old` as the panel's answer? Added October 17, 2026: a revision or a correction under
+    interrogation used to replace the answer unchecked, and in pilot 2 six of the panel's 26 wrong answers were right
+    values whose revision or hub reply had dropped the FINAL line or the code block. The rule: a new text that has
+    lost the format the old one had is refused and the old text stands. A malformed text may still replace a malformed
+    one, so the panel never gets stuck on a bad draft, and nothing here judges the values."""
+    return well_formed(task, new) or not well_formed(task, old)
+
+
 def run_panel(req, cfg, api, task=None, prelude="", log=None):
     """cfg keys: seats (list[Seat]), hub (model id or None), rounds, hub_budget, dissenter, tier, catalogue (dict), rng, ctx."""
     seats, N, cat = cfg["seats"], len(cfg["seats"]), cfg["catalogue"]
@@ -222,6 +241,14 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
         declined.append({"who": who, "step": step, "error": str(err)[:160]})
         if who != "hub":
             declined_letters.add(who)
+
+    # A revision or a correction that drops the request's answer format (keeps_format) is refused and recorded here;
+    # the text that stood before it stays the answer.
+    refused = []
+
+    def note_refusal(who, step, where, text):
+        refused.append({"who": who, "step": step, "where": where, "why": "no code block" if task and task.get("answer_type") == "code" else "no FINAL line",
+                        "text": (text or "")[:400]})
 
     def ask(s, user, temp, step, max_tokens=None):
         mt = max_tokens or JSON_TOKENS
@@ -363,19 +390,27 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
                     break
             if r is None:  # every seat declined to revise: the draft stands and the challenges stay open
                 r = {"answer": answer, "accepted": [], "rejected": []}
+            replaced, refused_text = False, None
             if isinstance(r.get("answer"), str) and len(r["answer"].strip()) > 20:
-                answer = r["answer"].strip()
+                if keeps_format(task, answer, r["answer"].strip()):
+                    answer = r["answer"].strip(); replaced = True
+                else:  # the revision dropped the answer format: the text that stood before it stays
+                    refused_text = r["answer"].strip(); note_refusal(reviser.letter, "revise", f"round {rnd}", refused_text)
             acc = [int(n) for n in (r.get("accepted") or []) if str(n).isdigit() and 1 <= int(n) <= len(challenges)]
             rej = [{"n": int(x.get("n")), "why": str(x.get("why") or "")} for x in (r.get("rejected") or []) if isinstance(x, dict) and str(x.get("n", "")).isdigit() and 1 <= int(x["n"]) <= len(challenges)]
             for n in acc:
-                ch = challenges[n - 1]; t = touch(author); t["corrected"] += 1
-                t["recent"] = ([(ch["problem"] or ch["claim"])[:120]] + t["recent"])[:3]
+                ch = challenges[n - 1]
+                if replaced:  # a refused revision corrected nothing
+                    t = touch(author); t["corrected"] += 1
+                    t["recent"] = ([(ch["problem"] or ch["claim"])[:120]] + t["recent"])[:3]
                 record["accepted"].append(ch)
             for x in rej:
                 ch = challenges[x["n"] - 1]; touch(ch["from"])["overruled"] += 1
                 record["rejected"].append(dict(ch, why=x["why"]))
-            author = reviser
-            log.append({"step": 4, "round": rnd, "reviser": reviser.letter, "accepted": len(acc), "rejected": len(rej), "answer": answer})
+            if replaced:
+                author = reviser
+            log.append({"step": 4, "round": rnd, "reviser": reviser.letter, "accepted": len(acc), "rejected": len(rej), "answer": answer,
+                        **({"refused": refused_text} if refused_text is not None else {})})
         votes = pool([(lambda s=s: (s, ask_json2(s, P.vote(req, answer), {"ready": False, "objection": "vote could not be read"}, 0.3, "vote"))) for s in seats])
         abstained = [s for s, v in votes if v is None]  # a seat that declined to vote abstains; an unreadable vote still counts as an objection
         votes = [(s, v) for s, v in votes if v is not None]
@@ -454,26 +489,32 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
             for i, b in enumerate(batch):
                 r = next((x for x in replies if isinstance(x, dict) and str(x.get("n")) == str(b["n"])), replies[i] if i < len(replies) and isinstance(replies[i], dict) else None)
                 b["reply"] = str(r.get("reply") or "") if r else "No reply."
+            refused_text = None
             if isinstance(pr.get("correctedAnswer"), str) and len(pr["correctedAnswer"].strip()) > 20:
-                answer = pr["correctedAnswer"].strip(); hub_corrected = True
-                t = touch(author); t["corrected"] += 1; t["recent"] = (["corrected under interrogation"] + t["recent"])[:3]
-                for c in checks:
-                    if c["kind"] == "arithmetic":
-                        c["addressed"] = True
-                mechanical()  # re-run the visible examples on the corrected code
+                if keeps_format(task, answer, pr["correctedAnswer"].strip()):
+                    answer = pr["correctedAnswer"].strip(); hub_corrected = True
+                    t = touch(author); t["corrected"] += 1; t["recent"] = (["corrected under interrogation"] + t["recent"])[:3]
+                    for c in checks:
+                        if c["kind"] == "arithmetic":
+                            c["addressed"] = True
+                    mechanical()  # re-run the visible examples on the corrected code
+                else:  # the correction dropped the answer format: the answer under interrogation stays
+                    refused_text = pr["correctedAnswer"].strip(); note_refusal(s.letter, "panel-reply", f"questions {batch[0]['n']} to {batch[-1]['n']}", refused_text)
             under_review = [next(b for b in qa if b["n"] == o["n"]) for o in hub_open] + batch
             rv_raw = hub_call(P.hub_review(req, answer, under_review, remaining), "hub-review")
             if rv_raw is None:  # the hub went silent mid-interrogation: everything under review stays open
                 hub_open = [{"n": b["n"], "why": "the hub did not answer", "q": b["q"]} for b in under_review]
                 questions = []
-                log.append({"step": 5, "asked": [b["q"] for b in batch], "replies": [b.get("reply") for b in batch], "open": [o["why"] for o in hub_open], "corrected": hub_corrected, "hub_down": hub_down})
+                log.append({"step": 5, "asked": [b["q"] for b in batch], "replies": [b.get("reply") for b in batch], "open": [o["why"] for o in hub_open], "corrected": hub_corrected, "hub_down": hub_down,
+                            **({"refused": refused_text} if refused_text is not None else {})})
                 break
             rv = parse_json(rv_raw, {"resolved": [b["n"] for b in under_review], "open": [], "questions": extract_questions(rv_raw)})
             resolved = {int(n) for n in (rv.get("resolved") or []) if str(n).isdigit()}
             hub_open = [{"n": int(o["n"]), "why": str(o.get("why") or ""), "q": next(b["q"] for b in under_review if b["n"] == int(o["n"]))}
                         for o in (rv.get("open") or []) if isinstance(o, dict) and str(o.get("n", "")).isdigit() and any(b["n"] == int(o["n"]) for b in under_review)]
             questions = [str(q) for q in (rv.get("questions") or []) if q] if remaining > 0 else []
-            log.append({"step": 5, "asked": [b["q"] for b in batch], "replies": [b.get("reply") for b in batch], "open": [o["why"] for o in hub_open], "corrected": hub_corrected})
+            log.append({"step": 5, "asked": [b["q"] for b in batch], "replies": [b.get("reply") for b in batch], "open": [o["why"] for o in hub_open], "corrected": hub_corrected,
+                        **({"refused": refused_text} if refused_text is not None else {})})
         hub_qs = qn
         if hub_down and not hub_open:  # the hub never reviewed the answer: it ships with that flag, not as cleared
             hub_open = [{"n": 0, "why": "the hub did not answer (" + hub_down + ")", "q": "hub interrogation"}]
@@ -489,4 +530,4 @@ def run_panel(req, cfg, api, task=None, prelude="", log=None):
     return {"answer": answer, "pre_hub_answer": pre_hub_answer, "agreed": agreed, "rounds_used": rounds_used, "gates": gates, "shipped": shipped,
             "hub_questions": hub_qs, "hub_open": len(hub_open), "hub_sent_back": sent_back, "hub_corrected": hub_corrected,
             "checks": [{k: v for k, v in c.items() if k != "addressed"} for c in checks], "author": author.letter,
-            "seats": {s.letter: s.model for s in seats}, "declined": declined, "log": log}
+            "seats": {s.letter: s.model for s in seats}, "declined": declined, "refused": refused, "log": log}

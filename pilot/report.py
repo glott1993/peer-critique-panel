@@ -89,7 +89,9 @@ def panel_stage_lines(res):
     panel = [c for c in ("c", "c2", "d") if c in res and any("pre_critique_correct" in r for r in res[c].values())]
     if not panel:
         return []
-    ok = {c: {t: r for t, r in res[c].items() if not r.get("error") and "pre_critique_correct" in r} for c in panel}
+    # task order is fixed here (sorted ids) so the block reads the same on every platform; load() walks the folder in
+    # directory order, which differs between Windows and Linux
+    ok = {c: {t: r for t, r in sorted(res[c].items()) if not r.get("error") and "pre_critique_correct" in r} for c in panel}
 
     def ids(lst):
         lst = list(lst)  # callers pass generators, which are always truthy
@@ -167,7 +169,7 @@ def panel_stage_lines(res):
             key = "+".join(name for name, bad in reasons if bad(r)) or "no gate recorded"
             combos.setdefault(key, []).append(t)
         if len(combos) > 1:
-            out.append("    - overlaps: " + "; ".join(f"{key} only: {len(lst)} ({sum(rs[t]['correct'] for t in lst)} right)" if "+" not in key else f"{key}: {len(lst)} ({sum(rs[t]['correct'] for t in lst)} right)" for key, lst in sorted(combos.items(), key=lambda kv: -len(kv[1]))))
+            out.append("    - overlaps: " + "; ".join(f"{key} only: {len(lst)} ({sum(rs[t]['correct'] for t in lst)} right)" if "+" not in key else f"{key}: {len(lst)} ({sum(rs[t]['correct'] for t in lst)} right)" for key, lst in sorted(combos.items(), key=lambda kv: (-len(kv[1]), kv[0]))))
     out.append("")
     # hub questions used
     hubc = [c for c in panel if any(r.get("hub_questions") for r in ok[c].values())]
