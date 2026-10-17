@@ -163,3 +163,58 @@ Condition d deadlocks: 53/104 (51.0%)
 - Hub adding value (c beats d): not shown at this sample size (c-d = -1.0 points, interval [-7.7, +5.8])
 
 Items that failed with an error (excluded from hub metrics, counted as wrong in accuracy; rerun to retry): a: 6, seat4: 5
+
+## Panel stages, flags and checks (added for v1.3)
+
+First draft = the assembled answer before any critique (pre_critique_correct); pre-hub = after critique and revision (pre_hub_correct); final = correct. In d there is no hub, so pre-hub and final coincide.
+
+### First draft, after critique, final
+
+- c: first draft right 99/104 (95.2%); after critique 95; final 95. Wrong first drafts: multi2-02, multi2-11, multi4-06, multi4-17, multi4-33
+- c2: first draft right 95/104 (91.3%); after critique 96; final 92. Wrong first drafts: multi2-02, multi2-21, multi2-34, multi4-06, multi4-18, multi4-25, multi4-26, multi4-31, multi4-35
+- d: first draft right 95/104 (91.3%); after critique 96; final 96. Wrong first drafts: data2-07, data2-10, multi2-02, multi4-04, multi4-17, multi4-24, multi4-26, multi4-33, multi4-35
+
+### Critique alone (first draft to pre-hub) and the hub alone (pre-hub to final)
+
+- c critique: right first draft to wrong pre-hub 7 (code2-14, code2-27, data2-17, data2-49, multi2-35, multi4-05, multi4-31); wrong first draft to right pre-hub 3 (multi2-11, multi4-17, multi4-33); net -4
+- c hub: right pre-hub to wrong final 4 (multi4-24, multi4-28, multi4-35, multi4-37); wrong pre-hub to right final 4 (code2-14, data2-17, multi2-35, multi4-31); net +0
+- c2 critique: right first draft to wrong pre-hub 4 (data2-34, logic2-06, multi4-11, multi4-39); wrong first draft to right pre-hub 5 (multi2-21, multi4-06, multi4-18, multi4-26, multi4-31); net +1
+- c2 hub: right pre-hub to wrong final 4 (code2-14, multi4-05, multi4-34, multi4-38); wrong pre-hub to right final 0 (none); net -4
+- d critique: right first draft to wrong pre-hub 5 (logic2-01, logic2-34, multi4-19, multi4-31, multi4-39); wrong first draft to right pre-hub 6 (data2-07, data2-10, multi4-04, multi4-17, multi4-26, multi4-35); net +1
+
+### Pairwise flips between panel conditions (tasks present in both)
+
+- c vs c2 over 104: first draft differs on 10 (right in c only: multi2-21, multi2-34, multi4-18, multi4-25, multi4-26, multi4-31, multi4-35; right in c2 only: multi2-11, multi4-17, multi4-33); final differs on 15 (right in c only: code2-14, data2-34, logic2-06, multi2-34, multi4-11, multi4-25, multi4-34, multi4-38, multi4-39; right in c2 only: code2-27, data2-49, multi4-06, multi4-24, multi4-28, multi4-37)
+- c vs d over 104: first draft differs on 8 (right in c only: data2-07, data2-10, multi4-04, multi4-24, multi4-26, multi4-35; right in d only: multi2-11, multi4-06); final differs on 13 (right in c only: logic2-01, logic2-34, multi4-19, multi4-31, multi4-33, multi4-39; right in d only: code2-27, data2-49, multi4-05, multi4-06, multi4-28, multi4-35, multi4-37)
+- c2 vs d over 104: first draft differs on 12 (right in c2 only: data2-07, data2-10, multi4-04, multi4-17, multi4-24, multi4-33; right in d only: multi2-21, multi2-34, multi4-06, multi4-18, multi4-25, multi4-31); final differs on 16 (right in c2 only: logic2-01, logic2-34, multi4-19, multi4-24, multi4-31, multi4-33; right in d only: code2-14, data2-34, logic2-06, multi2-34, multi4-05, multi4-11, multi4-25, multi4-34, multi4-35, multi4-38)
+
+### Accuracy by agreement
+
+- c: deadlocked 35/42 (83.3%), agreed 60/62 (96.8%); Fisher's exact p = 0.0214 one-sided (deadlocked more often wrong), 0.0288 two-sided, odds ratio 6.00. Wrong when deadlocked: code2-27, data2-49, multi4-05, multi4-06, multi4-24, multi4-28, multi4-37; wrong when agreed: multi2-02, multi4-35
+- c2: deadlocked 37/47 (78.7%), agreed 55/57 (96.5%); Fisher's exact p = 0.0054 one-sided (deadlocked more often wrong), 0.0058 two-sided, odds ratio 7.43. Wrong when deadlocked: code2-14, data2-34, multi2-34, multi4-05, multi4-11, multi4-25, multi4-34, multi4-35, multi4-38, multi4-39; wrong when agreed: logic2-06, multi2-02
+- d: deadlocked 48/53 (90.6%), agreed 48/51 (94.1%); Fisher's exact p = 0.3796 one-sided (deadlocked more often wrong), 0.7159 two-sided, odds ratio 1.67. Wrong when deadlocked: multi4-19, multi4-24, multi4-31, multi4-33, multi4-39; wrong when agreed: logic2-01, logic2-34, multi2-02
+
+### Flagged releases by reason (a task can fail more than one gate)
+
+- c: flagged 52 (7 wrong), all gates met 52 (2 wrong); Fisher's exact p = 0.0801 one-sided (flagged more often wrong), 0.1603 two-sided, odds ratio 3.89
+    - deadlock: 42 tasks, 35 right (83.3%); wrong: code2-27, data2-49, multi4-05, multi4-06, multi4-24, multi4-28, multi4-37
+    - hub questions open: 23 tasks, 19 right (82.6%); wrong: code2-27, data2-49, multi4-28, multi4-37
+    - failed check: 2 tasks, 1 right (50.0%); wrong: code2-27
+    - overlaps: deadlock only: 28 (25 right); deadlock+hub questions open: 12 (9 right); hub questions open only: 10 (10 right); deadlock+hub questions open+failed check: 1 (0 right); deadlock+failed check: 1 (1 right)
+- c2: flagged 63 (10 wrong), all gates met 41 (2 wrong); Fisher's exact p = 0.0768 one-sided (flagged more often wrong), 0.1191 two-sided, odds ratio 3.68
+    - deadlock: 47 tasks, 37 right (78.7%); wrong: code2-14, data2-34, multi2-34, multi4-05, multi4-11, multi4-25, multi4-34, multi4-35, multi4-38, multi4-39
+    - hub questions open: 32 tasks, 29 right (90.6%); wrong: multi2-34, multi4-11, multi4-39
+    - failed check: 2 tasks, 2 right (100.0%); wrong: none
+    - overlaps: deadlock only: 29 (22 right); deadlock+hub questions open: 17 (14 right); hub questions open only: 15 (15 right); failed check only: 1 (1 right); deadlock+failed check: 1 (1 right)
+- d: flagged 53 (5 wrong), all gates met 51 (3 wrong); Fisher's exact p = 0.3796 one-sided (flagged more often wrong), 0.7159 two-sided, odds ratio 1.67
+    - deadlock: 53 tasks, 48 right (90.6%); wrong: multi4-19, multi4-24, multi4-31, multi4-33, multi4-39
+
+### Hub questions used
+
+- c: questions per task {0: 8, 2: 2, 3: 12, 4: 3, 6: 79}; mean 5.06; at the most used (6): 79 tasks, 71 right; no question asked: code2-28, data2-45, math2-10, multi2-31, multi4-08, multi4-10, multi4-17, multi4-33
+- c2: questions per task {0: 12, 2: 3, 3: 14, 4: 1, 5: 3, 6: 71}; mean 4.74; at the most used (6): 71 tasks, 64 right; no question asked: code2-13, data2-17, data2-40, math2-04, multi2-07, multi2-31, multi2-35, multi4-06, multi4-19, multi4-26, multi4-32, multi4-35
+
+### Checks ordered by the hub and run outside the panel
+
+- c: 286 checks on 96 tasks; arithmetic invalid fail: 4; arithmetic valid fail: 4; arithmetic valid pass: 264; code valid fail: 1; code valid pass: 13. Failed: 5 on 4 tasks (code2-27 code: pre-hub wrong, final wrong, release blocked; multi2-20 arithmetic: pre-hub right, final right, release blocked; multi4-31 arithmetic: pre-hub wrong, final right, release not blocked; multi4-31 arithmetic: pre-hub wrong, final right, release not blocked; multi4-34 arithmetic: pre-hub right, final right, release not blocked)
+- c2: 263 checks on 89 tasks; arithmetic valid fail: 5; arithmetic valid pass: 244; code valid pass: 14. Failed: 5 on 5 tasks (code2-11 arithmetic: pre-hub right, final right, release not blocked; code2-28 arithmetic: pre-hub right, final right, release blocked; data2-10 arithmetic: pre-hub right, final right, release not blocked; multi4-27 arithmetic: pre-hub right, final right, release not blocked; multi4-37 arithmetic: pre-hub right, final right, release blocked)
