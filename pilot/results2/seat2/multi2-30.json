@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "ok: got 21717.91, expected 21717.91 | ok: got 2828.42, expected 2828.42 | ok: got 38.0, expected 38.0",
  "error": null,
- "seconds": 41.5,
- "tokens": 19823,
- "prompt_tokens": 11234,
- "completion_tokens": 8589,
- "cost": 0.01255,
+ "seconds": 27.7,
+ "tokens": 16955,
+ "prompt_tokens": 9963,
+ "completion_tokens": 6992,
+ "cost": 0.01038,
  "calls": 1,
  "call_errors": 0,
- "answer": "Part A:\nMonthly rate r = 0.06/12 = 0.005.\nRegular payment:\nP = 31200(0.005)/(1 - 1.005^(-60)) = 603.183408...\nBalance after 18 regular payments:\n603.183408...[(1 - 1.005^(-42))/0.005] = 22799.307359...\nSubtract accumulated extra principal payments:\n300(1.005^13) + 750(1.005^3) = 1081.402204...\nRemaining balance = 21717.905155... = 21717.91.\n\nPart B:\nFIFO cost:\n154(6.41) + 62(6.88) + 92(8.48) + 68(4.44) + 44(7.56)\n= 987.14 + 426.56 + 780.16 + 301.92 + 332.64\n= 2828.42.\n\nPart C:\nBy Fermat\u2019s theorem, 16^639 = 16^153 = 16^(-9) mod 163.\nSince 16^(-1) = 51 mod 163:\n51^2 \u2261 156, 51^4 \u2261 49, 51^8 \u2261 119, so\n51^9 \u2261 119(51) \u2261 38 mod 163.\n\nFINAL: 21717.91; 2828.42; 38"
+ "answer": "Part A:\nMonthly rate = 0.06/12 = 0.005.\nMonthly payment = 31200(0.005)/(1 - 1.005^(-60)) = 603.183406...\nAfter 18 regular payments and the extra principal payments:\nBalance = 31200(1.005)^18 - 603.183406[(1.005)^18 - 1]/0.005 - 300(1.005)^13 - 750(1.005)^3\n= 21717.91.\n\nPart B:\nFIFO cost:\n154(6.41) + 62(6.88) + 92(8.48) + 68(4.44) + 44(7.56)\n= 2828.42.\n\nPart C:\n16^9 \u2261 133 (mod 163), and 133^(-1) \u2261 38 (mod 163).\nSince 639 \u2261 -9 (mod 162), 16^639 \u2261 16^(-9) \u2261 38 (mod 163).\n\nFINAL: 21717.91; 2828.42; 38"
 }

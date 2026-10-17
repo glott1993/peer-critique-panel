@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-03",
+ "type": "multi",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "ok: got '2026-07-29', expected '2026-07-29' | ok: got 4010.0, expected 4010.0 | ok: got 2839.0, expected 2839.0",
+ "error": null,
+ "seconds": 155.5,
+ "tokens": 5614,
+ "prompt_tokens": 298,
+ "completion_tokens": 5316,
+ "cost": 0.01569,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A: 2026-03-19 is a Thursday. Counting weekdays from 2026-03-20 and skipping the six listed holidays, the 88th business day is 2026-07-29.\n\nPart B: Count divisible by at least one of 3, 5, 7:\n\\[\n\\lfloor 8000/3\\rfloor+\\lfloor 8000/5\\rfloor+\\lfloor 8000/7\\rfloor\n-\\lfloor 8000/15\\rfloor-\\lfloor 8000/21\\rfloor-\\lfloor 8000/35\\rfloor+\\lfloor 8000/105\\rfloor = 4343\n\\]\nSubtract those also divisible by 13:\n\\[\n\\lfloor 8000/39\\rfloor+\\lfloor 8000/65\\rfloor+\\lfloor 8000/91\\rfloor\n-\\lfloor 8000/195\\rfloor-\\lfloor 8000/273\\rfloor-\\lfloor 8000/455\\rfloor+\\lfloor 8000/1365\\rfloor = 333\n\\]\nSo the answer is \\(4343-333=4010\\).\n\nPart C: Let \\(n=17k\\). Then \\(17k\\equiv 8\\pmod{19}\\), so \\(k\\equiv 15\\pmod{19}\\). Thus \\(n=255+323t\\). Modulo 23:\n\\[\n255+323t \\equiv 2+t \\equiv 10 \\pmod{23}\n\\]\nso \\(t\\equiv 8\\pmod{23}\\). Therefore \\(n=255+323(8)=2839\\).\n\nFINAL: 2026-07-29; 4010; 2839"
+}

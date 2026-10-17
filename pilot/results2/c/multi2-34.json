@@ -1,0 +1,287 @@
+{
+ "task_id": "multi2-34",
+ "type": "multi",
+ "condition": "c",
+ "correct": true,
+ "detail": "ok: got -1856.35, expected -1856.35 | ok: got 4022.55, expected 4022.55 | ok: got 19389.44, expected 19389.44",
+ "error": null,
+ "seconds": 1381.1,
+ "tokens": 326026,
+ "prompt_tokens": 151572,
+ "completion_tokens": 174454,
+ "cost": 1.03562,
+ "calls": 52,
+ "call_errors": 5,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(-2539.118475+700-8)*1.005",
+   "claimed": -1856.354067,
+   "value": -1856.354067375,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "151*11.31+128*5.24+113*4.02+104*11.44",
+   "claimed": 4022.55,
+   "value": 4022.55,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "750*1.00575*1.00575*1.00575*1.00575*1.00575*1.00575*1.00575*1.00575*1.00575",
+   "claimed": 789.717268,
+   "value": 789.7172682875677,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A monthly balance simulation",
+     "what": "Simulate 15 months of transactions, fee, and interest to find final balance."
+    },
+    {
+     "id": "c2",
+     "title": "Part B FIFO cost of goods sold",
+     "what": "Apply FIFO to the six sales against the eight lots and sum the cost."
+    },
+    {
+     "id": "c3",
+     "title": "Part C amortization with extra principal",
+     "what": "Compute monthly payment, apply months 1-18 with extra principal in months 9 and 10, and find remaining balance."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "### Part A: Monthly Account Balance Simulation\n\nStarting from $\\$2,500.00$, applying the monthly transaction, checking if the balance is below $\\$1,000$ to deduct an $\\$8$ fee, and adding $0.5\\%$ interest:\n$$\\text{balance}_{t} = (\\text{balance}_{t-1} + T_t - (8\\text{ if } \\text{balance} < 1000\\text{ else } 0)) \\times 1.005$$\n\nThe balances across months 1 to 15 are:\n1. $1859.25$\n2. $1215.30$\n3. $2326.87$\n4. $1434.01$\n5. $1189.93$\n6. $936.59$\n7. $28.73$\n8. $-632.42$\n9. $-1296.87$\n10. $-1713.39$\n11. $-2132.00$\n12. $-1849.20$\n13. $-2268.49$\n14. $-2539.12$\n15. $-1856.35$\n\nAfter month 15, the remaining balance is $-1856.35$.\n\n### Part B: FIFO Cost of Goods Sold\n\nTotal units sold across the six orders:\n$$89 + 67 + 81 + 91 + 96 + 72 = 496\\text{ units}$$\n\nFulfilling from the earliest lots under FIFO:\n* **Lot 1:** $151\\text{ units} \\times \\$11.31 = \\$1,707.81$\n* **Lot 2:** $128\\text{ units} \\times \\$5.24 = \\$670.72$\n* **Lot 3:** $113\\text{ units} \\times \\$4.02 = \\$454.26$\n* **Lot 4:** $104\\text{ units} \\times \\$11.44 = \\$1,189.76$\n\n$$\\text{COGS} = 1707.81 + 670.72 + 454.26 + 1189.76 = 4022.55$$\n\n### Part C: Loan Amortization with Extra Principal\n\nFor $P = \\$31,200$, monthly rate $r = \\frac{0.069}{12} = 0.00575$, and $n = 48$:\n$$M = 31200 \\times \\frac{0.00575(1.00575)^{48}}{(1.00575)^{48} - 1} \\approx 745.649964$$\n\nScheduled balance at month 18 without prepayments:\n$$B_{18,\\text{sched}} = P(1+r)^{18} - M\\frac{(1+r)^{18}-1}{r} \\approx 20491.4608$$\n\nSubtracting the prepayments compounded to month 18:\n* Month 9 extra $\\$750$: $750 \\times (1.00575)^9 \\approx 789.7408$\n* Month 10 extra $\\$300$: $300 \\times (1.00575)^8 \\approx 314.0904$\n\n$$B_{18} = 20491.4608 - (789.7408 + 314.0904) \\approx 19387.63$$\n\nFINAL: -1856.35; 4022.55; 19387.63"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing: 2500-650=1850, balance\u22651000 so no fee, interest=1850*1.005=1858.25, not 1859.25 as stated."
+    },
+    {
+     "from": "A",
+     "problem": "The problem implies a normal checking account; allowing unchecked negative withdrawals for months 7-15 while still applying 0.5% interest and $8 fees to a negative balance is questionable and should be flagged even if mathematically followed, since it changes which transactions are 'withdrawals' from a negative balance (fee condition 'below $1000' is still mechanically true but real-world interpretation differs). At minimum the arithmetic should be verified independently."
+    },
+    {
+     "from": "A",
+     "problem": "Not independently verified; need to check (1.00575)^48 value and resulting M, and also verify B_18,sched and the compounding of extra payments (should extra principal reduce balance before interest accrues the same month, not be separately compounded afterward)."
+    },
+    {
+     "from": "B",
+     "problem": "The payment appears numerically incorrect: using r=0.069/12 and n=48 gives a payment of approximately 745.68, not 745.649964. Consequently, the scheduled balance and final balance are also unsupported. The stated compounded extra-payment figures are likewise inaccurate; 750(1.00575)^9 is about 789.72, not 789.7408."
+    },
+    {
+     "from": "D",
+     "problem": "The simulation allows the balance to go negative and continues charging fees and adding interest on negative balances, which may not reflect the intended account rules. Also, the listed balances do not match a straightforward application of the stated rules."
+    },
+    {
+     "from": "D",
+     "problem": "The calculation uses only 496 units but the sum of units in lots 1-4 is 151+128+113+125 = 517, so only 104 units from lot 4 are needed. However, the cost for lot 4 is listed as 104 units \u00d7 $11.44 = $1,189.76, which is correct. The total COGS computation appears correct, but the units sold sum should be verified: 89+67+81+91+96+72 = 496. This is correct. No error found in Part B."
+    },
+    {
+     "from": "D",
+     "problem": "The prepayment compounding uses (1.00575)^9 for month 9 and (1.00575)^8 for month 10, but the extra payments are made in month 9 and month 10, so the number of months to compound to month 18 should be 9 and 8 respectively, which matches. However, the scheduled balance formula and the prepayment subtraction may be incorrect because the extra payments reduce the balance and therefore reduce future interest, but the formula subtracts the compounded prepayments from the scheduled balance without adjusting the scheduled payment schedule. This is actually the correct approach for computing the remaining balance after prepayments, assuming the regular payment remains the same. The calculation appears correct, but the final answer should be verified by an independent amortization schedule."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 6,
+   "answer": "Part A: Applying the stated rules mechanically (allowing negative balances): after month 15 the balance is -1856.354..., so to the nearest cent: -1856.35.\n\nPart B: Total units sold = 89+67+81+91+96+72 = 496. FIFO consumes lot 1 (151), lot 2 (128), lot 3 (113), and 104 units from lot 4. COGS = 151(11.31)+128(5.24)+113(4.02)+104(11.44) = 1707.81+670.72+454.26+1189.76 = 4022.55.\n\nPart C: r = 0.069/12 = 0.00575, n = 48. The unrounded monthly payment is M = 31200*r/(1-(1+r)^-48) = 745.676162... Scheduled balance after month 18: B_sched = 31200(1+r)^18 - M((1+r)^18-1)/r = 20493.235267... Extra principal effects: 750(1+r)^9 + 300(1+r)^8 = 789.717267... + 314.080942... = 1103.798209... Remaining balance = 20493.235267... - 1103.798209... = 19389.437058, which rounds to 19389.44.\n\nFINAL: -1856.35; 4022.55; 19389.44"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Independent step-by-step recomputation of the month-by-month balance (applying transaction, then fee-if-below-1000, then 0.5% interest each month) yields approximately -1857.16, not -1856.35. The draft gives no intermediate monthly balances to verify its arithmetic."
+    },
+    {
+     "from": "A",
+     "problem": "Arithmetic should be double-checked: lot1 151*11.31=1707.81, lot2 128*5.24=670.72, lot3 113*4.02=454.26, lot4 104*11.44=1189.76, sum=4022.55 \u2014 this appears correct but was not cross-verified against remaining inventory balance check (lot4 remaining 125-104=21 units should carry forward, not verified in draft)."
+    },
+    {
+     "from": "A",
+     "problem": "The method (schedule balance minus future-value of extra payments) assumes extra payments only reduce balance without affecting subsequent scheduled interest calculation path, which is valid only if verified against a full month-by-month amortization table with extra principal applied in months 9 and 10 before interest accrual in later months. No month-by-month table was shown to confirm the shortcut formula handles timing correctly."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "B",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Part A: The challenge\u2019s recomputation is incorrect from month 1: $2,500-$650=$1,850, which becomes $1,859.25 after interest, not $1,858.50. Applying all transactions, fees, and interest gives $-1,856.354064..., so the result is $-1,856.35.\n\nPart B: FIFO COGS uses 151 units from lot 1, 128 from lot 2, 113 from lot 3, and 104 from lot 4:\n151(11.31)+128(5.24)+113(4.02)+104(11.44)=4022.55.\n\nPart C: With r=0.069/12 and the unrounded payment M=31200r/[1-(1+r)^(-48)], the scheduled balance after 18 payments is 20493.235267.... The extra payments reduce this by 750(1+r)^9+300(1+r)^8=1103.798209..., giving 19389.437058..., or 19389.44.\n\nFINAL: -1856.35; 4022.55; 19389.44"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The problem states each month the transaction is applied, then (if balance<1000) an $8 fee, then 0.5% interest \u2014 this sequence repeats every month, not just once at the end. The draft's own intermediate step ('becomes $1,859.25') doesn't match 1850*1.005=1858.25, suggesting the monthly fee/interest compounding was not applied correctly in each of the 15 months."
+    },
+    {
+     "from": "C",
+     "problem": "The draft applies interest when the balance is negative, adding negative interest (or deducting 0.5%) even though bank interest rules typically do not add credit interest to negative balances, or fee charging rules might differ. More importantly, let us verify the arithmetic month-by-month: M1: 2500-650=1850; int=9.25 -> 1859.25. M2: 1859.25-650=1209.25; int=6.04625 -> 1215.29625. M3: +1100 -> 2315.29625; int=11.576481 -> 2326.872731. M4: -900 -> 1426.872731; int=7.134364 -> 1434.007095. M5: -250 -> 1184.007095; int=5.920035 -> 1189.927130. M6: -250 -> 939.927130 (<1000, fee 8) -> 931.927130; int=4.659636 -> 936.586766. M7: -900 -> 36.586766 (<1000, fee 8) -> 28.586766; int=0.142934 -> 28.729700. M8: -650 -> -621.270300 (<1000, fee 8) -> -629.270300; if interest 0.5% applied -> -632.416651. M9: -650 -> -1282.416651 - 8 = -1290.416651; *1.005 -> -1296.868735. M10: -400 -> -1696.868735 - 8 = -1704.868735; *1.005 -> -1713.393078. M11: -400 -> -2113.393078 - 8 = -2121.393078; *1.005 -> -2132.000044. M12: +300 -> -1832.000044 - 8 = -1840.000044; *1.005 -> -1849.200044. M13: -400 -> -2249.200044 - 8 = -2257.200044; *1.005 -> -2268.486044. M14: -250 -> -2518.486044 - 8 = -2526.486044; *1.005 -> -2539.118475. M15: +700 -> -1839.118475 - 8 = -1847.118475; *1.005 -> -1856.354067. The draft's literal execution matches -1856.35, but whether interest applies to negative balances (which earns negative interest / costs money) is ambiguous and contradicts standard banking definition where deposit interest is max(0, balance)*0.005. Under max(0, balance)*0.005, the balance after month 15 is -1837.00."
+    },
+    {
+     "from": "C",
+     "problem": "Total units sold: 89 + 67 + 81 + 91 + 96 + 72 = 496 units. Lot sizes: 151, 128, 113, 125. 151 + 128 + 113 = 392. Remaining needed from Lot 4: 496 - 392 = 104 units. Cost: 151*11.31 = 1707.81; 128*5.24 = 670.72; 113*4.02 = 454.26; 104*11.44 = 1189.76. Sum = 1707.81 + 670.72 + 454.26 + 1189.76 = 4022.55. Calculation is mathematically solid."
+    },
+    {
+     "from": "D",
+     "problem": "The draft gives a negative final balance but does not show the month-by-month sequence or code to verify the fee and interest ordering. The stated month-1 figure $1,859.25 is inconsistent with the claimed correction: $2,500 - $650 = $1,850; no fee because $1,850 \u2265 $1,000; interest 0.5% of $1,850 = $9.25, so $1,859.25 is correct. However, the final negative balance is unsupported without the full sequence."
+    },
+    {
+     "from": "D",
+     "problem": "The draft uses 104 units from lot 4, but the total units sold are 89+67+81+91+96+72 = 496. The first three lots provide 151+128+113 = 392 units, so 496 - 392 = 104 units from lot 4 is correct. However, the arithmetic is not shown and the final figure is not independently verified."
+    },
+    {
+     "from": "D",
+     "problem": "The draft uses the unrounded payment M and then subtracts extra payments with factors (1+r)^9 and (1+r)^8, but the amortization balance after extra payments depends on the exact month-end balance calculation. The stated scheduled balance after 18 payments, $20,493.235267..., is not derived from a shown formula or code, and the extra-payment reduction formula may double-count interest if the extra payments are applied at the start of months 9 and 10 rather than after the regular payment."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 5,
+   "answer": "Part A: Applying the stated monthly order literally (including 0.5% on negative balances) gives month-end balances after interest: 1859.25, 1215.30, 2326.87, 1434.01, 1189.93, 936.59, 28.73, -632.42, -1296.87, -1713.39, -2132.00, -1849.20, -2268.49, -2539.12, -1856.35. Final -1856.35.\n\nPart B: Total units sold = 496. Lots 1-3 provide 151+128+113=392, so 104 units from lot 4. COGS = 151(11.31)+128(5.24)+113(4.02)+104(11.44)=4022.55.\n\nPart C: r=0.069/12=0.00575. M=31200r/[1-(1+r)^-48]=745.676162. Scheduled balance after 18 payments = M[1-(1+r)^-30]/r=20493.235261. Extra reduction = 750(1+r)^9+300(1+r)^8=1103.798209. Remaining = 19389.437052 -> 19389.44.\n\nFINAL: -1856.35; 4022.55; 19389.44"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part C: please supply a direct month-by-month amortization recurrence (balance_n = balance_{n-1}*1.00575 - 745.676162, with the extra principal subtracted after the regular payment in months 9 and 10) and state the balances immediately after the payments in months 9, 10, and 18, so the closed-form shortcut can be cross-checked against it.",
+    "Part C: state the payment M and the factor (1.00575)^48 to at least 8 significant figures, and confirm whether M was kept unrounded throughout (the panel accepted a correction from 745.649964 to ~745.68 \u2014 what exactly is the value now used, and does rounding M to the cent instead change the month-18 balance?)"
+   ],
+   "replies": [
+    "Part C cross-check:\nM = 31200*0.00575/[1-(1.00575)^-48] = 745.676162305... (unrounded; not 745.68). (1.00575)^48 = 1.3168065547.\nRecurrence: B_0=31200; for n=1,...,48: B_n = B_{n-1}*1.00575 - 745.676162305, then if n=9 subtract 750, if n=10 subtract 300. This gives after month 9 payment+extra: B_9 = 25234.709040; after month 10 payment+extra: B_10 = 24334.132455; after month 18 payment: B_18 = 19389.437057 -> 19389.44.\nClosed form matches: scheduled B_18 = 31200(1.00575)^18 - M[(1.00575)^18-1]/0.00575 = 20493.235267; extra reduction = 750(1.00575)^9 + 300(1.00575)^8 = 1103.798210; remaining = 19389.437057.\nIf M were rounded to the cent as 745.68, the month-18 balance would be lower by (745.68-745.676162305)*[(1.00575)^18-1]/0.00575 = 0.07256, giving 19389.36450, so it rounds to 19389.36 instead of 19389.44.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: please supply the full 15-row ledger \u2014 for each month give the opening balance, the transaction, the post-transaction balance, whether the $8 fee was triggered (balance < $1,000), the post-fee balance, the 0.5% interest amount, and the closing balance \u2014 so the listed figures (1859.25, 1215.30, ..., -1856.35) can be checked line by line.",
+    "Part A edge cases: confirm explicitly that the $8 fee was charged in every month where the balance was negative (not just 0 \u2264 balance < 1000), and that 0.5% interest was applied to negative balances (increasing the debt). State whether an alternative reading (no fee/interest once overdrawn, or balance floored at zero) was considered, what final figure it would give, and why the literal reading is the one the problem text supports.",
+    "Part B: give the per-lot consumption table for the six sales (89, 67, 81, 91, 96, 72) showing which lots each sale draws from and the running remainder, confirm total units sold = 496, confirm lot 4 is partially consumed at 104 units with 21 remaining, and restate the four product terms and their sum to verify 4022.55."
+   ],
+   "replies": [
+    "Ledger (computed without intermediate rounding; displayed to 6 decimals where useful):\nMonth | Opening | Txn | Post-txn | Fee? | Post-fee | Interest | Closing\n1 | 2500.000000 | -650 | 1850.000000 | No | 1850.000000 | 9.250000 | 1859.250000\n2 | 1859.250000 | -650 | 1209.250000 | No | 1209.250000 | 6.046250 | 1215.296250\n3 | 1215.296250 | +1100 | 2315.296250 | No | 2315.296250 | 11.576481 | 2326.872731\n4 | 2326.872731 | -900 | 1426.872731 | No | 1426.872731 | 7.134364 | 1434.007095\n5 | 1434.007095 | -250 | 1184.007095 | No | 1184.007095 | 5.920035 | 1189.927130\n6 | 1189.927130 | -250 | 939.927130 | Yes | 931.927130 | 4.659636 | 936.586762\n7 | 936.586762 | -900 | 36.586762 | Yes | 28.586762 | 0.142934 | 28.729696\n8 | 28.729696 | -650 | -621.270304 | Yes | -629.270304 | -3.146352 | -632.416656\n9 | -632.416656 | -650 | -1282.416656 | Yes | -1290.416656 | -6.452083 | -1296.868739\n10 | -1296.868739 | -400 | -1696.868739 | Yes | -1704.868739 | -8.524344 | -1713.393083\n11 | -1713.393083 | -400 | -2113.393083 | Yes | -2121.393083 | -10.606965 | -2132.000048\n12 | -2132.000048 | +300 | -1832.000048 | Yes | -1840.000048 | -9.200000 | -1849.200048\n13 | -1849.200048 | -400 | -2249.200048 | Yes | -2257.200048 | -11.286000 | -2268.486049\n14 | -2268.486049 | -250 | -2518.486049 | Yes | -2526.486049 | -12.632430 | -2539.118479\n15 | -2539.118479 | +700 | -1839.118479 | Yes | -1847.118479 | -9.235592 | -1856.354071\nThese round to the submitted month-end figures, ending at -1856.35.",
+    "Confirmed: the fee test is balance < 1000 after the transaction, with no exclusion for negative balances. Therefore the $8 fee is charged in months 6 through 15, including every negative-balance month (months 8 through 15). Interest is computed as 0.005 * balance, so on negative balances it is negative and increases the debt. The submitted answer did not consider an alternative reading. Under a no-fee/no-interest-once-overdrawn reading (skip both fee and interest when the post-transaction balance is negative), the final balance would be -1721.27. Under a floor-at-zero reading (negative closing balances reset to 0 after all monthly steps), the final balance would be 695.46. The literal reading is supported because the problem text says 'if the balance is below $1,000' without excluding negative balances, and says 'interest of 0.5% of the balance is added' without any floor or overdraft exclusion.",
+    "FIFO consumption table:\nSale | Units | Lots consumed | Remaining lot quantities (L1-L8)\n1 | 89 | 89 from L1 | 62, 128, 113, 125, 86, 109, 84, 95\n2 | 67 | 62 from L1, 5 from L2 | 0, 123, 113, 125, 86, 109, 84, 95\n3 | 81 | 81 from L2 | 0, 42, 113, 125, 86, 109, 84, 95\n4 | 91 | 42 from L2, 49 from L3 | 0, 0, 64, 125, 86, 109, 84, 95\n5 | 96 | 64 from L3, 32 from L4 | 0, 0, 0, 93, 86, 109, 84, 95\n6 | 72 | 72 from L4 | 0, 0, 0, 21, 86, 109, 84, 95\nTotal units sold = 89+67+81+91+96+72 = 496. Lot 4 is partially consumed: 32+72 = 104 units, leaving 125-104 = 21 units. COGS = 151(11.31) + 128(5.24) + 113(4.02) + 104(11.44) = 1707.81 + 670.72 + 454.26 + 1189.76 = 4022.55."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part C: please supply an independent month-by-month verification \u2014 (a) M to 6 decimals from 31200*r/(1-(1+r)^-48) with r=0.00575, and the value of (1.00575)^48 used; (b) a recursion table for months 8 through 11 and months 17 and 18 showing opening balance, interest accrued, regular payment, extra principal applied (750 in month 9, 300 in month 10), and closing balance; (c) explicit confirmation that the regular payment stays at M after the extra payments (loan simply ends early) rather than being re-amortized; and (d) the month-18 closing balance from that recursion, to confirm it matches 19389.437052 and that the extras were correctly value-forwarded as 750(1+r)^9 + 300(1+r)^8 (i.e. that a month-9 extra compounds for 9 periods, not 10 or 8)."
+   ],
+   "replies": [
+    "Part C verification:\n(a) r=0.00575. (1.00575)^48 = 1.3168065547; 1/(1.00575)^48 = 0.7594129877; denominator = 0.2405870123. M = 31200*0.00575/0.2405870123 = 179.4/0.2405870123 = 745.676162.\n\n(b) Recursion uses B_new = B_old + 0.00575*B_old - 745.676162 - extra. Table (rounded to 6 decimals):\nMonth 8: open 27167.029950, interest 156.210422, payment 745.676162, extra 0, close 26577.564210\nMonth 9: open 26577.564210, interest 152.820994, payment 745.676162, extra 750, close 25234.709042\nMonth 10: open 25234.709042, interest 145.099577, payment 745.676162, extra 300, close 24334.132457\nMonth 11: open 24334.132457, interest 139.921262, payment 745.676162, extra 0, close 23728.377556\nMonth 17: open 20646.954407, interest 118.719988, payment 745.676162, extra 0, close 20019.998232\nMonth 18: open 20019.998232, interest 115.114990, payment 745.676162, extra 0, close 19389.437060\n(With unrounded values the month-18 close is 19389.437053; the 6-decimal rounding in the table causes the last-digit difference.)\n\n(c) The regular payment is not re-amortized after the extra principal payments; it remains M = 745.676162 each month, so the loan simply ends earlier.\n\n(d) Extra value at month 18: 750(1.00575)^9 + 300(1.00575)^8 = 750(1.0529563577) + 300(1.0469364730) = 789.7172683 + 314.0809419 = 1103.7982102. Scheduled balance after 18 payments without extras = 20493.2352635. Remaining = 20493.2352635 - 1103.7982102 = 19389.4370533, which rounds to 19389.44 and matches the submitted 19389.437052 to rounding. The month-9 extra compounds for 9 periods (months 10-18), and the month-10 extra for 8 periods (months 11-18), so the exponents 9 and 8 are correct."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Part A: Applying the stated monthly order literally (including 0.5% on negative balances) gives month-end balances after interest: 1859.25, 1215.30, 2326.87, 1434.01, 1189.93, 936.59, 28.73, -632.42, -1296.87, -1713.39, -2132.00, -1849.20, -2268.49, -2539.12, -1856.35. Final -1856.35.\n\nPart B: Total units sold = 496. Lots 1-3 provide 151+128+113=392, so 104 units from lot 4. COGS = 151(11.31)+128(5.24)+113(4.02)+104(11.44)=4022.55.\n\nPart C: r=0.069/12=0.00575. M=31200r/[1-(1+r)^-48]=745.676162. Scheduled balance after 18 payments = M[1-(1+r)^-30]/r=20493.235261. Extra reduction = 750(1+r)^9+300(1+r)^8=1103.798209. Remaining = 19389.437052 -> 19389.44.\n\nFINAL: -1856.35; 4022.55; 19389.44"
+}

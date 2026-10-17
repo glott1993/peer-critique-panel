@@ -1,0 +1,146 @@
+{
+ "task_id": "data2-08",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 9.0, expected 9.0",
+ "error": null,
+ "seconds": 123.1,
+ "tokens": 173133,
+ "prompt_tokens": 149603,
+ "completion_tokens": 23530,
+ "cost": 0.15905,
+ "calls": 27,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Identify South region customers",
+     "what": "List customer_ids with region=South from Customers table (C102,C104,C105,C106,C109)."
+    },
+    {
+     "id": "c2",
+     "title": "Filter orders by customer and date range",
+     "what": "Select orders whose customer_id is in South list and order_date is between 2026-05-05 and 2026-06-04 inclusive, regardless of status."
+    },
+    {
+     "id": "c3",
+     "title": "Deduplicate exact repeat rows",
+     "what": "Remove exact duplicate order rows (same order_id and all fields) counting each unique order once."
+    },
+    {
+     "id": "c4",
+     "title": "Count resulting orders",
+     "what": "Count the number of remaining order rows after filtering and deduplication to get the final answer."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "B"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ],
+    "c3": [
+     "B",
+     "D"
+    ],
+    "c4": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "South region customers (Customers CSV): C102, C104, C105, C106, and C109.\n\nFiltering the Orders CSV for those customers and dates 2026-05-05 through 2026-06-04 inclusive, including all statuses, and counting exact duplicate rows once:\n\n- C102: O2260, O2413, O2471 = 3\n- C104: O2071, O2254, O2385 = 3\n- C105: O2535, O2234 = 2\n- C106: none = 0\n- C109: O2773 = 1\n\nThe exact duplicate rows (including O2392, O2217, and O2296) do not add extra qualifying orders. Total: 3 + 3 + 2 + 0 + 1 = 9.\n\nFINAL: 9"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "This should be double-checked against the Customers CSV tier/region column \u2014 easy to mis-copy a region"
+    },
+    {
+     "from": "A",
+     "problem": "O2727 (2026-06-05) and O2550 (2026-06-07) are close to boundary and must be verified as strictly outside the 2026-06-04 cutoff"
+    },
+    {
+     "from": "A",
+     "problem": "Need to verify O2217 belongs to C100 (not South) and O2296/O2392 dates fall outside window even though duplicated"
+    },
+    {
+     "from": "D",
+     "problem": "Missing source / unsupported inference: the list omits C101? No\u2014C101 is North. But it also omits C103? C103 is East. The list matches the Customers CSV, so this claim is correct. No challenge."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure / omission: O2260 is 2026-05-18 (within range) but status=cancelled; O2413 is 2026-05-12 (within range) but status=cancelled; O2471 is 2026-05-27 (within range) but status=returned. The question says 'any status', so these count. However, the draft omits O2447 (2026-04-24) which is outside range, and O2098 (2026-06-06) outside range. Also O2316 (2026-04-16) outside range. So C102 count of 3 appears correct for the date window. No challenge."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure / omission: O2071 is 2026-05-12 (within range) status=shipped; O2254 is 2026-05-31 (within range) status=shipped; O2385 is 2026-06-03 (within range) status=returned. However, O2392 is 2026-06-30 (outside range). O2696 is 2026-06-07 (outside range). O2374 is 2026-07-12 (outside range). O2681 is 2026-06-12 (outside range). O2725 is 2026-06-08 (outside range). O2340 is 2026-06-11 (outside range). O2110 is 2026-06-16 (outside range). O2364 is 2026-04-24 (outside range). So C104 count of 3 appears correct. No challenge."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: O2535 is 2026-05-13 (within range) status=pending; O2234 is 2026-06-04 (within range) status=pending. O2296 is 2026-04-20 (outside range). O2368 is 2026-04-17 (outside range). So C105 count of 2 appears correct. No challenge."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 7,
+   "answer": "South region customers: C102, C104, C105, C106, C109.\n\nFiltering orders for these customers with order_date between 2026-05-05 and 2026-06-04 inclusive (any status, duplicates counted once):\n\n- C102: O2260(05-18), O2413(05-12), O2471(05-27) = 3\n- C104: O2071(05-12), O2254(05-31), O2385(06-03) = 3\n- C105: O2535(05-13), O2234(06-04) = 2\n- C106: none = 0\n- C109: O2773(06-04) = 1\n\nTotal: 3+3+2+0+1 = 9\n\nFINAL: 9"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "South region customers: C102, C104, C105, C106, C109.\n\nFiltering orders for these customers with order_date between 2026-05-05 and 2026-06-04 inclusive (any status, duplicates counted once):\n\n- C102: O2260(05-18), O2413(05-12), O2471(05-27) = 3\n- C104: O2071(05-12), O2254(05-31), O2385(06-03) = 3\n- C105: O2535(05-13), O2234(06-04) = 2\n- C106: none = 0\n- C109: O2773(06-04) = 1\n\nTotal: 3+3+2+0+1 = 9\n\nFINAL: 9"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-15",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 61.8,
+ "tokens": 4294,
+ "prompt_tokens": 262,
+ "completion_tokens": 4032,
+ "cost": 0.00423,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport re\n\ndef json_pointer(doc, pointer: str):\n    if pointer == '':\n        return doc\n    if not pointer.startswith('/'):\n        raise ValueError(\"JSON pointer must start with '/'\")\n\n    def decode(token):\n        out = []\n        i = 0\n        while i < len(token):\n            c = token[i]\n            if c == '~':\n                if i + 1 >= len(token):\n                    raise ValueError(\"Invalid '~' escape\")\n                nxt = token[i + 1]\n                if nxt == '0':\n                    out.append('~')\n                elif nxt == '1':\n                    out.append('/')\n                else:\n                    raise ValueError(\"Invalid '~' escape\")\n                i += 2\n            else:\n                out.append(c)\n                i += 1\n        return ''.join(out)\n\n    current = doc\n    for token in pointer[1:].split('/'):\n        key = decode(token)\n\n        if isinstance(current, dict):\n            if key not in current:\n                raise ValueError(f\"Missing key: {key!r}\")\n            current = current[key]\n\n        elif isinstance(current, list):\n            if not re.fullmatch(r'(0|[1-9][0-9]*)', key):\n                raise ValueError(f\"Invalid list index: {key!r}\")\n            idx = int(key)\n            if idx < 0 or idx >= len(current):\n                raise ValueError(f\"List index out of range: {idx}\")\n            current = current[idx]\n\n        else:\n            raise ValueError(\"Cannot index into non-container\")\n\n    return current\n```"
+}

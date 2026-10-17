@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-27",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 1207.1,
+ "tokens": 100617,
+ "prompt_tokens": 1170,
+ "completion_tokens": 99447,
+ "cost": 0.43675,
+ "calls": 7,
+ "call_errors": 6,
+ "answer": "```python\ndef bowling_score(rolls):\n    # Validate each roll is an integer between 0 and 10\n    if any(not isinstance(r, int) or r < 0 or r > 10 for r in rolls):\n        raise ValueError(\"Invalid roll value\")\n\n    score = 0\n    i = 0\n\n    for frame in range(10):\n        if frame < 9:\n            # Frames 1-9\n            if i >= len(rolls):\n                raise ValueError(\"Too few rolls\")\n\n            first = rolls[i]\n\n            if first == 10:\n                # Strike: needs two bonus rolls\n                if i + 2 >= len(rolls):\n                    raise ValueError(\"Too few rolls for strike bonus\")\n                score += 10 + rolls[i + 1] + rolls[i + 2]\n                i += 1\n            else:\n                # Not a strike: needs a second roll\n                if i + 1 >= len(rolls):\n                    raise ValueError(\"Too few rolls\")\n                second = rolls[i + 1]\n\n                if first + second > 10:\n                    raise ValueError(\"Frame rolls exceed 10\")\n\n                if first + second == 10:\n                    # Spare: needs one bonus roll\n                    if i + 2 >= len(rolls):\n                        raise ValueError(\"Too few rolls for spare bonus\")\n                    score += 10 + rolls[i + 2]\n                else:\n                    score += first + second\n\n                i += 2\n        else:\n            # Tenth frame\n            if i >= len(rolls):\n                raise ValueError(\"Too few rolls\")\n\n            first = rolls[i]\n\n            if first == 10:\n                # Strike: needs two bonus rolls\n                if i + 2 >= len(rolls):\n                    raise ValueError(\"Too few rolls for strike bonus\")\n                score += 10 + rolls[i + 1] + rolls[i + 2]\n                i += 3\n            else:\n                # Needs a second roll\n                if i + 1 >= len(rolls):\n                    raise ValueError(\"Too few rolls\")\n                second = rolls[i + 1]\n\n                if first + second > 10:\n                    raise ValueError(\"Frame rolls exceed 10\")\n\n                if first + second == 10:\n                    # Spare: needs one bonus roll\n                    if i + 2 >= len(rolls):\n                        raise ValueError(\"Too few rolls for spare bonus\")\n                    score += 10 + rolls[i + 2]\n                    i += 3\n                else:\n                    score += first + second\n                    i += 2\n\n    if i != len(rolls):\n        raise ValueError(\"Too many rolls\")\n\n    return score\n```"
+}

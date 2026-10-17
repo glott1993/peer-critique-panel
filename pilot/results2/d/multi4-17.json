@@ -1,0 +1,199 @@
+{
+ "task_id": "multi4-17",
+ "type": "multi4",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got 17765.0, expected 17765.0 | ok: got 8278.5, expected 8278.5 | ok: got 6027840.0, expected 6027840.0 | ok: got 226.65, expected 226.65",
+ "error": null,
+ "seconds": 257.1,
+ "tokens": 162543,
+ "prompt_tokens": 104297,
+ "completion_tokens": 58246,
+ "cost": 0.2326,
+ "calls": 35,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": false,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute Veld income tax",
+     "what": "Apply the progressive tax brackets (8%/20%/30%) to $81,900, compute raw tax, then subtract credit reduced by 5% of income over $60,000 (floor credit at 0), then floor final tax at 0. Verify bracket boundary arithmetic ($12,500 and $52,000 cutoffs)."
+    },
+    {
+     "id": "c2",
+     "title": "Amortize loan with extra principal",
+     "what": "Compute standard monthly payment for $18,500 at 6.0% APR over 36 months using the amortization formula, build an amortization schedule applying the extra $600 principal payment in month 11 and $750 in month 14 (recomputing interest each month on the reduced balance), and report balance immediately a"
+    },
+    {
+     "id": "c3",
+     "title": "Sum filtered integers",
+     "what": "Sum integers from 311 to 10,613 inclusive divisible by 7 but not by 4 (i.e., divisible by 7, excluding those divisible by 28). Use arithmetic series formulas for multiples of 7 and multiples of 28 in range, then subtract. Verify endpoint inclusion (is 311 or 10,613 divisible by 7?)."
+    },
+    {
+     "id": "c4",
+     "title": "Reverse percentage changes",
+     "what": "Starting from $259.70, invert each sequential percentage change in reverse order (\u00f71.20, \u00f71.12, \u00f70.85 as cut, etc.) matching the exact sequence given (+18%, -15%, +12%, +20%, -15%) to recover the original price. Double check order of operations matches forward direction exactly."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ],
+    "c2": [
+     "A",
+     "B"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ],
+    "c4": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "**Part A: Veld Income Tax**\n- Tax by brackets:\n  - $0 to $12,500 at 8%: $12,500 \\times 0.08 = \\$1,000.00$\n  - $12,500 to $52,000 at 20%: $\\$39,500 \\times 0.20 = \\$7,900.00$\n  - Over $52,000 at 30%: $(\\$81,900 - \\$52,000) \\times 0.30 = \\$29,900 \\times 0.30 = \\$8,970.00$\n  - Raw tax: $\\$1,000.00 + \\$7,900.00 + \\$8,970.00 = \\$17,870.00$\n- Tax credit: Base $\\$1,200$ minus $5\\%$ of income over $\\$60,000$ ($(\\$81,900 - \\$60,000) \\times 0.05 = \\$1,095$). Remaining credit: $\\$1,200 - \\$1,095 = \\$105.00$.\n- Final tax owed: $\\$17,870.00 - \\$105.00 = \\$17,765.00$.\n\n**Part B: Loan Amortization**\n- Monthly rate $r = 0.06 / 12 = 0.005$, $n = 36$, $P = \\$18,500$.\n- Monthly payment: $M = \\frac{18,500 \\times 0.005}{1 - (1.005)^{-36}} \\approx \\$563.61$.\n- Tracking the monthly balance with extra payments of $\\$600$ at month 11 and $\\$750$ at month 14 yields a remaining balance after month 18 of $\\$8,263.39$.\n\n**Part C: Filtered Sum of Integers**\n- Multiples of 7 from 311 to 10,613: from $45 \\times 7 = 315$ to $1516 \\times 7 = 10,612$ ($n = 1,472$).\n  $$S_7 = \\frac{1,472}{2} \\times (315 + 10,612) = 8,042,272$$\n- Multiples of 28: from $12 \\times 28 = 336$ to $379 \\times 28 = 10,612$ ($n = 368$).\n  $$S_{28} = \\frac{368}{2} \\times (336 + 10,612) = 2,014,432$$\n- Sum divisible by 7 but not 4: $8,042,272 - 2,014,432 = 6,027,840$.\n\n**Part D: Reverse Percentage Changes**\n- Original price $= 259.70 / (1.18 \\times 0.85 \\times 1.12 \\times 1.20 \\times 0.85) = 259.70 / 1.1458272 \\approx \\$226.65$.\n\nFINAL: 17765.00; 8263.39; 6027840; 226.65"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "No intermediate amortization steps shown; monthly payment $563.61 and extra principal payments application not verified line-by-line, so arithmetic cannot be confirmed from the draft alone."
+    },
+    {
+     "from": "A",
+     "problem": "Multiplying 1.18*0.85*1.12*1.20*0.85 gives 1.1458272; 259.70/1.1458272 \u2248 226.657, which rounds to 226.66, not 226.65."
+    },
+    {
+     "from": "B",
+     "problem": "The stated monthly payment is also incorrect: using M=18500(0.005)/(1-(1.005)^-36) gives approximately $562.81, not $563.61. Applying the extra principal payments at months 11 and 14, the balance after month 18 is approximately $8,278.50."
+    },
+    {
+     "from": "D",
+     "problem": "The balance is stated without showing the amortization schedule or calculation steps, so the figure cannot be verified from the working shown."
+    },
+    {
+     "from": "D",
+     "problem": "The upper multiple of 28 is given as 379 \u00d7 28 = 10,612, but 10,612 / 28 = 379 exactly; the count from 12 to 379 inclusive is 368. This is correct, but the first multiple of 28 at or above 311 is 12 \u00d7 28 = 336, and the lower bound check is not shown."
+    },
+    {
+     "from": "D",
+     "problem": "The multiplication of factors 1.18 \u00d7 0.85 \u00d7 1.12 \u00d7 1.20 \u00d7 0.85 is stated as 1.1458272 without showing the intermediate product; a small arithmetic error would change the result."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 5,
+   "answer": "Part A: Raw tax = 12500(0.08) + 39500(0.20) + 29900(0.30) = 17870. The credit is 1200 - 0.05(81900 - 60000) = 105, so tax owed is 17765.00.\n\nPart B: The monthly rate is 0.005 and the regular payment is 18500(0.005)/(1 - 1.005^-36) = 562.81. Thus, after month 18,\nB18 = 18500(1.005)^18 - 562.80587((1.005)^18 - 1)/0.005 - 600(1.005)^7 - 750(1.005)^4 = 8278.50.\n\nPart C: The sum of multiples of 7 is 8042272. The sum of multiples of 28 is 2014432. Their difference is 6027840.\n\nPart D: The combined multiplier is 1.18(0.85)(1.12)(1.20)(0.85) = 1.1458272. Therefore, the original price is 259.70/1.1458272 = 226.66.\n\nFINAL: 17765.00; 8278.50; 6027840; 226.66"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing: multiples of 7 range from 315 to 10612 (45 to 1516 terms), sum = 7*(1516*1517/2 - 44*45/2) = 7*1149296 = 8045072, not 8042272. This changes the final difference to 8045072-2014432=6030640, not 6027840."
+    },
+    {
+     "from": "C",
+     "problem": "The exponents on the extra principal payments miscount the compounding periods. An extra payment made at month 11 compounds forward to month 18 for 18 - 11 = 7 months, but that term is correct; however, computing B_18 accurately: standard balance at m18 is 18500*(1.005^18) - 562.805872*(1.005^18 - 1)/0.005 = 9665.8885. The extra payments compound to 600*(1.005^7) = 621.3283 and 750*(1.005^4) = 765.1129. Subtracting these gives 9665.8885 - 621.3283 - 765.1129 = 8279.447, which rounds to 8279.45, not 8278.50."
+    },
+    {
+     "from": "C",
+     "problem": "259.70 / 1.1458272 = 226.64849..., which rounds to 226.65, not 226.66."
+    },
+    {
+     "from": "C",
+     "problem": "The lower bound is 311. Multiples of 7 run from 315 to 10612 (n=1472, sum = 1472*(315+10612)/2 = 8042272). Multiples of 28 run from 336 to 10612 (n=368, sum = 368*(336+10612)/2 = 2014432). The arithmetic difference is indeed 6027840, but the draft omits showing the bounds and term counts needed to verify the arithmetic."
+    },
+    {
+     "from": "D",
+     "problem": "The credit reduction is applied to the credit, but the credit cannot go below zero and the tax owed cannot go below zero. For income $81,900, the reduction is $1,095, leaving a credit of $105, so the credit is positive and tax owed is positive. This part appears correct, but the draft does not explicitly verify that the credit does not go below zero or that tax owed does not go below zero. The credit is $105, so it is above zero, and tax owed is $17,765, so both constraints are satisfied. However, the draft omits the explicit check of these constraints, which is an omission."
+    },
+    {
+     "from": "D",
+     "problem": "The draft states the regular payment as $562.81 but then uses 562.80587 in the balance calculation. The rounded value $562.81 is used for the payment amount, but the balance calculation uses the unrounded value 562.80587. The problem statement says 'round nothing until the end', so using the unrounded value is correct, but the draft's presentation of the payment as 562.81 is inconsistent with the unrounded value used in the formula. This is a presentation inconsistency, not necessarily a calculation error, but it could cause confusion."
+    },
+    {
+     "from": "D",
+     "problem": "The extra principal payments are subtracted with interest accrued from the month of payment to month 18. The extra $600 is paid in month 11, so by month 18 it has accrued interest for 7 months, and the extra $750 is paid in month 14, so it has accrued interest for 4 months. The formula subtracts 600(1.005)^7 and 750(1.005)^4, which is correct if the extra payments are made at the same time as the regular payment and the balance is calculated immediately after the month 18 payment. However, the draft does not specify whether the extra payments are applied before or after the regular payment in the same month, which could affect the interest accrual. The problem says 'on top of the regular payment', so the extra payment is made at the same time as the regular payment, and the formula is correct. But the draft does not explicitly state this assumption, which is an omission."
+    },
+    {
+     "from": "D",
+     "problem": "The draft does not show how the sums were calculated. The sum of multiples of 7 from 311 to 10613 inclusive and the sum of multiples of 28 from 311 to 10613 inclusive need to be verified. The draft's numbers may be correct, but without showing the arithmetic or the number of terms, it is an unsupported inference."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "D",
+   "accepted": 6,
+   "rejected": 2,
+   "answer": "Part A: Raw tax = 12500(0.08) + 39500(0.20) + 29900(0.30) = 17870. Credit reduction = 0.05(81900 - 60000) = 1095, so credit = 105 > 0; tax owed = 17870 - 105 = 17765.00.\n\nPart B: r = 0.005; P = 18500(0.005)/(1 - 1.005^-36) = 562.80584 (unrounded). Extra payments are applied with the regular payments, so they compound for 7 and 4 months respectively:\nB18 = 18500(1.005)^18 - 562.80584((1.005)^18 - 1)/0.005 - 600(1.005)^7 - 750(1.005)^4 = 8278.50.\n\nPart C: Multiples of 7: 315 to 10612, k = 45 to 1516, n = 1472; sum = 7 * 1472(45 + 1516)/2 = 8042272. Multiples of 28: 336 to 10612, k = 12 to 379, n = 368; sum = 28 * 368(12 + 379)/2 = 2014432. Difference = 6027840.\n\nPart D: Combined multiplier = 1.18(0.85)(1.12)(1.20)(0.85) = 1.1458272. Original price = 259.70 / 1.1458272 = 226.6485, which rounds to 226.65.\n\nFINAL: 17765.00; 8278.50; 6027840; 226.65"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Part A: Raw tax = 12500(0.08) + 39500(0.20) + 29900(0.30) = 17870. Credit reduction = 0.05(81900 - 60000) = 1095, so credit = 105 > 0; tax owed = 17870 - 105 = 17765.00.\n\nPart B: r = 0.005; P = 18500(0.005)/(1 - 1.005^-36) = 562.80584 (unrounded). Extra payments are applied with the regular payments, so they compound for 7 and 4 months respectively:\nB18 = 18500(1.005)^18 - 562.80584((1.005)^18 - 1)/0.005 - 600(1.005)^7 - 750(1.005)^4 = 8278.50.\n\nPart C: Multiples of 7: 315 to 10612, k = 45 to 1516, n = 1472; sum = 7 * 1472(45 + 1516)/2 = 8042272. Multiples of 28: 336 to 10612, k = 12 to 379, n = 368; sum = 28 * 368(12 + 379)/2 = 2014432. Difference = 6027840.\n\nPart D: Combined multiplier = 1.18(0.85)(1.12)(1.20)(0.85) = 1.1458272. Original price = 259.70 / 1.1458272 = 226.6485, which rounds to 226.65.\n\nFINAL: 17765.00; 8278.50; 6027840; 226.65"
+}

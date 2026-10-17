@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-21",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 12490.54, expected 12490.47 | ok: got 8599.87, expected 8599.63 | ok: got 502.46, expected 502.46 | ok: got 1294.0, expected 1294.0",
+ "error": null,
+ "seconds": 23.2,
+ "tokens": 3768,
+ "prompt_tokens": 485,
+ "completion_tokens": 3283,
+ "cost": 0.01268,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nThe effective growth multiplier per period is:\n$(1 + 0.015) \\times (1 - 0.0075) = 1.015 \\times 0.9925 = 1.0073875$\n\nApplying each contribution and multiplier recursively:\n- Period 1: $(5000 + 0) \\times 1.0073875 = 5036.9375$\n- Period 2: $(5036.9375 + 900) \\times 1.0073875 \\approx 5980.7969$\n- Period 3: $(5980.7969 + 900) \\times 1.0073875 \\approx 6931.6248$\n- Period 4: $(6931.6248 + 400) \\times 1.0073875 \\approx 7385.7910$\n- Period 5: $(7385.7910 + 900) \\times 1.0073875 \\approx 8346.9972$\n- Period 6: $(8346.9972 + 400) \\times 1.0073875 \\approx 8811.6191$\n- Period 7: $(8811.6191 + 250) \\times 1.0073875 \\approx 9128.5671$\n- Period 8: $(9128.5671 + 250) \\times 1.0073875 \\approx 9447.8488$\n- Period 9: $(9447.8488 + 900) \\times 1.0073875 \\approx 10424.3006$\n- Period 10: $(10424.3006 + 900) \\times 1.0073875 \\approx 11408.0196$\n- Period 11: $(11408.0196 + 900) \\times 1.0073875 \\approx 12398.9482$\n- Period 12: $(12398.9482 + 0) \\times 1.0073875 \\approx 12490.5404$\n\nBalance: $12,490.54\n\n---\n\n**Part B**\nMonthly interest rate $r = \\frac{0.069}{12} = 0.00575$.\nThe standard monthly payment for 36 months is:\n$\\text{PMT} = 18500 \\times \\frac{0.00575}{1 - (1 + 0.00575)^{-36}} \\approx 570.05284$\n\nThe standard remaining balance after 18 months without extra payments is:\n$B_{18,\\text{std}} = 18500(1+r)^{18} - \\text{PMT}\\frac{(1+r)^{18}-1}{r} \\approx 9727.1203$\n\nSubtracting the extra principal payments compounded to month 18:\n- Month 2 payment: $750 \\times (1 + r)^{16} \\approx 822.0418$\n- Month 15 payment: $300 \\times (1 + r)^{3} \\approx 305.2049$\n\nRemaining balance:\n$9727.1203 - 822.0418 - 305.2049 = 8599.8736 \\approx 8599.87$\n\n---\n\n**Part C**\nThe cumulative price multiplier is:\n$0.90 \\times 0.90 \\times 1.25 \\times 0.90 \\times 0.90 = 0.820125$\n\nThe original price was:\n$\\frac{412.08}{0.820125} = 502.46$\n\n---\n\n**Part D**\nWe solve the system of congruences:\n1. $x \\equiv 6 \\pmod 7$\n2. $x \\equiv 2 \\pmod{19}$\n3. $x \\equiv 14 \\pmod{16}$\n\nFrom (3), $x = 16k + 14$.\nSubstituting into (2):\n$16k + 14 \\equiv 2 \\pmod{19} \\implies -3k \\equiv -12 \\pmod{19} \\implies k \\equiv 4 \\pmod{19}$\nThus, $x = 16(19m + 4) + 14 = 304m + 78$.\n\nSubstituting into (1):\n$304m + 78 \\equiv 6 \\pmod 7 \\implies 3m + 1 \\equiv 6 \\pmod 7 \\implies 3m \\equiv 5 \\pmod 7 \\implies m \\equiv 4 \\pmod 7$\n\nThe smallest non-negative integer solution is $m = 4$:\n$x = 304(4) + 78 = 1294$\n\nFINAL: 12490.54; 8599.87; 502.46; 1294"
+}

@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'ada', expected 'ada'",
  "error": null,
- "seconds": 39.1,
- "tokens": 4936,
+ "seconds": 17.8,
+ "tokens": 2240,
  "prompt_tokens": 538,
- "completion_tokens": 4398,
- "cost": 0.04506,
+ "completion_tokens": 1702,
+ "cost": 0.0181,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Working:**\n\nFrom clues 1,2,9: Eli lives in the yellow house and drinks juice; coffee is immediately left of yellow.\nFrom clue 4, Cleo=house4. Testing yellow=house5 works cleanly:\n\n- House5: Eli, yellow, juice\n- House4: coffee (from clue1) \u2192 Cleo drinks coffee\n- Clue7: blue=house2\n- Remaining colors (red, green, white) go to houses 1,3,4.\n\nUsing clue14 (Ben=white) and clue11 (Ben immediately left of fish owner), test Ben=house3 (owns horse via clue6, since Cleo(4)'s neighbor house3 must have horse, dog=house5 per clue8). Then fish=house4.\n\nColors: white=3(Ben), and since Cleo(4) drinks coffee (not tea), red\u22604, so red=1, green=4.\nClue5: Ada must be next to tea drinker (house1=red=tea) \u2192 Ada=house2, Dev=house1.\n\nRemaining pets: cat/bird for houses1,2. Clue10: Ada(2) must be next to cat owner \u2192 cat=house1, bird=house2.\nClue12: water drinker = bird owner \u2192 house2 drinks water.\n\nFinal grid:\n1: Dev, red, tea, cat\n2: Ada, blue, water, bird\n3: Ben, white, milk, horse\n4: Cleo, green, coffee, fish\n5: Eli, yellow, juice, dog\n\nAll 14 clues check out consistently.\n\nFINAL: Ada"
+ "answer": "Working: Determined yellow house=5 (Eli, juice), coffee house=4 (Cleo). Colors: house1=red(tea), house2=blue, house3=white(Ben), house4=green, house5=yellow. Ada in house2 (adjacent to tea house1). Pets: house3=horse, house5=dog, house4=fish, house1=cat, house2=bird \u2192 bird owner drinks water, which is Ada.\n\nFINAL: Ada"
 }

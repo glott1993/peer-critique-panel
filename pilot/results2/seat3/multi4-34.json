@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-34",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 2555.0, expected 2555.0 | ok: got 70.0, expected 70.0 | ok: got 67.97, expected 67.97 | ok: got 1177.0, expected 1177.0",
+ "error": null,
+ "seconds": 19.9,
+ "tokens": 3625,
+ "prompt_tokens": 304,
+ "completion_tokens": 3321,
+ "cost": 0.01268,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nUsing the Principle of Inclusion-Exclusion, the number of integers from 1 to 5,000 divisible by at least one of 3, 5, or 7 is:\n$\\lfloor 5000/3 \\rfloor + \\lfloor 5000/5 \\rfloor + \\lfloor 5000/7 \\rfloor - \\lfloor 5000/15 \\rfloor - \\lfloor 5000/21 \\rfloor - \\lfloor 5000/35 \\rfloor + \\lfloor 5000/105 \\rfloor$\n$= 1666 + 1000 + 714 - 333 - 238 - 142 + 47 = 2714$.\n\nFrom these, we subtract those that are also multiples of 17 (i.e., multiples of 17 up to 5,000, so $k \\le \\lfloor 5000/17 \\rfloor = 294$, where $k$ is divisible by at least one of 3, 5, or 7):\n$\\lfloor 294/3 \\rfloor + \\lfloor 294/5 \\rfloor + \\lfloor 294/7 \\rfloor - \\lfloor 294/15 \\rfloor - \\lfloor 294/21 \\rfloor - \\lfloor 294/35 \\rfloor + \\lfloor 294/105 \\rfloor$\n$= 98 + 58 + 42 - 19 - 14 - 8 + 2 = 159$.\n\nTotal: $2714 - 159 = 2555$.\n\nPart B:\nSince 211 is prime, by Fermat's Little Theorem, $85^{210} \\equiv 1 \\pmod{211}$.\nThus, $85^{542} \\equiv 85^{542 \\bmod 210} \\equiv 85^{122} \\pmod{211}$.\nComputing successive squares modulo 211:\n- $85^2 = 7225 \\equiv 51$\n- $85^4 \\equiv 51^2 = 2601 \\equiv 69$\n- $85^8 \\equiv 69^2 = 4761 \\equiv 119$\n- $85^{16} \\equiv 119^2 = 14161 \\equiv 24$\n- $85^{32} \\equiv 24^2 = 576 \\equiv 154 \\equiv -57$\n- $85^{64} \\equiv (-57)^2 = 3249 \\equiv 84$\n\nThen:\n$85^{122} = 85^{64} \\times 85^{32} \\times 85^{16} \\times 85^8 \\times 85^2 \\equiv 84 \\times (-57) \\times 24 \\times 119 \\times 51 \\equiv 70 \\pmod{211}$.\n\nPart C:\nLet the original price be $P$.\n$P \\times 1.25 \\times 1.25 \\times 0.85 \\times 0.90 \\times 1.20 = 97.50$\n$P \\times \\frac{459}{320} = 97.50$\n$P = \\frac{97.50 \\times 320}{459} \\approx 67.97$.\n\nPart D:\nWe have the system of congruences:\n$x \\equiv 7 \\pmod{13}$\n$x \\equiv 1 \\pmod{7}$\n$x \\equiv 18 \\pmod{19}$\n\nFrom the first two, $x \\equiv 85 \\pmod{91}$.\nSetting $x = 91m + 85 \\equiv 18 \\equiv -1 \\pmod{19}$:\n$-4m + 9 \\equiv -1 \\implies 4m \\equiv 10 \\equiv 48 \\implies m \\equiv 12 \\pmod{19}$.\nFor the smallest positive integer, $m = 12$:\n$x = 91(12) + 85 = 1177$.\n\nFINAL: 2555; 70; 67.97; 1177"
+}

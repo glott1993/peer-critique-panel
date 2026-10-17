@@ -2,15 +2,15 @@
  "task_id": "data2-06",
  "type": "data",
  "condition": "seat2",
- "correct": false,
- "detail": "got 80.87, expected 78.31",
+ "correct": true,
+ "detail": "got 78.31, expected 78.31",
  "error": null,
- "seconds": 16.5,
- "tokens": 17727,
- "prompt_tokens": 14065,
- "completion_tokens": 3662,
- "cost": 0.00636,
+ "seconds": 8.7,
+ "tokens": 14382,
+ "prompt_tokens": 12608,
+ "completion_tokens": 1774,
+ "cost": 0.0038,
  "calls": 1,
  "call_errors": 0,
- "answer": "After removing exact duplicate rows, there are 23 orders in the date range. Sorted unit prices place the median at the 12th value:\n\n7.97, 10.73, 23.93, 31.80, 37.28, 39.98, 40.58, 41.46, 46.54, 64.55, 64.55, 80.87, ...\n\nFINAL: 80.87"
+ "answer": "Deduplicated exact repeats, then selected all 23 orders dated 2026-04-15 through 2026-05-20 inclusive, regardless of status.\n\nSorted unit prices have 23 values, so the median is the 12th value: 78.31.\n\nFINAL: 78.31"
 }

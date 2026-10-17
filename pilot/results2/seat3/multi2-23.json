@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-23",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 18545.0, expected 18545.0 | ok: got 212.0, expected 212.0 | ok: got 4571.99, expected 4571.99",
+ "error": null,
+ "seconds": 8.5,
+ "tokens": 1691,
+ "prompt_tokens": 523,
+ "completion_tokens": 1168,
+ "cost": 0.00477,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\n1. Base tax calculation on $81,900:\n- First $11,000 at 8%: 11,000 * 0.08 = $880\n- Next tier ($45,000 - $11,000 = $34,000) at 20%: 34,000 * 0.20 = $6,800\n- Remaining income ($81,900 - $45,000 = $36,900) at 30%: 36,900 * 0.30 = $11,070\nTotal initial tax = 880 + 6,800 + 11,070 = $18,750\n\n2. Tax credit calculation:\n- Base credit = $1,800\n- Income above $50,000 = $81,900 - $50,000 = $31,900\n- Credit reduction = 5% of $31,900 = $1,595\n- Adjusted tax credit = 1,800 - 1,595 = $205\n\n3. Tax owed = $18,750 - $205 = $18,545.00\n\nPart B:\nWe need the smallest positive integer $x$ such that:\n$x \\equiv 5 \\pmod 9$\n$x \\equiv 3 \\pmod{19}$\n$x \\equiv 4 \\pmod{16}$\n\nFrom $x \\equiv 4 \\pmod{16}$:\n$x = 16k + 4$.\n$16k + 4 \\equiv 5 \\pmod 9 \\implies -2k + 4 \\equiv 5 \\implies -2k \\equiv 1 \\implies 7k \\equiv 1 \\implies k \\equiv 4 \\pmod 9$.\nSo $k = 9m + 4$, which gives:\n$x = 16(9m + 4) + 4 = 144m + 68$.\n\nNow, modulo 19:\n$144m + 68 \\equiv 3 \\pmod{19}$\n$144 = 7 \\times 19 + 11 \\equiv 11 \\pmod{19}$\n$68 = 3 \\times 19 + 11 \\equiv 11 \\pmod{19}$\n$11m + 11 \\equiv 3 \\pmod{19}$\n$11m \\equiv -8 \\equiv 11 \\pmod{19}$\nDividing by 11 (since $\\gcd(11, 19) = 1$):\n$m \\equiv 1 \\pmod{19}$.\n\nThe smallest non-negative integer $m$ is 1:\n$x = 144(1) + 68 = 212$.\nChecking:\n$212 = 23 \\times 9 + 5$ (remainder 5)\n$212 = 11 \\times 19 + 3$ (remainder 3)\n$212 = 13 \\times 16 + 4$ (remainder 4)\n\nPart C:\nTotal units sold = 120 + 95 + 79 + 78 + 58 + 117 = 547 units.\nUsing FIFO, we deplete inventory in order:\n- Lot 1: 140 units at $4.15 = 140 * 4.15 = $581.00 (Remaining to sell: 547 - 140 = 407)\n- Lot 2: 83 units at $8.73 = 83 * 8.73 = $724.59 (Remaining to sell: 407 - 83 = 324)\n- Lot 3: 152 units at $10.67 = 152 * 10.67 = $1,621.84 (Remaining to sell: 324 - 152 = 172)\n- Lot 4: 152 units at $10.03 = 152 * 10.03 = $1,524.56 (Remaining to sell: 172 - 152 = 20)\n- Lot 5: 20 units at $6.00 = 20 * 6.00 = $120.00 (Remaining to sell: 0)\n\nTotal COGS = 581.00 + 724.59 + 1,621.84 + 1,524.56 + 120.00 = $4,571.99.\n\nFINAL: 18545; 212; 4571.99"
+}

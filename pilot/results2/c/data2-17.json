@@ -1,0 +1,266 @@
+{
+ "task_id": "data2-17",
+ "type": "data",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 2411.23, expected 2411.23",
+ "error": null,
+ "seconds": 315.8,
+ "tokens": 315106,
+ "prompt_tokens": 257536,
+ "completion_tokens": 57570,
+ "cost": 0.35815,
+ "calls": 43,
+ "call_errors": 0,
+ "pre_hub_correct": false,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": true,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "50635.85/21",
+   "claimed": 2411.23,
+   "value": 2411.230952380952,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(50635.85+15319.18)/21",
+   "claimed": 3140.72,
+   "value": 3140.715714285714,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "17488.11+14513.33+18634.41",
+   "claimed": 50635.85,
+   "value": 50635.850000000006,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "2189.88+528.00+5189.67+4657.84+2753.79",
+   "claimed": 15319.18,
+   "value": 15319.18,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Identify Gold shipped orders",
+     "what": "Join orders to customers on customer_id, retain Gold-tier customers with status shipped, and count each exact duplicate order row only once."
+    },
+    {
+     "id": "c2",
+     "title": "Compute order revenues",
+     "what": "For each retained order, calculate revenue as units multiplied by unit_price; the deduplicated set contains 21 orders totaling $50,635.85."
+    },
+    {
+     "id": "c3",
+     "title": "Average revenues",
+     "what": "Divide total revenue by the 21 unique shipped orders and round to two decimals: $2,411.23."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "D",
+     "B"
+    ],
+    "c3": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Gold-tier customers are C100, C101, and C107. Counting only shipped orders, and counting duplicate order O2867 once:\n\n- C100 shipped revenue: 429.84 + 1297.78 + 1700.89 + 1207.70 + 2095.54 + 5192.25 + 5564.11 = 17488.11\n- C101 shipped revenue: 2902.62 + 1742.72 + 6160.50 + 2845.26 + 639.31 + 222.92 = 14513.33\n- C107 shipped revenue: 1314.36 + 3768.84 + 4455.90 + 1628.40 + 2130.75 + 4066.56 + 822.90 + 446.70 = 18634.41\n\nTotal shipped revenue = 17488.11 + 14513.33 + 18634.41 = 50635.85  \nUnique shipped Gold orders = 7 + 6 + 8 = 21  \n\nAverage = 50635.85 / 21 = 2411.230952\u2026 \u2192 2411.23\n\nFINAL: 2411.23"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Need independent verification that no other C100 shipped order was omitted (e.g., O2199 is pending, correctly excluded, but worth double-checking all 11 C100 rows were correctly classified by status)."
+    },
+    {
+     "from": "A",
+     "problem": "The draft only treats O2867 as a duplicate; O2662 (C107, Easel, returned) also appears twice but was correctly excluded since returned orders don't count anyway - however this should be explicitly confirmed rather than assumed."
+    },
+    {
+     "from": "A",
+     "problem": "Arithmetic should be recomputed precisely: 50635.85/21 = 2411.23095..."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 3,
+   "rejected": 0,
+   "answer": "Gold-tier customers are C100, C101, and C107. Counting only shipped orders and deduplicating exact duplicate rows:\n\n- C100: 7 shipped orders, revenue $17,488.11\n- C101: 6 shipped orders, revenue $14,513.33\n- C107: 8 shipped orders, revenue $18,634.41\n\nThe duplicate order IDs are O2341, O2867, and O2662. O2341 is cancelled, and O2662 is returned, so neither contributes; O2867 is shipped and is counted once.\n\nTotal revenue = $50,635.85\nTotal shipped orders = 21\nAverage = $50,635.85 / 21 = $2,411.23\n\nFINAL: 2411.23"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing the 7 shipped C100 orders (429.84+1297.78+1701.09+2095.54+5192.25+5564.11+1207.70) sums to $17,488.31, not $17,488.11 \u2014 a $0.20 arithmetic error."
+    },
+    {
+     "from": "A",
+     "problem": "Using corrected C100 total ($17,488.31), total revenue becomes $50,636.05, giving average $50,636.05/21 = $2,411.24, not $2,411.23."
+    },
+    {
+     "from": "C",
+     "problem": "Seat count check shows C100 has only 6 distinct shipped orders, not 7: O2191 ($429.84), O2131 ($1,297.78), O2150 ($1,700.89), O2891 ($1,207.70), O2470 ($2,095.54), O2867 ($5,192.25), and O2163 ($5,564.11). Wait, that is 7 shipped orders. Let's re-verify C100: O2191, O2131, O2150, O2891, O2470, O2867 (duplicated), O2163. That is indeed 7. Let's check C101 shipped orders: O2218 (21*138.22=2902.62), O2165 (14*124.48=1742.72), O2817 (45*136.90=6160.50), O2738 (33*86.22=2845.26), O2422 (7*91.33=639.31), O2286 (2*111.46=222.92). Total C101 shipped = 6. Revenue = 2902.62 + 1742.72 + 6160.50 + 2845.26 + 639.31 + 222.92 = 14513.33. C107 shipped orders: O2125 (27*48.68=1314.36), O2350 (36*104.69=3768.84), O2316 (45*99.02=4455.90), O2881 (15*108.56=1628.40), O2840 (45*47.35=2130.75), O2032 (32*127.08=4066.56), O2856 (30*27.43=822.90), O2674 (10*44.67=446.70). Total C107 shipped = 8. Revenue = 1314.36 + 3768.84 + 4455.90 + 1628.40 + 2130.75 + 4066.56 + 822.90 + 446.70 = 18634.41. C100 sum: 429.84 + 1297.78 + 1700.89 + 1207.70 + 2095.54 + 5192.25 + 5564.11 = 17488.11. Total = 17488.11 + 14513.33 + 18634.41 = 50635.85. 50635.85 / 21 = 2411.23095 -> 2411.23. The prompt asks to dissent: what about pending orders? The prompt stated: 'Unless the question says otherwise, revenue counts only orders whose status is shipped or pending... What is the average revenue per shipped order placed by Gold-tier customers?'"
+    },
+    {
+     "from": "C",
+     "problem": "The prompt establishes: 'Unless the question says otherwise, revenue counts only orders whose status is shipped or pending'. The specific question asks 'What is the average revenue per shipped order placed by Gold-tier customers?' A strict literal reading could mean: calculate total revenue for Gold-tier customers (which defines revenue as shipped + pending) divided by the count of shipped orders, or it could mean only revenue from shipped orders."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 4,
+   "rejected": 4,
+   "answer": "Gold-tier customers: C100, C101, C107.\n\nC100 shipped orders: O2191 (429.84), O2131 (1297.78), O2150 (1700.89), O2891 (1207.70), O2470 (2095.54), O2867 (5192.25, dedup counted once), O2163 (5564.11) = 7 orders, $17,488.11\n\nC101 shipped orders: O2218 (2902.62), O2165 (1742.72), O2817 (6160.50), O2738 (2845.26), O2422 (639.31), O2286 (222.92) = 6 orders, $14,513.33\n\nC107 shipped orders: O2125 (1314.36), O2350 (3768.84), O2316 (4455.90), O2881 (1628.40), O2840 (2130.75), O2032 (4066.56), O2856 (822.90), O2674 (446.70) = 8 orders, $18,634.41\n\nDuplicate order IDs O2341 (cancelled) and O2662 (returned) contribute nothing either way; O2867 (shipped) is counted once as above.\n\nTotal shipped orders = 7+6+8 = 21\nTotal revenue = 17488.11 + 14513.33 + 18634.41 = 50,635.85\n\nThe question specifically asks for average revenue \"per shipped order\" \u2014 this explicitly scopes both numerator and denominator to shipped orders only, overriding the general preamble definition that would otherwise include pending orders in \"revenue.\" Pending orders are not shipped orders, so they're excluded from this specific calculation.\n\nAverage = 50,635.85 / 21 = 2,411.2309... = $2,411.23\n\nFINAL: 2411.23"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "This is a misreading of the preamble. The preamble says revenue counts only orders whose status is shipped or pending. The question asks for average revenue per shipped order. 'Revenue per shipped order' means total revenue (which includes pending orders, per the preamble) divided by the number of shipped orders. The draft's interpretation excludes pending order revenue from the numerator, but the preamble explicitly says pending orders contribute to revenue. The phrase 'per shipped order' constrains the denominator only, not the numerator. The preamble's 'unless the question says otherwise' clause is not triggered because 'per shipped order' does not say pending orders contribute nothing to revenue \u2014 it just specifies what to divide by."
+    },
+    {
+     "from": "D",
+     "problem": "O2867 appears twice in the data (lines 61 and 67), both with status 'shipped'. The draft correctly deduplicates it, but does not verify whether any other duplicate order IDs exist among Gold-tier shipped orders. A quick scan shows O2867 is the only duplicate shipped order for Gold customers, so this is not an error, but the draft's deduplication claim should be verified against all Gold shipped orders, not just O2867."
+    },
+    {
+     "from": "D",
+     "problem": "O2341 appears twice, both cancelled, so it contributes nothing regardless of interpretation. O2662 appears twice, both returned, so it also contributes nothing. However, the draft fails to mention that O2341 is a C101 order and O2662 is a C107 order, both Gold-tier customers. If the interpretation of 'revenue' included cancelled or returned orders (which it does not per the preamble), these would need deduplication. Since they don't contribute, this is not an error, but the draft's blanket statement could be misleading if the preamble were misread."
+    },
+    {
+     "from": "D",
+     "problem": "Verify each C100 shipped order revenue: O2191: 18 \u00d7 $23.88 = $429.84. O2131: 34 \u00d7 $38.17 = $1,297.78. O2150: 37 \u00d7 $45.97 = $1,700.89. O2891: 13 \u00d7 $92.90 = $1,207.70. O2470: 29 \u00d7 $72.26 = $2,095.54. O2867: 43 \u00d7 $120.75 = $5,192.25. O2163: 41 \u00d7 $135.71 = $5,564.11. Sum = $17,488.11. Correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "Under the preamble, revenue includes shipped and pending orders; \"per shipped order\" constrains only the denominator.\n\nGold-tier customers are C100, C101, C107.\n\nShipped orders (unique): C100 7, C101 6, C107 8 = 21.\n\nRevenue from shipped orders:\nC100: 429.84+1297.78+1700.89+1207.70+2095.54+5192.25+5564.11 = 17488.11\nC101: 2902.62+1742.72+6160.50+2845.26+639.31+222.92 = 14513.33\nC107: 1314.36+3768.84+4455.90+1628.40+2130.75+4066.56+822.90+446.70 = 18634.41\nShipped revenue total = 50635.85.\n\nPending Gold-tier revenue:\nC100 O2199: 22\u00d799.54 = 2189.88\nC101 O2447: 33\u00d716.00 = 528.00; O2174: 43\u00d7120.69 = 5189.67\nC107 O2819: 44\u00d7105.86 = 4657.84; O2082: 39\u00d770.61 = 2753.79\nPending total = 15319.18.\n\nTotal revenue = 50635.85 + 15319.18 = 65955.03.\nAverage = 65955.03 / 21 = 3140.7157... = 3140.72.\n\nFINAL: 3140.72"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The submitted answer includes pending-order revenue in the numerator while all four seats objected at the final vote that the numerator should be shipped-only. On what textual basis does the submitted reading survive the fact that the denominator (21) counts only shipped orders, so pending revenue is attributed to orders not in the denominator? Please state which reading the final answer rests on and why the panel's unanimous objection was not adopted.",
+    "The preamble's 'Unless the question says otherwise' clause: does the phrase 'per shipped order' constitute the question saying otherwise about which orders are in scope, or only about the divisor? Point to the specific words that decide this, and state what the answer would be under each reading so the difference is explicit.",
+    "Independent of the interpretation dispute, is the shipped-only Gold total of 50635.85 fully verified line by line, including that O2867 (C100, duplicated) is counted once and that no Gold shipped order was missed? List the 21 order_ids used."
+   ],
+   "replies": [
+    "The submitted reading does not survive. The final answer rests on the shipped-only reading. The question's words 'per shipped order' are the textual basis for overriding the default: they put only shipped orders in scope, so both numerator and denominator must be shipped-only. There is no textual support for adding pending revenue while dividing by shipped-order count; the panel's objection is adopted.",
+    "'Per shipped order' constitutes the question saying otherwise about scope, not only the divisor. The deciding words are 'per shipped order': the average is over shipped orders, so the revenue summed must be revenue of shipped orders. Shipped-only reading: 50635.85 / 21 = 2411.23. Mixed reading: (50635.85 + 15319.18) / 21 = 3140.72.",
+    "Yes, the shipped-only Gold total is verified. The 21 unique Gold shipped order_ids are: C100 O2191, O2131, O2150, O2891, O2470, O2867, O2163; C101 O2218, O2165, O2817, O2738, O2422, O2286; C107 O2125, O2350, O2316, O2881, O2840, O2032, O2856, O2674. O2867 is duplicated in the data and counted once. Revenue by customer: C100 17488.11, C101 14513.33, C107 18634.41; total 50635.85."
+   ],
+   "open": [],
+   "corrected": true
+  }
+ ],
+ "answer": "Shipped-only Gold revenue = 50635.85; shipped Gold orders = 21; average = 50635.85 / 21 = 2411.23.\nFINAL: 2411.23"
+}

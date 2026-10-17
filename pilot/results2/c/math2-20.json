@@ -1,0 +1,163 @@
+{
+ "task_id": "math2-20",
+ "type": "math",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 2747.06, expected 2747.06",
+ "error": null,
+ "seconds": 93.3,
+ "tokens": 46984,
+ "prompt_tokens": 37815,
+ "completion_tokens": 9169,
+ "cost": 0.07976,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "100+200+528",
+   "claimed": 828.0,
+   "value": 828.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "100*4.25+200*3.61+528*2.97",
+   "claimed": 2715.16,
+   "value": 2715.16,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "2715.16*0.95*1.065",
+   "claimed": 2747.06313,
+   "value": 2747.0631299999995,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Subtotal Calculation",
+     "what": "Calculate the tiered subtotal for 828 units: 100 units at $4.25, 200 units at $3.61, and the remaining 528 units at $2.97."
+    },
+    {
+     "id": "c2",
+     "title": "Discount and Tax Application",
+     "what": "Verify that the subtotal exceeds $2,500, apply the 5% discount to the entire subtotal, then add 6.5% sales tax to the discounted amount and round the final total to the nearest cent."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Tier1: 100\u00d74.25=425.00\nTier2: 200\u00d73.61=722.00\nTier3: (828-300)=528\u00d72.97=1568.16\nSubtotal = 425.00+722.00+1568.16 = 2715.16\n\nSubtotal exceeds $2,500, so apply 5% discount:\n2715.16\u00d70.95 = 2579.402\n\nApply 6.5% sales tax:\n2579.402\u00d71.065 = 2747.06313 \u2192 $2747.06\n\nFINAL: 2747.06"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The prompt does not specify rounding policy. Rounding the discounted subtotal to $2,579.40 before tax gives $2,579.40 \u00d7 1.065 = $2,747.061, which still rounds to $2,747.06, so the final answer is unchanged but the working should state the convention."
+    },
+    {
+     "from": "B",
+     "problem": "The calculation treats the prices as incremental tiers, which is the natural reading of \u201cfirst,\u201d \u201cnext,\u201d and \u201cbeyond,\u201d but the draft should explicitly state that assumption because an all-units price interpretation would yield a different result."
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 5,
+   "answer": "Tier 1 (incremental): 100 \u00d7 $4.25 = $425.00\nTier 2: 200 \u00d7 $3.61 = $722.00\nTier 3: 528 \u00d7 $2.97 = $1,568.16\nSubtotal: 425.00 + 722.00 + 1568.16 = $2,715.16\n\nSince the subtotal exceeds $2,500, a 5% discount applies:\n$2,715.16 \u00d7 0.95 = $2,579.402 (or $2,579.40 rounded to nearest cent)\n\nAdding 6.5% sales tax:\nExact: $2,579.402 \u00d7 1.065 = $2,747.06313 \u2192 $2,747.06\nRounded intermediate: $2,579.40 \u00d7 1.065 = $2,747.061 \u2192 $2,747.06\nBoth methods round to $2,747.06.\n\nFINAL: 2747.06"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The order is 828 units; the third tier is 'beyond 300', so the tier-3 quantity should be 828 - 300. Confirm that 528 is the correct tier-3 count and that no units are double-counted or omitted across the three tiers (100 + 200 + 528 = 828).",
+    "The discount condition is stated as 'if the subtotal exceeds $2,500' \u2014 does the record confirm the discount is applied to the pre-tax subtotal only (not to tax), and that the 6.5% tax is levied on the discounted amount rather than the original subtotal?",
+    "Seat B's rejected challenge raised the all-units interpretation; aside from rejecting it, does the panel record identify any source or convention (e.g., standard tiered-pricing usage) that settles whether 'exceeds $2,500' is evaluated before or after the discount, i.e. whether any circularity arises here?"
+   ],
+   "replies": [
+    "Confirmed by exact arithmetic: Tier 1 covers units 1 to 100 (count = 100); Tier 2 covers units 101 to 300 (count = 200); Tier 3 covers units beyond 300 up to 828, yielding 828 - 300 = 528 units. The sum 100 + 200 + 528 = 828 partitions the entire order with zero double-counting or omission.",
+    "Confirmed by the problem text and standard accounting definitions. The prompt explicitly specifies the sequential order of operations: 'If the subtotal exceeds $2,500, a 5% discount applies to the whole subtotal. Sales tax of 6.5% is then added.' In standard accounting and tax code conventions, sales tax is levied on the net taxable amount (post-discount subtotal), not on gross pre-discount amounts.",
+    "No external source is cited in the record, but standard English and pricing conventions settle this unambiguously without circularity. 'Subtotal' is computed before discounts; once computed ($2,715.16), the threshold test '$2,715.16 > $2,500' is evaluated, triggering the discount. The discounted figure is the net subtotal. A condition cannot circularly reference its own post-discount result unless explicitly worded as 'if the post-discount total exceeds $2,500'."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Tier 1 (incremental): 100 \u00d7 $4.25 = $425.00\nTier 2: 200 \u00d7 $3.61 = $722.00\nTier 3: 528 \u00d7 $2.97 = $1,568.16\nSubtotal: 425.00 + 722.00 + 1568.16 = $2,715.16\n\nSince the subtotal exceeds $2,500, a 5% discount applies:\n$2,715.16 \u00d7 0.95 = $2,579.402 (or $2,579.40 rounded to nearest cent)\n\nAdding 6.5% sales tax:\nExact: $2,579.402 \u00d7 1.065 = $2,747.06313 \u2192 $2,747.06\nRounded intermediate: $2,579.40 \u00d7 1.065 = $2,747.061 \u2192 $2,747.06\nBoth methods round to $2,747.06.\n\nFINAL: 2747.06"
+}

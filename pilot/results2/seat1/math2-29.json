@@ -3,14 +3,14 @@
  "type": "math",
  "condition": "seat1",
  "correct": true,
- "detail": "got 191.79, expected 191.79",
+ "detail": "got 191.8, expected 191.79",
  "error": null,
- "seconds": 29.5,
- "tokens": 3599,
+ "seconds": 3.2,
+ "tokens": 476,
  "prompt_tokens": 215,
- "completion_tokens": 3384,
- "cost": 0.03427,
+ "completion_tokens": 261,
+ "cost": 0.00304,
  "calls": 1,
  "call_errors": 0,
- "answer": "## Working\n\nCombine all percentage changes into one multiplier:\n\n- +25% \u2192 \u00d71.25  \n- +18% \u2192 \u00d71.18  \n- +20% \u2192 \u00d71.20  \n- \u221215% \u2192 \u00d70.85  \n- \u221210% \u2192 \u00d70.90  \n\nMultiply:\n1.25 \u00d7 1.18 = 1.475  \n1.475 \u00d7 1.20 = 1.77  \n1.77 \u00d7 0.85 = 1.5045  \n1.5045 \u00d7 0.90 = 1.35405  \n\nSo the overall multiplier is **1.35405**.\n\n## Solve for original price\n\nOriginal price \u00d7 1.35405 = 259.70\n\nOriginal price = 259.70 / 1.35405\n\nPerforming the division precisely:\n\n259.70 / 1.35405 = 191.79498...\n\nRounded to the nearest cent: **$191.79**\n\n**Check:** 191.79 \u00d7 1.35405 \u2248 259.6932 (\u2248259.70, consistent given rounding)\n\nFINAL: 191.79"
+ "answer": "Factor = 1.25\u00d71.18\u00d71.20\u00d70.85\u00d70.90 = 1.35405\nOriginal = 259.70/1.35405 \u2248 191.80\n\nFINAL: 191.80"
 }

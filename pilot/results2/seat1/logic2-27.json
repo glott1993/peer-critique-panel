@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'milk', expected 'milk'",
  "error": null,
- "seconds": 28.9,
- "tokens": 3794,
+ "seconds": 25.5,
+ "tokens": 3049,
  "prompt_tokens": 545,
- "completion_tokens": 3249,
- "cost": 0.03358,
+ "completion_tokens": 2504,
+ "cost": 0.02613,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Solution walkthrough:**\n\nFrom clues 10 & 12: coffee = yellow house = horse owner.\nFrom clue 8: horse owner is immediately left of the blue house \u2192 yellow house is immediately left of blue house.\nFrom clue 5: dog owner is immediately left of yellow house.\nFrom clue 7: fish owner (Dev, clue 6) is adjacent to yellow house \u2014 but the house left of yellow already has the dog, so Dev must be immediately **right** of yellow (i.e., in the blue house).\n\nTesting possible positions for the yellow house (2,3,4) while satisfying clue 11 (Ben immediately left of dog owner) and clue 2 (Eli immediately left of bird owner), only yellow = house 4 works:\n\n- House3 = dog (Ben must be at house2)\n- House4 = yellow, coffee, horse\n- House5 = blue, fish (Dev)\n- Remaining pets: cat/bird for houses1,2 \u2192 bird=2 (Eli=1), cat=1\n\nColors: Ada is house3 (clue9). Using clue3 (green\u22601), clue4 (juice=white), clue1 (water next to red), and clue13 (tea next to cat@1), the only consistent assignment is:\n\n- House1: white, juice, cat, Eli\n- House2: red, tea, bird, Ben\n- House3: green, water, dog, Ada\n- House4: yellow, coffee, horse, Cleo\n- House5: blue, milk, fish, Dev\n\nAll 13 clues check out with this arrangement.\n\nThus, **Dev drinks milk**.\n\nFINAL: milk"
+ "answer": "Working: Using clues 12,10 \u2192 horse owner is in yellow house drinking coffee. Clue 8 places blue house right after it. Clues 5,7,6 force dog owner immediately left of yellow, fish owner (Dev) immediately right of yellow house. Testing positions with clue 9 (Ada house3) and clue 11 (Ben left of dog owner), the only consistent arrangement is:\n\nHouse1: Eli, cat, white, juice\nHouse2: Ben, bird, red, tea\nHouse3: Ada, dog, green, water\nHouse4: Cleo, horse, yellow, coffee\nHouse5: Dev, fish, blue, milk\n\nAll clues check out.\n\nFINAL: milk"
 }

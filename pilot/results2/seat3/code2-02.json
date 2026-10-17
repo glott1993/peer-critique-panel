@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-02",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.4,
+ "tokens": 376,
+ "prompt_tokens": 187,
+ "completion_tokens": 189,
+ "cost": 0.00085,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete function definition:\n\n```python\ndef min_rooms(meetings: list[list[int]]) -> int:\n    if not meetings:\n        return 0\n\n    start_times = sorted(m[0] for m in meetings)\n    end_times = sorted(m[1] for m in meetings)\n\n    start_ptr = 0\n    end_ptr = 0\n    rooms = 0\n    max_rooms = 0\n\n    while start_ptr < len(meetings):\n        if start_times[start_ptr] < end_times[end_ptr]:\n            rooms += 1\n            start_ptr += 1\n        else:\n            rooms -= 1\n            end_ptr += 1\n\n        if rooms > max_rooms:\n            max_rooms = rooms\n\n    return max_rooms\n```"
+}

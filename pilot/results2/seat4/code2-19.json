@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-19",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 29.1,
+ "tokens": 2810,
+ "prompt_tokens": 160,
+ "completion_tokens": 2650,
+ "cost": 0.0107,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom typing import List\n\ndef largest_rectangle(heights: List[int]) -> int:\n    stack = []\n    max_area = 0\n    n = len(heights)\n\n    for i in range(n + 1):\n        current_height = heights[i] if i < n else 0\n\n        while stack and heights[stack[-1]] > current_height:\n            height = heights[stack.pop()]\n            width = i if not stack else i - stack[-1] - 1\n            max_area = max(max_area, height * width)\n\n        stack.append(i)\n\n    return max_area\n```"
+}

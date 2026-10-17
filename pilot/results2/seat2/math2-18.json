@@ -3,14 +3,14 @@
  "type": "math",
  "condition": "seat2",
  "correct": true,
- "detail": "got 19235.46, expected 19235.46",
+ "detail": "got 19235.52, expected 19235.46",
  "error": null,
- "seconds": 46.5,
- "tokens": 24162,
- "prompt_tokens": 12998,
- "completion_tokens": 11164,
- "cost": 0.016,
+ "seconds": 41.0,
+ "tokens": 14832,
+ "prompt_tokens": 7754,
+ "completion_tokens": 7078,
+ "cost": 0.01004,
  "calls": 1,
  "call_errors": 0,
- "answer": "Monthly rate: i = 0.078/12 = 0.0065\n\nRegular payment:\nP = 31200i/[1 - (1+i)^(-48)] = 758.757503815...\n\nBalance after month 18 without extra payments:\nB = P[1 - (1+i)^(-30)]/i = 20620.222157934...\n\nSubtract the accumulated extra principal payments:\nB18 = 20620.222157934 - 1000(1.0065)^12 - 300(1.0065)^2\n= 19235.459672568\n\nFINAL: 19235.46"
+ "answer": "Monthly rate: r = 0.078/12 = 0.0065\n\nRegular payment:\nA = 31200(0.0065)/(1 - 1.0065^(-48)) \u2248 759.80\n\nBalance after 18 regular payments:\nB = 31200(1.0065)^18 - A[((1.0065)^18 - 1)/0.0065]\n  \u2248 20620.29\n\nThe extra payments accrue for 12 and 2 months, respectively:\nB18 = 20620.29 - 1000(1.0065)^12 - 300(1.0065)^2\n    \u2248 19235.52\n\nFINAL: 19235.52"
 }

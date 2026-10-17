@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-22",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 22.3,
+ "tokens": 1920,
+ "prompt_tokens": 199,
+ "completion_tokens": 1721,
+ "cost": 0.00865,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef knapsack(items, capacity):\n    dp = [0] * (capacity + 1)\n\n    for weight, value in items:\n        if weight == 0:\n            for w in range(capacity, -1, -1):\n                dp[w] = max(dp[w], dp[w] + value)\n        else:\n            for w in range(capacity, weight - 1, -1):\n                candidate = dp[w - weight] + value\n                if candidate > dp[w]:\n                    dp[w] = candidate\n\n    return dp[capacity]\n```"
+}

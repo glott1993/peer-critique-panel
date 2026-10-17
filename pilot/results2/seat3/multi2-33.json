@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-33",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got '19/28', expected '19/28' | ok: got 6575.43, expected 6575.43 | ok: got '2026-11-27', expected '2026-11-27'",
+ "error": null,
+ "seconds": 10.4,
+ "tokens": 2034,
+ "prompt_tokens": 510,
+ "completion_tokens": 1524,
+ "cost": 0.0061,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nTotal marbles: 3 red + 3 green + 2 blue = 8 marbles.\nThree marbles are drawn without replacement.\nTotal possible outcomes = $\\binom{8}{3} = \\frac{8 \\times 7 \\times 6}{3 \\times 2 \\times 1} = 56$.\nThe complement of \"at least two share a color\" is \"all three marbles have different colors\", which means 1 red, 1 green, and 1 blue.\nNumber of ways to choose 1 of each color = $\\binom{3}{1} \\times \\binom{3}{1} \\times \\binom{2}{1} = 3 \\times 3 \\times 2 = 18$.\nProbability of all different = $\\frac{18}{56} = \\frac{9}{28}$.\nProbability of at least two sharing a color = $1 - \\frac{9}{28} = \\frac{19}{28}$.\n\n**Part B**\nInitial balance: $2,500.00.\nSince the starting balance is $2,500.00 and all monthly changes (even net of withdrawals) leave the balance well above $1,000, no fee is ever charged.\nEach month: Balance = (Balance + Transaction) $\\times 1.004$.\n\nTransactions for months 1 to 15:\n- Month 1: (2500 + 700) * 1.004 = 3200 * 1.004 = 3212.80\n- Month 2: (3212.80 + 700) * 1.004 = 3912.80 * 1.004 = 3928.4512\n- Month 3: (3928.4512 + 300) * 1.004 = 4228.4512 * 1.004 = 4245.3650\n- Month 4: (4245.3650 - 900) * 1.004 = 3345.3650 * 1.004 = 3358.7465\n- Month 5: (3358.7465 + 700) * 1.004 = 4058.7465 * 1.004 = 4074.9815\n- Month 6: (4074.9815 + 700) * 1.004 = 4774.9815 * 1.004 = 4794.0814\n- Month 7: (4794.0814 + 300) * 1.004 = 5094.0814 * 1.004 = 5114.4577\n- Month 8: (5114.4577 + 1100) * 1.004 = 6214.4577 * 1.004 = 6239.3156\n- Month 9: (6239.3156 + 300) * 1.004 = 6539.3156 * 1.004 = 6565.4728\n- Month 10: (6565.4728 - 250) * 1.004 = 6315.4728 * 1.004 = 6340.7347\n- Month 11: (6340.7347 + 300) * 1.004 = 6640.7347 * 1.004 = 6667.2977\n- Month 12: (6667.2977 + 300) * 1.004 = 6967.2977 * 1.004 = 6995.1668\n- Month 13: (6995.1668 - 400) * 1.004 = 6595.1668 * 1.004 = 6621.5475\n- Month 14: (6621.5475 + 300) * 1.004 = 6921.5475 * 1.004 = 6949.2337\n- Month 15: (6949.2337 - 400) * 1.004 = 6549.2337 * 1.004 = 6575.4306\n\nRounded to the nearest cent: 6575.43.\n\n**Part C**\nStart date: 2026-07-19 is a Sunday.\nWe need 89 business days, skipping weekends and the specified holidays:\n- 2026-07-20 (Monday)\n- 2026-08-07 (Friday)\n- 2026-08-25 (Tuesday)\n- 2026-09-16 (Wednesday)\n- 2026-10-28 (Wednesday)\n- 2026-11-11 (Wednesday)\nAll 6 holidays fall on weekdays.\n89 business days requires $89 + 6 = 95$ non-holiday weekdays.\n95 weekdays = 19 full weeks (since $19 \\times 5 = 95$).\n19 weeks after Sunday 2026-07-19 is Sunday 2026-11-29.\nThe 95th weekday is the Friday of that 19th week, which is 2026-11-27.\nAll 6 holidays occur on or before 2026-11-27, so exactly 6 holidays have been passed.\nThus, the 89th business day is 2026-11-27.\n\nFINAL: 19/28; 6575.43; 2026-11-27"
+}

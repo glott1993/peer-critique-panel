@@ -1,0 +1,215 @@
+{
+ "task_id": "multi2-28",
+ "type": "multi",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got 10931.29, expected 10931.29 | ok: got '89/110', expected '89/110' | ok: got 3489.75, expected 3489.75",
+ "error": null,
+ "seconds": 686.0,
+ "tokens": 206558,
+ "prompt_tokens": 125201,
+ "completion_tokens": 81357,
+ "cost": 0.23433,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Loan Balance",
+     "what": "Calculate the regular monthly payment, apply the two extra principal payments, and determine the balance immediately after month 18."
+    },
+    {
+     "id": "c2",
+     "title": "Marble Probability",
+     "what": "Count three-marble selections containing at least two marbles of the same color and divide by all three-marble selections."
+    },
+    {
+     "id": "c3",
+     "title": "Overtime Pay",
+     "what": "Compute each day\u2019s regular, time-and-a-half, and double-time wages, then sum the pay across all 14 days."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "A",
+     "B"
+    ],
+    "c3": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Part A: Monthly rate r=0.069/12=0.00575. Standard payment M=PMT(r,36,24000)=739.9535. Balance after 18 scheduled payments (ignoring extra principal) = M\u00d7(1-(1+r)^-18)/r = 12,618.6724. The extra $600 (month 5) and $1000 (month 11) reduce principal immediately, saving further interest; their accumulated value by month 18 is 600(1.00575)^13 + 1000(1.00575)^7 = 646.4304+1040.9510=1,687.3814. Net balance after month\u201118 payment = 12,618.6724 \u2212 1,687.3814 = $10,931.29.\n\nPart B: Total ways C(12,3)=220. P(all different colors)=7\u00d73\u00d72/220=42/220=21/110. P(at least two share a color)=1\u221221/110=89/110. Verified by direct count of exactly-2-same (142) plus exactly-3-same (36) = 178/220 = 89/110. 89 is prime and doesn't divide 110, so fraction is already reduced.\n\nPart C: Rate $24.75/hr. Daily pay by hours: 6h\u2192$148.50; 8h\u2192$198.00; 9h\u21928+1.5=9.5 eq hrs\u2192$235.125; 11h\u21928+4.5=12.5 eq hrs\u2192$309.375; 13h\u21928+6+2=16 eq hrs\u2192$396.00. Day counts from schedule (13,8,13,9,8,11,9,6,8,6,9,13,8,8): 13h\u00d73, 8h\u00d75, 9h\u00d73, 11h\u00d71, 6h\u00d72 (sum=14, matches). Total = 3(396)+5(198)+3(235.125)+309.375+2(148.5) = 1188+990+705.375+309.375+297 = $3,489.75.\n\nFINAL: 10931.29; 89/110; 3489.75"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The prompt says the borrower pays extra principal 'in month 5' and 'in month 11' but does not explicitly specify whether each extra is paid before or after the scheduled payment. If paid immediately before the regular payment, the accumulation exponents would be 14 and 8 rather than 13 and 7, changing the cents result."
+    },
+    {
+     "from": "D",
+     "problem": "The formula used gives the present value of the remaining 18 payments, not the balance after 18 payments on a 36-month amortization. The correct balance after 18 payments is the present value of the remaining 18 payments, but the formula appears to use n=18, which would be the balance after 18 payments only if the loan term were 18 months. For a 36-month loan, the balance after 18 payments should be M\u00d7(1-(1+r)^-(36-18))/r = M\u00d7(1-(1+r)^-18)/r, which is actually correct. However, the formula as written is ambiguous and should be verified against an amortization schedule."
+    },
+    {
+     "from": "D",
+     "problem": "The accumulated value calculation assumes the extra payments are compounded forward at the monthly rate from the payment month to month 18. However, the extra payments reduce the principal, which reduces the interest accrued on the remaining balance. The correct approach is to subtract the extra principal from the balance at the time of payment and then recalculate the balance forward with the reduced principal. The accumulated value method may be equivalent if applied correctly, but the exponents need verification: month 5 extra payment to month 18 is 13 months, and month 11 to month 18 is 7 months. This appears correct, but the claim that the net balance is simply the scheduled balance minus the accumulated value of extra payments needs verification because the extra payments also reduce the interest on the scheduled payment portion."
+    },
+    {
+     "from": "D",
+     "problem": "The numerator 7\u00d73\u00d72 counts the number of ways to draw one red, one green, and one blue in a specific order (red first, green second, blue third). For combinations (order doesn't matter), the number of ways to choose one of each color is C(7,1)\u00d7C(3,1)\u00d7C(2,1) = 7\u00d73\u00d72 = 42. This is correct for combinations because the draw is without replacement and order doesn't matter. However, the total ways C(12,3)=220 is correct. The calculation appears correct, but the claim that 89 is prime and doesn't divide 110 needs verification: 89 is prime, but the fraction 89/110 is already in lowest terms because 89 and 110 share no common factors. This is correct."
+    },
+    {
+     "from": "D",
+     "problem": "The equivalent hours calculation for 13 hours is 8 + 4\u00d71.5 + 1\u00d72 = 8 + 6 + 2 = 16 equivalent hours. However, the daily overtime rules state hours over 8 are paid at 1.5 times the rate, and hours over 12 at 2 times the rate. For 13 hours, hours 9-12 (4 hours) are at 1.5\u00d7, and hour 13 (1 hour) is at 2\u00d7. This gives 8 + 4\u00d71.5 + 1\u00d72 = 16 equivalent hours. This is correct. The calculation for 11 hours: 8 + 3\u00d71.5 = 12.5 equivalent hours. This is correct. However, the total pay calculation needs verification: 3(396)+5(198)+3(235.125)+309.375+2(148.5) = 1188+990+705.375+309.375+297 = 3489.75. This appears correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "Part A: Monthly rate r=0.069/12=0.00575. Standard payment M=739.953585. Assuming extra principal is paid with the regular payment after that month's interest accrues, the balance after 18 scheduled payments without extras is M(1-(1+r)^-18)/r = 12618.6708. The accumulated value of the extras through month 18 is 600(1.00575)^13 + 1000(1.00575)^7 = 1687.3814. Balance = 12618.6708 - 1687.3814 = 10931.29.\n\nPart B: Total draws C(12,3)=220. All-different draws are 7*3*2=42, so P(all different)=42/220=21/110. Therefore P(at least two share)=1-21/110=89/110.\n\nPart C: Equivalent hours: 6h=6, 8h=8, 9h=9.5, 11h=12.5, 13h=16. Counts: 13h\u00d73, 8h\u00d75, 9h\u00d73, 11h\u00d71, 6h\u00d72. Gross pay = 3(16)+5(8)+3(9.5)+12.5+2(6)=141 equivalent hours; 141*24.75=3489.75.\n\nFINAL: 10931.29; 89/110; 3489.75"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing M=24000*r*(1+r)^36/((1+r)^36-1) with r=0.00575 gives (1+r)^36\u22481.229255, so M\u2248740.02, not 739.95. This changes the downstream balance calculation."
+    },
+    {
+     "from": "C",
+     "problem": "The draft computes remaining balance without extras using prospective valuation M(1-(1+r)^-18)/r, which incorrectly calculates remaining balance for an 18-month loan rather than at month 18 of a 36-month loan. For a 36-month loan at t=18, the remaining payments are 36-18=18, so M(1-(1+r)^-18)/r happens to give 12618.67, but let's recompute the exact retrospective balance: B_18 = 24000*(1+r)^18 - M*((1+r)^18 - 1)/r - 600*(1+r)^13 - 1000*(1+r)^7. M = 24000*r/(1-(1+r)^-36) = 739.953585. 24000*(1.00575)^18 - 739.953585*((1.00575)^18 - 1)/0.00575 = 12618.6708. 12618.6708 - 1687.3814 = 10931.2894 -> 10931.29. However, the draft's definition of extra payment timing leaves ambiguity on whether 'in month 5' means before or after month 5 interest accrual. If extra principal reduces principal at month 5 before interest, accumulated value is 600*(1+r)^14."
+    },
+    {
+     "from": "C",
+     "problem": "Check the 14-day list: 13, 8, 13, 9, 8, 11, 9, 6, 8, 6, 9, 13, 8, 8. Counts: 13 appears 3 times (indices 1, 3, 12). 8 appears 5 times (indices 2, 5, 9, 13, 14). 9 appears 3 times (indices 4, 7, 11). 11 appears 1 time (index 6). 6 appears 2 times (indices 8, 10). Total days: 3+5+3+1+2 = 14. Daily equivalent hours for 13: 8 + 4*1.5 + 1*2 = 8 + 6 + 2 = 16. For 11: 8 + 3*1.5 = 12.5. For 9: 8 + 1*1.5 = 9.5. For 8: 8. For 6: 6. Sum: 3*16 + 5*8 + 3*9.5 + 12.5 + 2*6 = 48 + 40 + 28.5 + 12.5 + 12 = 141.0. 141 * 24.75 = 3489.75. The calculation is mathematically sound, but verify whether daily overtime over 12 hours is paid at double time plus regular time (triple time) or if 2x base rate applies."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Part A: Monthly rate r = 0.069 / 12 = 0.00575. Standard payment for n = 36 months: M = 24000 * r / (1 - (1+r)^-36) = 138 / (1 - 1.00575^-36) = 739.953585. The remaining balance after 18 scheduled payments without extra principal is B_18 = M * (1 - (1+r)^-18) / r = 12618.6708. Paid on top of regular payments, the extra principal amounts compound through month 18: $600 grows over 18 - 5 = 13 months and $1000 grows over 18 - 11 = 7 months: 600*(1.00575)^13 + 1000*(1.00575)^7 = 646.2409 + 1041.1405 = 1687.3814. Balance = 12618.6708 - 1687.3814 = 10931.2894, which rounds to 10931.29.\n\nPart B: Total ways to choose 3 marbles from 12 is C(12, 3) = 220. The only way to not have at least two marbles share a color is to draw three distinct colors (1 red, 1 green, 1 blue): 7 * 3 * 2 = 42 ways. Thus, P(at least two share) = 1 - 42/220 = 1 - 21/110 = 89/110.\n\nPart C: Base rate = $24.75. Standard daily overtime pays hours 8\u201312 at 1.5x and hours > 12 at 2x base rate. Equivalent hours per day:\n- 13 hours: 8 + 4(1.5) + 1(2.0) = 16 (occurs 3 times)\n- 11 hours: 8 + 3(1.5) = 12.5 (occurs 1 time)\n- 9 hours: 8 + 1(1.5) = 9.5 (occurs 3 times)\n- 8 hours: 8 (occurs 5 times)\n- 6 hours: 6 (occurs 2 times)\nTotal equivalent hours = 3(16) + 1(12.5) + 3(9.5) + 5(8) + 2(6) = 48 + 12.5 + 28.5 + 40 + 12 = 141.\nGross pay = 141 * 24.75 = 3489.75.\n\nFINAL: 10931.29; 89/110; 3489.75"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "This shortcut assumes the regular monthly payment M stays exactly fixed in all 18 months (not recalculated after extra principal), which is stated but should be verified by directly simulating the amortization schedule month-by-month to confirm the final balance matches 10931.29"
+    },
+    {
+     "from": "B",
+     "problem": "Both compound-growth calculations are numerically incorrect. Direct evaluation gives (1.00575)^13 \u2248 1.077384, so the first amount is \u2248 646.4304; (1.00575)^7 \u2248 1.040951, so the second is \u2248 1040.9510."
+    },
+    {
+     "from": "D",
+     "problem": "The value is not verified by an independent calculation; a small error here propagates to the balance."
+    },
+    {
+     "from": "D",
+     "problem": "The formula B_18 = M * (1 - (1+r)^-18) / r uses only 18 remaining payments, but after 18 payments of a 36-month loan there are 18 payments left, so this is correct only if the exponent is 18; the value is not independently checked."
+    },
+    {
+     "from": "D",
+     "problem": "The treatment of extra principal as compounding forward is an unsupported inference. In standard amortization, extra principal reduces the balance immediately and saves future interest, but the remaining balance after month 18 is not obtained by subtracting the compounded value of extra payments from the no-extra-payment balance unless the payment schedule is recalculated or the balance is updated month by month."
+    },
+    {
+     "from": "D",
+     "problem": "The daily hours listed sum to 129, but the equivalent-hour calculation gives 141; this is plausible due to overtime multipliers, but the individual daily breakdown should be checked against the 14 listed days."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "B",
+   "accepted": 4,
+   "rejected": 2,
+   "answer": "Part A: Let r=0.069/12=0.00575 and M=24000r/[1-(1+r)^(-36)]\u2248739.953423. Updating the balance monthly by B_k=B_{k-1}(1+r)-M, and subtracting 600 in month 5 and 1000 in month 11, gives B_18\u224810931.29. Equivalently, the extra payments reduce the month-18 balance by 600(1.00575)^13+1000(1.00575)^7\u22481687.3814.\n\nPart B: There are C(12,3)=220 total selections. The complement consists of one marble of each color: 7\u00b73\u00b72=42. Thus P=1-42/220=89/110.\n\nPart C: Equivalent paid hours are 16 for each 13-hour day, 12.5 for the 11-hour day, 9.5 for each 9-hour day, 8 for each 8-hour day, and 6 for each 6-hour day. Total=3(16)+12.5+3(9.5)+5(8)+2(6)=141. Pay=141\u00b724.75=3489.75.\n\nFINAL: 10931.29; 89/110; 3489.75"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Part A: Let r=0.069/12=0.00575 and M=24000r/[1-(1+r)^(-36)]\u2248739.953423. Updating the balance monthly by B_k=B_{k-1}(1+r)-M, and subtracting 600 in month 5 and 1000 in month 11, gives B_18\u224810931.29. Equivalently, the extra payments reduce the month-18 balance by 600(1.00575)^13+1000(1.00575)^7\u22481687.3814.\n\nPart B: There are C(12,3)=220 total selections. The complement consists of one marble of each color: 7\u00b73\u00b72=42. Thus P=1-42/220=89/110.\n\nPart C: Equivalent paid hours are 16 for each 13-hour day, 12.5 for the 11-hour day, 9.5 for each 9-hour day, 8 for each 8-hour day, and 6 for each 6-hour day. Total=3(16)+12.5+3(9.5)+5(8)+2(6)=141. Pay=141\u00b724.75=3489.75.\n\nFINAL: 10931.29; 89/110; 3489.75"
+}

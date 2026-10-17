@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-16",
+ "type": "data",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 'morgan', expected 'morgan'",
+ "error": null,
+ "seconds": 12.2,
+ "tokens": 5543,
+ "prompt_tokens": 3363,
+ "completion_tokens": 2180,
+ "cost": 0.0107,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To determine which customer has the highest total revenue, we sum the revenue (`units` \u00d7 `unit_price`) for all unique orders with a status of `shipped` or `pending` for each customer:\n\n- **Morgan (C105)**:\n  - O2001: 22 \u00d7 109.34 = 2,405.48\n  - O2012: 26 \u00d7 139.49 = 3,626.74\n  - O2874: 36 \u00d7 5.45 = 196.20\n  - O2748: 4 \u00d7 11.56 = 46.24\n  - O2127: 29 \u00d7 103.40 = 2,998.60\n  - O2042: 24 \u00d7 42.15 = 1,011.60\n  - O2610: 4 \u00d7 101.84 = 407.36\n  - O2454: 37 \u00d7 97.11 = 3,593.07\n  - O2406: 45 \u00d7 108.89 = 4,900.05\n  - **Total**: 19,185.34\n\n- **Jordan (C103)**: 16,838.08\n- **Kendall (C102)**: 15,756.90\n- Other customers have significantly lower totals.\n\nMorgan has the highest total revenue.\n\nFINAL: Morgan"
+}

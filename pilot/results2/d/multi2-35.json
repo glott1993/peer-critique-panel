@@ -1,0 +1,125 @@
+{
+ "task_id": "multi2-35",
+ "type": "multi",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got '2026-11-10', expected '2026-11-10' | ok: got 16076.21, expected 16076.21 | ok: got 3193.48, expected 3193.48",
+ "error": null,
+ "seconds": 197.0,
+ "tokens": 103276,
+ "prompt_tokens": 59893,
+ "completion_tokens": 43383,
+ "cost": 0.20761,
+ "calls": 25,
+ "call_errors": 1,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Business day count (Part A)",
+     "what": "Count 80 business weekdays from 2026-07-13 skipping the six listed holidays to find the final date."
+    },
+    {
+     "id": "c2",
+     "title": "Loan amortization schedule (Part B)",
+     "what": "Compute monthly payment for $24,000 at 5.4% APR over 5 years, apply extra principal in months 11-12, and find balance after month 18 payment."
+    },
+    {
+     "id": "c3",
+     "title": "FIFO COGS calculation (Part C)",
+     "what": "Apply FIFO layer depletion across the sales sequence against the 8 inventory lots to compute total cost of goods sold."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "D"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Part A: Counting weekdays after 2026-07-13 and removing the six listed weekday holidays gives 73 business days through 2026-10-31. The next seven business days are 2026-11-02 through 2026-11-10, so the date is 2026-11-10.\n\nPart B: The monthly rate is \\(0.054/12=0.0045\\), and the regular payment is\n\\[\n\\frac{24000(0.0045)}{1-(1.0045)^{-60}}=457.320961\\ldots\n\\]\nUsing \\(B_t=B_{t-1}(1.0045)-457.320961\\ldots-E_t\\), with \\(E_{11}=600\\) and \\(E_{12}=750\\), gives \\(B_{18}=16076.208402\\ldots\\), or 16076.21.\n\nPart C: FIFO uses 106 units from lot 1, 88 from lot 2, 136 from lot 3, 108 from lot 4, and 22 from lot 5. Thus,\n\\[\n495.02+668.80+748.00+1131.84+149.82=3193.48.\n\\]\n\nFINAL: 2026-11-10; 16076.21; 3193.48"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The draft asserts 73 business days through 2026-10-31 without showing the count, and the final date 2026-11-10 depends entirely on this unverified cumulative count. If the count through 2026-10-31 is off by even one day, the final date shifts by one business day."
+    },
+    {
+     "from": "D",
+     "problem": "The draft provides no intermediate balances, so a single arithmetic or timing error in the recurrence would go undetected. In particular, the extra principal payments are applied in months 11 and 12, but the draft does not state whether the regular payment is made in those months before or after the extra principal, nor whether interest for month 11 is computed on the balance before or after the $600 extra payment. Both conventions are common and produce different B_18 values."
+    },
+    {
+     "from": "D",
+     "problem": "The total units sold are 52+74+53+87+84+110 = 460 units. The draft's FIFO allocation uses 106+88+136+108+22 = 460 units, which matches the total. However, the draft does not show the per-sale allocation, and the unit costs for lots 1-4 are used in full while lot 5 is partially used. If any sale order is misapplied\u2014e.g., the 110-unit final sale is incorrectly taken from lot 5 before lot 4 is exhausted\u2014the total COGS would change."
+    },
+    {
+     "from": "D",
+     "problem": "The draft uses 22 units from lot 5 at $6.81, giving 22*6.81 = 149.82. But if the correct allocation is only 2 units from lot 5 (as the final sale of 110 units consumes 108 from lot 4 and 2 from lot 5), the lot 5 contribution should be 2*6.81 = 13.62, and the total COGS would be 495.02+668.80+748.00+1131.84+13.62 = 3057.28. The draft's 22 units from lot 5 suggests it incorrectly allocated the final sale or an earlier sale."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "Part A: From 2026-07-14 through 2026-10-31 inclusive is 110 calendar days, which contains 79 weekdays. Subtracting the 6 listed weekday holidays gives 73 business days. The next 7 business days are 2026-11-02, 11-03, 11-04, 11-05, 11-06, 11-09, and 11-10, so the 80th business day is 2026-11-10.\n\nPart B: The monthly rate is r = 0.054/12 = 0.0045. The regular payment is\nP = 24000(0.0045)/(1 - (1.0045)^-60) = 457.320961...\nUsing the standard convention that interest accrues on the prior balance and then the regular and extra principal payments are applied,\nB_t = B_{t-1}(1.0045) - P - E_t,\nwith E_11 = 600 and E_12 = 750. This gives B_10 = 20435.1973, B_12 = 18350.1280, and B_18 = 16076.2081, so the balance is 16076.21.\n\nPart C: Total units sold are 52+74+53+87+84+110 = 460. FIFO exhausts lots 1-4 (106+88+136+108 = 438 units) and then uses 22 units from lot 5. COGS = 106(4.67) + 88(7.60) + 136(5.50) + 108(10.48) + 22(6.81) = 495.02 + 668.80 + 748.00 + 1131.84 + 149.82 = 3193.48.\n\nFINAL: 2026-11-10; 16076.21; 3193.48"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Part A: From 2026-07-14 through 2026-10-31 inclusive is 110 calendar days, which contains 79 weekdays. Subtracting the 6 listed weekday holidays gives 73 business days. The next 7 business days are 2026-11-02, 11-03, 11-04, 11-05, 11-06, 11-09, and 11-10, so the 80th business day is 2026-11-10.\n\nPart B: The monthly rate is r = 0.054/12 = 0.0045. The regular payment is\nP = 24000(0.0045)/(1 - (1.0045)^-60) = 457.320961...\nUsing the standard convention that interest accrues on the prior balance and then the regular and extra principal payments are applied,\nB_t = B_{t-1}(1.0045) - P - E_t,\nwith E_11 = 600 and E_12 = 750. This gives B_10 = 20435.1973, B_12 = 18350.1280, and B_18 = 16076.2081, so the balance is 16076.21.\n\nPart C: Total units sold are 52+74+53+87+84+110 = 460. FIFO exhausts lots 1-4 (106+88+136+108 = 438 units) and then uses 22 units from lot 5. COGS = 106(4.67) + 88(7.60) + 136(5.50) + 108(10.48) + 22(6.81) = 495.02 + 668.80 + 748.00 + 1131.84 + 149.82 = 3193.48.\n\nFINAL: 2026-11-10; 16076.21; 3193.48"
+}

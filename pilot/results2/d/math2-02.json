@@ -1,0 +1,129 @@
+{
+ "task_id": "math2-02",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 3868.8, expected 3868.8",
+ "error": null,
+ "seconds": 112.3,
+ "tokens": 70768,
+ "prompt_tokens": 50727,
+ "completion_tokens": 20041,
+ "cost": 0.09877,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Classify daily hours by overtime tier",
+     "what": "For each day, split hours into regular (up to 8), 1.5x overtime (over 8 through 12), and 2x overtime (over 12)."
+    },
+    {
+     "id": "c2",
+     "title": "Sum hours per category",
+     "what": "Across all 14 days: regular = 99.5 hours, 1.5x overtime = 15 hours, and 2x overtime = 1 hour."
+    },
+    {
+     "id": "c3",
+     "title": "Compute gross pay",
+     "what": "Gross pay = 31.20 \u00d7 (99.5 + 1.5 \u00d7 15 + 2 \u00d7 1) = 31.20 \u00d7 124 = 3868.80."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the gross pay, we categorize the daily hours into regular hours (up to 8), 1.5\u00d7 overtime hours (hours over 8 up to 12), and 2\u00d7 overtime hours (hours over 12):\n\n- **Day 1 (8 h):** 8 regular, 0 OT, 0 DT\n- **Day 2 (8 h):** 8 regular, 0 OT, 0 DT\n- **Day 3 (9.5 h):** 8 regular, 1.5 OT, 0 DT\n- **Day 4 (9.5 h):** 8 regular, 1.5 OT, 0 DT\n- **Day 5 (7.5 h):** 7.5 regular, 0 OT, 0 DT\n- **Day 6 (6 h):** 6 regular, 0 OT, 0 DT\n- **Day 7 (9 h):** 8 regular, 1 OT, 0 DT\n- **Day 8 (10 h):** 8 regular, 2 OT, 0 DT\n- **Day 9 (6 h):** 6 regular, 0 OT, 0 DT\n- **Day 10 (10 h):** 8 regular, 2 OT, 0 DT\n- **Day 11 (8 h):** 8 regular, 0 OT, 0 DT\n- **Day 12 (13 h):** 8 regular, 4 OT, 1 DT\n- **Day 13 (0 h):** 0 regular, 0 OT, 0 DT\n- **Day 14 (11 h):** 8 regular, 3 OT, 0 DT\n\n**Category Totals:**\n- **Regular hours:** $8 + 8 + 8 + 8 + 7.5 + 6 + 8 + 8 + 6 + 8 + 8 + 8 + 0 + 8 = 99.5\\text{ hours}$\n- **1.5\u00d7 Overtime hours:** $1.5 + 1.5 + 1 + 2 + 2 + 4 + 3 = 15.0\\text{ hours}$\n- **2\u00d7 Overtime hours:** $1.0\\text{ hour}$\n*(Verification: $99.5 + 15.0 + 1.0 = 115.5\\text{ total hours worked}$)*\n\n**Pay Calculation (Base rate = $31.20/hour):**\n- Regular pay: $99.5 \\times \\$31.20 = \\$3,104.40$\n- 1.5\u00d7 Overtime pay: $15.0 \\times (\\$31.20 \\times 1.5) = 15.0 \\times \\$46.80 = \\$702.00$\n- 2\u00d7 Overtime pay: $1.0 \\times (\\$31.20 \\times 2) = 1.0 \\times \\$62.40 = \\$62.40$\n\n$$\\text{Gross Pay} = \\$3,104.40 + \\$702.00 + \\$62.40 = \\$3,868.80$$\n\nFINAL: 3868.80"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The wording does not explicitly state whether hours over 12 are paid exclusively at 2\u00d7 or receive 1.5\u00d7 plus an additional 2\u00d7 premium. The draft assumes the standard mutually exclusive tier interpretation without stating it."
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error in summing regular hours"
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error in summing overtime hours"
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error in verifying total hours"
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error in multiplication"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "Categorize each day using standard tiered (mutually exclusive) overtime: hours 0-8 regular, hours 8-12 at 1.5\u00d7, hours over 12 at 2\u00d7 (this is the standard interpretation of daily OT tiers, not additive premiums).\n\nDay hours \u2192 (reg, 1.5x, 2x):\n8\u2192(8,0,0); 8\u2192(8,0,0); 9.5\u2192(8,1.5,0); 9.5\u2192(8,1.5,0); 7.5\u2192(7.5,0,0); 6\u2192(6,0,0); 9\u2192(8,1,0); 10\u2192(8,2,0); 6\u2192(6,0,0); 10\u2192(8,2,0); 8\u2192(8,0,0); 13\u2192(8,4,1); 0\u2192(0,0,0); 11\u2192(8,3,0)\n\nTotals:\nRegular = 8+8+8+8+7.5+6+8+8+6+8+8+8+0+8 = 99.5\n1.5x OT = 1.5+1.5+1+2+2+4+3 = 15.0\n2x OT = 1.0\nCheck: 99.5+15+1 = 115.5, matches sum of daily hours (115.5).\n\nPay:\nRegular: 99.5 \u00d7 31.20 = 3104.40\n1.5x: 15.0 \u00d7 46.80 = 702.00\n2x: 1.0 \u00d7 62.40 = 62.40\n\nGross = 3104.40 + 702.00 + 62.40 = 3868.80\n\nFINAL: 3868.80"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Categorize each day using standard tiered (mutually exclusive) overtime: hours 0-8 regular, hours 8-12 at 1.5\u00d7, hours over 12 at 2\u00d7 (this is the standard interpretation of daily OT tiers, not additive premiums).\n\nDay hours \u2192 (reg, 1.5x, 2x):\n8\u2192(8,0,0); 8\u2192(8,0,0); 9.5\u2192(8,1.5,0); 9.5\u2192(8,1.5,0); 7.5\u2192(7.5,0,0); 6\u2192(6,0,0); 9\u2192(8,1,0); 10\u2192(8,2,0); 6\u2192(6,0,0); 10\u2192(8,2,0); 8\u2192(8,0,0); 13\u2192(8,4,1); 0\u2192(0,0,0); 11\u2192(8,3,0)\n\nTotals:\nRegular = 8+8+8+8+7.5+6+8+8+6+8+8+8+0+8 = 99.5\n1.5x OT = 1.5+1.5+1+2+2+4+3 = 15.0\n2x OT = 1.0\nCheck: 99.5+15+1 = 115.5, matches sum of daily hours (115.5).\n\nPay:\nRegular: 99.5 \u00d7 31.20 = 3104.40\n1.5x: 15.0 \u00d7 46.80 = 702.00\n2x: 1.0 \u00d7 62.40 = 62.40\n\nGross = 3104.40 + 702.00 + 62.40 = 3868.80\n\nFINAL: 3868.80"
+}

@@ -1,0 +1,210 @@
+{
+ "task_id": "data2-10",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 10601.06, expected 10601.06",
+ "error": null,
+ "seconds": 554.7,
+ "tokens": 291583,
+ "prompt_tokens": 227090,
+ "completion_tokens": 64493,
+ "cost": 0.38871,
+ "calls": 37,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": false,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Regional revenue totals",
+     "what": "After counting each exact duplicate order once and including only shipped or pending orders, totals are South 19421.48, East 23759.20, West 26796.64, and North 34517.94."
+    },
+    {
+     "id": "c2",
+     "title": "Highest-minus-second difference",
+     "what": "North is highest and West is second; 34517.94 - 26796.64 = 7721.30.\nFINAL: 7721.30"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Filter to shipped/pending orders, deduplicate exact rows (O2474, O2697, and O2855), join orders to customer regions, and sum units \u00d7 unit price.\n\nRegional totals:\n- South: 19421.48\n- East: 23483.60\n- West: 26796.64\n- North: 34517.94\n\nThe highest is North, and the second highest is West:\n\n34517.94 \u2212 26796.64 = 7721.30\n\nFINAL: 7721.30"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing North (C103+C104+C109) shipped/pending orders manually gives roughly 37397.70, about $2879.76 higher than the draft's figure \u2014 the discrepancy matches exactly order O2044 (Flange, C104, shipped, 26\u00d7110.76=2879.76), suggesting this order was dropped from the sum."
+    },
+    {
+     "from": "A",
+     "problem": "If North's true total is ~37397.70, the gap calculation and possibly the ranking of regions need re-verification; also West and other region totals should be independently recomputed since an error in one region casts doubt on the whole table."
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 2,
+   "rejected": 4,
+   "answer": "Filtering to shipped/pending orders and deduplicating O2474, O2697, and O2855 gives:\nSouth: 19421.48\nEast: 23759.20\nWest: 26796.64\nNorth: 37397.70\n\nHighest is North; second-highest is West.\n37397.70 - 26796.64 = 10601.06\n\nFINAL: 10601.06"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "No line-by-line breakdown is shown for South orders (C100,C106,C107 customers), so this figure can't be verified from the draft alone"
+    },
+    {
+     "from": "A",
+     "problem": "North customers are C103,C104,C109; draft doesn't show which orders were included/excluded (e.g. confirm O2729, O2805, O2044, O2361, O2874, O2184, O2577, O2625, O2053, O2396, O2302 etc. were correctly filtered to shipped/pending only)"
+    },
+    {
+     "from": "A",
+     "problem": "Need to confirm no other exact duplicate rows exist in the 70+ order list that were missed (e.g. check full list systematically for repeated order_id with identical all fields)"
+    },
+    {
+     "from": "A",
+     "problem": "West customers are C102,C105; large unit*price values (e.g. O2795: 43*134.48=5782.64, O2426:35*116.60=4081.00) should be re-added to confirm no arithmetic slip"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 4,
+   "answer": "Verified region totals after deduplicating O2474, O2697, and O2855 (confirmed no other duplicate order_id/field pairs exist in the list) and filtering to shipped/pending only:\n\nSouth (C100,C106,C107): 2211.35+10584.16+6625.97 = 19421.48\nEast (C101,C108): 8159.29+15599.91 = 23759.20\nWest (C102,C105): 14409.69+12386.95 = 26796.64\nNorth (C103,C104,C109): 9766.45+16823.75+10807.50 = 37397.70\n\nHighest region is North (37397.70), second-highest is West (26796.64).\nDifference = 37397.70 - 26796.64 = 10601.06\n\nFINAL: 10601.06"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The draft provides no reproducible row-level calculation showing that all eligible orders were included exactly once; the assertion that no other duplicate order_id/field pairs exist is unsupported within the working."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure / unsupported inference: the per-customer South figures do not appear to match the shipped/pending orders for those customers."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure / unsupported inference: the per-customer East figures do not appear to match the shipped/pending orders for those customers."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure / unsupported inference: the per-customer West figures do not appear to match the shipped/pending orders for those customers."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure / unsupported inference: the per-customer North figures do not appear to match the shipped/pending orders for those customers."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "After grouping by all order fields, exact duplicates are O2474, O2697, O2855; each counted once. Filtering to shipped/pending and joining customers gives per-customer totals:\nSouth: C100 2211.35, C106 10584.16, C107 6625.97 = 19421.48.\nEast: C101 8159.29, C108 15599.91 = 23759.20.\nWest: C102 14409.69, C105 12386.95 = 26796.64.\nNorth: C103 9766.45, C104 16823.75, C109 10807.50 = 37397.70.\nHighest is North 37397.70; second is West 26796.64; difference = 10601.06.\nFINAL: 10601.06"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "After grouping by all order fields, exact duplicates are O2474, O2697, O2855; each counted once. Filtering to shipped/pending and joining customers gives per-customer totals:\nSouth: C100 2211.35, C106 10584.16, C107 6625.97 = 19421.48.\nEast: C101 8159.29, C108 15599.91 = 23759.20.\nWest: C102 14409.69, C105 12386.95 = 26796.64.\nNorth: C103 9766.45, C104 16823.75, C109 10807.50 = 37397.70.\nHighest is North 37397.70; second is West 26796.64; difference = 10601.06.\nFINAL: 10601.06"
+}

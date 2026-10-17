@@ -1,0 +1,16 @@
+{
+ "task_id": "logic2-01",
+ "type": "logic",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 'white', expected 'white'",
+ "error": null,
+ "seconds": 19.5,
+ "tokens": 2843,
+ "prompt_tokens": 370,
+ "completion_tokens": 2473,
+ "cost": 0.00955,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To determine the color of Ada's house, we analyze the clues:\n\n1. From Clue 2 and Clue 8, Cat is in house 3 and Ben lives in house 4.\n2. From Clue 7 and Clue 4, the juice drinker is immediately to the left of the horse owner, and tea is next to the horse owner. This means Juice, Horse, and Tea are at positions $(i, i+1, i+2)$. Since house 3 has the cat, Horse cannot be at house 3, leaving Horse at house 4. Thus:\n   - House 3 drinks Juice (and has the Cat).\n   - House 4 has the Horse (Ben).\n   - House 5 drinks Tea.\n3. Clue 1 states Coffee is immediately left of the White house, so White can be house 5, meaning Coffee is at house 4.\n4. House 2 must drink Milk (since Clue 9 gives Milk = Green, and house 1 drinking Milk would cause contradictions with Cleo's constraints). Thus, House 2 is Green and drinks Milk, leaving Water for House 1.\n5. Cleo is next to Milk (House 2) and immediately left of the Yellow house (Clue 5 & 6), which places Cleo at House 3 and makes House 4 Yellow.\n6. Blue must be next to Ben (House 4), so House 3 is Blue. House 1 is therefore Red, and House 5 is White.\n7. Clue 11 places Eli at House 1 and Dog at House 2. Dev is at House 2, leaving Ada (with the Bird) at House 5.\n\nAda lives in House 5, which is White.\n\nFINAL: white"
+}

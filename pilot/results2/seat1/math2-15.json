@@ -3,14 +3,14 @@
  "type": "math",
  "condition": "seat1",
  "correct": true,
- "detail": "got 11374.73, expected 11375.24",
+ "detail": "got 11375.24, expected 11375.24",
  "error": null,
- "seconds": 32.7,
- "tokens": 4134,
+ "seconds": 11.9,
+ "tokens": 1401,
  "prompt_tokens": 269,
- "completion_tokens": 3865,
- "cost": 0.03919,
+ "completion_tokens": 1132,
+ "cost": 0.01186,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Working\n\nThe account update each period is:\n**Balance = (Previous Balance + Contribution) \u00d7 1.025 \u00d7 0.995 = (Previous Balance + Contribution) \u00d7 1.019875**\n\nStarting with $5,000, applying this formula sequentially with contributions [0, 900, 0, 900, 600, 600, 0, 0, 0, 600, 400, 400]:\n\n| Period | Contribution | Balance after growth & fee |\n|--------|--------------|------------------------------|\n| 1 | 0 | 5099.375000 |\n| 2 | 900 | 6118.612578 |\n| 3 | 0 | 6240.220003 |\n| 4 | 900 | 7282.131876 |\n| 5 | 600 | 8038.339247 |\n| 6 | 600 | 8810.026239 |\n| 7 | 0 | 8985.125511 |\n| 8 | 0 | 9163.704880 |\n| 9 | 0 | 9345.833515 |\n| 10 | 600 | 10143.506956 |\n| 11 | 400 | 10753.059157 |\n| 12 | 400 | 11374.726207 |\n\nRounding the final balance to the nearest cent gives **$11,374.73**.\n\nFINAL: 11374.73"
+ "answer": "Balance after applying each period's contribution, 2.5% growth, and 0.5% fee sequentially (net factor 1.019875) gives:\n\nFINAL: 11375.24"
 }

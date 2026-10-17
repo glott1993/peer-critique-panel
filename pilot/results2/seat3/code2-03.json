@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-03",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.9,
+ "tokens": 521,
+ "prompt_tokens": 211,
+ "completion_tokens": 310,
+ "cost": 0.00132,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of `topo_order`:\n\n```python\nimport heapq\nfrom collections import defaultdict\n\ndef topo_order(nodes, edges):\n    # Collect all unique nodes, including any introduced by edges\n    all_nodes = set(nodes)\n    for u, v in edges:\n        all_nodes.add(u)\n        all_nodes.add(v)\n\n    # Initialize graph and in-degree counter\n    adj = defaultdict(list)\n    in_degree = {node: 0 for node in all_nodes}\n\n    for u, v in edges:\n        adj[u].append(v)\n        in_degree[v] += 1\n\n    # Use a min-heap for Kahn's algorithm to always pick lexicographically smallest\n    heap = [node for node, deg in in_degree.items() if deg == 0]\n    heapq.heapify(heap)\n\n    order = []\n    while heap:\n        curr = heapq.heappop(heap)\n        order.append(curr)\n        for neighbor in adj[curr]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                heapq.heappush(heap, neighbor)\n\n    if len(order) < len(all_nodes):\n        raise ValueError(\"Graph has at least one cycle.\")\n\n    return order\n```"
+}

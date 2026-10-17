@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 9.9,
- "tokens": 4727,
- "prompt_tokens": 3401,
- "completion_tokens": 1326,
- "cost": 0.00227,
+ "seconds": 6.0,
+ "tokens": 3933,
+ "prompt_tokens": 3034,
+ "completion_tokens": 899,
+ "cost": 0.00169,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef knapsack(items, capacity):\n    dp = [0] * (capacity + 1)\n\n    for weight, value in items:\n        if weight <= capacity:\n            for remaining in range(capacity, weight - 1, -1):\n                dp[remaining] = max(\n                    dp[remaining],\n                    dp[remaining - weight] + value\n                )\n\n    return dp[capacity]\n```"
+ "answer": "```python\ndef knapsack(items, capacity):\n    dp = [0] * (capacity + 1)\n\n    for weight, value in items:\n        if weight > capacity:\n            continue\n        for remaining in range(capacity, weight - 1, -1):\n            dp[remaining] = max(dp[remaining], dp[remaining - weight] + value)\n\n    return dp[capacity]\n```"
 }

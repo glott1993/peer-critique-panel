@@ -3,14 +3,14 @@
  "type": "multi",
  "condition": "seat1",
  "correct": false,
- "detail": "no FINAL line",
+ "detail": "ok: got 222.86, expected 222.87 | no: got 4260.63, expected 4397.87 | ok: got '2026-10-23', expected '2026-10-23'",
  "error": null,
- "seconds": 64.3,
- "tokens": 8587,
+ "seconds": 17.6,
+ "tokens": 2651,
  "prompt_tokens": 587,
- "completion_tokens": 8000,
- "cost": 0.08117,
+ "completion_tokens": 2064,
+ "cost": 0.02181,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Part A: Original Price\n\nWorking backward through the multipliers:\n- Combined multiplier = 1.20 \u00d7 0.85 \u00d7 1.20 \u00d7 1.12 \u00d7 0.85\n- = 1.02 \u00d7 1.20 \u00d7 1.12 \u00d7 0.85\n- = 1.224 \u00d7 1.12 \u00d7 0.85\n- = 1.37088 \u00d7 0.85\n- = 1.165248\n\nOriginal price = 259.70 / 1.165248 \u2248 **$222.87**\n\n(Check: 222.87 \u00d7 1.165248 \u2248 259.70 \u2713)\n\n# Part B: Account Balance\n\n"
+ "answer": "**Part A:**\nCombined multiplier = 1.20\u00d70.85\u00d71.20\u00d71.12\u00d70.85 = 1.165248\nOriginal price = 259.70 / 1.165248 \u2248 $222.86\n\n**Part B:**\nTracking balance through months 1\u201315:\n4300\u21925000\u21924350\u21924100\u21924550\u21924150\u21923250\u21923000\u21922350\u21923450\u21923750\u21923100\u21924200\u21923950\u21924650\u21924250\n\nFinal balance after transactions: $4250.00 (not below $1500, no fee)\nAdd interest: 4250 \u00d7 1.0025 = 4260.625 \u2192 $4260.63\n\n**Part C:**\nStarting from 2026-06-19, counting business days (skipping weekends and holidays):\nTracking week by week, day 84 lands on **2026-10-23** (Friday).\n\nFINAL: 222.86; 4260.63; 2026-10-23"
 }

@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 7.6,
- "tokens": 1339,
+ "seconds": 4.6,
+ "tokens": 980,
  "prompt_tokens": 443,
- "completion_tokens": 896,
- "cost": 0.00985,
+ "completion_tokens": 537,
+ "cost": 0.00626,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nfrom datetime import date\nfrom typing import List, Tuple\n\ndef reconcile(bank: List[Tuple[str, str, float]],\n              ledger: List[Tuple[str, str, float]],\n              window: int = 2\n              ) -> Tuple[List[Tuple[str, str]], List[str], List[str]]:\n\n    def parse(d):\n        return date.fromisoformat(d)\n\n    # Keep original order references for unmatched output\n    bank_order = [b[0] for b in bank]\n    ledger_order = [l[0] for l in ledger]\n\n    # Sort bank items by (date, id)\n    bank_sorted = sorted(bank, key=lambda x: (parse(x[1]), x[0]))\n\n    ledger_matched = set()\n    bank_matched = set()\n    matches = []\n\n    # Precompute ledger list with parsed dates for quick access\n    ledger_info = {l[0]: (parse(l[1]), l[2]) for l in ledger}\n\n    for b_id, b_date_str, b_amount in bank_sorted:\n        b_date = parse(b_date_str)\n        best_candidate = None  # (ledger_date, ledger_id)\n\n        for l_id, (l_date, l_amount) in ledger_info.items():\n            if l_id in ledger_matched:\n                continue\n            if l_amount != b_amount:\n                continue\n            diff = abs((b_date - l_date).days)\n            if diff > window:\n                continue\n            candidate_key = (l_date, l_id)\n            if best_candidate is None or candidate_key < best_candidate:\n                best_candidate = candidate_key\n\n        if best_candidate is not None:\n            chosen_l_id = best_candidate[1]\n            ledger_matched.add(chosen_l_id)\n            bank_matched.add(b_id)\n            matches.append((b_id, chosen_l_id))\n\n    unmatched_bank = [bid for bid in bank_order if bid not in bank_matched]\n    unmatched_ledger = [lid for lid in ledger_order if lid not in ledger_matched]\n\n    return (matches, unmatched_bank, unmatched_ledger)\n```"
+ "answer": "```python\nfrom datetime import date as _date\n\ndef reconcile(bank, ledger, window=2):\n    def parse(d):\n        y, m, dd = d.split('-')\n        return _date(int(y), int(m), int(dd))\n\n    bank_sorted = sorted(enumerate(bank), key=lambda x: (x[1][1], x[1][0]))\n    ledger_candidates = list(enumerate(ledger))\n\n    used_ledger = set()\n    matches = []\n    unmatched_bank_idx = set()\n\n    for orig_idx, b in bank_sorted:\n        b_id, b_date, b_amt = b\n        b_d = parse(b_date)\n        best = None\n        for l_idx, l in ledger_candidates:\n            if l_idx in used_ledger:\n                continue\n            l_id, l_date, l_amt = l\n            if l_amt != b_amt:\n                continue\n            l_d = parse(l_date)\n            if abs((l_d - b_d).days) <= window:\n                key = (l_d, l_id)\n                if best is None or key < best[0]:\n                    best = (key, l_idx, l_id)\n        if best is not None:\n            used_ledger.add(best[1])\n            matches.append((b_id, best[2]))\n        else:\n            unmatched_bank_idx.add(orig_idx)\n\n    unmatched_bank = [b[0] for i, b in enumerate(bank) if i in unmatched_bank_idx]\n    unmatched_ledger = [l[0] for i, l in enumerate(ledger) if i not in used_ledger]\n\n    return (matches, unmatched_bank, unmatched_ledger)\n```"
 }

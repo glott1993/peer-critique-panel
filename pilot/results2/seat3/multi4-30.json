@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-30",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 3.0, expected 3.0 | ok: got 3051167.0, expected 3051167.0 | ok: got 4706.75, expected 4706.75 | ok: got 1150.88, expected 1150.88",
+ "error": null,
+ "seconds": 10.1,
+ "tokens": 1829,
+ "prompt_tokens": 506,
+ "completion_tokens": 1323,
+ "cost": 0.00534,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\n151 is a prime number. By Fermat's Little Theorem, $28^{150} \\equiv 1 \\pmod{151}$.\n$283 = 150 + 133 \\equiv 133 \\pmod{150}$, so we need $28^{133} \\pmod{151}$.\nEquivalently, $28^{133} \\equiv 28^{-17} \\pmod{151}$.\nLet's compute powers of 28 modulo 151:\n$28^2 = 784 = 5 \\times 151 + 29 = 29$.\n$28^4 = 29^2 = 841 = 5 \\times 151 + 86 = 86 \\equiv -65$.\n$28^8 = (-65)^2 = 4225 = 27 \\times 151 + 148 \\equiv -3$.\n$28^{16} = (-3)^2 = 9$.\n$28^{32} = 81$.\n$28^{64} = 81^2 = 6561 = 43 \\times 151 + 68 = 68$.\n$28^{128} = 68^2 = 4624 = 30 \\times 151 + 94 = 94 \\equiv -57$.\nNow, $133 = 128 + 4 + 1$:\n$28^{133} = 28^{128} \\times 28^4 \\times 28^1$\n$28^4 \\times 28 = 86 \\times 28 = 2408 = 15 \\times 151 + 143 \\equiv -8$.\n$28^{133} \\equiv 94 \\times (-8) = -752 = -5 \\times 151 + 3 = 3$.\n\n**Part B**\nIntegers divisible by 7 in $[434, 6947]$:\n$434 / 7 = 62$.\n$6947 / 7 = 992$ with remainder 3, so last multiple is $7 \\times 992 = 6944$.\nNumber of terms: $992 - 62 + 1 = 931$.\nSum = $931 \\times \\frac{434 + 6944}{2} = 931 \\times 3689 = 3,434,459$.\n\nNow subtract multiples of $7 \\times 9 = 63$ in $[434, 6947]$:\n$434 / 63 = 6.888... \\implies$ first term is $63 \\times 7 = 441$.\n$6947 / 63 = 110.269... \\implies$ last term is $63 \\times 110 = 6930$.\nNumber of terms: $110 - 7 + 1 = 104$.\nSum = $104 \\times \\frac{441 + 6930}{2} = 52 \\times 7371 = 383,292$.\n\nSum divisible by 7 but not 9 = $3,434,459 - 383,292 = 3,051,167$.\n\n**Part C**\nTotal units sold: $57 + 101 + 79 + 67 + 70 + 47 = 421$ units.\nUnder FIFO, the 421 units come from the earliest lots:\n- Lot 1: 122 units at $8.14 = $993.08\n- Lot 2: 114 units at $13.41 = $1528.74\n- Lot 3: 83 units at $11.43 = $948.69\nRemaining needed: $421 - (122 + 114 + 83) = 421 - 319 = 102$ units.\n- Lot 4: 102 units (out of 138) at $12.12 = $1236.24\n\nTotal COGS = $993.08 + $1528.74 + $948.69 + $1236.24 = $4706.75.\n\n**Part D**\nOrder size: 181 units.\n- First 100 units at $6.40: $100 \\times 6.40 = 640.00$\n- Next 81 units at $5.44: $81 \\times 5.44 = 440.64$\nSubtotal = $640.00 + 440.64 = 1080.64$.\nSince $1080.64 \\le 2500$, no discount applies.\nSales tax of 6.5%: $1080.64 \\times 1.065 = 1150.8816 \\approx 1150.88$.\n\nFINAL: 3; 3051167; 4706.75; 1150.88"
+}

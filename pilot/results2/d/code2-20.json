@@ -1,0 +1,137 @@
+{
+ "task_id": "code2-20",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 144.4,
+ "tokens": 59987,
+ "prompt_tokens": 44369,
+ "completion_tokens": 15618,
+ "cost": 0.05957,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Greedy line grouping",
+     "what": "Accumulate words into a line while total length plus single spaces stays <= width; start new line otherwise."
+    },
+    {
+     "id": "c2",
+     "title": "Line formatting (full vs left justify)",
+     "what": "For non-last lines with >1 word, distribute width-minus-wordlen spaces into gaps as evenly as possible, extra spaces leftmost; for last line or single-word lines, join with single spaces and pad with trailing spaces to width."
+    },
+    {
+     "id": "c3",
+     "title": "Edge cases",
+     "what": "Return [] for empty word list; ensure every produced line has exactly width characters."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\ndef justify(words, width):\n    if not words:\n        return []\n\n    lines = []\n    current = []\n    current_length = 0\n\n    for word in words:\n        needed = len(word) if not current else current_length + 1 + len(word)\n        if current and needed > width:\n            lines.append(current)\n            current = [word]\n            current_length = len(word)\n        else:\n            current.append(word)\n            current_length = needed\n\n    lines.append(current)\n\n    result = []\n    for index, line in enumerate(lines):\n        if index == len(lines) - 1 or len(line) == 1:\n            result.append(\" \".join(line).ljust(width))\n            continue\n\n        word_length = sum(len(word) for word in line)\n        gap_count = len(line) - 1\n        total_spaces = width - word_length\n        base_spaces, extra_spaces = divmod(total_spaces, gap_count)\n\n        parts = []\n        for gap_index, word in enumerate(line[:-1]):\n            spaces = base_spaces + (1 if gap_index < extra_spaces else 0)\n            parts.append(word + \" \" * spaces)\n        parts.append(line[-1])\n        result.append(\"\".join(parts))\n\n    return result\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "On first word of a line, 'needed = len(word)' is correct, but when current is non-empty the check 'if current and needed > width' recomputes needed as current_length+1+len(word) only in the else branch of the ternary \u2014 actually needed is computed once before the if, so it's fine; but verify word longer than width case: spec says every word <= width, so no explicit guard needed \u2014 acceptable but untested."
+    },
+    {
+     "from": "A",
+     "problem": "Correct per spec, but code checks 'len(line)==1' without checking it's not the only way single words could need full distribution if gap_count were 0 causing ZeroDivisionError if not caught \u2014 this is guarded, but confirm with a line of exactly one word mid-text."
+    },
+    {
+     "from": "A",
+     "problem": "Should double check gap distribution direction: extra spaces given to leftmost gaps first \u2014 code adds extra when gap_index < extra_spaces, correct."
+    },
+    {
+     "from": "D",
+     "problem": "Untested code: For input ['a'], 1, the line is last and left-justified, but for input ['a', 'b'], 1, the first line is a single word and should be left-justified with trailing spaces to width. The code does this via ljust, but the visible examples do not cover width equal to word length or multi-line single-word lines."
+    },
+    {
+     "from": "D",
+     "problem": "Unsupported inference: The code assumes current_length is updated correctly when a line is flushed and a new word starts, but it does not reset current_length to 0 before appending the new line. This works because current_length is reassigned to len(word) in the if branch, but if the else branch is taken after a prior flush, current_length could be stale. However, the else branch is only reached when current is empty, so needed = len(word) and current_length is set to needed. This is correct, but not explicitly tested."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: The code uses `spaces = base_spaces + (1 if gap_index < extra_spaces else 0)`, which gives extra spaces to gaps with smaller indices (leftmost). This matches the requirement, but the visible example 'This    is    an' has width 16, word_length 10, gap_count 2, total_spaces 6, base_spaces 3, extra_spaces 0, so no extra spaces are demonstrated. The claim is not validated by the visible examples."
+    },
+    {
+     "from": "D",
+     "problem": "Untested code: The visible examples do not include an empty input. The code returns [] for empty words, but this is not verified against hidden tests."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 4,
+   "rejected": 3,
+   "answer": "```python\ndef justify(words, width):\n    if not words:\n        return []\n\n    lines = []\n    current = []\n    current_length = 0\n\n    for word in words:\n        needed = len(word) if not current else current_length + 1 + len(word)\n        if current and needed > width:\n            lines.append(current)\n            current = [word]\n            current_length = len(word)\n        else:\n            current.append(word)\n            current_length = needed\n\n    lines.append(current)\n\n    result = []\n    for index, line in enumerate(lines):\n        if index == len(lines) - 1 or len(line) == 1:\n            result.append(\" \".join(line).ljust(width))\n            continue\n\n        word_length = sum(len(word) for word in line)\n        gap_count = len(line) - 1\n        total_spaces = width - word_length\n        base_spaces, extra_spaces = divmod(total_spaces, gap_count)\n\n        parts = []\n        for gap_index, word in enumerate(line[:-1]):\n            spaces = base_spaces + (1 if gap_index < extra_spaces else 0)\n            parts.append(word + \" \" * spaces)\n        parts.append(line[-1])\n        result.append(\"\".join(parts))\n\n    return result\n```\n\nThe draft is correct as written; no functional revision needed."
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\ndef justify(words, width):\n    if not words:\n        return []\n\n    lines = []\n    current = []\n    current_length = 0\n\n    for word in words:\n        needed = len(word) if not current else current_length + 1 + len(word)\n        if current and needed > width:\n            lines.append(current)\n            current = [word]\n            current_length = len(word)\n        else:\n            current.append(word)\n            current_length = needed\n\n    lines.append(current)\n\n    result = []\n    for index, line in enumerate(lines):\n        if index == len(lines) - 1 or len(line) == 1:\n            result.append(\" \".join(line).ljust(width))\n            continue\n\n        word_length = sum(len(word) for word in line)\n        gap_count = len(line) - 1\n        total_spaces = width - word_length\n        base_spaces, extra_spaces = divmod(total_spaces, gap_count)\n\n        parts = []\n        for gap_index, word in enumerate(line[:-1]):\n            spaces = base_spaces + (1 if gap_index < extra_spaces else 0)\n            parts.append(word + \" \" * spaces)\n        parts.append(line[-1])\n        result.append(\"\".join(parts))\n\n    return result\n```\n\nThe draft is correct as written; no functional revision needed."
+}

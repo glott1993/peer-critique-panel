@@ -2,15 +2,15 @@
  "task_id": "multi4-12",
  "type": "multi4",
  "condition": "seat1",
- "correct": true,
- "detail": "ok: got 3093.75, expected 3093.75 | ok: got 9912.0, expected 9912.0 | ok: got 10446.02, expected 10446.02 | ok: got 156.0, expected 156.0",
+ "correct": false,
+ "detail": "no: got 3095.25, expected 3093.75 | ok: got 9912.0, expected 9912.0 | ok: got 10446.02, expected 10446.02 | ok: got 156.0, expected 156.0",
  "error": null,
- "seconds": 57.4,
- "tokens": 7612,
+ "seconds": 19.8,
+ "tokens": 2779,
  "prompt_tokens": 694,
- "completion_tokens": 6918,
- "cost": 0.07057,
+ "completion_tokens": 2085,
+ "cost": 0.02224,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Part A: Hourly Worker Gross Pay\n\nRate = $24.75/hr; 1.5\u00d7 = $37.125; 2\u00d7 = $49.50\n\nDaily pay calculation (regular \u22648h, 1.5\u00d7 for 8\u201312h, 2\u00d7 for >12h):\n\n| Hours | Pay |\n|---|---|\n|7.5|185.625|\n|8|198.00|\n|9.5|253.6875|\n|0|0|\n|12.5|371.25|\n|6|148.50|\n|11|309.375|\n|10|272.25|\n|13|396.00|\n|12.5|371.25|\n|6|148.50|\n|7.5|185.625|\n|9.5|253.6875|\n|0|0|\n\nSum = **$3,093.75**\n\n# Part B: Tax Owed\n\nTax by brackets on $57,400:\n- 8% \u00d7 12,500 = 1,000\n- 20% \u00d7 (52,000\u221212,500) = 20% \u00d7 39,500 = 7,900\n- 30% \u00d7 (57,400\u221252,000) = 30% \u00d7 5,400 = 1,620\n\nTotal tax = 1,000+7,900+1,620 = **10,520**\n\nCredit reduction: income\u221250,000 = 7,400 \u2192 8% \u00d7 7,400 = 592\nCredit = 1,200 \u2212 592 = 608 (\u22650, ok)\n\nTax owed = 10,520 \u2212 608 = **$9,912.00**\n\n# Part C: Investment Balance\n\nEach period: B \u2192 (B + contribution) \u00d7 1.015 \u00d7 0.995 = (B+contribution) \u00d7 1.009925\n\nStarting at 5,000, applying contributions in order (250,900,250,250,250,400,400,250,900,0,400,250):\n\nStep-by-step balances (after each period):\n1. 5,302.10625\n2. 6,263.66215\n3. 6,578.31025\n4. 6,896.08123\n5. 7,217.00609\n6. 7,692.60487\n7. 8,172.92398\n8. 8,506.52150\n9. 9,499.88122\n10. 9,594.16754\n11. 10,093.35966\n12. 10,446.01750\n\nRounded: **$10,446.02**\n\n# Part D: CRT Problem\n\nx \u2261 12 (mod 16) \u2192 x = 16k+12\nMod 5: 16k+12 \u22611 \u2192 k\u22614 (mod5) \u2192 k=5m+4 \u2192 x=80m+76\nMod 11: 80m+76\u22612 \u2192 3m+10\u22612 \u2192 3m\u22613 \u2192 m\u22611 (mod11) \u2192 m=11n+1\nx = 80(11n+1)+76 = 880n+156\n\nSmallest positive: **156** (check: 156=14\u00d711+2, 31\u00d75+1, 9\u00d716+12 \u2713)\n\nFINAL: 3093.75; 9912.00; 10446.02; 156"
+ "answer": "**Part A:** Sum of daily pay (computed per day with 1.5x and 2x overtime) = **3095.25**\n\n**Part B:** Tax before credit = 1000+7900+1620=10520; credit=1200-0.08*7400=608; tax owed=10520-608=**9912.00**\n\n**Part C:** Step-by-step compounding gives final balance \u2248 **10446.02**\n\n**Part D:** Using CRT: x\u226176 mod80, then x\u22612 mod11 gives x=156 (smallest positive).\n\nFINAL: 3095.25; 9912.00; 10446.02; 156"
 }

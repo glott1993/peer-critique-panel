@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-28",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "no: got 10929.54, expected 10931.29 | ok: got '89/110', expected '89/110' | ok: got 3489.75, expected 3489.75",
+ "error": null,
+ "seconds": 16.1,
+ "tokens": 2841,
+ "prompt_tokens": 440,
+ "completion_tokens": 2401,
+ "cost": 0.00933,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nThe monthly interest rate is $r = 0.069 / 12 = 0.00575$.\nThe regular monthly payment is:\n$P = \\frac{24000 \\times 0.00575}{1 - (1 + 0.00575)^{-36}} \\approx 740.162664$\n\nThe balance at month 18, taking into account the regular payments and the extra principal payments compounding forward, is:\n$B_{18} = 24000(1+r)^{18} - P\\frac{(1+r)^{18}-1}{r} - 600(1+r)^{13} - 1000(1+r)^{7}$\n$B_{18} \\approx 26608.723 - 13991.880 - 646.364 - 1040.941 = 10929.54$\n\nPart B:\nTotal possible selections of 3 marbles from 12: $\\binom{12}{3} = 220$.\nThe only way no two marbles share a color is if exactly one marble of each color (Red, Green, Blue) is chosen:\n$7 \\times 3 \\times 2 = 42$ ways.\nThe probability that at least two share a color is:\n$1 - \\frac{42}{220} = 1 - \\frac{21}{110} = \\frac{89}{110}$.\n\nPart C:\nBreaking down each day's hours into regular (up to 8 hours), overtime at 1.5\u00d7 (hours between 8 and 12), and double time at 2\u00d7 (hours over 12):\n- Regular hours: $12 \\times 8 + 2 \\times 6 = 108$ hours\n- Overtime (1.5\u00d7): $4 + 4 + 1 + 3 + 1 + 1 + 4 = 18$ hours\n- Double time (2\u00d7): $1 + 1 + 1 = 3$ hours\n\nEquivalent straight-time hours:\n$108 + 1.5 \\times 18 + 2 \\times 3 = 108 + 27 + 6 = 141$ hours.\nGross pay:\n$141 \\times \\$24.75 = \\$3489.75$.\n\nFINAL: 10929.54; 89/110; 3489.75"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-33",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 1264.0, expected 1264.0 | ok: got 3092.67, expected 3092.67 | ok: got 2426.79, expected 2426.79 | ok: got 15395.17, expected 15394.46",
+ "error": null,
+ "seconds": 22.5,
+ "tokens": 4042,
+ "prompt_tokens": 600,
+ "completion_tokens": 3442,
+ "cost": 0.01336,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nTo find the number of integers from 1 to 5,000 divisible by at least one of 6, 10, or 15, we use the Principle of Inclusion-Exclusion:\n- Divisible by 6: $\\lfloor 5000/6 \\rfloor = 833$\n- Divisible by 10: $\\lfloor 5000/10 \\rfloor = 500$\n- Divisible by 15: $\\lfloor 5000/15 \\rfloor = 333$\n- Divisible by $\\text{lcm}(6,10) = 30$: $\\lfloor 5000/30 \\rfloor = 166$\n- Divisible by $\\text{lcm}(6,15) = 30$: $\\lfloor 5000/30 \\rfloor = 166$\n- Divisible by $\\text{lcm}(10,15) = 30$: $\\lfloor 5000/30 \\rfloor = 166$\n- Divisible by $\\text{lcm}(6,10,15) = 30$: $\\lfloor 5000/30 \\rfloor = 166$\n\nTotal divisible by 6, 10, or 15:\n$$833 + 500 + 333 - 166 - 166 - 166 + 166 = 1334$$\n\nNow, subtract those among them also divisible by 19:\n- Divisible by $\\text{lcm}(6,19) = 114$: $\\lfloor 5000/114 \\rfloor = 43$\n- Divisible by $\\text{lcm}(10,19) = 190$: $\\lfloor 5000/190 \\rfloor = 26$\n- Divisible by $\\text{lcm}(15,19) = 285$: $\\lfloor 5000/285 \\rfloor = 17$\n- Divisible by $\\text{lcm}(30,19) = 570$: $\\lfloor 5000/570 \\rfloor = 8$\n\nBy Inclusion-Exclusion for multiples of 19:\n$$43 + 26 + 17 - 8 - 8 - 8 + 8 = 70$$\n\nRemaining integers:\n$$1334 - 70 = 1264$$\n\n**Part B**\nTotal units sold: $90 + 79 + 92 + 44 + 80 + 50 = 435$ units.\nUsing FIFO costing:\n- Lot 1: 127 units at $\\$10.60 = \\$1346.20$\n- Lot 2: 87 units at $\\$5.52 = \\$480.24$\n- Lot 3: 138 units at $\\$6.03 = \\$832.14$\n- Lot 4: $435 - (127 + 87 + 138) = 83$ units at $\\$5.23 = \\$434.09$\n\nTotal COGS:\n$$\\$1346.20 + \\$480.24 + \\$832.14 + \\$434.09 = \\$3092.67$$\n\n**Part C**\nSubtotal for 617 units:\n- First 100 units: $100 \\times \\$5.00 = \\$500.00$\n- Next 200 units: $200 \\times \\$4.25 = \\$850.00$\n- Remaining 317 units: $317 \\times \\$3.50 = \\$1109.50$\n- Subtotal: $\\$500.00 + \\$850.00 + \\$1109.50 = \\$2459.50$\n\nSince the subtotal exceeds $\\$1,500$, an $8\\%$ discount applies:\n$$\\$2459.50 \\times (1 - 0.08) = \\$2262.74$$\n\nAdding $7.25\\%$ sales tax:\n$$\\$2262.74 \\times 1.0725 = \\$2426.78865 \\approx \\$2426.79$$\n\n**Part D**\nMonthly interest rate $r = \\frac{0.078}{12} = 0.0065$.\nFor $n = 36$ months and principal $P = \\$31,200$:\n$$M = \\frac{31200 \\times 0.0065}{1 - (1.0065)^{-36}} \\approx \\$974.3638$$\n\nWithout extra payments, the remaining balance after 18 months would be:\n$$B_{18} = M \\times \\frac{1 - (1.0065)^{-18}}{0.0065} \\approx \\$16509.3095$$\n\nThe extra payments reduce the balance at month 18 compounded by interest:\n- Month 6 extra: $\\$300 \\times (1.0065)^{12} \\approx \\$324.2549$\n- Month 10 extra: $\\$750 \\times (1.0065)^8 \\approx \\$789.8832$\n- Total reduction: $\\$324.2549 + \\$789.8832 = \\$1114.1381$\n\nRemaining balance at month 18:\n$$\\$16509.3095 - \\$1114.1381 = \\$15395.1714 \\approx \\$15395.17$$\n\nFINAL: 1264; 3092.67; 2426.79; 15395.17"
+}

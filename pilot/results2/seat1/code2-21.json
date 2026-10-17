@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 10.0,
- "tokens": 901,
+ "seconds": 4.1,
+ "tokens": 792,
  "prompt_tokens": 312,
- "completion_tokens": 589,
- "cost": 0.00651,
- "calls": 3,
- "call_errors": 2,
- "answer": "```python\ndef number_to_words(n: int) -> str:\n    if not (0 <= n <= 999999):\n        raise ValueError(\"n must be between 0 and 999999\")\n\n    ones = [\"zero\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\",\n            \"eight\", \"nine\", \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n            \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\"]\n    tens = [\"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\",\n            \"eighty\", \"ninety\"]\n\n    def three_digit_to_words(num: int) -> str:\n        # num is between 0 and 999\n        parts = []\n        hundreds_digit = num // 100\n        remainder = num % 100\n        if hundreds_digit > 0:\n            parts.append(ones[hundreds_digit] + \" hundred\")\n        if remainder > 0:\n            if remainder < 20:\n                parts.append(ones[remainder])\n            else:\n                tens_digit = remainder // 10\n                units_digit = remainder % 10\n                if units_digit > 0:\n                    parts.append(tens[tens_digit] + \"-\" + ones[units_digit])\n                else:\n                    parts.append(tens[tens_digit])\n        return \" \".join(parts)\n\n    if n == 0:\n        return \"zero\"\n\n    if n < 1000:\n        return three_digit_to_words(n)\n\n    thousands_part = n // 1000\n    remainder_part = n % 1000\n\n    words = []\n    words.append(three_digit_to_words(thousands_part) + \" thousand\")\n    if remainder_part > 0:\n        words.append(three_digit_to_words(remainder_part))\n\n    return \" \".join(words)\n```"
+ "completion_tokens": 480,
+ "cost": 0.00542,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef number_to_words(n: int) -> str:\n    if not (0 <= n <= 999999):\n        raise ValueError(\"n out of range\")\n\n    ones = [\"zero\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\",\n            \"eight\", \"nine\", \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n            \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\"]\n    tens = [\"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\",\n            \"eighty\", \"ninety\"]\n\n    def two_digits(num):\n        if num < 20:\n            return ones[num]\n        t, o = divmod(num, 10)\n        if o == 0:\n            return tens[t]\n        return tens[t] + \"-\" + ones[o]\n\n    def three_digits(num):\n        h, r = divmod(num, 100)\n        parts = []\n        if h > 0:\n            parts.append(ones[h] + \" hundred\")\n        if r > 0:\n            parts.append(two_digits(r))\n        return \" \".join(parts)\n\n    if n == 0:\n        return \"zero\"\n\n    thousands, remainder = divmod(n, 1000)\n    parts = []\n    if thousands > 0:\n        parts.append(three_digits(thousands) + \" thousand\")\n    if remainder > 0:\n        parts.append(three_digits(remainder))\n    return \" \".join(parts)\n```"
 }

@@ -1,0 +1,239 @@
+{
+ "task_id": "code2-05",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 295.3,
+ "tokens": 172119,
+ "prompt_tokens": 115543,
+ "completion_tokens": 56576,
+ "cost": 0.23052,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Tokenizer",
+     "what": "Scan the string into tokens (numbers incl. decimals, + - * / ( )), skipping whitespace, raising ValueError on unknown characters."
+    },
+    {
+     "id": "c2",
+     "title": "Recursive descent parser/evaluator",
+     "what": "Grammar: expr := term (('+'|'-') term)*; term := factor (('*'|'/') factor)*; factor := '-' factor | NUMBER | '(' expr ')'. Evaluate directly, raising ValueError on missing operands, unmatched parens, or unexpected tokens, and ZeroDivisionError on division by zero."
+    },
+    {
+     "id": "c3",
+     "title": "Full-consumption & empty-input check",
+     "what": "After parsing, verify no leftover tokens remain (catches unbalanced closing parens / trailing operators) and verify token list isn't empty before parsing."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "B"
+    ],
+    "c2": [
+     "A",
+     "C"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "Here is the complete implementation of `evaluate`, combining the robust regex tokenization from **c1** and **c2** with the recursive-descent precedence parsing and validation checks from **c1**, **c2**, and **c3**:\n\n```python\nimport re\n\n\ndef evaluate(expr: str) -> float:\n    # Tokenize numbers, operators/parens, or unknown characters\n    number_pattern = re.compile(r\"(?:\\d+(?:\\.\\d*)?|\\.\\d+)\")\n    tokens = []\n    i = 0\n\n    while i < len(expr):\n        if expr[i].isspace():\n            i += 1\n            continue\n\n        match = number_pattern.match(expr, i)\n        if match:\n            tokens.append((\"NUM\", float(match.group())))\n            i = match.end()\n        elif expr[i] in \"+-*/()\":\n            tokens.append((\"OP\", expr[i]))\n            i += 1\n        else:\n            raise ValueError(f\"Unknown character: {expr[i]}\")\n\n    # Empty-input check (c1, c2, c3)\n    if not tokens:\n        raise ValueError(\"Empty expression\")\n\n    pos = 0\n    n = len(tokens)\n\n    def peek():\n        return tokens[pos] if pos < n else None\n\n    def consume(expected=None):\n        nonlocal pos\n        tok = peek()\n        if tok is None:\n            raise ValueError(\"Unexpected end of expression\")\n        if expected is not None and tok != expected:\n            raise ValueError(f\"Expected {expected}, got {tok}\")\n        pos += 1\n        return tok\n\n    # Grammar:\n    # expr   := term (('+' | '-') term)*\n    # term   := factor (('*' | '/') factor)*\n    # factor := '-' factor | NUM | '(' expr ')'\n\n    def parse_expr():\n        val = parse_term()\n        while peek() in ((\"OP\", \"+\"), (\"OP\", \"-\")):\n            op = consume()[1]\n            right = parse_term()\n            val = val + right if op == \"+\" else val - right\n        return val\n\n    def parse_term():\n        val = parse_factor()\n        while peek() in ((\"OP\", \"*\"), (\"OP\", \"/\")):\n            op = consume()[1]\n            right = parse_factor()\n            if op == \"*\":\n                val *= right\n            else:\n                if right == 0.0:\n                    raise ZeroDivisionError(\"Division by zero\")\n                val /= right\n        return val\n\n    def parse_factor():\n        tok = peek()\n        if tok is None:\n            raise ValueError(\"Trailing operator or missing operand\")\n        if tok == (\"OP\", \"-\"):\n            consume()\n            # Unary minus binds tighter than * and /\n            return -parse_factor()\n        if tok[0] == \"NUM\":\n            consume()\n            return tok[1]\n        if tok == (\"OP\", \"(\"):\n            consume()\n            val = parse_expr()\n            consume((\"OP\", \")\"))\n            return val\n        raise ValueError(f\"Unexpected token: {tok}\")\n\n    res = parse_expr()\n\n    # Full-consumption check (c1, c2, c3)\n    if pos < n:\n        raise ValueError(\"Unmatched token or unbalanced parentheses\")\n\n    return float(res)\n```\n\n### Verification\n- **Visible tests**:\n  - `evaluate('2 + 3 * 4') == 14.0`\n  - `evaluate('-(2 + 3) * 2') == -10.0`\n- **Error handling**:\n  - Rejects empty strings and whitespace-only input (`evaluate('')`, `evaluate('   ')`).\n  - Rejects unknown tokens (`evaluate('2 & 3')`).\n  - Rejects unbalanced parentheses (`evaluate('(2 + 3')`, `evaluate('1 + 2)')`).\n  - Rejects consecutive binary operators (`evaluate('2 ++ 3')`).\n  - Flags division by zero with `ZeroDivisionError`."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "parse_factor allows unary '-' after any operator, including '+', recursively, so '2 ++ 3' parses as '2 + (+3)'? Actually '+' is never consumed as unary since only '-' handled in parse_factor; '2 ++ 3' -> parse_term returns 2, peek is ('OP','+') consumed in parse_expr, then parse_term->parse_factor sees ('OP','+') which is not '-' and not NUM/'(' so raises ValueError. But '2 -- 3' or '2 +- 3' will silently succeed as valid unary chains, which may be intended but claim text implies general rejection of 'two operators in a row other than unary minus' - needs check that '+-' sequences and multiple unary minuses are desired behavior per spec, and that '2+-3' isn't accidentally wrongly rejected or accepted inconsistently."
+    },
+    {
+     "from": "A",
+     "problem": "Floating-point equality check for zero is fine for exact zero but doesn't handle expressions like '1/0.0000000000000001' which should not raise, that's fine; but check whether negative zero '-0.0' is caught correctly (right==0.0 true for -0.0 in Python) \u2014 should verify edge case '5 / -0' or '5/(-0)' doesn't crash incorrectly and returns correct ZeroDivisionError vs float result."
+    },
+    {
+     "from": "A",
+     "problem": "Input '3 +' should raise ValueError for trailing operator \u2014 verify consume() in parse_term/parse_expr loop correctly stops and parse_factor raises when tok is None at end, but there's no explicit test showing evaluate('3+') raises; also malformed input like '()' (empty parens) will call parse_expr with pos pointing at ')', parse_term->parse_factor sees tok ('OP',')') which isn't matched by any branch, falls to final raise \u2014 but need confirmation no index errors occur."
+    },
+    {
+     "from": "D",
+     "problem": "The regex \\d+(\\.\\d*)?|\\.\\d+ will match '1.2' from '1.2.3', leaving '.3' as another token. The parser would then see two consecutive NUM tokens, which parse_factor does not handle, but the error would be a generic 'Unexpected token' rather than a clean rejection. More importantly, '1.2.3' should be a malformed expression, but the tokenizer silently splits it into '1.2' and '.3', which could lead to incorrect parsing if the parser were more permissive."
+    },
+    {
+     "from": "D",
+     "problem": "The grammar factor := '-' factor allows unary minus to appear before any factor, including after a binary operator. However, the tokenizer does not distinguish between unary and binary minus. The parser's parse_expr and parse_term only consume binary operators in their while loops, so a sequence like '2 * -3' works, but '2 - -3' also works because the second '-' is parsed as a unary minus in parse_factor. The issue is that '2 - -3' is arguably valid (binary minus followed by unary minus), but '2 + -3' is also valid. The real problem is that the parser accepts '2 - - - 3' (multiple unary minuses), which is valid per the grammar, but the challenge is whether this is intended. The more concrete issue is that the parser does not reject '2 - - 3' as malformed if the spec intended only one unary minus before a number or parenthesis."
+    },
+    {
+     "from": "D",
+     "problem": "The parse_expr function calls parse_term, which calls parse_factor. If the expression is '2 +', parse_expr consumes '2', then sees '+', consumes it, and calls parse_term. parse_term calls parse_factor, which sees None (end of tokens) and raises ValueError('Trailing operator or missing operand'). This is correct. However, if the expression is '2 + )', parse_expr consumes '2', sees '+', consumes it, calls parse_term, which calls parse_factor, which sees ')', and raises ValueError('Unexpected token: (OP, )'). This is a different error message but still a ValueError. The issue is that the error message is misleading for a trailing operator case, but the error type is correct."
+    },
+    {
+     "from": "D",
+     "problem": "The check for division by zero is done in parse_term when the right operand is 0.0. However, if the right operand is a float that is very close to zero but not exactly zero (e.g., 0.0 from a previous computation), the check works. But if the expression is '1 / (2 - 2)', the right operand is 0.0, so ZeroDivisionError is raised. This is correct. The issue is that the check only happens in parse_term, not in parse_expr. If the expression is '1 / 0', the check works. But if the expression is '1 / (0.0)', the check also works because 0.0 is a float. The real problem is that the check is done after the right operand is fully parsed, which is correct. No issue found here."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 6,
+   "answer": "Revised implementation with stricter tokenization for malformed decimal literals.\n\n```python\nimport re\n\n\ndef evaluate(expr: str) -> float:\n    number_pattern = re.compile(r\"(?:\\d+(?:\\.\\d*)?|\\.\\d+)\")\n    tokens = []\n    i = 0\n\n    while i < len(expr):\n        if expr[i].isspace():\n            i += 1\n            continue\n\n        match = number_pattern.match(expr, i)\n        if match:\n            tokens.append((\"NUM\", float(match.group())))\n            i = match.end()\n            # Reject malformed numbers like \"1.2.3\" or \"1..2\"\n            if i < len(expr) and (expr[i].isdigit() or expr[i] == '.'):\n                raise ValueError(\"Malformed number\")\n        elif expr[i] in \"+-*/()\":\n            tokens.append((\"OP\", expr[i]))\n            i += 1\n        else:\n            raise ValueError(f\"Unknown character: {expr[i]}\")\n\n    if not tokens:\n        raise ValueError(\"Empty expression\")\n\n    pos = 0\n    n = len(tokens)\n\n    def peek():\n        return tokens[pos] if pos < n else None\n\n    def consume(expected=None):\n        nonlocal pos\n        tok = peek()\n        if tok is None:\n            raise ValueError(\"Unexpected end of expression\")\n        if expected is not None and tok != expected:\n            raise ValueError(f\"Expected {expected}, got {tok}\")\n        pos += 1\n        return tok\n\n    def parse_expr():\n        val = parse_term()\n        while peek() in ((\"OP\", \"+\"), (\"OP\", \"-\")):\n            op = consume()[1]\n            right = parse_term()\n            val = val + right if op == \"+\" else val - right\n        return val\n\n    def parse_term():\n        val = parse_factor()\n        while peek() in ((\"OP\", \"*\"), (\"OP\", \"/\")):\n            op = consume()[1]\n            right = parse_factor()\n            if op == \"*\":\n                val *= right\n            else:\n                if right == 0.0:\n                    raise ZeroDivisionError(\"Division by zero\")\n                val /= right\n        return val\n\n    def parse_factor():\n        tok = peek()\n        if tok is None:\n            raise ValueError(\"Trailing operator or missing operand\")\n        if tok == (\"OP\", \"-\"):\n            consume()\n            return -parse_factor()\n        if tok[0] == \"NUM\":\n            consume()\n            return tok[1]\n        if tok == (\"OP\", \"(\"):\n            consume()\n            val = parse_expr()\n            consume((\"OP\", \")\"))\n            return val\n        raise ValueError(f\"Unexpected token: {tok}\")\n\n    res = parse_expr()\n\n    if pos < n:\n        raise ValueError(\"Unmatched token or unbalanced parentheses\")\n\n    return float(res)\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Expression like '+2' or '1 + +2' will raise ValueError even though many arithmetic evaluators allow unary plus; spec says 'unary minus' explicitly but doesn't forbid unary plus, and the 'two operators in a row other than unary minus' wording in the spec implies only '-' is exempted, so this may actually be correct behavior \u2014 but it should be explicitly tested since hidden tests may check '1 - -2' (double unary minus) which parse_factor *does* support via recursion, confirm this with a check"
+    },
+    {
+     "from": "A",
+     "problem": "If right is computed as a tiny float like -0.0 this still equals 0.0 so fine, but what about float division where right is int 0 vs float truthiness \u2014 more importantly, no check exists for '2/0.0' inside nested expression e.g. '2/(1-1)' \u2014 need to confirm ZeroDivisionError propagates not caught by outer ValueError handlers"
+    },
+    {
+     "from": "A",
+     "problem": "The check only looks one char ahead after a number match; input '1.2.3.4' \u2014 after matching '1.2', next char is '.', raises correctly. But what about '.' alone, e.g. '.' with no digits \u2014 number_pattern requires \\d+ after dot so a lone '.' won't match NUM and falls to else branch raising 'Unknown character: .' which is fine, but trailing '.' like '5.' is accepted since \\d* allows zero digits after dot \u2014 confirm whether spec intends '5.' as valid or malformed"
+    },
+    {
+     "from": "A",
+     "problem": "tokens for '2++3': NUM(2), OP(+), OP(+), NUM(3) \u2014 parse_expr consumes '+', calls parse_term->parse_factor, peek is OP('+') not '-' or NUM or '(' so raises ValueError, good. But '2+-3' should be valid (plus followed by unary minus) \u2014 confirm parse_factor allows this via the '-' branch"
+    },
+    {
+     "from": "B",
+     "problem": "Converting a sufficiently large valid literal with float(match.group()) can raise OverflowError rather than returning a float or one of the specified exceptions. For example, evaluate('1' * 400) fails during tokenization."
+    },
+    {
+     "from": "C",
+     "problem": "Omission: does not allow unary plus ('+'), rejecting valid arithmetic expressions like '+5' or '3 * +2', though prompt specifies unary minus and standard arithmetic expressions often permit unary plus or at least prompt mentions 'two operators in a row other than a unary minus'"
+    },
+    {
+     "from": "C",
+     "problem": "Untested code: empty parentheses '()' cause parse_factor to encounter ')' and raise a generic Unexpected token ValueError, which passes the requirement to raise ValueError, but stacked unary minuses like '--5' are rejected because '--' is treated as two unary minuses or an invalid operator depending on grammar; the prompt states 'two operators in a row other than a unary minus', implying '--5' might be expected to either evaluate to 5.0 or fail as two consecutive operators"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 0,
+   "answer": "Revised implementation with stricter tokenization for malformed decimal literals.\n\n```python\nimport re\n\n\ndef evaluate(expr: str) -> float:\n    number_pattern = re.compile(r\"(?:\\d+(?:\\.\\d*)?|\\.\\d+)\")\n    tokens = []\n    i = 0\n\n    while i < len(expr):\n        if expr[i].isspace():\n            i += 1\n            continue\n\n        match = number_pattern.match(expr, i)\n        if match:\n            tokens.append((\"NUM\", float(match.group())))\n            i = match.end()\n            # Reject malformed numbers like \"1.2.3\" or \"1..2\"\n            if i < len(expr) and (expr[i].isdigit() or expr[i] == '.'):\n                raise ValueError(\"Malformed number\")\n        elif expr[i] in \"+-*/()\":\n            tokens.append((\"OP\", expr[i]))\n            i += 1\n        else:\n            raise ValueError(f\"Unknown character: {expr[i]}\")\n\n    if not tokens:\n        raise ValueError(\"Empty expression\")\n\n    pos = 0\n    n = len(tokens)\n\n    def peek():\n        return tokens[pos] if pos < n else None\n\n    def consume(expected=None):\n        nonlocal pos\n        tok = peek()\n        if tok is None:\n            raise ValueError(\"Unexpected end of expression\")\n        if expected is not None and tok != expected:\n            raise ValueError(f\"Expected {expected}, got {tok}\")\n        pos += 1\n        return tok\n\n    def parse_expr():\n        val = parse_term()\n        while peek() in ((\"OP\", \"+\"), (\"OP\", \"-\")):\n            op = consume()[1]\n            right = parse_term()\n            val = val + right if op == \"+\" else val - right\n        return val\n\n    def parse_term():\n        val = parse_factor()\n        while peek() in ((\"OP\", \"*\"), (\"OP\", \"/\")):\n            op = consume()[1]\n            right = parse_factor()\n            if op == \"*\":\n                val *= right\n            else:\n                if right == 0.0:\n                    raise ZeroDivisionError(\"Division by zero\")\n                val /= right\n        return val\n\n    def parse_factor():\n        tok = peek()\n        if tok is None:\n            raise ValueError(\"Trailing operator or missing operand\")\n        if tok == (\"OP\", \"-\"):\n            consume()\n            return -parse_factor()\n        if tok[0] == \"NUM\":\n            consume()\n            return tok[1]\n        if tok == (\"OP\", \"(\"):\n            consume()\n            val = parse_expr()\n            consume((\"OP\", \")\"))\n            return val\n        raise ValueError(f\"Unexpected token: {tok}\")\n\n    res = parse_expr()\n\n    if pos < n:\n        raise ValueError(\"Unmatched token or unbalanced parentheses\")\n\n    return float(res)\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "The lookahead only checks the character immediately adjacent to the matched token, allowing whitespace-separated malformed numbers like '1.2 .3' or spaced multi-dot sequences to bypass the check and tokenize as two consecutive numbers ('NUM', 1.2) followed by ('NUM', 0.3). Furthermore, consecutive numbers without an operator (e.g. '2 3' or '1.2 .3') fail late with a vague 'Unmatched token' error instead of being caught as a syntax error during parsing, and empty parentheses '()' or unary plus '+2' are not handled explicitly (raising ValueError vs potentially masking invalid two-operator sequences)."
+    },
+    {
+     "from": "C",
+     "problem": "parse_factor allows arbitrarily chained unary minuses (e.g., '--3' or '---3'), which represents two or more '-' operators in a row. The grammar should either permit multiple unary minuses or strictly reject them if only a single unary minus following an operator is allowed. More critically, an expression like '2 * - - 3' parses successfully even though it contains three operators in a row."
+    },
+    {
+     "from": "D",
+     "problem": "The post-match check `if i < len(expr) and (expr[i].isdigit() or expr[i] == '.')` is too aggressive and will reject valid expressions where a number is immediately followed by a `.` that belongs to a method or attribute, but more importantly, it will reject valid expressions like `1.2.3` correctly but also reject `1..2` correctly. However, it will also reject valid expressions like `2.` followed by `(` such as `2.(3)` which is malformed anyway. The real issue is that it will reject valid expressions like `1.2+3` because after matching `1.2`, the next char is `+`, which is fine. But it will reject `1.2.` as malformed, which is correct. However, it will also reject `1.2.3` correctly. The check seems correct for malformed numbers, but it may reject valid expressions like `1.2.` followed by a digit? Actually `1.2.3` is malformed. The check is fine for malformed numbers, but the claim that it rejects malformed numbers is untested for cases like `1.2.3` and `1..2`."
+    },
+    {
+     "from": "D",
+     "problem": "The `parse_factor` function handles unary minus by recursively calling `parse_factor`, which means `-2*3` is parsed as `(-2)*3`, and `-2/3` as `(-2)/3`. This is correct. However, the claim that unary minus binds tighter than * and / is not explicitly tested for cases like `2*-3` or `2/-3` or `-2*-3`. The visible examples only test `-(2+3)*2` which is a parenthesized unary minus."
+    },
+    {
+     "from": "D",
+     "problem": "The parser uses recursive descent with `parse_expr`, `parse_term`, `parse_factor`. For input like `2++3`, `parse_expr` will parse `2`, then see `+` and consume it, then call `parse_term` which calls `parse_factor` and sees `+` which is not a valid factor start, raising ValueError. This is correct. However, for input like `2+-3`, the parser will parse `2`, see `+`, consume it, then `parse_term` calls `parse_factor` which sees `-` and treats it as unary minus, returning -3. This is correct. For input like `2--3`, similar. But for input like `2*/3`, `parse_term` will parse `2`, see `*`, consume it, then `parse_factor` sees `/` and raises ValueError. This is correct. The claim is not explicitly tested for all operator combinations."
+    },
+    {
+     "from": "D",
+     "problem": "The `parse_expr` function parses terms and operators. For input like `2+`, after parsing `2`, it sees `+`, consumes it, then calls `parse_term` which calls `parse_factor` and sees end of tokens, raising ValueError. This is correct. However, for input like `2+3)` with unbalanced parentheses, the parser will parse `2+3`, then `parse_expr` returns, and the final check `if pos < n` will catch the unmatched `)`. The claim is not explicitly tested for trailing operator."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "B",
+   "accepted": 2,
+   "rejected": 4,
+   "answer": "```python\nimport re\n\n\ndef evaluate(expr: str) -> float:\n    number_pattern = re.compile(r\"(?:\\d+(?:\\.\\d*)?|\\.\\d+)\")\n    tokens = []\n    i = 0\n\n    while i < len(expr):\n        if expr[i].isspace():\n            i += 1\n            continue\n\n        match = number_pattern.match(expr, i)\n        if match:\n            tokens.append((\"NUM\", float(match.group())))\n            i = match.end()\n            if i < len(expr) and (expr[i].isdigit() or expr[i] == \".\"):\n                raise ValueError(\"Malformed number\")\n        elif expr[i] in \"+-*/()\":\n            tokens.append((\"OP\", expr[i]))\n            i += 1\n        else:\n            raise ValueError(f\"Unknown character: {expr[i]}\")\n\n    if not tokens:\n        raise ValueError(\"Empty expression\")\n\n    pos = 0\n\n    def peek():\n        return tokens[pos] if pos < len(tokens) else None\n\n    def consume(expected=None):\n        nonlocal pos\n        token = peek()\n        if token is None:\n            raise ValueError(\"Unexpected end of expression\")\n        if expected is not None and token != expected:\n            raise ValueError(\"Unexpected token\")\n        pos += 1\n        return token\n\n    def parse_expr():\n        value = parse_term()\n        while peek() in ((\"OP\", \"+\"), (\"OP\", \"-\")):\n            op = consume()[1]\n            right = parse_term()\n            value = value + right if op == \"+\" else value - right\n        return value\n\n    def parse_term():\n        value = parse_factor()\n        while peek() in ((\"OP\", \"*\"), (\"OP\", \"/\")):\n            op = consume()[1]\n            right = parse_factor()\n            if op == \"*\":\n                value *= right\n            else:\n                if right == 0.0:\n                    raise ZeroDivisionError(\"Division by zero\")\n                value /= right\n        return value\n\n    def parse_factor():\n        if peek() == (\"OP\", \"-\"):\n            consume()\n            # A unary minus applies to one primary, not another unary minus.\n            return -parse_primary()\n        return parse_primary()\n\n    def parse_primary():\n        token = peek()\n        if token is None:\n            raise ValueError(\"Missing operand\")\n        if token[0] == \"NUM\":\n            consume()\n            return token[1]\n        if token == (\"OP\", \"(\"):\n            consume()\n            value = parse_expr()\n            consume((\"OP\", \")\"))\n            return value\n        raise ValueError(\"Unexpected token\")\n\n    result = parse_expr()\n    if pos != len(tokens):\n        raise ValueError(\"Unexpected token or unbalanced parentheses\")\n    return float(result)\n```"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "```python\nimport re\n\n\ndef evaluate(expr: str) -> float:\n    number_pattern = re.compile(r\"(?:\\d+(?:\\.\\d*)?|\\.\\d+)\")\n    tokens = []\n    i = 0\n\n    while i < len(expr):\n        if expr[i].isspace():\n            i += 1\n            continue\n\n        match = number_pattern.match(expr, i)\n        if match:\n            tokens.append((\"NUM\", float(match.group())))\n            i = match.end()\n            if i < len(expr) and (expr[i].isdigit() or expr[i] == \".\"):\n                raise ValueError(\"Malformed number\")\n        elif expr[i] in \"+-*/()\":\n            tokens.append((\"OP\", expr[i]))\n            i += 1\n        else:\n            raise ValueError(f\"Unknown character: {expr[i]}\")\n\n    if not tokens:\n        raise ValueError(\"Empty expression\")\n\n    pos = 0\n\n    def peek():\n        return tokens[pos] if pos < len(tokens) else None\n\n    def consume(expected=None):\n        nonlocal pos\n        token = peek()\n        if token is None:\n            raise ValueError(\"Unexpected end of expression\")\n        if expected is not None and token != expected:\n            raise ValueError(\"Unexpected token\")\n        pos += 1\n        return token\n\n    def parse_expr():\n        value = parse_term()\n        while peek() in ((\"OP\", \"+\"), (\"OP\", \"-\")):\n            op = consume()[1]\n            right = parse_term()\n            value = value + right if op == \"+\" else value - right\n        return value\n\n    def parse_term():\n        value = parse_factor()\n        while peek() in ((\"OP\", \"*\"), (\"OP\", \"/\")):\n            op = consume()[1]\n            right = parse_factor()\n            if op == \"*\":\n                value *= right\n            else:\n                if right == 0.0:\n                    raise ZeroDivisionError(\"Division by zero\")\n                value /= right\n        return value\n\n    def parse_factor():\n        if peek() == (\"OP\", \"-\"):\n            consume()\n            # A unary minus applies to one primary, not another unary minus.\n            return -parse_primary()\n        return parse_primary()\n\n    def parse_primary():\n        token = peek()\n        if token is None:\n            raise ValueError(\"Missing operand\")\n        if token[0] == \"NUM\":\n            consume()\n            return token[1]\n        if token == (\"OP\", \"(\"):\n            consume()\n            value = parse_expr()\n            consume((\"OP\", \")\"))\n            return value\n        raise ValueError(\"Unexpected token\")\n\n    result = parse_expr()\n    if pos != len(tokens):\n        raise ValueError(\"Unexpected token or unbalanced parentheses\")\n    return float(result)\n```"
+}

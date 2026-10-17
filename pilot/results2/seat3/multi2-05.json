@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-05",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 101.61, expected 101.61 | ok: got 6173.0, expected 6173.0 | ok: got 6997.7, expected 6997.65",
+ "error": null,
+ "seconds": 16.7,
+ "tokens": 3049,
+ "prompt_tokens": 342,
+ "completion_tokens": 2707,
+ "cost": 0.01041,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\nLet the original price be $P$. Applying the successive percentage changes:\n$P \\times (1 - 0.15) \\times (1 - 0.15) \\times (1 + 0.25) \\times (1 + 0.25) \\times (1 - 0.15) = 97.50$\n$P \\times (0.85)^3 \\times (1.25)^2 = 97.50$\n$P \\times 0.614125 \\times 1.5625 = 97.50$\n$P \\times 0.9595703125 = 97.50 \\implies P \\approx 101.60797$\n\nRounding to the nearest cent gives **101.61**.\n\n---\n\n**Part B:**\nUsing the Principle of Inclusion-Exclusion for $N = 12{,}000$:\n- Multiples of 3: $\\lfloor 12000 / 3 \\rfloor = 4000$\n- Multiples of 5: $\\lfloor 12000 / 5 \\rfloor = 2400$\n- Multiples of 7: $\\lfloor 12000 / 7 \\rfloor = 1714$\n- Multiples of 15: $\\lfloor 12000 / 15 \\rfloor = 800$\n- Multiples of 21: $\\lfloor 12000 / 21 \\rfloor = 571$\n- Multiples of 35: $\\lfloor 12000 / 35 \\rfloor = 342$\n- Multiples of 105: $\\lfloor 12000 / 105 \\rfloor = 114$\n\nTotal divisible by at least one of 3, 5, or 7:\n$4000 + 2400 + 1714 - 800 - 571 - 342 + 114 = 6515$\n\nAmong these, the count of integers that are also multiples of 19 corresponds to the number of multiples of 3, 5, or 7 in the range $1$ to $\\lfloor 12000 / 19 \\rfloor = 631$:\n- Multiples of 3: $\\lfloor 631 / 3 \\rfloor = 210$\n- Multiples of 5: $\\lfloor 631 / 5 \\rfloor = 126$\n- Multiples of 7: $\\lfloor 631 / 7 \\rfloor = 90$\n- Multiples of 15: $\\lfloor 631 / 15 \\rfloor = 42$\n- Multiples of 21: $\\lfloor 631 / 21 \\rfloor = 30$\n- Multiples of 35: $\\lfloor 631 / 35 \\rfloor = 18$\n- Multiples of 105: $\\lfloor 631 / 105 \\rfloor = 6$\n\nTotal divisible by 19 and at least one of 3, 5, or 7:\n$210 + 126 + 90 - 42 - 30 - 18 + 6 = 342$\n\nSubtracting gives $6515 - 342 =$ **6173**.\n\n---\n\n**Part C:**\n- Monthly interest rate: $r = 0.06 / 12 = 0.005$\n- Total periods: $n = 48$ months\n- Monthly payment: \n  $$M = \\frac{12000 \\times 0.005}{1 - (1.005)^{-48}} \\approx 281.822294$$\n\nThe balance at month 18 without prepayments is the present value of the remaining 30 payments:\n$$B_{18,\\text{standard}} = M \\times \\frac{1 - (1.005)^{-30}}{0.005} \\approx 7832.9841$$\n\nSubtracting the extra principal payments compounded to month 18:\n- Extra payment in month 5 ($18 - 5 = 13$ months compounded): $300 \\times (1.005)^{13} \\approx 320.0958$\n- Extra payment in month 12 ($18 - 12 = 6$ months compounded): $500 \\times (1.005)^6 \\approx 515.1888$\n\n$$B_{18} = 7832.9841 - 320.0958 - 515.1888 \\approx 6997.70$$\n\nFINAL: 101.61; 6173; 6997.70"
+}

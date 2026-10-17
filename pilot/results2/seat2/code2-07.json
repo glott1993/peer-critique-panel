@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 15.3,
- "tokens": 8172,
- "prompt_tokens": 5134,
- "completion_tokens": 3038,
- "cost": 0.00467,
+ "seconds": 14.4,
+ "tokens": 7230,
+ "prompt_tokens": 4733,
+ "completion_tokens": 2497,
+ "cost": 0.00394,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef cidr_contains(cidr: str, ip: str) -> bool:\n    def parse_ipv4(value: str) -> int:\n        if not isinstance(value, str):\n            raise ValueError(\"IPv4 address must be a string\")\n\n        octets = value.split(\".\")\n        if len(octets) != 4:\n            raise ValueError(\"IPv4 address must contain four octets\")\n\n        result = 0\n        for octet in octets:\n            if not octet or any(char not in \"0123456789\" for char in octet):\n                raise ValueError(\"Malformed IPv4 address\")\n            number = int(octet)\n            if number < 0 or number > 255:\n                raise ValueError(\"IPv4 octet out of range\")\n            result = (result << 8) | number\n\n        return result\n\n    if not isinstance(cidr, str) or cidr.count(\"/\") != 1:\n        raise ValueError(\"CIDR must contain exactly one slash\")\n\n    network_text, prefix_text = cidr.split(\"/\")\n    network = parse_ipv4(network_text)\n\n    if not prefix_text or any(char not in \"0123456789\" for char in prefix_text):\n        raise ValueError(\"Malformed prefix length\")\n\n    prefix = int(prefix_text)\n    if prefix < 0 or prefix > 32:\n        raise ValueError(\"Prefix length must be between 0 and 32\")\n\n    address = parse_ipv4(ip)\n\n    mask = 0 if prefix == 0 else (0xFFFFFFFF << (32 - prefix)) & 0xFFFFFFFF\n    return (network & mask) == (address & mask)\n```"
+ "answer": "```python\ndef cidr_contains(cidr: str, ip: str) -> bool:\n    def parse_ipv4(value: str) -> int:\n        if not isinstance(value, str):\n            raise ValueError(\"IPv4 address must be a string\")\n\n        parts = value.split(\".\")\n        if len(parts) != 4:\n            raise ValueError(\"IPv4 address must contain four octets\")\n\n        octets = []\n        for part in parts:\n            if not part or any(ch not in \"0123456789\" for ch in part):\n                raise ValueError(\"Invalid IPv4 octet\")\n            number = int(part)\n            if number < 0 or number > 255:\n                raise ValueError(\"IPv4 octet out of range\")\n            octets.append(number)\n\n        return (\n            (octets[0] << 24)\n            | (octets[1] << 16)\n            | (octets[2] << 8)\n            | octets[3]\n        )\n\n    if not isinstance(cidr, str) or cidr.count(\"/\") != 1:\n        raise ValueError(\"CIDR must contain exactly one slash\")\n\n    network_text, prefix_text = cidr.split(\"/\")\n    if not prefix_text or any(ch not in \"0123456789\" for ch in prefix_text):\n        raise ValueError(\"Invalid prefix length\")\n\n    prefix = int(prefix_text)\n    if prefix < 0 or prefix > 32:\n        raise ValueError(\"Prefix length must be between 0 and 32\")\n\n    network = parse_ipv4(network_text)\n    address = parse_ipv4(ip)\n\n    mask = (0xFFFFFFFF << (32 - prefix)) & 0xFFFFFFFF\n    return (network & mask) == (address & mask)\n```"
 }

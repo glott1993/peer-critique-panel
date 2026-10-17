@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-21",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.1,
+ "tokens": 714,
+ "prompt_tokens": 229,
+ "completion_tokens": 485,
+ "cost": 0.00199,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete `number_to_words` function:\n\n```python\ndef number_to_words(n: int) -> str:\n    if not isinstance(n, int) or isinstance(n, bool) or not (0 <= n <= 999999):\n        raise ValueError(\"Input must be an integer between 0 and 999999 inclusive.\")\n\n    if n == 0:\n        return \"zero\"\n\n    ones = [\n        \"\", \"one\", \"two\", \"three\", \"four\", \"five\", \"six\", \"seven\", \"eight\", \"nine\",\n        \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\", \"fifteen\", \"sixteen\",\n        \"seventeen\", \"eighteen\", \"nineteen\"\n    ]\n    tens = [\n        \"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\", \"sixty\", \"seventy\", \"eighty\", \"ninety\"\n    ]\n\n    def convert_below_thousand(num: int) -> list[str]:\n        parts = []\n        hundreds = num // 100\n        remainder = num % 100\n\n        if hundreds > 0:\n            parts.append(f\"{ones[hundreds]} hundred\")\n\n        if remainder > 0:\n            if remainder < 20:\n                parts.append(ones[remainder])\n            else:\n                t = remainder // 10\n                u = remainder % 10\n                if u > 0:\n                    parts.append(f\"{tens[t]}-{ones[u]}\")\n                else:\n                    parts.append(tens[t])\n\n        return parts\n\n    thousands_part = n // 1000\n    remainder_part = n % 1000\n\n    result = []\n    if thousands_part > 0:\n        result.extend(convert_below_thousand(thousands_part))\n        result.append(\"thousand\")\n\n    if remainder_part > 0:\n        result.extend(convert_below_thousand(remainder_part))\n\n    return \" \".join(result)\n```"
+}

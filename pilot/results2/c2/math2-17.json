@@ -1,0 +1,183 @@
+{
+ "task_id": "math2-17",
+ "type": "math",
+ "condition": "c2",
+ "correct": true,
+ "detail": "got 2617.31, expected 2617.31",
+ "error": null,
+ "seconds": 161.0,
+ "tokens": 85377,
+ "prompt_tokens": 61895,
+ "completion_tokens": 23482,
+ "cost": 0.20385,
+ "calls": 31,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "0+12.5+11+9+8+0+0+11+10+9+9+9.5+0+8",
+   "claimed": 97.0,
+   "value": 97.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "80+16.5+0.5",
+   "claimed": 97.0,
+   "value": 97.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "97*24.75+16.5*0.5*24.75+0.5*1*24.75",
+   "claimed": 2617.3125,
+   "value": 2617.3125,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute daily regular and overtime hours",
+     "what": "For each day, assign hours through 8 to regular time, hours from over 8 through 12 to 1.5x overtime, and hours over 12 to 2x overtime."
+    },
+    {
+     "id": "c2",
+     "title": "Sum hour buckets across the period",
+     "what": "Regular hours = 80, 1.5x overtime hours = 16.5, and 2x overtime hours = 0.5."
+    },
+    {
+     "id": "c3",
+     "title": "Calculate and round gross pay",
+     "what": "80 \u00d7 $24.75 = $1,980.00; 16.5 \u00d7 $37.125 = $612.5625; 0.5 \u00d7 $49.50 = $24.75. Total = $2,617.3125, which rounds to $2,617.31."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Daily hours are split as: first 8 regular; hours over 8 up to 12 at 1.5x; hours over 12 at 2x.\n\nNonzero days:\n- 12.5 \u2192 8 regular, 4 at 1.5x, 0.5 at 2x\n- 11 \u2192 8 regular, 3 at 1.5x\n- 9 \u2192 8 regular, 1 at 1.5x\n- 8 \u2192 8 regular\n- 11 \u2192 8 regular, 3 at 1.5x\n- 10 \u2192 8 regular, 2 at 1.5x\n- 9 \u2192 8 regular, 1 at 1.5x\n- 9 \u2192 8 regular, 1 at 1.5x\n- 9.5 \u2192 8 regular, 1.5 at 1.5x\n- 8 \u2192 8 regular\n\nTotals:\n- Regular hours = 80\n- 1.5x overtime hours = 16.5\n- 2x overtime hours = 0.5\n\nPay:\n- 80 \u00d7 $24.75 = $1,980.00\n- 16.5 \u00d7 $37.125 = $612.5625\n- 0.5 \u00d7 $49.50 = $24.75\n\nTotal = $1,980.00 + $612.5625 + $24.75 = $2,617.3125, which rounds to $2,617.31.\n\nFINAL: 2617.31"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The draft lists only 10 nonzero days but the original data has 12 nonzero-looking commas and only verifies by eyeballing; a transcription slip (e.g., swapping one 11 for 9.5 or mis-assigning which day is 12.5) would not be caught without recomputing from the raw sequence item-by-item with explicit day indices."
+    },
+    {
+     "from": "A",
+     "problem": "Standard rounding of .3125 to nearest cent should round the thousandths digit (2) down, giving .31 \u2014 but this should be verified against banker's rounding or half-up convention since .3125 is close to a boundary only at four decimal places, not two, so likely fine, but worth explicit confirmation via Decimal arithmetic rather than mental math."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 1,
+   "answer": "Day-by-day hours breakdown (Reg / 1.5x / 2x):\n- Day 1 (0): 0 / 0 / 0\n- Day 2 (12.5): 8 / 4 / 0.5\n- Day 3 (11): 8 / 3 / 0\n- Day 4 (9): 8 / 1 / 0\n- Day 5 (8): 8 / 0 / 0\n- Day 6 (0): 0 / 0 / 0\n- Day 7 (0): 0 / 0 / 0\n- Day 8 (11): 8 / 3 / 0\n- Day 9 (10): 8 / 2 / 0\n- Day 10 (9): 8 / 1 / 0\n- Day 11 (9): 8 / 1 / 0\n- Day 12 (9.5): 8 / 1.5 / 0\n- Day 13 (0): 0 / 0 / 0\n- Day 14 (8): 8 / 0 / 0\n\nBucket totals:\n- Regular (1x): 10 \u00d7 8 = 80 hours\n- Overtime (1.5x): 4 + 3 + 1 + 3 + 2 + 1 + 1 + 1.5 = 16.5 hours\n- Double-time (2x): 0.5 hours\n\nPay calculation:\n- Regular: 80 \u00d7 $24.75 = $1,980.00\n- Overtime: 16.5 \u00d7 ($24.75 \u00d7 1.5) = 16.5 \u00d7 $37.125 = $612.5625\n- Double-time: 0.5 \u00d7 ($24.75 \u00d7 2.0) = 0.5 \u00d7 $49.50 = $24.75\n\nGross Pay = $1,980.00 + $612.5625 + $24.75 = $2,617.3125\nRounding to the nearest cent gives $2,617.31.\n\nFINAL: 2617.31"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Re-list the 14 day values from the original sequence with explicit day indices (Day 1 through Day 14), and state how many days are nonzero and what the total raw hours sum is \u2014 does that item-by-item reconstruction match the breakdown used (10 nonzero days, including exactly one 12.5, two 11s, four 9s, one 9.5, one 10, two 8s)?",
+    "The answer treats hours 8-12 at 1.5x and above 12 at 2x, so Day 2 (12.5) gives 8 reg + 4 OT + 0.5 DT. Is there any reading of the stated rule under which the 0.5 hour above 12 would be counted in both the 1.5x and 2x buckets, or under which a day of exactly 8 or exactly 12 hours would shift a boundary hour? State the boundary convention explicitly.",
+    "Does the total paid hours reconcile with the raw hours worked (i.e., regular + 1.5x-bucket hours + 2x-bucket hours equal the sum of all 14 daily figures), and does the gross pay equal the straight-time total plus the premium portions when computed that second, independent way?"
+   ],
+   "replies": [
+    "Item-by-item listing:\n- Day 1: 0\n- Day 2: 12.5\n- Day 3: 11\n- Day 4: 9\n- Day 5: 8\n- Day 6: 0\n- Day 7: 0\n- Day 8: 11\n- Day 9: 10\n- Day 10: 9\n- Day 11: 9\n- Day 12: 9.5\n- Day 13: 0\n- Day 14: 8\n\nThere are 10 nonzero days (Days 2, 3, 4, 5, 8, 9, 10, 11, 12, 14) and 4 zero days (Days 1, 6, 7, 13). Counts of values: one 12.5, two 11s, one 10, one 9.5, three 9s (Day 4, Day 10, Day 11 \u2014 wait, sequence has four 9s: Day 4, 10, 11 are three 9s; let us re-check the user list: 0, 12.5, 11, 9, 8, 0, 0, 11, 10, 9, 9, 9.5, 0, 8 -> Days are: 1:0, 2:12.5, 3:11, 4:9, 5:8, 6:0, 7:0, 8:11, 9:10, 10:9, 11:9, 12:9.5, 13:0, 14:8; exactly three 9s, not four). Total raw hours = 0 + 12.5 + 11 + 9 + 8 + 0 + 0 + 11 + 10 + 9 + 9 + 9.5 + 0 + 8 = 97.0 hours. The submitted breakdown lists four 9s instead of three 9s? No, Day 4 (9), Day 10 (9), Day 11 (9) is three 9s. The submitted answer's breakdown text lists: Day 2: 12.5, Day 3: 11, Day 4: 9, Day 5: 8, Day 8: 11, Day 9: 10, Day 10: 9, Day 11: 9, Day 12: 9.5, Day 14: 8. That is three 9s. The sum in submitted answer: 80 reg + 16.5 OT + 0.5 DT = 97.0 hours. It perfectly matches the sequence.",
+    "Standard labor law and payroll convention (e.g., California Labor Code \u00a7 510) establishes non-overlapping marginal tiers: [0, 8] regular, (8, 12] overtime at 1.5x, and >12 double time at 2x. Pyramiding or double-counting the same hour in multiple premium tiers is explicitly prohibited in standard wage orders, meaning hours over 12 are paid at 2x instead of 1.5x, not in addition to 1.5x. Boundary convention: exactly 8.0 hours falls entirely in regular pay (0 overtime), and exactly 12.0 hours yields 8 regular and 4 overtime hours (0 double time). Thus, Day 2 (12.5) unambiguously splits into 8.0 regular, 4.0 overtime, and 0.5 double time.",
+    "Reconciliation of hours:\nRaw total hours = 97.0.\nBucket sum = 80.0 (regular) + 16.5 (1.5x) + 0.5 (2x) = 97.0 hours. The hours reconcile exactly.\n\nAlternative computation via base pay plus premium adders:\n- All hours at straight time: 97.0 \u00d7 $24.75 = $2,400.75\n- Overtime premium (0.5x): 16.5 \u00d7 ($24.75 \u00d7 0.5) = 16.5 \u00d7 $12.375 = $204.1875\n- Double-time premium (1.0x): 0.5 \u00d7 ($24.75 \u00d7 1.0) = 0.5 \u00d7 $24.75 = $12.375\n- Total gross pay = $2,400.75 + $204.1875 + $12.375 = $2,617.3125, which rounds to $2,617.31.\nBoth calculation methods yield identical results."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Rounding is the one item not yet addressed by evidence: the unrounded total is $2,617.3125, which sits just above a half-cent boundary only for intermediate day totals. If pay were computed and rounded day-by-day (e.g., Day 12 = 198 + 55.6875 = $253.6875 -> $253.69) and then summed, what total results, and does it differ from the period-level rounding of $2,617.31? State which convention governs and show the day-rounded sum."
+   ],
+   "replies": [
+    "Daily pay calculations with round-half-up applied per day:\n- Day 1 (0h): $0.00\n- Day 2 (12.5h): 8\u00d7$24.75 + 4\u00d7$37.125 + 0.5\u00d7$49.50 = 198 + 148.50 + 24.75 = $371.25\n- Day 3 (11h): 8\u00d7$24.75 + 3\u00d7$37.125 = 198 + 111.375 = $309.375 -> $309.38\n- Day 4 (9h): 8\u00d7$24.75 + 1\u00d7$37.125 = 198 + 37.125 = $235.125 -> $235.13\n- Day 5 (8h): 8\u00d7$24.75 = $198.00\n- Day 6 (0h): $0.00\n- Day 7 (0h): $0.00\n- Day 8 (11h): 198 + 111.375 = $309.375 -> $309.38\n- Day 9 (10h): 8\u00d7$24.75 + 2\u00d7$37.125 = 198 + 74.25 = $272.25\n- Day 10 (9h): 198 + 37.125 = $235.125 -> $235.13\n- Day 11 (9h): 198 + 37.125 = $235.125 -> $235.13\n- Day 12 (9.5h): 8\u00d7$24.75 + 1.5\u00d7$37.125 = 198 + 55.6875 = $253.6875 -> $253.69\n- Day 13 (0h): $0.00\n- Day 14 (8h): $198.00\n\nSum of day-rounded earnings:\n371.25 + 309.38 + 235.13 + 198.00 + 309.38 + 272.25 + 235.13 + 235.13 + 253.69 + 198.00 = $2,617.34.\nThis differs by +$0.03 from the period-level rounded total of $2,617.31.\n\nGoverning convention: Standard payroll practice (e.g., US FLSA 29 CFR \u00a7 778.103 and California Labor Code standard payroll methods) computes total regular and overtime hours across the pay period first, applies regular and overtime rates, and rounds only the final aggregate gross pay to the nearest cent. Day-by-day rounding is not a standard statutory requirement and introduces rounding bias. Therefore, the period-level rounding of $2,617.31 governs."
+   ],
+   "open": [
+    "The arithmetic of the day-rounded sum is shown, but the governing-convention claim rests on 29 CFR 778.103, which concerns the workweek as the unit for overtime computation, not cent-rounding of daily pay; no authority addressing rounding granularity (e.g., DOL Field Operations Handbook rounding guidance, or the California DLSE manual, which is the relevant regime since daily overtime is in force) has been cited."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "For the rounding convention, cite a source that actually speaks to rounding granularity rather than to the workweek unit: does the California DLSE Enforcement Policies and Interpretations Manual or the DOL Field Operations Handbook state that gross pay is rounded once at the pay-period total rather than per day, and what is the exact provision number and wording?",
+    "Please verify the hours bookkeeping independently: does the sum of the 14 listed daily hours equal the sum of the three buckets (80 regular + 16.5 at 1.5x + 0.5 at 2x), and is Day 2 the only day exceeding 12 hours? State both totals explicitly."
+   ],
+   "replies": [
+    "No specific provision in the California DLSE Enforcement Policies and Interpretations Manual or the US DOL Field Operations Handbook (FOH) prescribes a mandatory daily-versus-pay-period rounding rule for intermediate gross wage subtotals. Standard payroll practice under FLSA (29 CFR Part 778) and DLSE guidelines calculates total regular and premium pay on aggregate pay-period/workweek hours, applying currency rounding ($0.01) to the final disbursement. Neither manual mandates rounding intermediate daily wage calculations to the nearest cent.",
+    "Sum of the 14 daily hours: 0 + 12.5 + 11 + 9 + 8 + 0 + 0 + 11 + 10 + 9 + 9 + 9.5 + 0 + 8 = 98.0 hours. Sum of the three buckets: 80.0 (regular) + 16.5 (1.5x) + 0.5 (2x) = 97.0 hours. An error is present in the bookkeeping: 98.0 != 97.0. Looking at the non-zero days, there are 10 days worked of at least 8 hours, giving 10 * 8 = 80 regular hours. The overtime above 8 up to 12 is: Day 2 (4.0), Day 3 (3.0), Day 4 (1.0), Day 8 (3.0), Day 9 (2.0), Day 10 (1.0), Day 11 (1.0), Day 12 (1.5). Total overtime hours = 4 + 3 + 1 + 3 + 2 + 1 + 1 + 1.5 = 16.5 hours. Double time (>12): Day 2 has 12.5 hours, so 0.5 hours. Sum = 80 + 16.5 + 0.5 = 97.0, whereas the listed inputs sum to 0 + 12.5 + 11 + 9 + 8 + 0 + 0 + 11 + 10 + 9 + 9 + 9.5 + 0 + 8 = 98.0. Re-evaluating: Day 4 is 9 (1 OT), Day 5 is 8 (0 OT), Day 8 is 11 (3 OT), Day 9 is 10 (2 OT), Day 10 is 9 (1 OT), Day 11 is 9 (1 OT), Day 12 is 9.5 (1.5 OT), Day 14 is 8 (0 OT). Regular days: Day 2, 3, 4, 5, 8, 9, 10, 11, 12, 14 = 10 days * 8 = 80. Overtime hours sum: 4.0 + 3.0 + 1.0 + 3.0 + 2.0 + 1.0 + 1.0 + 1.5 = 16.5. Wait: 12.5 - 8 = 4.5 (4 at 1.5x, 0.5 at 2x). 11 - 8 = 3. 9 - 8 = 1. 8 - 8 = 0. 11 - 8 = 3. 10 - 8 = 2. 9 - 8 = 1. 9 - 8 = 1. 9.5 - 8 = 1.5. 8 - 8 = 0. Daily sum: 12.5 + 11 + 9 + 8 + 11 + 10 + 9 + 9 + 9.5 + 8 = 98.0. Bucket sum: 80 + 16.5 + 0.5 = 97.0. The discrepancy is that 80 + 4 + 0.5 + 3 + 1 + 0 + 3 + 2 + 1 + 1 + 1.5 + 0 = 97.0, but 12.5 + 11 = 23.5; + 9 = 32.5; + 8 = 40.5; + 11 = 51.5; + 10 = 61.5; + 9 = 70.5; + 9 = 79.5; + 9.5 = 89.0; + 8 = 97.0! The daily sum is indeed 97.0 hours, not 98.0 (89.0 + 8 = 97.0). Day 2 (12.5) is indeed the only day exceeding 12 hours. Both totals explicitly equal 97.0 hours."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Day-by-day hours breakdown (Reg / 1.5x / 2x):\n- Day 1 (0): 0 / 0 / 0\n- Day 2 (12.5): 8 / 4 / 0.5\n- Day 3 (11): 8 / 3 / 0\n- Day 4 (9): 8 / 1 / 0\n- Day 5 (8): 8 / 0 / 0\n- Day 6 (0): 0 / 0 / 0\n- Day 7 (0): 0 / 0 / 0\n- Day 8 (11): 8 / 3 / 0\n- Day 9 (10): 8 / 2 / 0\n- Day 10 (9): 8 / 1 / 0\n- Day 11 (9): 8 / 1 / 0\n- Day 12 (9.5): 8 / 1.5 / 0\n- Day 13 (0): 0 / 0 / 0\n- Day 14 (8): 8 / 0 / 0\n\nBucket totals:\n- Regular (1x): 10 \u00d7 8 = 80 hours\n- Overtime (1.5x): 4 + 3 + 1 + 3 + 2 + 1 + 1 + 1.5 = 16.5 hours\n- Double-time (2x): 0.5 hours\n\nPay calculation:\n- Regular: 80 \u00d7 $24.75 = $1,980.00\n- Overtime: 16.5 \u00d7 ($24.75 \u00d7 1.5) = 16.5 \u00d7 $37.125 = $612.5625\n- Double-time: 0.5 \u00d7 ($24.75 \u00d7 2.0) = 0.5 \u00d7 $49.50 = $24.75\n\nGross Pay = $1,980.00 + $612.5625 + $24.75 = $2,617.3125\nRounding to the nearest cent gives $2,617.31.\n\nFINAL: 2617.31"
+}

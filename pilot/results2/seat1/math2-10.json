@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got '2026-07-24', expected '2026-07-24'",
  "error": null,
- "seconds": 15.0,
- "tokens": 2329,
+ "seconds": 8.1,
+ "tokens": 995,
  "prompt_tokens": 247,
- "completion_tokens": 2082,
- "cost": 0.02131,
+ "completion_tokens": 748,
+ "cost": 0.00797,
  "calls": 1,
  "call_errors": 0,
- "answer": "Working:\n\nStart date 2026-03-14 is a Saturday, so business day counting begins Monday 2026-03-16.\n\nCounting weekdays (Mon\u2013Fri) sequentially while skipping the listed holidays, I tallied cumulative business days week by week:\n\n- Mar 16\u201320 (holiday 3/20 excluded): 4 \u2192 total 4\n- Mar 23\u201327 (holiday 3/26 excluded): 4 \u2192 total 8\n- Mar 30\u2013Apr 3: 5 \u2192 total 13\n- Apr 6\u201310: 5 \u2192 total 18\n- Apr 13\u201317: 5 \u2192 total 23\n- Apr 20\u201324: 5 \u2192 total 28\n- Apr 27\u2013May1 (holiday 4/30 excluded): 4 \u2192 total 32\n- May 4\u20138: 5 \u2192 total 37\n- May 11\u201315: 5 \u2192 total 42\n- May 18\u201322: 5 \u2192 total 47\n- May 25\u201329: 5 \u2192 total 52\n- Jun 1\u20135: 5 \u2192 total 57\n- Jun 8\u201312 (holidays 6/10,6/11 excluded): 3 \u2192 total 60\n- Jun 15\u201319: 5 \u2192 total 65\n- Jun 22\u201326: 5 \u2192 total 70\n- Jun 29\u2013Jul3: 5 \u2192 total 75\n- Jul 6\u201310: 5 \u2192 total 80\n- Jul 13\u201317 (holiday 7/16 excluded): 4 \u2192 total 84\n\nNeed 89th business day, so 5 more after Jul 17:\n- Jul 20 (85)\n- Jul 21 (86)\n- Jul 22 (87)\n- Jul 23 (88)\n- Jul 24 (89)\n\nFINAL: 2026-07-24"
+ "answer": "Counting business days from 2026-03-16 onward, skipping holidays, reaches 89 at 2026-07-24.\n\nFINAL: 2026-07-24"
 }

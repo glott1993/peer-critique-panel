@@ -1,0 +1,99 @@
+{
+ "task_id": "data2-17",
+ "type": "data",
+ "condition": "c2",
+ "correct": true,
+ "detail": "got 2411.23, expected 2411.23",
+ "error": null,
+ "seconds": 102.4,
+ "tokens": 122178,
+ "prompt_tokens": 104837,
+ "completion_tokens": 17341,
+ "cost": 0.16915,
+ "calls": 18,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Calculate Gold shipped order average revenue",
+     "what": "Deduplicate orders table, filter to shipped orders placed by Gold-tier customers (C100, C101, C107), compute revenue=units*unit_price per order, sum and divide by count of such orders (21 orders, total $50635.85) to get average $2411.23."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Source: provided Customers.csv (Gold rows: C100, C101, C107) and Orders.csv; duplicate order O2867 counted once.\n\nGold shipped orders after deduplication: C100 has 7, C101 has 6, C107 has 8, total 21.\n\nRevenue per order = units \u00d7 unit_price.\n\nC100 shipped revenue: 429.84 + 1297.78 + 1700.89 + 1207.70 + 2095.54 + 5192.25 + 5564.11 = 17488.11  \nC101 shipped revenue: 2902.62 + 1742.72 + 6160.50 + 2845.26 + 639.31 + 222.92 = 14513.33  \nC107 shipped revenue: 1314.36 + 3768.84 + 4455.90 + 1628.40 + 2130.75 + 4066.56 + 822.90 + 446.70 = 18634.41  \n\nTotal = 17488.11 + 14513.33 + 18634.41 = 50635.85  \nAverage = 50635.85 / 21 = 2411.230952\u2026 \u2248 2411.23\n\nFINAL: 2411.23"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "O2163 is 41 units \u00d7 135.71 = 5563.11, not 5564.11 \u2014 arithmetic error of $1.00"
+    },
+    {
+     "from": "B",
+     "problem": "The draft identifies only one duplicate, but O2341 appears twice identically and O2662 also appears twice identically. Although both are excluded because their statuses are cancelled or returned, the duplicate-handling statement is incomplete."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "Gold customers: C100, C101, C107.\n\nDeduplicated shipped orders for Gold customers:\n\nC100 (7 orders):\n- O2191: 18 * 23.88 = 429.84\n- O2131: 34 * 38.17 = 1297.78\n- O2150: 37 * 45.97 = 1700.89\n- O2891: 13 * 92.90 = 1207.70\n- O2470: 29 * 72.26 = 2095.54\n- O2867: 43 * 120.75 = 5192.25 (deduplicated)\n- O2163: 41 * 135.71 = 5564.11\n(41 * 135.71 = 5564.11, since 40 * 135.71 = 5428.40, + 135.71 = 5564.11)\nC100 sum = 17488.11\n\nC101 (6 orders):\n- O2218: 21 * 138.22 = 2902.62\n- O2165: 14 * 124.48 = 1742.72\n- O2817: 45 * 136.90 = 6160.50\n- O2738: 33 * 86.22 = 2845.26\n- O2422: 7 * 91.33 = 639.31\n- O2286: 2 * 111.46 = 222.92\nC101 sum = 14513.33\n\nC107 (8 orders):\n- O2125: 27 * 48.68 = 1314.36\n- O2350: 36 * 104.69 = 3768.84\n- O2316: 45 * 99.02 = 4455.90\n- O2881: 15 * 108.56 = 1628.40\n- O2840: 45 * 47.35 = 2130.75\n- O2032: 32 * 127.08 = 4066.56\n- O2856: 30 * 27.43 = 822.90\n- O2674: 10 * 44.67 = 446.70\nC107 sum = 18634.41\n\nTotal shipped orders = 7 + 6 + 8 = 21.\nTotal revenue = 17488.11 + 14513.33 + 18634.41 = 50635.85.\n\nAverage revenue per shipped order = 50635.85 / 21 = 2411.23095... \u2248 2411.23.\n\nFINAL: 2411.23"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Gold customers: C100, C101, C107.\n\nDeduplicated shipped orders for Gold customers:\n\nC100 (7 orders):\n- O2191: 18 * 23.88 = 429.84\n- O2131: 34 * 38.17 = 1297.78\n- O2150: 37 * 45.97 = 1700.89\n- O2891: 13 * 92.90 = 1207.70\n- O2470: 29 * 72.26 = 2095.54\n- O2867: 43 * 120.75 = 5192.25 (deduplicated)\n- O2163: 41 * 135.71 = 5564.11\n(41 * 135.71 = 5564.11, since 40 * 135.71 = 5428.40, + 135.71 = 5564.11)\nC100 sum = 17488.11\n\nC101 (6 orders):\n- O2218: 21 * 138.22 = 2902.62\n- O2165: 14 * 124.48 = 1742.72\n- O2817: 45 * 136.90 = 6160.50\n- O2738: 33 * 86.22 = 2845.26\n- O2422: 7 * 91.33 = 639.31\n- O2286: 2 * 111.46 = 222.92\nC101 sum = 14513.33\n\nC107 (8 orders):\n- O2125: 27 * 48.68 = 1314.36\n- O2350: 36 * 104.69 = 3768.84\n- O2316: 45 * 99.02 = 4455.90\n- O2881: 15 * 108.56 = 1628.40\n- O2840: 45 * 47.35 = 2130.75\n- O2032: 32 * 127.08 = 4066.56\n- O2856: 30 * 27.43 = 822.90\n- O2674: 10 * 44.67 = 446.70\nC107 sum = 18634.41\n\nTotal shipped orders = 7 + 6 + 8 = 21.\nTotal revenue = 17488.11 + 14513.33 + 18634.41 = 50635.85.\n\nAverage revenue per shipped order = 50635.85 / 21 = 2411.23095... \u2248 2411.23.\n\nFINAL: 2411.23"
+}

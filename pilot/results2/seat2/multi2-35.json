@@ -2,15 +2,15 @@
  "task_id": "multi2-35",
  "type": "multi",
  "condition": "seat2",
- "correct": true,
- "detail": "ok: got '2026-11-10', expected '2026-11-10' | ok: got 16076.21, expected 16076.21 | ok: got 3193.48, expected 3193.48",
+ "correct": false,
+ "detail": "ok: got '2026-11-10', expected '2026-11-10' | ok: got 16076.21, expected 16076.21 | no: got 3121.58, expected 3193.48",
  "error": null,
- "seconds": 39.2,
- "tokens": 21238,
- "prompt_tokens": 12226,
- "completion_tokens": 9012,
- "cost": 0.01326,
+ "seconds": 28.1,
+ "tokens": 15986,
+ "prompt_tokens": 9570,
+ "completion_tokens": 6416,
+ "cost": 0.00961,
  "calls": 1,
  "call_errors": 0,
- "answer": "Part A: 80 weekdays after 2026-07-13 would be 2026-11-02 before holidays. The six listed holidays add six business days, giving 2026-11-10.\n\nPart B: The monthly payment is approximately 457.3209478. After 18 regular payments and the extra principal payments:\nBalance = 24000(1.0045)^18 - 457.3209478[((1.0045)^18 - 1)/0.0045] - 600(1.0045)^7 - 750(1.0045)^6\n= 16076.21.\n\nPart C: FIFO cost:\n106(4.67) + 88(7.60) + 136(5.50) + 108(10.48) + 22(6.81) = 3193.48.\n\nFINAL: 2026-11-10; 16076.21; 3193.48"
+ "answer": "Part A: Counting weekdays, excluding the six holidays, the 80th business day after 2026-07-13 is 2026-11-10.\n\nPart B: Monthly rate = 0.054/12 = 0.0045. The regular payment is approximately $457.3208. Applying the two extra principal payments and accruing through month 18 gives a remaining balance of $16,076.21.\n\nPart C: FIFO costs by sale are $242.84, $404.18, $402.80, $621.30, $462.00, and $988.46, totaling $3,121.58.\n\nFINAL: 2026-11-10; 16076.21; 3121.58"
 }

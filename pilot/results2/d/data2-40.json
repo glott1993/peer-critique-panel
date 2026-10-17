@@ -1,0 +1,117 @@
+{
+ "task_id": "data2-40",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 293.0, expected 293.0",
+ "error": null,
+ "seconds": 241.5,
+ "tokens": 188153,
+ "prompt_tokens": 132035,
+ "completion_tokens": 56118,
+ "cost": 0.29305,
+ "calls": 27,
+ "call_errors": 3,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter returned orders",
+     "what": "Select all order rows with status returned."
+    },
+    {
+     "id": "c2",
+     "title": "Deduplicate",
+     "what": "Remove exact duplicate rows (same order_id and all fields) so each order counts once."
+    },
+    {
+     "id": "c3",
+     "title": "Sum units",
+     "what": "Sum the units field across the deduplicated returned orders to get total units."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Filtering the Orders table to `status = returned` gives 17 rows. The only exact duplicate rows in the data are O2852, O2133, and O2628, none of which are returned, so no returned order is double-counted.\n\nSum of units for returned orders:\n\n2 + 6 + 8 + 9 + 23 + 42 + 3 + 28 + 8 + 16 + 41 + 25 + 24 + 42 + 3 + 11 + 2 = 293\n\nFINAL: 293"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "There are actually 18 returned orders (including O2002 with 3 units, which appears omitted), and recomputing the sum of units gives 296, not 293"
+    },
+    {
+     "from": "C",
+     "problem": "The draft's sum arithmetic is incorrect. Adding the listed numbers (2+6+8+9+23+42+3+28+8+16+41+25+24+42+3+11+2) yields 293, but this list must be rechecked against the 17 returned rows: O2352 (2), O2421 (6), O2174 (8), O2562 (9), O2222 (23), O2466 (42), O2643 (3), O2231 (28), O2568 (8), O2723 (16), O2074 (41), O2206 (25), O2623 (24), O2405 (42), O2180 (3), O2082 (11), O2378 (2). The sum of these 17 unit values is indeed 293. However, the premise of the prompt defines revenue rules ('returned orders contribute nothing') which might tempt an interpretation that returned units count as 0 if asking about effective volume, though the literal question explicitly asks for units of returned orders."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "Listing all unique rows with status `returned`:\n- O2352: 2\n- O2421: 6\n- O2174: 8\n- O2562: 9\n- O2222: 23\n- O2466: 42\n- O2643: 3\n- O2231: 28\n- O2568: 8\n- O2723: 16\n- O2074: 41\n- O2206: 25\n- O2623: 24\n- O2405: 42\n- O2180: 3\n- O2082: 11\n- O2378: 2\n\nThere are 17 returned orders (the exact duplicates in the dataset are O2852, O2133, and O2628, none of which have status `returned`).\n\nSum of units:\n2 + 6 + 8 + 9 + 23 + 42 + 3 + 28 + 8 + 16 + 41 + 25 + 24 + 42 + 3 + 11 + 2 = 293\n\nFINAL: 293"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Listing all unique rows with status `returned`:\n- O2352: 2\n- O2421: 6\n- O2174: 8\n- O2562: 9\n- O2222: 23\n- O2466: 42\n- O2643: 3\n- O2231: 28\n- O2568: 8\n- O2723: 16\n- O2074: 41\n- O2206: 25\n- O2623: 24\n- O2405: 42\n- O2180: 3\n- O2082: 11\n- O2378: 2\n\nThere are 17 returned orders (the exact duplicates in the dataset are O2852, O2133, and O2628, none of which have status `returned`).\n\nSum of units:\n2 + 6 + 8 + 9 + 23 + 42 + 3 + 28 + 8 + 16 + 41 + 25 + 24 + 42 + 3 + 11 + 2 = 293\n\nFINAL: 293"
+}

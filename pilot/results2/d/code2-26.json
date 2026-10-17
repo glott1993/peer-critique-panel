@@ -1,0 +1,214 @@
+{
+ "task_id": "code2-26",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 247.1,
+ "tokens": 96750,
+ "prompt_tokens": 64281,
+ "completion_tokens": 32469,
+ "cost": 0.13702,
+ "calls": 38,
+ "call_errors": 1,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Percent/plus decoder helper",
+     "what": "Decode a string by replacing '+' with space and %XX hex escapes, raising ValueError on malformed escapes."
+    },
+    {
+     "id": "c2",
+     "title": "Query string splitter and parser",
+     "what": "Split the query string on '&', skip empty pairs, split each pair on first '=' (defaulting value to empty string), decode key/value via the helper, and accumulate values into lists keyed by decoded key in order."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\nfrom urllib.parse import unquote_plus\n\n\ndef parse_query(qs: str) -> dict:\n    def decode(text: str) -> str:\n        i = 0\n        while i < len(text):\n            if text[i] == \"%\":\n                if (\n                    i + 2 >= len(text)\n                    or text[i + 1] not in \"0123456789abcdefABCDEF\"\n                    or text[i + 2] not in \"0123456789abcdefABCDEF\"\n                ):\n                    raise ValueError(\"malformed percent-escape\")\n                i += 3\n            else:\n                i += 1\n        return unquote_plus(text)\n\n    result = {}\n    for pair in qs.split(\"&\"):\n        if not pair:\n            continue\n        key, separator, value = pair.partition(\"=\")\n        decoded_key = decode(key)\n        decoded_value = decode(value if separator else \"\")\n        result.setdefault(decoded_key, []).append(decoded_value)\n    return result\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "unquote_plus decodes %XX based on UTF-8 byte semantics and silently replaces invalid UTF-8 sequences (e.g. a lone %FF) with U+FFFD instead of raising, while the custom validator only checks that two hex digits follow '%', not that the resulting byte sequence is valid UTF-8 \u2014 so a value with a structurally valid but non-UTF8 escape won't raise even if hidden tests expect byte-for-byte fidelity or a different decoding result than unquote_plus provides"
+    },
+    {
+     "from": "A",
+     "problem": "the code scans and validates the string twice (once manually, once inside unquote_plus), which is wasteful but also means any discrepancy between the custom hex-check and unquote_plus's own parsing (e.g. different hex digit set acceptance) could cause valid strings per one pass to be rejected or mis-decoded by the other"
+    },
+    {
+     "from": "A",
+     "problem": "the spec says 'empty pairs from && or trailing & are ignored' but the code only skips pair=='' ; a pair like '=' (bare equals with no key or value) is not empty string-wise and gets inserted as key '' -> [''], which hidden tests may or may not expect \u2014 this ambiguity is untested in the visible examples"
+    },
+    {
+     "from": "D",
+     "problem": "The validation loop only checks that each '%' is followed by two hex digits, but it does not verify that the two hex digits form a valid byte sequence for UTF-8 decoding. unquote_plus will raise UnicodeDecodeError for invalid UTF-8 sequences, not ValueError, so malformed percent-escapes like '%FF' will not raise ValueError as required."
+    },
+    {
+     "from": "D",
+     "problem": "The manual validation loop treats '+' as a normal character and does not convert it to a space before calling unquote_plus. However, unquote_plus does convert '+' to space, so this is actually correct. No issue here."
+    },
+    {
+     "from": "D",
+     "problem": "The code skips empty pairs with 'if not pair: continue', which correctly ignores empty pairs. No issue here."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses pair.partition('=') and if separator is empty, it sets value to empty string. This is correct. No issue here."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 0,
+   "answer": "```python\nfrom urllib.parse import unquote_plus\n\n\ndef parse_query(qs: str) -> dict:\n    def decode(text: str) -> str:\n        i = 0\n        while i < len(text):\n            if text[i] == \"%\":\n                if (\n                    i + 2 >= len(text)\n                    or text[i + 1] not in \"0123456789abcdefABCDEF\"\n                    or text[i + 2] not in \"0123456789abcdefABCDEF\"\n                ):\n                    raise ValueError(\"malformed percent-escape\")\n                i += 3\n            else:\n                i += 1\n        return unquote_plus(text)\n\n    result = {}\n    for pair in qs.split(\"&\"):\n        if not pair:\n            continue\n        key, separator, value = pair.partition(\"=\")\n        decoded_key = decode(key)\n        decoded_value = decode(value if separator else \"\")\n        result.setdefault(decoded_key, []).append(decoded_value)\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "unquote_plus defaults to utf-8 with errors='replace', replacing invalid UTF-8 byte sequences (e.g. '%FF' or incomplete sequences like '%C3%28') with '\\ufffd' instead of raising ValueError, or conversely, unquote_to_bytes / strict decoding might be required when the prompt explicitly specifies 'Raise ValueError for a malformed percent-escape'"
+    },
+    {
+     "from": "C",
+     "problem": "While the draft checks `i + 2 >= len(text)`, if the input contains '%80' in isolation (an invalid single UTF-8 byte), `unquote_plus` silently produces U+FFFD instead of failing, which conflicts with standard strict query string parsers if byte validity is enforced"
+    },
+    {
+     "from": "D",
+     "problem": "The validation loop only checks that '%' is followed by two hex digits, but it does not verify that the '%' itself is part of a valid escape sequence in all cases. Specifically, the loop increments i by 3 when it finds a valid '%' escape, but it does not handle the case where '%' appears at the end of the string or is followed by non-hex characters correctly in all scenarios. However, the more critical issue is that the validation is redundant and potentially incorrect: unquote_plus already raises ValueError for malformed percent-escapes, but the custom validation may miss some edge cases or incorrectly reject valid input."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses `if not pair: continue` to skip empty pairs. However, this also skips pairs that are empty after splitting but might contain meaningful data if the query string has leading or trailing '&' with spaces or other characters. For example, '&a=1' would split into ['', 'a=1'], and the empty string is skipped. This is correct per the spec. But what about 'a=1&&b=2'? This splits into ['a=1', '', 'b=2'], and the empty string is skipped. This is also correct. The issue is that the spec says 'Empty pairs (from '&&' or a trailing '&') are ignored', but what about a pair that is just '='? The spec says 'a key without '=' maps to the empty string', but '=' alone would be a key of empty string and value of empty string. The code handles this: pair.partition('=') on '=' gives key='', separator='=', value='', so decoded_key='' and decoded_value=''. This is correct. However, the code does not explicitly handle the case where the pair is just '=' and the key is empty, which might be considered an empty pair and should be ignored? The spec is ambiguous, but the code treats it as a valid pair with empty key and empty value."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses unquote_plus for decoding, which converts '+' to space. However, the custom validation loop does not handle '+' specially, which is fine because '+' is not a percent-escape. The issue is that the validation loop might interfere with the decoding of '+' if the input contains '%' followed by '+' or other characters. For example, 'a=%2B' should decode to 'a=+' (since %2B is '+'), but the custom validation sees '%2B' as valid (2 and B are hex), so it passes, and unquote_plus decodes '%2B' to '+'. This is correct. But what about 'a=%+B'? The custom validation sees '%' followed by '+' which is not hex, so it raises ValueError. This is correct because '%+B' is malformed. The issue is that the custom validation is redundant and might cause confusion, but it doesn't introduce bugs for '+' handling."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses `result.setdefault(decoded_key, []).append(decoded_value)`, which correctly appends values to a list for each key. However, the order of keys in the result dictionary is not guaranteed to be the order of first appearance, but the spec only requires that values for the same key are in order of appearance, not that the dictionary preserves insertion order. Python 3.7+ dictionaries preserve insertion order, but this is an implementation detail. The code is correct for the visible examples and likely for hidden tests, but if the hidden tests check for key order, it might fail on older Python versions. The spec does not require key order, so this is not a bug."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "D",
+   "accepted": 0,
+   "rejected": 6,
+   "answer": "```python\nfrom urllib.parse import unquote_plus\n\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if not pair:\n            continue\n        key, sep, value = pair.partition('=')\n        result.setdefault(unquote_plus(key), []).append(unquote_plus(value if sep else ''))\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "CPython's unquote_plus/unquote silently leaves invalid %-sequences like '%zz' or trailing '%' unchanged instead of raising, so spec requirement is violated"
+    },
+    {
+     "from": "A",
+     "problem": "logic uses value if sep else '' but value from partition is already '' when sep is absent, so the conditional is redundant but not wrong \u2014 however this masks that unquote_plus is still called on '' needlessly, not a real bug, retract"
+    },
+    {
+     "from": "B",
+     "problem": "Unsupported inference: unquote_plus silently leaves malformed percent-escapes unchanged instead of raising ValueError, violating the requirement."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "C",
+   "accepted": 2,
+   "rejected": 1,
+   "answer": "```python\ndef _decode_component(s: str) -> str:\n    # '+' represents a space in query strings\n    s = s.replace('+', ' ')\n    if '%' not in s:\n        return s\n\n    parts = s.split('%')\n    res = bytearray(parts[0].encode('utf-8'))\n    for part in parts[1:]:\n        if len(part) < 2:\n            raise ValueError(f\"Malformed percent-escape: incomplete escape '%{part}'\")\n        hex_code = part[:2]\n        try:\n            res.append(int(hex_code, 16))\n        except ValueError:\n            raise ValueError(f\"Malformed percent-escape: invalid hex digits '%{hex_code}'\")\n        res.extend(part[2:].encode('utf-8'))\n\n    return res.decode('utf-8')\n\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if not pair:\n            continue\n        key, sep, value = pair.partition('=')\n        decoded_key = _decode_component(key)\n        decoded_val = _decode_component(value) if sep else ''\n        result.setdefault(decoded_key, []).append(decoded_val)\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "```python\ndef _decode_component(s: str) -> str:\n    # '+' represents a space in query strings\n    s = s.replace('+', ' ')\n    if '%' not in s:\n        return s\n\n    parts = s.split('%')\n    res = bytearray(parts[0].encode('utf-8'))\n    for part in parts[1:]:\n        if len(part) < 2:\n            raise ValueError(f\"Malformed percent-escape: incomplete escape '%{part}'\")\n        hex_code = part[:2]\n        try:\n            res.append(int(hex_code, 16))\n        except ValueError:\n            raise ValueError(f\"Malformed percent-escape: invalid hex digits '%{hex_code}'\")\n        res.extend(part[2:].encode('utf-8'))\n\n    return res.decode('utf-8')\n\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if not pair:\n            continue\n        key, sep, value = pair.partition('=')\n        decoded_key = _decode_component(key)\n        decoded_val = _decode_component(value) if sep else ''\n        result.setdefault(decoded_key, []).append(decoded_val)\n    return result\n```"
+}

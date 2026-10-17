@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-40",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "no: got 2150.63, expected 2298.62 | ok: got 205.0, expected 205.0 | ok: got 78.0, expected 78.0",
+ "error": null,
+ "seconds": 20.7,
+ "tokens": 3746,
+ "prompt_tokens": 329,
+ "completion_tokens": 3417,
+ "cost": 0.01306,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nThe regular hours (up to 8/day), overtime hours (8 to 12/day, paid at 1.5x), and double-time hours (over 12/day, paid at 2x) are calculated for each of the 14 days:\n- Regular hours: 8 + 8 + 7.5 + 7.5 + 8 + 6 + 8 + 7.5 + 8 + 0 + 8 + 8 + 8 + 8 = 92.5 hours\n- Overtime hours: 3 + 0 + 0 + 0 + 0 + 0 + 1.5 + 0 + 4 + 0 + 2 + 2 + 0 + 2 = 14.5 hours\n- Double-time hours: 1 hour\n\nTotal equivalent regular hours = 92.5 + 1.5 \u00d7 14.5 + 2 \u00d7 1 = 116.25 hours.\nGross pay = 116.25 \u00d7 $18.50 = $2150.625, which rounds to 2150.63.\n\nPart B:\nBy Fermat's Little Theorem, since 233 is prime, 52^232 \u2261 1 (mod 233).\n799 = 3 \u00d7 232 + 103, so 52^799 \u2261 52^103 (mod 233).\nComputing successive squares modulo 233:\n- 52^2 = 2704 \u2261 141 \u2261 -92 (mod 233)\n- 52^4 \u2261 (-92)^2 = 8464 \u2261 76 (mod 233)\n- 52^8 \u2261 76^2 = 5776 \u2261 184 \u2261 -49 (mod 233)\n- 52^16 \u2261 (-49)^2 = 2401 \u2261 71 (mod 233)\n- 52^32 \u2261 71^2 = 5041 \u2261 148 \u2261 -85 (mod 233)\n- 52^64 \u2261 (-85)^2 = 7225 \u2261 2 (mod 233)\n\nThen 52^103 = 52^64 \u00d7 52^32 \u00d7 52^4 \u00d7 52^2 \u00d7 52^1 \u2261 2 \u00d7 (-85) \u00d7 76 \u00d7 (-92) \u00d7 52 \u2261 205 (mod 233).\n\nPart C:\n80228 \u00d7 4038 = 323960664\n514 \u00d7 4208 = 2162912\n323960664 \u00d7 2162912 = 700698407693568\nThe sum of the digits is 7 + 0 + 0 + 6 + 9 + 8 + 4 + 0 + 7 + 6 + 9 + 3 + 5 + 6 + 8 = 78.\n\nFINAL: 2150.63; 205; 78"
+}

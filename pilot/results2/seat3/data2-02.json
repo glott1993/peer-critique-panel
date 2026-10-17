@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-02",
+ "type": "data",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 'reese', expected 'reese'",
+ "error": null,
+ "seconds": 10.0,
+ "tokens": 5131,
+ "prompt_tokens": 3375,
+ "completion_tokens": 1756,
+ "cost": 0.00912,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the customer with the highest total revenue, we calculate the revenue (units \u00d7 unit_price) for all shipped and pending orders, removing exact duplicate rows:\n\n1. **Reese (C102)**:\n- O2675: 16 \u00d7 31.64 = $506.24 (pending)\n- O2582: 12 \u00d7 106.84 = $1,282.08 (pending, counted once)\n- O2258: 2 \u00d7 112.95 = $225.90 (shipped)\n- O2648: 16 \u00d7 124.39 = $1,990.24 (shipped)\n- O2112: 32 \u00d7 65.81 = $2,105.92 (shipped)\n- O2856: 23 \u00d7 28.59 = $657.57 (shipped)\n- O2406: 5 \u00d7 93.67 = $468.35 (shipped)\n- O2708: 22 \u00d7 136.23 = $2,997.06 (shipped)\n- O2745: 38 \u00d7 105.24 = $3,999.12 (shipped)\n- O2739: 24 \u00d7 4.61 = $110.64 (shipped)\n- O2337: 37 \u00d7 135.16 = $5,000.92 (shipped)\nTotal for Reese = $19,344.04\n\n2. **Casey (C101)**:\n- O2449 + O2156 + O2799 + O2032 + O2523 + O2280 + O2585 = $14,133.28\n\nAll other customers have significantly lower totals.\n\nFINAL: Reese"
+}

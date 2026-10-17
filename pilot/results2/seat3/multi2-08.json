@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-08",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 6015.0, expected 6015.0 | ok: got 200.0, expected 200.0 | ok: got 227.12, expected 227.12",
+ "error": null,
+ "seconds": 20.0,
+ "tokens": 3955,
+ "prompt_tokens": 254,
+ "completion_tokens": 3701,
+ "cost": 0.01407,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\nUsing the principle of inclusion-exclusion, we count the integers $n \\le 12{,}000$ divisible by at least one of 3, 5, or 7:\n- Divisible by 3, 5, or 7:\n  $$\\lfloor 12000/3 \\rfloor + \\lfloor 12000/5 \\rfloor + \\lfloor 12000/7 \\rfloor - \\lfloor 12000/15 \\rfloor - \\lfloor 12000/21 \\rfloor - \\lfloor 12000/35 \\rfloor + \\lfloor 12000/105 \\rfloor$$\n  $$= 4000 + 2400 + 1714 - 800 - 571 - 342 + 114 = 6515$$\n- Divisible by 3, 5, or 7 and also divisible by 13:\n  $$\\lfloor 12000/39 \\rfloor + \\lfloor 12000/65 \\rfloor + \\lfloor 12000/91 \\rfloor - \\lfloor 12000/195 \\rfloor - \\lfloor 12000/273 \\rfloor - \\lfloor 12000/455 \\rfloor + \\lfloor 12000/1365 \\rfloor$$\n  $$= 307 + 184 + 131 - 61 - 43 - 26 + 8 = 500$$\n\nSubtracting the two gives $6515 - 500 = 6015$.\n\n**Part B:**\nSince 233 is prime, Euler's criterion gives $86^{(233-1)/2} = 86^{116} \\equiv \\left(\\frac{86}{233}\\right) \\pmod{233}$.\nComputing the Legendre symbol:\n$$\\left(\\frac{86}{233}\\right) = \\left(\\frac{2}{233}\\right)\\left(\\frac{43}{233}\\right) = (1)\\left(\\frac{233}{43}\\right) = \\left(\\frac{18}{43}\\right) = \\left(\\frac{2}{43}\\right) = -1$$\nThus, $86^{116} \\equiv -1 \\pmod{233}$, so $86^{130} \\equiv -86^{14} \\pmod{233}$.\nBy successive squaring:\n- $86^2 = 7396 \\equiv -60 \\pmod{233}$\n- $86^4 \\equiv (-60)^2 = 3600 \\equiv 105 \\pmod{233}$\n- $86^8 \\equiv 105^2 = 11025 \\equiv 74 \\pmod{233}$\n- $86^{14} = 86^8 \\cdot 86^4 \\cdot 86^2 \\equiv 74 \\cdot 105 \\cdot (-60) \\equiv 81 \\cdot (-60) = -4860 \\equiv 33 \\pmod{233}$\n\nTherefore, $86^{130} \\equiv -33 \\equiv 200 \\pmod{233}$.\n\n**Part C:**\nThe compound multiplier applied to the original price $P$ is:\n$$0.90 \\times 1.25 \\times 1.12 \\times 1.20 \\times 1.20 = 1.8144$$\nSetting up the equation $P \\times 1.8144 = 412.08$, we find:\n$$P = \\frac{412.08}{1.8144} \\approx 227.1153\\dots \\approx 227.12$$\n\nFINAL: 6015; 200; 227.12"
+}

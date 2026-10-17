@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-13",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.7,
+ "tokens": 539,
+ "prompt_tokens": 166,
+ "completion_tokens": 373,
+ "cost": 0.00152,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of the `edit_distance` function using the Optimal String Alignment (OSA) algorithm (restricted Damerau\u2013Levenshtein distance):\n\n```python\ndef edit_distance(a: str, b: str) -> int:\n    m, n = len(a), len(b)\n    # Initialize (m + 1) x (n + 1) dynamic programming table\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n\n    for i in range(m + 1):\n        dp[i][0] = i\n    for j in range(n + 1):\n        dp[0][j] = j\n\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            cost = 0 if a[i - 1] == b[j - 1] else 1\n            dp[i][j] = min(\n                dp[i - 1][j] + 1,        # deletion\n                dp[i][j - 1] + 1,        # insertion\n                dp[i - 1][j - 1] + cost  # substitution\n            )\n            # Transposition of adjacent characters\n            if i > 1 and j > 1 and a[i - 1] == b[j - 2] and a[i - 2] == b[j - 1]:\n                dp[i][j] = min(dp[i][j], dp[i - 2][j - 2] + 1)\n\n    return dp[m][n]\n```"
+}

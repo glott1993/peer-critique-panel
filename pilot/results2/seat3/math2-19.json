@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-19",
+ "type": "math",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 3554.19, expected 3554.19",
+ "error": null,
+ "seconds": 5.9,
+ "tokens": 1374,
+ "prompt_tokens": 305,
+ "completion_tokens": 1069,
+ "cost": 0.00424,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the balance after month 15, we track the balance at each step. Each month:\n1. Apply the transaction.\n2. If balance < $1,000, subtract $12.\n3. Add interest of 0.5% (multiply by 1.005).\n\n- Start: 1200.00\n- Month 1: +1100 -> 2300.00; fee: 0 -> 2300.00; interest: * 1.005 = 2311.50\n- Month 2: -400 -> 1911.50; fee: 0 -> 1911.50; interest: * 1.005 = 1921.0575\n- Month 3: +450 -> 2371.0575; fee: 0 -> 2371.0575; interest: * 1.005 = 2382.912788\n- Month 4: +450 -> 2832.912788; fee: 0 -> 2832.912788; interest: * 1.005 = 2847.077351\n- Month 5: -400 -> 2447.077351; fee: 0 -> 2447.077351; interest: * 1.005 = 2459.312738\n- Month 6: +1100 -> 3559.312738; fee: 0 -> 3559.312738; interest: * 1.005 = 3577.109302\n- Month 7: -900 -> 2677.109302; fee: 0 -> 2677.109302; interest: * 1.005 = 2690.494848\n- Month 8: +1100 -> 3790.494848; fee: 0 -> 3790.494848; interest: * 1.005 = 3809.447323\n- Month 9: -650 -> 3159.447323; fee: 0 -> 3159.447323; interest: * 1.005 = 3175.244559\n- Month 10: +1100 -> 4275.244559; fee: 0 -> 4275.244559; interest: * 1.005 = 4296.620782\n- Month 11: +300 -> 4596.620782; fee: 0 -> 4596.620782; interest: * 1.005 = 4619.603886\n- Month 12: +300 -> 4919.603886; fee: 0 -> 4919.603886; interest: * 1.005 = 4944.201906\n- Month 13: -400 -> 4544.201906; fee: 0 -> 4544.201906; interest: * 1.005 = 4566.922915\n- Month 14: -650 -> 3916.922915; fee: 0 -> 3916.922915; interest: * 1.005 = 3936.507530\n- Month 15: -400 -> 3536.507530; fee: 0 -> 3536.507530; interest: * 1.005 = 3554.190068\n\nThe balance never drops below $1,000, so no fees are incurred.\nRounding to the nearest cent gives 3554.19.\n\nFINAL: 3554.19"
+}

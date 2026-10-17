@@ -1,0 +1,207 @@
+{
+ "task_id": "multi2-22",
+ "type": "multi",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got 222.87, expected 222.87 | ok: got 4397.87, expected 4397.87 | ok: got '2026-10-23', expected '2026-10-23'",
+ "error": null,
+ "seconds": 385.1,
+ "tokens": 168843,
+ "prompt_tokens": 101095,
+ "completion_tokens": 67748,
+ "cost": 0.29773,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Solve Price Sequence",
+     "what": "Reverse the successive percentage changes (\u00d71.20\u00d70.85\u00d71.20\u00d71.12\u00d70.85) applied to the original price to equal $259.70, and solve for that original price to the nearest cent."
+    },
+    {
+     "id": "c2",
+     "title": "Compute Monthly Account Balance",
+     "what": "Starting from $4,300.00, sequentially apply each of the 15 listed monthly transactions, then after month 15 apply the $12 fee only if balance <$1,500, then add 0.25% interest, to get the final balance to the nearest cent."
+    },
+    {
+     "id": "c3",
+     "title": "Count Business Days",
+     "what": "Starting from 2026-06-19, advance 84 weekdays (Mon\u2013Fri only), skipping the six listed holidays if they fall on a counted weekday, to find the resulting date in YYYY-MM-DD format."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "C",
+     "D"
+    ],
+    "c3": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Part A: Combined multiplier = \\(1.20 \\times 0.85 \\times 1.20 \\times 1.12 \\times 0.85 = 1.165248\\).  \nOriginal price = \\(259.70 / 1.165248 = 222.87\\).\n\nPart B: Starting balance \\(4300.00\\). No $12 fee occurs because the lowest pre-fee balance after a transaction is \\(2421.59\\) above $1,500. After month 15\u2019s transaction, before interest: \\(4386.899803\\). Interest: \\(10.967250\\). Balance: \\(4397.867053 \\to 4397.87\\).\n\nPart C: 84 business days after Friday 2026-06-19 requires 90 weekdays because the 6 listed holidays are weekdays in the interval. 90 weekdays = 18 weeks later = 2026-10-23.\n\nFINAL: 222.87; 4397.87; 2026-10-23"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "This intermediate value is arithmetically inaccurate. Applying the stated recurrence month by month, with no fees, gives approximately 4386.899292 before month 15 interest, not 4386.899803."
+    },
+    {
+     "from": "B",
+     "problem": "These figures inherit the incorrect pre-interest amount. Using the corrected value gives interest approximately 10.967248 and final balance approximately 4397.866540, which still rounds to 4397.87."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "Part A: Combined multiplier = 1.20 \u00d7 0.85 \u00d7 1.20 \u00d7 1.12 \u00d7 0.85 = 1.165248. Original price = 259.70 / 1.165248 \u2248 222.87.\n\nPart B: Starting balance is $4,300.00. Following the exact monthly recurrence without intermediate rounding, the lowest balance after a transaction is $2,421.59 (month 8), so no $12 fee applies. After month 15's $400 withdrawal, the balance before interest is 4386.899803. Interest is 4386.899803 \u00d7 0.0025 \u2248 10.967250, resulting in a final balance of 4397.867053 \u2192 4397.87.\n\nPart C: Counting weekdays after Friday 2026-06-19, all 6 given holidays fall on Mondays through Fridays. Adding 6 holiday days to 84 business days gives 90 weekdays. Exactly 90 weekdays equals 18 full weeks, landing on Friday 2026-10-23.\n\nFINAL: 222.87; 4397.87; 2026-10-23"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The draft does not show the required month-by-month application of the fee-check and 0.25% interest after each month's transaction (only mentions checking the minimum and computing final interest once), which could hide an error if interest compounds monthly as specified"
+    },
+    {
+     "from": "D",
+     "problem": "The draft computes 259.70 / 1.165248 \u2248 222.87, but the exact quotient is 222.870... Let's verify: 1.165248 \u00d7 222.87 = 259.699... which rounds to 259.70, so the answer is consistent. However, the draft does not show whether the original price should be rounded to the nearest cent before applying the multipliers, which could change the final amount. The request asks for the original price to the nearest cent, so rounding is appropriate, but the working is too terse to confirm the exact unrounded value."
+    },
+    {
+     "from": "D",
+     "problem": "The draft states the lowest balance after a transaction is $2,421.59 in month 8, so no $12 fee applies. But the recurrence includes interest of 0.25% added each month, and the draft does not show the month-by-month balances. The claim that no fee applies depends on the exact order of operations: transaction, then fee check, then interest. If the balance after a transaction is below $1,500, the fee is charged before interest. The draft's lowest balance of $2,421.59 is above $1,500, but this needs verification against the full sequence of 15 months. A single arithmetic slip in any month could change the fee status and the final balance."
+    },
+    {
+     "from": "D",
+     "problem": "The draft says 84 business days plus 6 holidays equals 90 weekdays, and 90 weekdays equals 18 full weeks, landing on Friday 2026-10-23. But 2026-06-19 is a Friday, and the first business day after it is Monday 2026-06-22. Counting 84 business days from 2026-06-19 (exclusive) means the 84th business day is not simply 90 weekdays later if the starting day is a Friday and holidays are skipped. The draft assumes all 6 holidays fall within the 90-weekday span, but it does not verify that none of the holidays fall after the 84th business day. If a holiday occurs after the target date, it should not be counted."
+    },
+    {
+     "from": "D",
+     "problem": "The draft ends with 'FINAL: 222.87; 4397.87; 2026-10-23' but the request says 'For a number give digits only (no units, no currency sign, no commas; use a decimal point).' The draft uses a decimal point correctly, but Part B's answer 4397.87 is a number, and Part A's 222.87 is a number. The date is YYYY-MM-DD. The format appears correct, but the draft does not explicitly state that the numbers are rounded to the nearest cent, which is required."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "B",
+   "accepted": 3,
+   "rejected": 2,
+   "answer": "Part A: The combined multiplier is 1.20 \u00d7 0.85 \u00d7 1.20 \u00d7 1.12 \u00d7 0.85 = 1.165248. Thus, original price = 259.70 \u00f7 1.165248 = 222.871011..., which rounds to 222.87.\n\nPart B: Applying each transaction, then the fee check, then 0.25% interest gives balances after interest of 5012.50, 4373.41, 4133.71, 4595.17, 4205.66, 3313.93, 3071.58, 2427.64, 3536.46, 3846.05, 3204.04, 4314.80, 4074.96, 4786.90, and 4397.87. The minimum post-transaction balance is above 1500, so no fees apply. Final balance: 4397.87.\n\nPart C: Starting with Monday 2026-06-22, the 84th weekday would be 2026-10-16. All six listed holidays occur before then, extending the date by six weekdays to 2026-10-23.\n\nFINAL: 222.87; 4397.87; 2026-10-23"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing exactly: after month 6 balance is 3313.926143, minus 250 withdrawal = 3063.926143, times 1.0025 = 3071.585958, which rounds to 3071.59, not 3071.58. This propagates through all later months, so the final balance 4397.87 should be re-verified."
+    },
+    {
+     "from": "A",
+     "problem": "The draft correctly identifies that the 84th weekday (ignoring holidays) from 2026-06-22 is 2026-10-16, and that 6 holidays fall within the range requiring 6 additional business days. But counting 6 business days forward from 2026-10-16 (a Friday) lands on 2026-10-26 (Mon 10/19, Tue 10/20, Wed 10/21, Thu 10/22, Fri 10/23, Mon 10/26), not 2026-10-23."
+    },
+    {
+     "from": "D",
+     "problem": "The draft multiplies the percentages in the order given, but the request says 'raised by 20%, then cut by 15%, then raised by 20%, then raised by 12%, then cut by 15%'. The order of multiplication for percentage changes is commutative, so the product is correct. However, the draft does not show the intermediate rounding or verify that the final price after applying the multipliers to 222.87 equals 259.70. The original price calculation is 259.70 / 1.165248 = 222.871011..., which rounds to 222.87. This is correct, but the draft's working is too brief and does not demonstrate the reverse check."
+    },
+    {
+     "from": "D",
+     "problem": "The draft states 'The minimum post-transaction balance is above 1500, so no fees apply.' This is false. The fee is charged if the balance is below $1,500 after the transaction but before interest. In month 6, the balance after the transaction is $3,300.00 (4300 + 700 - 650 - 250 + 450 - 400 - 900 - 250 - 650 + 1100 + 300 - 650 + 1100 - 250 + 700 - 400 = 3300), which is above 1500. However, in month 7, the balance after the transaction is $2,650.00, still above 1500. In month 8, the balance after the transaction is $2,000.00, still above 1500. In month 9, the balance after the transaction is $3,100.00, still above 1500. In month 10, the balance after the transaction is $3,400.00, still above 1500. In month 11, the balance after the transaction is $2,750.00, still above 1500. In month 12, the balance after the transaction is $3,850.00, still above 1500. In month 13, the balance after the transaction is $3,600.00, still above 1500. In month 14, the balance after the transaction is $4,300.00, still above 1500. In month 15, the balance after the transaction is $3,900.00, still above 1500. So no fees apply. The draft's claim is correct, but the working is not shown for each month, making it impossible to verify the intermediate balances. The final balance of 4397.87 is plausible but not independently verified."
+    },
+    {
+     "from": "D",
+     "problem": "The draft says 'Starting with Monday 2026-06-22, the 84th weekday would be 2026-10-16. All six listed holidays occur before then, extending the date by six weekdays to 2026-10-23.' This is incorrect because the holidays are not all before 2026-10-16. The holidays are 2026-06-23, 2026-07-03, 2026-07-06, 2026-07-13, 2026-07-17, 2026-08-07. All of these are before 2026-10-16, so the draft's statement is correct. However, the draft does not account for the fact that 2026-06-19 is a Friday, so the first business day is Monday 2026-06-22. The 84th business day after 2026-06-19, counting only weekdays and skipping the six holidays, is indeed 2026-10-23. The draft's answer is correct, but the working is too brief and does not show the day-by-day count or the holiday adjustments."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "Part A: multiplier = 1.20 \u00d7 0.85 \u00d7 1.20 \u00d7 1.12 \u00d7 0.85 = 1.165248. Original = 259.70 / 1.165248 = 222.871..., so $222.87.\nPart B: Using one listed transaction per month and exact arithmetic, balances after interest are 5012.50, 4373.41, 4133.71, 4595.17, 4205.66, 3313.93, 3071.59, 2427.64, 3536.46, 3846.05, 3204.04, 4314.80, 4074.96, 4786.90, 4397.87. Pre-interest balances stay above $1,500, so no fees; final is $4397.87.\nPart C: 2026-06-19 is Friday, so day 1 is Monday 2026-06-22. The 84th weekday ignoring holidays is Thursday 2026-10-15. All six holidays occur before then and are weekdays, so add six weekdays: 10/16, 10/19, 10/20, 10/21, 10/22, 10/23. Date is 2026-10-23.\nFINAL: 222.87; 4397.87; 2026-10-23"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Part A: multiplier = 1.20 \u00d7 0.85 \u00d7 1.20 \u00d7 1.12 \u00d7 0.85 = 1.165248. Original = 259.70 / 1.165248 = 222.871..., so $222.87.\nPart B: Using one listed transaction per month and exact arithmetic, balances after interest are 5012.50, 4373.41, 4133.71, 4595.17, 4205.66, 3313.93, 3071.59, 2427.64, 3536.46, 3846.05, 3204.04, 4314.80, 4074.96, 4786.90, 4397.87. Pre-interest balances stay above $1,500, so no fees; final is $4397.87.\nPart C: 2026-06-19 is Friday, so day 1 is Monday 2026-06-22. The 84th weekday ignoring holidays is Thursday 2026-10-15. All six holidays occur before then and are weekdays, so add six weekdays: 10/16, 10/19, 10/20, 10/21, 10/22, 10/23. Date is 2026-10-23.\nFINAL: 222.87; 4397.87; 2026-10-23"
+}

@@ -165,11 +165,13 @@ python run_pilot.py --tasks tasks/pilot2_tasks.json --results results2-smoke --c
 rm -rf results2-smoke
 ```
 
-Status line, from `pilot/` (files written so far, then tasks that ended in an error):
+Status line, from `pilot/` (files written so far, then tasks that ended in an error; the `[A-Z]` keeps the count to the task's own error field, which starts with the exception's name, because a record where the panel routed around a call carries that call's error text under `declined`):
 
 ```
-ls results2/*/ | grep -c json; grep -l '"error": "' results2/*/*.json 2>/dev/null | wc -l
+ls results2/*/ | grep -c json; grep -l '"error": "[A-Z]' results2/*/*.json 2>/dev/null | wc -l
 ```
+
+PowerShell: `(Get-ChildItem results2\*\*.json).Count; (Select-String -Path results2\*\*.json -Pattern '"error": "[A-Z]' -CaseSensitive -List | Measure-Object).Count`
 
 ### Stages and costs
 

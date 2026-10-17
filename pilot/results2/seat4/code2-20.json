@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-20",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 219.9,
+ "tokens": 19766,
+ "prompt_tokens": 440,
+ "completion_tokens": 19326,
+ "cost": 0.01937,
+ "calls": 2,
+ "call_errors": 1,
+ "answer": "```python\ndef justify(words, width):\n    if not words:\n        return []\n    \n    lines = []\n    current = []\n    current_len = 0\n    \n    for word in words:\n        if not current:\n            current.append(word)\n            current_len = len(word)\n        else:\n            # Adding word requires len(current) spaces between all words\n            if current_len + len(current) + len(word) <= width:\n                current.append(word)\n                current_len += len(word)\n            else:\n                lines.append(_justify_line(current, width))\n                current = [word]\n                current_len = len(word)\n    \n    # Last line is left-justified\n    if current:\n        line = ' '.join(current)\n        lines.append(line + ' ' * (width - len(line)))\n    \n    return lines\n\n\ndef _justify_line(words, width):\n    if len(words) == 1:\n        return words[0] + ' ' * (width - len(words[0]))\n    \n    total_len = sum(len(w) for w in words)\n    total_spaces = width - total_len\n    gaps = len(words) - 1\n    \n    base = total_spaces // gaps\n    extra = total_spaces % gaps\n    \n    parts = []\n    for i, word in enumerate(words):\n        parts.append(word)\n        if i < gaps:\n            spaces = base + (1 if i < extra else 0)\n            parts.append(' ' * spaces)\n    \n    return ''.join(parts)\n```"
+}

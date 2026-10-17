@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-02",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 8.4,
+ "tokens": 654,
+ "prompt_tokens": 185,
+ "completion_tokens": 469,
+ "cost": 0.0021,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\ndef min_rooms(meetings):\n    if not meetings:\n        return 0\n\n    meetings = sorted(meetings, key=lambda x: x[0])\n    end_times = []\n    max_rooms = 0\n\n    for start, end in meetings:\n        if end_times and end_times[0] <= start:\n            heapq.heappop(end_times)\n        heapq.heappush(end_times, end)\n        max_rooms = max(max_rooms, len(end_times))\n\n    return max_rooms\n```"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-03",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got '2026-07-29', expected '2026-07-29' | ok: got 4010.0, expected 4010.0 | ok: got 2839.0, expected 2839.0",
+ "error": null,
+ "seconds": 16.8,
+ "tokens": 3015,
+ "prompt_tokens": 333,
+ "completion_tokens": 2682,
+ "cost": 0.01031,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nStarting from 2026-03-19, we count business days (Monday\u2013Friday) excluding the given holidays:\n- March 2026: 8 business days (March 20, 23\u201327, 30\u201331), leaving $88 - 8 = 80$ days.\n- April 2026: 22 weekdays minus 3 holidays (2026-04-03, 2026-04-09, 2026-04-24) = 19 business days, leaving $80 - 19 = 61$ days.\n- May 2026: 21 weekdays minus 1 holiday (2026-05-13) = 20 business days, leaving $61 - 20 = 41$ days.\n- June 2026: 22 weekdays minus 2 holidays (2026-06-18, 2026-06-29) = 20 business days, leaving $41 - 20 = 21$ days.\n- July 2026: Counting 21 business days starting from July 1 reaches Wednesday, July 29, 2026.\n\n**Part B**\nUsing the Principle of Inclusion-Exclusion for multiples of 3, 5, and 7 up to 8000:\n- Divisible by at least one of $\\{3, 5, 7\\}$:\n  $\\lfloor\\frac{8000}{3}\\rfloor + \\lfloor\\frac{8000}{5}\\rfloor + \\lfloor\\frac{8000}{7}\\rfloor - \\lfloor\\frac{8000}{15}\\rfloor - \\lfloor\\frac{8000}{21}\\rfloor - \\lfloor\\frac{8000}{35}\\rfloor + \\lfloor\\frac{8000}{105}\\rfloor$\n  $= 2666 + 1600 + 1142 - 533 - 380 - 228 + 76 = 4343$.\n- Divisible by at least one of $\\{3, 5, 7\\}$ and also divisible by 13:\n  $\\lfloor\\frac{8000}{39}\\rfloor + \\lfloor\\frac{8000}{65}\\rfloor + \\lfloor\\frac{8000}{91}\\rfloor - \\lfloor\\frac{8000}{195}\\rfloor - \\lfloor\\frac{8000}{273}\\rfloor - \\lfloor\\frac{8000}{455}\\rfloor + \\lfloor\\frac{8000}{1365}\\rfloor$\n  $= 205 + 123 + 87 - 41 - 29 - 17 + 5 = 333$.\n- Subtracting gives $4343 - 333 = 4010$.\n\n**Part C**\nWe solve the system of congruences:\n$x \\equiv 0 \\pmod{17}$\n$x \\equiv 8 \\pmod{19}$\n$x \\equiv 10 \\pmod{23}$\n\nFrom $x = 17k \\equiv 8 \\pmod{19}$, we have $-2k \\equiv 8 \\pmod{19} \\implies k \\equiv 15 \\pmod{19}$, so $x \\equiv 17 \\times 15 = 255 \\pmod{323}$.\nThen $x = 255 + 323m \\equiv 10 \\pmod{23}$.\nSince $255 \\equiv 2 \\pmod{23}$ and $323 \\equiv 1 \\pmod{23}$, this gives $2 + m \\equiv 10 \\implies m \\equiv 8 \\pmod{23}$.\nThe smallest positive integer is $x = 255 + 323 \\times 8 = 2839$.\n\nFINAL: 2026-07-29; 4010; 2839"
+}

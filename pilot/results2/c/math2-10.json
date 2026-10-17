@@ -1,0 +1,94 @@
+{
+ "task_id": "math2-10",
+ "type": "math",
+ "condition": "c",
+ "correct": true,
+ "detail": "got '2026-07-24', expected '2026-07-24'",
+ "error": null,
+ "seconds": 106.9,
+ "tokens": 43054,
+ "prompt_tokens": 30873,
+ "completion_tokens": 12181,
+ "cost": 0.06662,
+ "calls": 18,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Calculate target date",
+     "what": "Starting Monday 2026-03-16: through Friday 2026-07-24 there are 19 full weeks (95 weekdays) minus 6 listed holidays = 88 business days. Day 89 is Monday 2026-07-27."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "2026-03-14 is a Saturday (verify with a date library or 2026 calendar: 2026-01-01 is Thursday, so Mar 14 is Saturday). The first business day after it is Monday 2026-03-16.\n\nFrom Monday 2026-03-16 through Friday 2026-07-24 inclusive there are 95 weekdays. The six listed holidays all fall on weekdays in that range: 2026-03-20 Fri, 2026-03-26 Thu, 2026-04-30 Thu, 2026-06-10 Wed, 2026-06-11 Thu, 2026-07-16 Thu. So business days = 95 - 6 = 89.\n\nThus the 89th business day after 2026-03-14 is Friday 2026-07-24, not Monday 2026-07-27. The earlier \u201c88 business days\u201d figure is an arithmetic error.\n\nFINAL: 2026-07-24"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "The count of weekdays from Monday 2026-03-16 through Friday 2026-07-24 inclusive is 95, but the calendar calculation needs re-verifying: 2026-03-16 to 2026-07-24 is exactly 19 full weeks (19 * 7 = 133 days; 133 - 1 = 132? March 16 to July 24 is: March has 16 days [16..31], April 30, May 31, June 30, July 24 = 131 days). 131 days / 7 = 18 weeks and 5 days. Monday to Friday across 18 full weeks plus Mon-Fri of the 19th week is (18 * 5) + 5 = 95 weekdays. Subtracting 6 holidays leaves 89 business days. The draft's arithmetic appears fully sound, leaving no valid counter-date."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 0,
+   "answer": "2026-03-14 is a Saturday. The first business day after it is Monday 2026-03-16.\n\nCount weekdays from Monday 2026-03-16 through Friday 2026-07-24 inclusive: this span is 131 calendar days (16 in March, 30 April, 31 May, 30 June, 24 July), i.e., 18 full weeks plus 5 extra days (Mon-Fri). That gives 18*5 + 5 = 95 weekdays. All six holidays (2026-03-20 Fri, 2026-03-26 Thu, 2026-04-30 Thu, 2026-06-10 Wed, 2026-06-11 Thu, 2026-07-16 Thu) fall within this range on weekdays, so business days = 95 - 6 = 89.\n\nThus 89 business days after 2026-03-14 lands on Friday 2026-07-24.\n\nFINAL: 2026-07-24"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "2026-03-14 is a Saturday. The first business day after it is Monday 2026-03-16.\n\nCount weekdays from Monday 2026-03-16 through Friday 2026-07-24 inclusive: this span is 131 calendar days (16 in March, 30 April, 31 May, 30 June, 24 July), i.e., 18 full weeks plus 5 extra days (Mon-Fri). That gives 18*5 + 5 = 95 weekdays. All six holidays (2026-03-20 Fri, 2026-03-26 Thu, 2026-04-30 Thu, 2026-06-10 Wed, 2026-06-11 Thu, 2026-07-16 Thu) fall within this range on weekdays, so business days = 95 - 6 = 89.\n\nThus 89 business days after 2026-03-14 lands on Friday 2026-07-24.\n\nFINAL: 2026-07-24"
+}

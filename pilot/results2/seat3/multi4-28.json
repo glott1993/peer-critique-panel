@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-28",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 10929.03, expected 10929.04 | ok: got 99.72, expected 99.72 | ok: got 7321.0, expected 7321.0 | ok: got 4792.96, expected 4792.96",
+ "error": null,
+ "seconds": 18.0,
+ "tokens": 3474,
+ "prompt_tokens": 567,
+ "completion_tokens": 2907,
+ "cost": 0.01133,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nEach period, the balance increases by contribution $c_t$, then is multiplied by $(1 + 0.015) \\times (1 - 0.0075) = 1.015 \\times 0.9925 = 1.0073875$.\nIterating through the 12 periods starting from $5,000 with the specified contributions gives a final balance of approximately $10,929.03.\n\n**Part B**\nLet the original price be $P$.\n$P \\times 1.25 \\times 1.18 \\times 1.18 \\times 0.90 \\times 1.18 = 184.32$\n$P \\times 1.848411 = 184.32 \\implies P \\approx 99.72$.\n\n**Part C**\nUsing the principle of inclusion-exclusion:\nNumber of integers up to 20,000 divisible by at least one of 4, 6, 9:\n$|A_4 \\cup A_6 \\cup A_9| = 5000 + 3333 + 2222 - 1666 - 555 - 1111 + 555 = 7778$.\nNumber of these also divisible by 17:\n$|A_{68} \\cup A_{102} \\cup A_{153}| = 294 + 196 + 130 - 98 - 32 - 65 + 32 = 457$.\n$7778 - 457 = 7321$.\n\n**Part D**\nTracking the balance month-by-month with the given transactions and monthly interest of $0.25\\%$ (the balance remains well above $1,000 throughout all 15 months, so the $12 fee is never triggered) yields a final balance of $4,792.96.\n\nFINAL: 10929.03; 99.72; 7321; 4792.96"
+}

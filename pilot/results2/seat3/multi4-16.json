@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-16",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "ok: got '66/91', expected '66/91' | no: got 390.0, expected 960.0 | ok: got 157.0, expected 157.0 | ok: got 21397.0, expected 21397.0",
+ "error": null,
+ "seconds": 10.4,
+ "tokens": 1872,
+ "prompt_tokens": 408,
+ "completion_tokens": 1464,
+ "cost": 0.0058,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nThe complement is drawing three marbles of different colors (one red, one green, one blue).\nTotal ways to draw 3 marbles from 15: $\\binom{15}{3} = \\frac{15 \\times 14 \\times 13}{6} = 455$.\nWays to draw one of each color: $\\binom{5}{1} \\times \\binom{5}{1} \\times \\binom{5}{1} = 5 \\times 5 \\times 5 = 125$.\nProbability of all different: $\\frac{125}{455} = \\frac{25}{91}$.\nProbability that at least two share a color: $1 - \\frac{25}{91} = \\frac{66}{91}$.\n\nPart B:\nWe need $x > 0$ such that:\n$x \\equiv 0 \\pmod 5$\n$x \\equiv 11 \\pmod{13}$\n$x \\equiv 10 \\pmod{19}$\n\nFrom $x \\equiv 11 \\pmod{13}$ and $x \\equiv 10 \\pmod{19}$:\n$x = 19k + 10 \\equiv 11 \\pmod{13} \\implies 6k - 3 \\equiv 0 \\pmod{13} \\implies 2k \\equiv 1 \\implies k \\equiv 7 \\pmod{13}$.\nFor $k = 7$: $x = 19(7) + 10 = 143$.\nModulo $13 \\times 19 = 247$:\n$x \\equiv 143 \\pmod{247}$.\nNow $x \\equiv 0 \\pmod 5$:\n$x = 247m + 143 \\equiv 2m + 3 \\equiv 0 \\pmod 5 \\implies 2m \\equiv 2 \\pmod 5 \\implies m \\equiv 1 \\pmod 5$.\nSmallest positive integer is for $m = 1$:\n$x = 247(1) + 143 = 390$.\n\nPart C:\n163 is prime. By Fermat's Little Theorem, $29^{162} \\equiv 1 \\pmod{163}$.\n$627 = 3 \\times 162 + 141$.\nSo $29^{627} \\equiv 29^{141} \\pmod{163}$.\nNotice $141 = 162 - 21$, so $29^{141} \\equiv 29^{-21} \\pmod{163}$.\nLet's compute powers of 29 mod 163:\n$29^2 = 841 = 5 \\times 163 + 26 = 26$.\n$29^3 = 26 \\times 29 = 754 = 4 \\times 163 + 102 = 102 \\equiv -61$.\n$29^4 = 26^2 = 676 = 4 \\times 163 + 24 = 24$.\n$29^7 = 29^3 \\times 29^4 \\equiv (-61) \\times 24 = -1464 = -9 \\times 163 + 3 = 3$.\n$29^7 \\equiv 3 \\pmod{163}$.\nSince $141 = 7 \\times 20 + 1$:\n$29^{141} = (29^7)^{20} \\times 29 \\equiv 3^{20} \\times 29 \\pmod{163}$.\nNow compute $3^{20} \\pmod{163}$:\n$3^5 = 243 \\equiv 80 \\pmod{163}$.\n$3^{10} \\equiv 80^2 = 6400$.\n$6400 / 163 = 39$ with remainder $6400 - 6357 = 43$.\n$3^{20} \\equiv 43^2 = 1849$.\n$1849 / 163 = 11$ with remainder $1849 - 1793 = 56$.\nSo $3^{20} \\equiv 56 \\pmod{163}$.\nThen $29^{141} \\equiv 56 \\times 29 = 1624 \\pmod{163}$.\n$1624 / 163 = 9$ with remainder $1624 - 1467 = 157$.\nRemainder is 157.\n\nPart D:\nIncome = $81,900.\nTax brackets:\n- First $12,500 at 12%: $12,500 \\times 0.12 = $1,500.\n- From $12,500 to $52,000 ($39,500) at 24%: $39,500 \\times 0.24 = $9,480.\n- Above $52,000 ($81,900 - $52,000 = $29,900) at 35%: $29,900 \\times 0.35 = $10,465.\nTotal base tax = $1,500 + $9,480 + $10,465 = $21,445.\n\nTax credit reduction:\nIncome above $60,000 = $81,900 - $60,000 = $21,900.\nCredit reduction = $21,900 \\times 0.08 = $1,752.\nRemaining credit = $1,800 - $1,752 = $48.\n\nFinal tax owed = $21,445 - $48 = $21,397.00.\n\nFINAL: 66/91; 390; 157; 21397.00"
+}

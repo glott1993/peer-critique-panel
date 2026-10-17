@@ -3,14 +3,14 @@
  "type": "multi4",
  "condition": "seat1",
  "correct": true,
- "detail": "ok: got 369.08, expected 369.08 | ok: got 20625.0, expected 20625.0 | ok: got 2898.5, expected 2898.5 | ok: got 1179.0, expected 1179.0",
+ "detail": "ok: got 369.09, expected 369.08 | ok: got 20625.0, expected 20625.0 | ok: got 2898.5, expected 2898.5 | ok: got 1179.0, expected 1179.0",
  "error": null,
- "seconds": 37.2,
- "tokens": 5335,
+ "seconds": 20.1,
+ "tokens": 3097,
  "prompt_tokens": 788,
- "completion_tokens": 4547,
- "cost": 0.04705,
+ "completion_tokens": 2309,
+ "cost": 0.02467,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Part A\n\nStarting at $2,500.00, applying each month's transaction, then an $8 fee if balance < $1,000, then 0.4% interest:\n\nTracking balance through all 15 months (keeping full precision, rounding only at the end):\n\n- After month 1 (deposit 1100, interest): 3614.400000\n- After month 2 (withdraw 400): 3227.257600\n- After month 3 (deposit 450): 3691.966630\n- After month 4 (withdraw 250): 3455.734497\n- After month 5 (deposit 700): 4172.357435\n- After month 6 (deposit 450): 4640.846865\n- After month 7 (withdraw 250): 4408.410252\n- After month 8 (withdraw 650): 3773.443893\n- After month 9 (withdraw 900): 2884.937669\n- After month 10 (withdraw 650): 2243.877419\n- After month 11 (deposit 450): 2704.652929\n- After month 12 (withdraw 400): 2313.871541\n- After month 13 (withdraw 400): 1921.527027\n- After month 14 (withdraw 900 \u2192 1021.527..., still \u22651000, no fee): 1025.613135\n- Month 15: withdraw 650 \u2192 375.613135 (below 1000 \u2192 fee $8) \u2192 367.613135 \u2192 \u00d71.004 = 369.083588\n\n**Balance after month 15 \u2248 $369.08**\n\n# Part B\n\nTax brackets on $96,300:\n- 8% \u00d7 14,000 = 1,120\n- 20% \u00d7 (60,000\u221214,000)=46,000 \u2192 9,200\n- 30% \u00d7 (96,300\u221260,000)=36,300 \u2192 10,890\n\nTotal tax before credit = 1,120+9,200+10,890 = 21,210\n\nCredit: 2,400 \u2212 5%\u00d7(96,300\u221260,000)=2,400\u22121,815=585\n\nTax owed = 21,210 \u2212 585 = **$20,625.00**\n\n# Part C\n\nRate $22/hr; >8\u201312 hrs at 1.5\u00d7, >12 hrs at 2\u00d7.\n\nDaily pay:\n- 10h: 176+2\u00d733=242.00\n- 12.5h: 308+0.5\u00d744=330.00\n- 10h: 242.00\n- 11h: 176+3\u00d733=275.00\n- 9h: 176+33=209.00\n- 6h: 132.00\n- 9.5h: 176+1.5\u00d733=225.50\n- 9h: 209.00\n- 0h: 0.00\n- 10h: 242.00\n- 10h: 242.00\n- 6h: 132.00\n- 9h: 209.00\n- 9h: 209.00\n\nSum = 2,898.50\n\n**Gross pay = $2,898.50**\n\n# Part D\n\nSolve x\u22619 mod13, x\u22612 mod11, x\u22616 mod17.\n\nCombine first two: x=13k+9 \u22612 mod11 \u2192 2k\u22614 mod11 \u2192 k\u22612 mod11 \u2192 x=143m+35 (mod143)\n\nCombine with mod17: 143m+35\u22616 mod17 \u2192 7m+1\u22616 \u2192 7m\u22615 mod17 \u2192 m\u22615\u00d75=25\u22618 mod17\n\nx = 143(17n+8)+35 = 2431n + 1179\n\nSmallest positive: **1179**\n\nCheck: 1179=13\u00d790+9 \u2713; 11\u00d7107+2 \u2713; 17\u00d769+6 \u2713\n\nFINAL: 369.08; 20625.00; 2898.50; 1179"
+ "answer": "**Part A:**\nStepping through each month (apply transaction \u2192 fee if balance<1000 \u2192 0.4% interest), rounding to cents each step:\n\nFinal balance after month 15 = **$369.09**\n\n**Part B:**\nTax: 8%\u00d714000=1120; 20%\u00d746000=9200; 30%\u00d736300=10890 \u2192 total=21210\nCredit=2400\u22125%\u00d736300=2400\u22121815=585\nTax owed=21210\u2212585=**$20625.00**\n\n**Part C:**\nDaily pay (8h@22, next 4h@33, beyond12@44):\n242,330,242,275,209,132,225.5,209,0,242,242,132,209,209 \u2192 sum=**$2898.50**\n\n**Part D:**\nCRT: x\u22619(13), x\u22612(11), x\u22616(17) \u2192 x=1179 (smallest positive)\n\nFINAL: 369.09; 20625.00; 2898.50; 1179"
 }

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-17",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 567.2,
+ "tokens": 50703,
+ "prompt_tokens": 944,
+ "completion_tokens": 49759,
+ "cost": 0.04961,
+ "calls": 4,
+ "call_errors": 3,
+ "answer": "```python\ndef sudoku_valid(board):\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"board must be a 9x9 list of lists\")\n\n    rows = [set() for _ in range(9)]\n    cols = [set() for _ in range(9)]\n    boxes = [set() for _ in range(9)]\n\n    for r in range(9):\n        row = board[r]\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"board must be a 9x9 list of lists\")\n\n        for c in range(9):\n            val = row[c]\n\n            if isinstance(val, bool) or not isinstance(val, int) or val < 0 or val > 9:\n                raise ValueError(\"board values must be integers 0 to 9\")\n\n            if val == 0:\n                continue\n\n            box_index = (r // 3) * 3 + (c // 3)\n\n            if val in rows[r] or val in cols[c] or val in boxes[box_index]:\n                return False\n\n            rows[r].add(val)\n            cols[c].add(val)\n            boxes[box_index].add(val)\n\n    return True\n```"
+}

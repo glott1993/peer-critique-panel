@@ -1,0 +1,211 @@
+{
+ "task_id": "data2-35",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 19.0, expected 19.0",
+ "error": null,
+ "seconds": 253.5,
+ "tokens": 320164,
+ "prompt_tokens": 266524,
+ "completion_tokens": 53640,
+ "cost": 0.25684,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Deduplicate and filter revenue-bearing orders",
+     "what": "Remove exact duplicate order rows so each order_id counts once, then retain only shipped and pending orders and calculate each order's revenue as units \u00d7 unit_price."
+    },
+    {
+     "id": "c2",
+     "title": "Aggregate revenue by customer",
+     "what": "Sum the valid order revenues for each customer, using the customer table to identify customers and their names."
+    },
+    {
+     "id": "c3",
+     "title": "Compute the highest-customer revenue share",
+     "what": "Find the customer with the greatest aggregated revenue, divide it by total valid revenue across all customers, multiply by 100, and round to one decimal place."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the percentage of revenue from the single highest-revenue customer:\n\n1. **Deduplication**:\nThree exact duplicate order rows are deduplicated to count once each:\n- `O2394` (cancelled)\n- `O2507` (returned)\n- `O2559` (shipped)\n\n2. **Filter & Aggregate Revenue (`units` \u00d7 `unit_price`) for `shipped` and `pending` orders**:\n- **C100 (Kendall)**: O2381 (1,518.69) + O2587 (3,402.14) + O2008 (948.60) + O2672 (1,813.00) + O2711 (2,368.92) = 10,051.35\n- **C101 (Blake)**: O2290 (128.49) + O2276 (4,231.08) + O2154 (984.86) + O2108 (830.88) + O2393 (648.90) + O2798 (601.44) + O2457 (491.13) + O2447 (845.90) + O2731 (3,492.00) + O2042 (4,619.55) = 16,874.23\n- **C102 (Quinn)**: O2714 (1,350.75) + O2424 (700.80) + O2377 (161.68) + O2310 (1,371.20) + O2234 (1,213.59) + O2469 (105.60) + O2444 (2,884.50) = 7,788.12\n- **C103 (Logan)**: O2510 (1,246.37) + O2503 (1,351.13) + O2653 (4,473.60) + O2695 (194.25) = 7,265.35\n- **C104 (Harper)**: O2586 (1,743.84) + O2075 (4,997.59) + O2065 (2,583.70) + O2892 (599.97) + O2491 (643.77) = 10,568.87\n- **C105 (Parker)**: O2288 (3,509.94) + O2331 (337.44) + O2544 (16.23) + O2631 (1,863.00) = 5,726.61\n- **C106 (Casey)**: O2671 (1,260.80) + O2055 (1,179.36) + O2705 (4,823.35) + O2315 (5,775.44) + O2559 (1,961.44) + O2270 (1,427.40) = 16,427.79\n- **C107 (Morgan)**: O2357 (1,525.70) + O2675 (184.46) + O2213 (1,172.49) + O2268 (177.60) + O2589 (410.19) + O2143 (3,355.80) + O2299 (2,762.91) + O2078 (194.04) + O2429 (968.76) + O2220 (3,129.30) = 13,881.25\n\n3. **Calculation**:\n- Total revenue across all customers = 88,583.57\n- Highest-revenue customer is C101 with 16,874.23\n- Percentage share: (16,874.23 / 88,583.57) \u00d7 100 = 19.049% \u2248 19.0%\n\nFINAL: 19.0"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "O2705 units=35, unit_price=137.81 gives 4823.35, correct; but recompute O2315: 44*131.26=5775.44, correct; verify O2559 dedup only once=1961.44 correct. However sum 1260.80+1179.36+4823.35+5775.44+1961.44+1427.40=16427.79, matches - but this is close to C101, need to verify both totals precisely since they're the top two"
+    },
+    {
+     "from": "A",
+     "problem": "This total is asserted without showing the sum of all 8 customer subtotals being added explicitly, and individual subtotals should be re-verified (e.g., C104: 1743.84+4997.59+2583.70+599.97+643.77=10568.87, check O2075: 37*135.07=4997.59 correct)"
+    },
+    {
+     "from": "D",
+     "problem": "The draft's per-customer totals may have arithmetic errors. For C101, the listed line items sum to 16,874.23, but C106's listed line items sum to 16,427.79, which is close. If any C101 line item is miscomputed, C106 could overtake C101, changing the answer."
+    },
+    {
+     "from": "D",
+     "problem": "The total revenue may be wrong because the draft may have included or excluded duplicate rows inconsistently. O2394 and O2507 are cancelled/returned so they contribute zero, but O2559 is shipped and must be counted once. If O2559 was accidentally counted twice or omitted, the total changes, altering the percentage."
+    },
+    {
+     "from": "D",
+     "problem": "The draft identifies C101 as highest, but C106 is within 446.44 of C101. If any C101 order is actually cancelled/returned (e.g., misread status) or any C106 order is actually shipped/pending (e.g., O2394 duplicate counted once as cancelled but actually one row could be shipped), the ranking flips. The data shows O2394 appears twice as cancelled, so it contributes zero, but if one occurrence were shipped, C106 would gain 849.29 (11*77.39), making C106=17,277.08 > C101=16,874.23."
+    },
+    {
+     "from": "D",
+     "problem": "Even if C101 is highest and total is 88,583.57, the percentage 16,874.23/88,583.57*100 = 19.049%, which rounds to 19.0%. However, if the total revenue denominator should include only unique orders (dedup) and the draft's total already does this, the percentage is correct. But if the draft's total accidentally includes a duplicate shipped order O2559 twice, total would be 90,545.01, giving 18.6%, not 19.0%."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 5,
+   "answer": "Deduplicate exact repeats O2394, O2507, and O2559; O2559 is shipped, so count it once. Summing shipped and pending revenue by customer gives:\n\nC100 10,051.35; C101 16,874.23; C102 7,788.12; C103 7,265.35; C104 10,568.87; C105 5,726.61; C106 16,427.79; C107 13,881.25.\n\nTotal revenue = 10,051.35 + 16,874.23 + 7,788.12 + 7,265.35 + 10,568.87 + 5,726.61 + 16,427.79 + 13,881.25 = 88,583.57.\n\nThe highest-revenue customer is C101, with 16,874.23. Its share is:\n(16,874.23 / 88,583.57) \u00d7 100 = 19.049%, which rounds to 19.0%.\n\nFINAL: 19.0"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The per-customer revenue figures may contain arithmetic errors, particularly for C100, C101, C106, and C107, which would change the total and the percentage."
+    },
+    {
+     "from": "D",
+     "problem": "C106's revenue of 16,427.79 is close to C101's, and if any C106 or C101 rows are miscounted (e.g., O2270 pending, O2315 shipped, O2705 shipped), the ranking could flip, changing the answer."
+    },
+    {
+     "from": "D",
+     "problem": "There are two O2559 rows and both are shipped; the draft counts one, but the instruction says 'each such order counts once,' which is correct. However, O2507 appears twice with status returned, so it contributes zero either way \u2014 no issue. The real risk is whether any other duplicate pairs were missed (e.g., O2394 appears twice as cancelled, O2507 twice as returned)."
+    },
+    {
+     "from": "D",
+     "problem": "If any shipped/pending order was omitted or a cancelled/returned order was included, the total changes. For instance, O2695 (C103, Crate, 3, 64.75, pending) is included in C103's 7,265.35, but O2653 (C103, Easel, 40, 111.84, pending) is also pending \u2014 check that both are counted. Similarly, O2310 (C102, Crate, 40, 34.28, pending) and O2714 (C102, Bolt, 25, 54.03, pending) must be included."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "Deduplicating exact repeats O2394, O2507, O2559 (only O2559 is shipped, so counted once). Scanning confirms no other exact duplicates. Recomputing shipped/pending revenue by customer:\nC100 10,051.35; C101 16,874.23; C102 7,788.12; C103 7,265.35; C104 10,568.87; C105 5,726.61; C106 16,427.79; C107 13,881.25.\nTotal revenue = 88,583.57. Highest-revenue customer is C101 at 16,874.23.\n(16,874.23 / 88,583.57) \u00d7 100 = 19.0489%, which rounds to 19.0%.\nFINAL: 19.0"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing the shipped/pending orders for C101 (O2290,O2276,O2154,O2108,O2393,O2798,O2457,O2447,O2731,O2042) sums to 16,875.23, a $1.00 discrepancy from the draft's figure."
+    },
+    {
+     "from": "B",
+     "problem": "The draft gives no reproducible order-level check for duplicate detection, so this key data-cleaning step is asserted rather than demonstrated."
+    },
+    {
+     "from": "B",
+     "problem": "The arithmetic is plausible, but the working omits the contributing orders, making it difficult to verify that returned and cancelled rows were excluded and that O2559 was not double-counted."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "B",
+   "accepted": 2,
+   "rejected": 1,
+   "answer": "Deduplicating exact repeated rows O2394, O2507, and O2559; only O2559 has a counted status, so it contributes once (26 \u00d7 75.44 = 1,961.44). Filtering to shipped/pending orders and summing units \u00d7 unit_price by customer gives:\n\nC100: 10,051.35; C101: 16,875.23; C102: 7,788.12; C103: 7,265.35; C104: 10,568.87; C105: 5,726.61; C106: 16,427.79; C107: 13,881.25.\n\nTotal revenue = 88,584.57. C101 is highest, with revenue from its counted orders totaling 16,875.23.\n\n(16,875.23 / 88,584.57) \u00d7 100 = 19.0499%, which rounds to 19.0%.\nFINAL: 19.0"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Deduplicating exact repeated rows O2394, O2507, and O2559; only O2559 has a counted status, so it contributes once (26 \u00d7 75.44 = 1,961.44). Filtering to shipped/pending orders and summing units \u00d7 unit_price by customer gives:\n\nC100: 10,051.35; C101: 16,875.23; C102: 7,788.12; C103: 7,265.35; C104: 10,568.87; C105: 5,726.61; C106: 16,427.79; C107: 13,881.25.\n\nTotal revenue = 88,584.57. C101 is highest, with revenue from its counted orders totaling 16,875.23.\n\n(16,875.23 / 88,584.57) \u00d7 100 = 19.0499%, which rounds to 19.0%.\nFINAL: 19.0"
+}

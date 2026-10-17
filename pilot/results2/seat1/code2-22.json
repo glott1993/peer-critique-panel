@@ -2,15 +2,15 @@
  "task_id": "code2-22",
  "type": "code",
  "condition": "seat1",
- "correct": false,
- "detail": "AssertionError",
+ "correct": true,
+ "detail": "all tests passed",
  "error": null,
- "seconds": 3.4,
- "tokens": 572,
+ "seconds": 1.4,
+ "tokens": 377,
  "prompt_tokens": 275,
- "completion_tokens": 297,
- "cost": 0.00352,
+ "completion_tokens": 102,
+ "cost": 0.00157,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef knapsack(items, capacity):\n    dp = [0] * (capacity + 1)\n    for weight, value in items:\n        if weight < 0 or value < 0:\n            continue\n        if weight > capacity:\n            if weight == 0:\n                pass\n            else:\n                continue\n        for c in range(capacity, weight - 1, -1):\n            candidate = dp[c - weight] + value\n            if candidate > dp[c]:\n                dp[c] = candidate\n        if weight == 0:\n            for c in range(capacity + 1):\n                if dp[c] + value > dp[c]:\n                    dp[c] += value\n    return max(dp) if dp else 0\n```\n\nThis handles standard 0/1 knapsack logic, including edge cases like zero-weight items (which always add their value since they don't consume capacity) and zero capacity or empty item lists (returning 0 unless zero-weight items contribute value)."
+ "answer": "```python\ndef knapsack(items, capacity):\n    dp = [0] * (capacity + 1)\n    for weight, value in items:\n        for c in range(capacity, weight - 1, -1):\n            dp[c] = max(dp[c], dp[c - weight] + value)\n    return dp[capacity]\n```"
 }

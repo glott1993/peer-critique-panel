@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-29",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 12.5,
+ "tokens": 915,
+ "prompt_tokens": 164,
+ "completion_tokens": 751,
+ "cost": 0.0016,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef count_islands(grid):\n    if not grid or not grid[0]:\n        return 0\n\n    rows, cols = len(grid), len(grid[0])\n    visited = [[False] * cols for _ in range(rows)]\n    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]\n    count = 0\n\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == '#' and not visited[r][c]:\n                count += 1\n                stack = [(r, c)]\n                visited[r][c] = True\n\n                while stack:\n                    x, y = stack.pop()\n                    for dx, dy in directions:\n                        nx, ny = x + dx, y + dy\n                        if 0 <= nx < rows and 0 <= ny < cols:\n                            if grid[nx][ny] == '#' and not visited[nx][ny]:\n                                visited[nx][ny] = True\n                                stack.append((nx, ny))\n\n    return count\n```"
+}

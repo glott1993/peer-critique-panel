@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 6.3,
- "tokens": 3328,
- "prompt_tokens": 2598,
- "completion_tokens": 730,
- "cost": 0.0014,
+ "seconds": 6.1,
+ "tokens": 3267,
+ "prompt_tokens": 2540,
+ "completion_tokens": 727,
+ "cost": 0.00138,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef lcs_length(a: str, b: str) -> int:\n    if len(b) > len(a):\n        a, b = b, a\n\n    previous = [0] * (len(b) + 1)\n\n    for char_a in a:\n        current = [0]\n        for j, char_b in enumerate(b, start=1):\n            if char_a == char_b:\n                current.append(previous[j - 1] + 1)\n            else:\n                current.append(max(previous[j], current[-1]))\n        previous = current\n\n    return previous[-1]\n```"
+ "answer": "```python\ndef lcs_length(a: str, b: str) -> int:\n    # Use the shorter string for the DP row to reduce memory usage.\n    if len(a) < len(b):\n        a, b = b, a\n\n    dp = [0] * (len(b) + 1)\n\n    for char_a in a:\n        previous_diagonal = 0\n        for j, char_b in enumerate(b, 1):\n            previous = dp[j]\n            if char_a == char_b:\n                dp[j] = previous_diagonal + 1\n            else:\n                dp[j] = max(dp[j], dp[j - 1])\n            previous_diagonal = previous\n\n    return dp[-1]\n```"
 }

@@ -1,0 +1,295 @@
+{
+ "task_id": "multi4-27",
+ "type": "multi4",
+ "condition": "c",
+ "correct": true,
+ "detail": "ok: got 2589.1, expected 2589.1 | ok: got 102.0, expected 102.0 | ok: got 16556.77, expected 16556.77 | ok: got '2026-05-11', expected '2026-05-11'",
+ "error": null,
+ "seconds": 1813.5,
+ "tokens": 382697,
+ "prompt_tokens": 157288,
+ "completion_tokens": 225409,
+ "cost": 0.68437,
+ "calls": 58,
+ "call_errors": 8,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "24000*0.00575*1.4105954368/(1.4105954368-1)",
+   "claimed": 474.0972569,
+   "value": 474.09725688992364,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "24000*1.1087170913 - 474.0972569*((1.1087170913-1)/0.00575)",
+   "claimed": 17645.3015,
+   "value": 17645.301536682287,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "17645.3015 - 1088.5351",
+   "claimed": 16556.7664,
+   "value": 16556.7664,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A: tiered pricing with discount and tax",
+     "what": "Compute cost of 500 units with tiered pricing, apply 8% discount if subtotal exceeds $1500, then add 7.25% tax"
+    },
+    {
+     "id": "c2",
+     "title": "Part B: modular exponentiation",
+     "what": "Compute 76^487 mod 233 using fast exponentiation"
+    },
+    {
+     "id": "c3",
+     "title": "Part C: loan amortization with extra payments",
+     "what": "Compute remaining balance after month 18 with standard payments plus extra principal in months 11 and 12"
+    },
+    {
+     "id": "c4",
+     "title": "Part D: business day counting with holidays",
+     "what": "Count 82 weekdays from 2026-01-09 skipping listed holidays to find final date"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ],
+    "c2": [
+     "A",
+     "B"
+    ],
+    "c3": [
+     "A",
+     "B"
+    ],
+    "c4": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Part A: Subtotal = 100\u00d76.40 + 200\u00d75.44 + 200\u00d74.48 = 2624.00. Discounted = 2624.00\u00d70.92 = 2414.08. Tax = 2414.08\u00d70.0725 = 175.0208. Total = 2589.1008 \u2192 2589.10.\n\nPart B: 233 is prime and gcd(76,233)=1, so 76^232 \u2261 1 mod 233. 487 mod 232 = 23. Powers: 76^2\u2261184, 76^4\u226171, 76^8\u2261148, 76^16\u22612. Then 76^23 = 2\u00b771\u00b7184\u00b776 \u2261 102 mod 233.\n\nPart C: M = 24000(0.00575)/(1\u2212(1.00575)^\u221260) = 474.097267. Recurrence B_t = B_{t\u22121}(1.00575) \u2212 M \u2212 E_t, with E_11=300, E_12=750, else 0. B_18 = 16556.765... \u2192 16556.77.\n\nPart D: Jan 9, 2026 is Friday, so day 1 is Mon Jan 12. Jan 12\u2013May 10 inclusive is 17 weeks = 85 weekdays; four listed holidays fall in that span, leaving 81. The 82nd business day is Mon May 11.\n\nFINAL: 2589.10; 102; 16556.77; 2026-05-11"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The monthly payment and balance recurrence involve many compounding steps; the draft doesn't show intermediate balances, so a transcription or rounding error in any of the 18 steps (especially around the extra principal payments in months 11-12) wouldn't be visible"
+    },
+    {
+     "from": "B",
+     "problem": "The instruction says to round nothing until the end, but the displayed payment is rounded to six decimal places. If that rounded value was actually used, the calculation technically violates the instruction, even though the final cent likely remains unchanged."
+    },
+    {
+     "from": "B",
+     "problem": "Because the extra payments are specified as extra principal, the timing must be explicit: subtract 300 after the month-11 regular payment and 750 after the month-12 regular payment. The draft gives the recurrence but not enough intermediate values to independently verify that convention."
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure: 76^2 = 5776 = 24*233 + 184 = -49 mod 233. (-49)^2 = 2401 = 10*233 + 71 mod 233 (correct). But 71^2 = 5041 = 21*233 + 148 = -85 mod 233 (correct). However, 76^16 = 148^2 = (-85)^2 = 7225 = 31*233 + 2 mod 233 (correct). Then 76^23 = 76^16 * 76^4 * 76^2 * 76^1: 16+4+2+1 = 23. Let's compute: 2 * 71 = 142. 184 * 76 = (-49)*76 = -3724 = -233*16 + 4. Then 142 * 4 = 568 = 2*233 + 102. Wait, 568 mod 233 is 102. 568 - 466 = 102! Let me recheck (-49)*76: 49*76 = 3724. 3724 / 233 = 15.98... 233 * 16 = 3728. -3724 = +4 mod 233. So 142 * 4 = 568 = 2*233 + 102. That's 102!"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 3,
+   "rejected": 1,
+   "answer": "Part A: Subtotal = 100 \u00d7 6.40 + 200 \u00d7 5.44 + 200 \u00d7 4.48 = 640 + 1088 + 896 = 2624.00. Discounted subtotal (8% off) = 2624 \u00d7 0.92 = 2414.08. Total with 7.25% sales tax = 2414.08 \u00d7 1.0725 = 2589.1008, which rounds to 2589.10.\n\nPart B: 233 is prime, so by Fermat's Little Theorem, 76^232 \u2261 1 (mod 233). 487 mod 232 = 23. By repeated squaring:\n76^2 = 5776 \u2261 184 \u2261 -49 (mod 233)\n76^4 = (-49)^2 = 2401 \u2261 71 (mod 233)\n76^8 = 71^2 = 5041 \u2261 148 \u2261 -85 (mod 233)\n76^16 = (-85)^2 = 7225 \u2261 2 (mod 233)\nThen 76^23 = 76^16 \u00d7 76^4 \u00d7 76^2 \u00d7 76 \u2261 2 \u00d7 71 \u00d7 (-49 \u00d7 76) \u2261 142 \u00d7 4 = 568 \u2261 102 (mod 233).\n\nPart C: Monthly rate r = 0.069 / 12 = 0.00575. The exact monthly payment is M = 24000 \u00d7 r / (1 - (1+r)^(-60)) \u2248 474.0972669. Without extra payments, balance at month 18 is B_18^0 = 24000(1+r)^18 - M[((1+r)^18 - 1)/r] \u2248 17654.5126. The extra principal payments compound to: 300(1+r)^7 + 750(1+r)^6 \u2248 312.3023 + 776.2483 = 1088.5506. The net balance is B_18 = 17654.5126 - 1088.5506 = 16555.9620 \u2192 16555.96.\n\nPart D: Starting after Friday 2026-01-09, 82 business days are needed. 17 full weeks (85 weekdays) end on Friday 2026-05-08. Four specified holidays (2026-01-27 Tue, 2026-02-16 Mon, 2026-03-26 Thu, 2026-04-16 Thu) fall on weekdays in this interval, leaving 81 business days through 2026-05-08. The 82nd business day is Monday 2026-05-11.\n\nFINAL: 2589.10; 102; 16555.96; 2026-05-11"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The exponents used for extra-payment compounding (7 and 6) and the balance formula are asserted without showing the full numeric derivation; rounding errors could accumulate since 'round nothing until the end' is required"
+    },
+    {
+     "from": "A",
+     "problem": "No verification shown that these dates actually fall on Mon-Fri and lie within the 17-week span counted"
+    },
+    {
+     "from": "B",
+     "problem": "The stated balance is inconsistent with the displayed amortization formula and monthly payment. Using r=0.069/12, M\u2248474.0973, and B_18^0=24000(1+r)^18\u2212M[((1+r)^18\u22121)/r] gives approximately 17645.34, not 17654.51. Therefore the final balance is also incorrect."
+    },
+    {
+     "from": "D",
+     "problem": "The draft counts 17 full weeks as 85 weekdays ending Friday 2026-05-08, subtracts 4 holidays to get 81 business days, then adds Monday 2026-05-11. But the starting point is ambiguous: 'after 2026-01-09' could mean the count starts on Monday 2026-01-12 (the next business day) or that 2026-01-09 itself is day 0. If 2026-01-09 is a Friday and the 82 business days are counted starting Monday 2026-01-12 as day 1, then 82 business days later lands on 2026-05-08, not 2026-05-11. The draft implicitly treats the 82nd business day as the 83rd weekday after the start."
+    },
+    {
+     "from": "D",
+     "problem": "The modular arithmetic in the draft contains a sign error: it computes 76^23 \u2261 2 \u00d7 71 \u00d7 (-49 \u00d7 76) \u2261 142 \u00d7 4 \u2261 568 \u2261 102 (mod 233). But (-49 \u00d7 76) mod 233 is not 4. Let's verify: 76 \u2261 -157 (mod 233), so -49 \u00d7 76 \u2261 -49 \u00d7 (-157) = 7693. 7693 mod 233 = 7693 - 233\u00d733 = 7693 - 7689 = 4. That part is correct. However, the draft then multiplies 142 \u00d7 4 = 568, and 568 mod 233 = 568 - 466 = 102. This appears correct. But the squaring chain has a potential error: 76^2 = 5776, and 5776 mod 233 = 5776 - 233\u00d724 = 5776 - 5592 = 184. 184 \u2261 -49. 76^4 = (-49)^2 = 2401, 2401 mod 233 = 2401 - 233\u00d710 = 2401 - 2330 = 71. 76^8 = 71^2 = 5041, 5041 mod 233 = 5041 - 233\u00d721 = 5041 - 4893 = 148. 148 \u2261 -85. 76^16 = (-85)^2 = 7225, 7225 mod 233 = 7225 - 233\u00d731 = 7225 - 7223 = 2. Then 76^23 = 76^16 \u00d7 76^4 \u00d7 76^2 \u00d7 76 \u2261 2 \u00d7 71 \u00d7 184 \u00d7 76. 71 \u00d7 184 = 13064, 13064 mod 233 = 13064 - 233\u00d756 = 13064 - 13048 = 16. 16 \u00d7 76 = 1216, 1216 mod 233 = 1216 - 1165 = 51. 51 \u00d7 2 = 102. So the result 102 is correct."
+    },
+    {
+     "from": "D",
+     "problem": "The draft computes the regular payment M \u2248 474.0972669 and the balance without extras at month 18 as B_18^0 \u2248 17654.5126. Then it subtracts the compounded extra payments: 300(1+r)^7 + 750(1+r)^6 \u2248 312.3023 + 776.2483 = 1088.5506. But the exponent for the month 11 extra payment should be 18 - 11 = 7 months of compounding, and for month 12 it should be 18 - 12 = 6 months. That is correct. However, the balance formula B_18^0 = 24000(1+r)^18 - M[((1+r)^18 - 1)/r] is the balance after 18 regular payments, but the extra payments in months 11 and 12 also reduce the principal on which interest accrues in subsequent months. The draft's method of subtracting the compounded extra payments from the no-extra balance correctly accounts for this, so the result should be accurate. Let's verify the arithmetic: 300(1.00575)^7 = 300 \u00d7 1.040907 = 312.2721 (not 312.3023). 750(1.00575)^6 = 750 \u00d7 1.034997 = 776.2478 (not 776.2483). The sum is 1088.5199, not 1088.5506. Then B_18 = 17654.5126 - 1088.5199 = 16565.9927, which rounds to 16565.99, not 16555.96. The draft's subtraction of 1088.5506 appears to have a typo or arithmetic error."
+    },
+    {
+     "from": "D",
+     "problem": "The subtotal calculation is correct: 100\u00d76.40 + 200\u00d75.44 + 200\u00d74.48 = 640 + 1088 + 896 = 2624.00. The discount is 8% off, so 2624 \u00d7 0.92 = 2414.08. Sales tax 7.25% gives 2414.08 \u00d7 1.0725 = 2589.1008, which rounds to 2589.10. This appears correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 6,
+   "answer": "Part A: Subtotal = 100\u00d76.40+200\u00d75.44+200\u00d74.48 = 2624.00. After 8% discount: 2624\u00d70.92=2414.08. After 7.25% tax: 2414.08\u00d71.0725=2589.1008 \u2192 2589.10.\n\nPart B: 233 prime, 487 mod 232=23. 76^2\u2261184\u2261-49, 76^4\u226171, 76^8\u2261148\u2261-85, 76^16\u22612 (mod 233). 76^23=76^16\u00b776^4\u00b776^2\u00b776 \u22612\u00b771\u00b7184\u00b776. 71\u00b7184=13064\u226116; 16\u00b776=1216\u226151; 51\u00b72=102. Remainder=102.\n\nPart C: r=0.00575. Precise squaring gives (1.00575)^60\u22481.41059497, so M=24000r(1+r)^60/((1+r)^60-1)\u2248474.0978. (1.00575)^18\u22481.10872096, giving B_18^0=24000(1.10872096)-M\u00d7(0.10872096/0.00575)\u224817645.08. Extra payments compound: 300\u00d7(1.00575)^7+750\u00d7(1.00575)^6 \u2248312.29+776.25=1088.54. Net balance = 17645.08-1088.54 \u224816556.54.\n\nPart D: Jan 1 2026 is Thursday, so Jan 9 2026 is Friday; all four holidays fall on weekdays within the window. Counting weekdays from Monday 2026-01-12 as day 1 through Friday 2026-05-08 (skipping the four holidays) totals 81 business days (5+5+4+5+5+4+5+5+5+5+4+5+5+4+5+5+5=81), so the 82nd business day is the next weekday, Monday 2026-05-11.\n\nFINAL: 2589.10; 102; 16556.54; 2026-05-11"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The weekday count from 2026-01-12 through 2026-05-08 is 84, not 85: January 12\u201330 has 15 weekdays, February has 20, March 22, April 22, and May 1\u20138 has 5. Removing the four listed weekday holidays gives 80 business days. Thus May 11 is day 81 and May 12 is day 82."
+    },
+    {
+     "from": "B",
+     "problem": "The stated intermediate power (1.00575)^18\u22481.10872096 is inaccurate; direct evaluation gives approximately 1.10871636. Using the exact annuity payment and compounding the month-11 and month-12 extras through month 18 gives a balance near 16556.81, not 16556.54."
+    },
+    {
+     "from": "D",
+     "problem": "The exponents are wrong. The extra payment in month 11 should be compounded from month 11 to month 18, which is 7 months, but the payment in month 12 is compounded from month 12 to month 18, which is 6 months. However, the claim says month 11 extra payment compounds for 7 months and month 12 for 6 months, which is correct. The issue is whether the extra payments should be subtracted from the balance computed at month 18 without extra payments. The method of compounding extra payments forward and subtracting from the no-extra balance is valid, but the computed value 1088.54 needs verification: 300\u00d7(1.00575)^7 = 300\u00d71.04098 \u2248 312.29, and 750\u00d7(1.00575)^6 = 750\u00d71.03498 \u2248 776.24, sum \u2248 1088.53, not 1088.54. Minor rounding discrepancy."
+    },
+    {
+     "from": "D",
+     "problem": "The formula for the remaining balance after 18 payments without extra payments is B_18 = P(1+r)^18 - M[((1+r)^18 - 1)/r]. Here P=24000, r=0.00575, M\u2248474.0978. The claim computes 24000\u00d71.10872096 - 474.0978\u00d7(0.10872096/0.00575). The second term is 474.0978\u00d718.9080 \u2248 8964.92, and 24000\u00d71.10872096 = 26609.30, difference \u2248 17644.38, not 17645.08. The discrepancy suggests an error in the arithmetic or the value of M."
+    },
+    {
+     "from": "D",
+     "problem": "The count of business days from 2026-01-12 to 2026-05-08 inclusive, skipping the four holidays, is not verified. The claim says the total is 81, but the number of weekdays in that range must be counted carefully. Also, the starting point for counting is ambiguous: if Jan 9 is Friday, then the first business day after Jan 9 is Monday Jan 12, so day 1 is Jan 12. The claim says day 82 is Monday 2026-05-11, but the count of 81 days ending on May 8 needs verification."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 0,
+   "rejected": 5,
+   "answer": "Part A: Subtotal = 100\u00d76.40 + 200\u00d75.44 + 200\u00d74.48 = 2624.00. After 8% discount: 2624\u00d70.92 = 2414.08. After 7.25% tax: 2414.08\u00d71.0725 = 2589.1008 \u2192 2589.10.\n\nPart B: 233 is prime, so use Fermat: 487 mod 232 = 23. Powers mod 233: 76^2\u2261184, 76^4\u226171, 76^8\u2261148, 76^16\u22612. Then 76^23 = 76^16\u00b776^4\u00b776^2\u00b776 \u2261 2\u00b771\u00b7184\u00b776 \u2261 102.\n\nPart C: r=0.00575. (1.00575)^60\u22481.4105954368, so M = 24000r(1+r)^60/((1+r)^60\u22121) \u2248 474.0972569. (1.00575)^18\u22481.1087170913. No-extra balance after 18 payments = 24000(1.00575)^18 \u2212 M[((1.00575)^18\u22121)/r] \u2248 17645.3015. Extra reduction = 300(1.00575)^7 + 750(1.00575)^6 \u2248 1088.5351. Balance = 17645.3015 \u2212 1088.5351 = 16556.7664 \u2192 16556.77.\n\nPart D: Jan 9, 2026 is Friday, so day 1 is Monday Jan 12. All four holidays are weekdays. Business days from Jan 12 through May 8 inclusive: Jan 14, Feb 19, Mar 21, Apr 21, May 6 = 81. The 82nd business day is Monday 2026-05-11.\n\nFINAL: 2589.10; 102; 16556.77; 2026-05-11"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part C: please list the full-precision intermediate values you used \u2014 (1.00575)^60, (1.00575)^18, (1.00575)^7, (1.00575)^6, each to 10 decimal places, and the unrounded monthly payment M \u2014 and then give the month-by-month balances for months 10 through 18 (showing exactly where the $300 and $750 are subtracted) so the single no-extra balance figure can be audited; the record contains competing values for B_18 without extras (17645.3015 vs 17645.34) and competing finals (16556.77 vs 16556.54 vs 16556.81), so state which is right and why the others are wrong.",
+    "Part C: confirm the timing convention explicitly \u2014 are the extras applied immediately after the regular month-11 and month-12 payments (so interest in months 12-18 accrues on the reduced balance), and does the final cent change at all if instead the full-precision M is carried unrounded through a 18-step recursion rather than using the closed-form 474.0972569? State the final figure under both routes."
+   ],
+   "replies": [
+    "Part C audit:\n\n1. Full-precision intermediates:\nr = 0.00575\n(1.00575)^60 = 1.4105954368203296, so to 10 dp: 1.4105954368\n(1.00575)^18 = 1.1087170912561402, so to 10 dp: 1.1087170913\n(1.00575)^7  = 1.0409510047198853, so to 10 dp: 1.0409510047\n(1.00575)^6  = 1.0349997561221827, so to 10 dp: 1.0349997561\n\nM = 24000*0.00575*(1.00575)^60 / ((1.00575)^60 - 1)\n  = 194.6621702812055 / 0.4105954368203296\n  = 474.0972568733 (unrounded)\n\nMonth-by-month recurrence B_k = 1.00575*B_{k-1} - M - extra_k:\nB_10 = 20550.7152891548\nB_11 = 20550.7152891548*1.00575 - 474.0972568733 - 300 = 19894.7846451941\nB_12 = 19894.7846451941*1.00575 - 474.0972568733 - 750 = 18785.0824000307\nB_13 = 18418.9993669576\nB_14 = 18050.8113564443\nB_15 = 17680.5062648705\nB_16 = 17308.0719190203\nB_17 = 16933.4960756813\nB_18 = 16556.7664212432 -> 16556.77\n\nThe no-extra balance after 18 payments is:\n24000*(1.00575)^18 - M*((1.00575)^18 - 1)/0.00575\n= 26609.210190147365 - 8963.90865039656\n= 17645.3015397508\nSo 17645.3015 is correct; 17645.34 is not supported by the exact calculation. The extra reduction is:\n300*(1.00575)^7 + 750*(1.00575)^6\n= 312.2853014159656 + 776.249817091637\n= 1088.5351185076026\nFinal balance = 17645.3015397508 - 1088.5351185076026 = 16556.7664212432 -> 16556.77.\nThe competing finals 16556.54 and 16556.81 are wrong under the stated timing; they would require different rounding or different extra-payment timing.\n\n2. Timing convention: yes, the $300 and $750 extras are applied immediately after the regular month-11 and month-12 payments, so interest for months 12-18 accrues on the reduced balance. That is why the $300 is compounded for 7 months and the $750 for 6 months.\n\nUsing full-precision M = 474.0972568733 in the 18-step recursion gives B_18 = 16556.7664212432 -> 16556.77.\nUsing the rounded M = 474.0972569 in the same recursion gives B_18 = 16556.7664207384 -> 16556.77.\nThe final cent does not change.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: confirm the tier split for 500 units is 100 at 6.40 + 200 at 5.44 + 200 at 4.48 (i.e. 'beyond 300' covers units 301-500), state the exact subtotal, and confirm the discount threshold test uses the pre-tax subtotal 2624.00 > 1500; also state whether any intermediate rounding (e.g. rounding the discounted subtotal to cents before applying 7.25% tax) would change the final cent, giving the figure under both routes.",
+    "Part B: verify 76^487 mod 233 by an independent route that does not use Fermat reduction - e.g. direct left-to-right square-and-multiply on the binary expansion of 487 - and list the intermediate residues so the two routes can be compared; also confirm 233 is prime and that 76^232 mod 233 = 1 as a check that the exponent reduction 487 mod 232 = 23 is legitimate.",
+    "Part D: give the month-by-month business-day tally (weekday count per month, holidays subtracted, running total) from 2026-01-12 through the answer date, confirm 2026-01-09 is a Friday and that day 1 is 2026-01-12 under the 'N business days after' convention used, and confirm each of the four holidays falls on a Mon-Fri and lies inside the counted span."
+   ],
+   "replies": [
+    "Part A: Tier split is 100 @ 6.40 = 640.00, 200 @ 5.44 = 1088.00, 200 @ 4.48 = 896.00, so exact subtotal = 2624.00. The discount test uses the pre-tax subtotal: 2624.00 > 1500, so the 8% discount applies. Discounted subtotal = 2624.00*0.92 = 2414.08. Tax = 2414.08*0.0725 = 175.0208, total = 2589.1008 -> 2589.10. The discounted subtotal is already exact to cents, so rounding it to cents before tax gives the same 2414.08 and the same final 2589.10.\n\nPart B: 233 is prime: sqrt(233) < 15.3, and it is not divisible by 2, 3, 5, 7, 11, or 13. Check for Fermat reduction: 76^232 mod 233 = 76^128 * 76^64 * 76^32 * 76^8 mod 233 = 23*16*4*148 mod 233 = 1, so reducing 487 mod 232 = 23 is legitimate. Independent left-to-right square-and-multiply on binary 487 = 111100111 gives residues after each bit: 76, 4, 51, 92, 76, 184, 37, 126, 102. Thus 76^487 mod 233 = 102.\n\nPart D: 2026-01-09 is Friday, so day 1 is Monday 2026-01-12. Holiday weekdays: 2026-01-27 Tue, 2026-02-16 Mon, 2026-03-26 Thu, 2026-04-16 Thu. Month-by-month tally from 2026-01-12 through 2026-05-11: Jan 12-31 has 15 weekdays - 1 holiday = 14, running 14; Feb has 20 - 1 = 19, running 33; Mar has 22 - 1 = 21, running 54; Apr has 22 - 1 = 21, running 75; May 1-11 has 7 - 0 = 7, running 82. So the 82nd business day is 2026-05-11.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part C: please verify the month-18 balance independently by a month-by-month amortization table (opening balance, interest at 0.575%, regular payment, extra principal, closing balance for months 1-18), stating the exact monthly payment to full precision and whether it is rounded to cents or kept unrounded; confirm the extra $300 in month 11 and $750 in month 12 are applied as additional principal on top of the regular payment (regular payment unchanged thereafter), confirm the growth exponents used (7 for the month-11 extra and 6 for the month-12 extra, measured to month 18), and state the resulting balance to the nearest cent under both the unrounded-payment and rounded-payment conventions so any cent-level discrepancy is visible."
+   ],
+   "replies": [
+    "No external source; computation is standard amortization.\n\nExact monthly payment: r=0.069/12=0.00575. (1.00575)^60=1.410595436820536. M=24000*0.00575*(1.00575)^60/((1.00575)^60-1)=474.0972568731137. This is kept unrounded, per the instruction 'round nothing until the end'. If instead the regular payment is rounded to cents, it is 474.10.\n\nExtras: yes, $300 extra principal is applied in month 11 and $750 extra principal in month 12, on top of the regular payment; the regular payment is unchanged thereafter. Growth exponents to month 18 are 18-11=7 and 18-12=6, so extra reduction = 300(1.00575)^7 + 750(1.00575)^6 = 312.285301416 + 776.249817092 = 1088.535118508.\n\nMonth-by-month table using unrounded M=474.097256873 (displayed to cents):\nMonth | Opening | Interest | Regular payment | Extra | Closing\n1 | 24000.00 | 138.00 | 474.097256873 | 0.00 | 23663.90\n2 | 23663.90 | 136.07 | 474.097256873 | 0.00 | 23325.87\n3 | 23325.87 | 134.12 | 474.097256873 | 0.00 | 22985.90\n4 | 22985.90 | 132.17 | 474.097256873 | 0.00 | 22643.97\n5 | 22643.97 | 130.20 | 474.097256873 | 0.00 | 22300.08\n6 | 22300.08 | 128.23 | 474.097256873 | 0.00 | 21954.20\n7 | 21954.20 | 126.24 | 474.097256873 | 0.00 | 21606.34\n8 | 21606.34 | 124.24 | 474.097256873 | 0.00 | 21256.48\n9 | 21256.48 | 122.22 | 474.097256873 | 0.00 | 20904.61\n10 | 20904.61 | 120.20 | 474.097256873 | 0.00 | 20550.72\n11 | 20550.72 | 118.17 | 474.097256873 | 300.00 | 19894.78\n12 | 19894.78 | 114.40 | 474.097256873 | 750.00 | 18785.08\n13 | 18785.08 | 108.01 | 474.097256873 | 0.00 | 18419.00\n14 | 18419.00 | 105.91 | 474.097256873 | 0.00 | 18050.81\n15 | 18050.81 | 103.79 | 474.097256873 | 0.00 | 17680.51\n16 | 17680.51 | 101.66 | 474.097256873 | 0.00 | 17308.07\n17 | 17308.07 | 99.52 | 474.097256873 | 0.00 | 16933.50\n18 | 16933.50 | 97.37 | 474.097256873 | 0.00 | 16556.77\n\nFinal balance with unrounded payment: 16556.766421247 -> 16556.77. Final balance with rounded payment 474.10: 16556.714556 -> 16556.71. The original answer's 16556.77 is correct under the stated round-nothing-until-the-end convention."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Part A: Subtotal = 100\u00d76.40 + 200\u00d75.44 + 200\u00d74.48 = 2624.00. After 8% discount: 2624\u00d70.92 = 2414.08. After 7.25% tax: 2414.08\u00d71.0725 = 2589.1008 \u2192 2589.10.\n\nPart B: 233 is prime, so use Fermat: 487 mod 232 = 23. Powers mod 233: 76^2\u2261184, 76^4\u226171, 76^8\u2261148, 76^16\u22612. Then 76^23 = 76^16\u00b776^4\u00b776^2\u00b776 \u2261 2\u00b771\u00b7184\u00b776 \u2261 102.\n\nPart C: r=0.00575. (1.00575)^60\u22481.4105954368, so M = 24000r(1+r)^60/((1+r)^60\u22121) \u2248 474.0972569. (1.00575)^18\u22481.1087170913. No-extra balance after 18 payments = 24000(1.00575)^18 \u2212 M[((1.00575)^18\u22121)/r] \u2248 17645.3015. Extra reduction = 300(1.00575)^7 + 750(1.00575)^6 \u2248 1088.5351. Balance = 17645.3015 \u2212 1088.5351 = 16556.7664 \u2192 16556.77.\n\nPart D: Jan 9, 2026 is Friday, so day 1 is Monday Jan 12. All four holidays are weekdays. Business days from Jan 12 through May 8 inclusive: Jan 14, Feb 19, Mar 21, Apr 21, May 6 = 81. The 82nd business day is Monday 2026-05-11.\n\nFINAL: 2589.10; 102; 16556.77; 2026-05-11"
+}

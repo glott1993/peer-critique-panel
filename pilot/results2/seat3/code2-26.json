@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-26",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.2,
+ "tokens": 588,
+ "prompt_tokens": 239,
+ "completion_tokens": 349,
+ "cost": 0.00149,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of `parse_query`:\n\n```python\nimport string\n\nHEX_DIGITS = set(string.hexdigits)\n\n\ndef _unquote(s: str) -> str:\n    s = s.replace(\"+\", \" \")\n    parts = s.split(\"%\")\n    if len(parts) == 1:\n        return parts[0]\n\n    res = bytearray(parts[0].encode(\"latin1\"))\n    for part in parts[1:]:\n        if len(part) < 2 or part[0] not in HEX_DIGITS or part[1] not in HEX_DIGITS:\n            raise ValueError(f\"Malformed percent-escape in: {s}\")\n        res.append(int(part[:2], 16))\n        res.extend(part[2:].encode(\"latin1\"))\n\n    return res.decode(\"utf-8\")\n\n\ndef parse_query(qs: str) -> dict[str, list[str]]:\n    result: dict[str, list[str]] = {}\n    if not qs:\n        return result\n\n    pairs = qs.split(\"&\")\n    for pair in pairs:\n        if not pair:\n            continue\n        if \"=\" in pair:\n            key, val = pair.split(\"=\", 1)\n        else:\n            key, val = pair, \"\"\n\n        decoded_key = _unquote(key)\n        decoded_val = _unquote(val)\n\n        result.setdefault(decoded_key, []).append(decoded_val)\n\n    return result\n```"
+}

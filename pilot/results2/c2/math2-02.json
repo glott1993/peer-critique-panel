@@ -1,0 +1,182 @@
+{
+ "task_id": "math2-02",
+ "type": "math",
+ "condition": "c2",
+ "correct": true,
+ "detail": "got 3868.8, expected 3868.8",
+ "error": null,
+ "seconds": 122.8,
+ "tokens": 72805,
+ "prompt_tokens": 51064,
+ "completion_tokens": 21741,
+ "cost": 0.14098,
+ "calls": 29,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 3,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "99.5*31.2+15*46.8+1*62.4",
+   "claimed": 3868.8,
+   "value": 3868.8,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "8+8+9.5+9.5+7.5+6+9+10+6+10+8+13+0+11",
+   "claimed": 115.5,
+   "value": 115.5,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "99.5+15+1",
+   "claimed": 115.5,
+   "value": 115.5,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Calculate Daily Pay Categories",
+     "what": "For each day, split hours into regular (\u22648), time-and-a-half (8\u201312), and double-time (>12), and sum each category across all 14 days."
+    },
+    {
+     "id": "c2",
+     "title": "Verify Tier Totals",
+     "what": "Confirm total hours (99.5 regular, 15 overtime, 1 double-time) sum to 115.5, matching the raw hour total."
+    },
+    {
+     "id": "c3",
+     "title": "Compute Gross Pay",
+     "what": "Multiply each tier's total hours by its respective rate ($31.20, $46.80, $62.40) and sum the results."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Daily totals by pay category:\n\n- Regular hours (up to 8/day): 99.5\n- Time-and-a-half hours (over 8 through 12/day): 15\n- Double-time hours (over 12/day): 1\n\nThese total 115.5 hours, matching the listed daily hours.\n\nPay:\n- 99.5 \u00d7 $31.20 = $3,104.40\n- 15 \u00d7 $46.80 = $702.00\n- 1 \u00d7 $62.40 = $62.40\n\nTotal gross pay = $3,868.80\n\nFINAL: 3868.80"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "The draft miscalculated the time-and-a-half overtime hours. Summing the daily portions over 8 and up to 12 gives: 0 + 0 + 1.5 + 1.5 + 0 + 0 + 1 + 2 + 0 + 2 + 0 + 4 + 0 + 3 = 15. Wait, 1.5+1.5=3; +1=4; +2=6; +2=8; +4=12; +3=15. That is 15. Let us check regular: 8+8+8+8+7.5+6+8+8+6+8+8+8+0+8 = 99.5. Total hours: 8+8+9.5+9.5+7.5+6+9+10+6+10+8+13+0+11 = 115.5. 99.5 + 15 + 1 = 115.5. Double time: day with 13 hrs gives 1 hr over 12. Arithmetic is completely correct. What potential challenge exists? Statutory California-style daily overtime usually includes 7th consecutive day rules or weekly threshold rules, but prompt specifies 'there is no weekly overtime rule'. Another challenge: rounding intermediate figures vs total formula, or interpreting 'hours over 8 in a day are paid at 1.5 times the rate' as meaning all hours above 8 including those above 12 receiving overtime premium on top of double time, but standard tiering applies 1.5x only between 8 and 12."
+    },
+    {
+     "from": "C",
+     "problem": "Under strict labor standards interpretation where the 13-hour day is computed as base rate $31.20 across all hours plus overtime premiums (0.5x and 1.0x), the calculation matches, but if the consecutive 14 days represent two workweeks where 7th consecutive day overtime applies under typical daily OT statutes, draft fails to mention or exclude it despite prompt stating 'no weekly overtime rule' (which technically leaves daily 7th-day rules ambiguous)."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: summing regular hours from the listed daily hours (8, 8, 9.5, 9.5, 7.5, 6, 9, 10, 6, 10, 8, 13, 0, 11) gives 8+8+8+8+7.5+6+8+8+6+8+8+8+0+8 = 99.5, which is correct."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: over 8 through 12 hours are 1.5, 1.5, 1, 2, 2, 3, 3 = 14, not 15."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: only the 13-hour day exceeds 12, giving 1 double-time hour. Correct."
+    },
+    {
+     "from": "D",
+     "problem": "Unsupported inference: the arithmetic is correct given the hour totals, but the hour totals should be verified independently."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 6,
+   "answer": "Daily hours: 8, 8, 9.5, 9.5, 7.5, 6, 9, 10, 6, 10, 8, 13, 0, 11\n\nBreakdown by day:\n- Regular (up to 8 hrs/day): 8 + 8 + 8 + 8 + 7.5 + 6 + 8 + 8 + 6 + 8 + 8 + 8 + 0 + 8 = 99.5 hours\n- Overtime (over 8 up to 12 hrs/day): 0 + 0 + 1.5 + 1.5 + 0 + 0 + 1 + 2 + 0 + 2 + 0 + 4 + 0 + 3 = 15 hours\n- Double time (over 12 hrs/day): 13 - 12 = 1 hour (on day 12)\n\nRates:\n- Regular: $31.20\n- Overtime (1.5\u00d7): $46.80\n- Double time (2\u00d7): $62.40\n\nEarnings:\n- Regular: 99.5 \u00d7 $31.20 = $3,104.40\n- Overtime: 15 \u00d7 $46.80 = $702.00\n- Double time: 1 \u00d7 $62.40 = $62.40\n\nTotal Gross Pay = $3,104.40 + $702.00 + $62.40 = $3,868.80\n\nFINAL: 3868.80"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The record confirms the hour tiers and arithmetic; is there any remaining open point about whether the 11-hour day and 10-hour days were each correctly allocated (i.e., 3, 2, and 2 premium hours respectively) rather than capped at some other threshold?",
+    "Does any day in the list other than the 13-hour day exceed 12 hours, and if not, is 1 double-time hour the complete double-time total?"
+   ],
+   "replies": [
+    "There is no open point. By the explicit daily rules, overtime applies to hours worked between 8 and 12 in a single day. For a 10-hour day, min(10, 12) - 8 = 2 overtime hours. For an 11-hour day, min(11, 12) - 8 = 3 overtime hours. The two 10-hour days each generate 2 overtime hours, and the 11-hour day generates 3 overtime hours, matching the submitted breakdown exactly.",
+    "No other day exceeds 12 hours. The hours list is: 8, 8, 9.5, 9.5, 7.5, 6, 9, 10, 6, 10, 8, 13, 0, 11. Testing max(h - 12, 0) across all 14 entries yields 0 for all days except day 12 (13 - 12 = 1). Thus, 1 double-time hour is the complete double-time total."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please verify the totals independently: does the sum of the 14 daily hours equal 99.5 + 15 + 1 = 115.5, and do the products 99.5 x 31.20 = 3104.40, 15 x 46.80 = 702.00, and 1 x 62.40 = 62.40 sum exactly to 3868.80?"
+   ],
+   "replies": [
+    "Yes. Summing the 14 days directly: 8 + 8 + 9.5 + 9.5 + 7.5 + 6 + 9 + 10 + 6 + 10 + 8 + 13 + 0 + 11 = 115.5 hours, which exactly matches 99.5 + 15 + 1 = 115.5 hours. Furthermore, computing the dollar amounts: 99.5 \u00d7 31.20 = 3104.40, 15 \u00d7 46.80 = 702.00, and 1 \u00d7 62.40 = 62.40. Their sum is 3104.40 + 702.00 + 62.40 = 3868.80 exactly."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Daily hours: 8, 8, 9.5, 9.5, 7.5, 6, 9, 10, 6, 10, 8, 13, 0, 11\n\nBreakdown by day:\n- Regular (up to 8 hrs/day): 8 + 8 + 8 + 8 + 7.5 + 6 + 8 + 8 + 6 + 8 + 8 + 8 + 0 + 8 = 99.5 hours\n- Overtime (over 8 up to 12 hrs/day): 0 + 0 + 1.5 + 1.5 + 0 + 0 + 1 + 2 + 0 + 2 + 0 + 4 + 0 + 3 = 15 hours\n- Double time (over 12 hrs/day): 13 - 12 = 1 hour (on day 12)\n\nRates:\n- Regular: $31.20\n- Overtime (1.5\u00d7): $46.80\n- Double time (2\u00d7): $62.40\n\nEarnings:\n- Regular: 99.5 \u00d7 $31.20 = $3,104.40\n- Overtime: 15 \u00d7 $46.80 = $702.00\n- Double time: 1 \u00d7 $62.40 = $62.40\n\nTotal Gross Pay = $3,104.40 + $702.00 + $62.40 = $3,868.80\n\nFINAL: 3868.80"
+}

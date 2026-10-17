@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-18",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 765.0, expected 765.0 | ok: got 11604.63, expected 11604.68 | ok: got 4393.0, expected 4393.0 | ok: got 66.0, expected 66.0",
+ "error": null,
+ "seconds": 18.8,
+ "tokens": 3537,
+ "prompt_tokens": 389,
+ "completion_tokens": 3148,
+ "cost": 0.0121,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nWe are looking for the smallest positive integer $x$ such that:\n- $x \\equiv 2 \\pmod 7$\n- $x \\equiv 11 \\equiv -2 \\pmod{13}$\n- $x \\equiv 6 \\pmod{23}$\n\nCombining the first two congruences: $x \\equiv 37 \\pmod{91}$.\nSetting $x = 91n + 37 \\equiv 6 \\pmod{23}$ gives:\n$-n + 14 \\equiv 6 \\pmod{23} \\implies n \\equiv 8 \\pmod{23}$.\nThus, the smallest positive integer is $91(8) + 37 = 765$.\n\n**Part B**\nEach period, the balance after contribution is multiplied by $1.015 \\times (1 - 0.0075) = 1.0073875$.\nIterating through the 12 periods with the given contributions yields a final balance of:\n$11604.63$\n\n**Part C**\nUsing the Principle of Inclusion-Exclusion, the number of integers in $\\{1, \\dots, 12000\\}$ divisible by at least one of 4, 6, or 9 is:\n$\\lfloor 12000/4 \\rfloor + \\lfloor 12000/6 \\rfloor + \\lfloor 12000/9 \\rfloor - \\lfloor 12000/12 \\rfloor - \\lfloor 12000/18 \\rfloor = 3000 + 2000 + 1333 - 1000 - 666 = 4667$.\n\nSince $\\gcd(17, 36) = 1$, the number of these divisible by 17 corresponds to the count for $\\{1, \\dots, \\lfloor 12000/17 \\rfloor = 705\\}$:\n$\\lfloor 705/4 \\rfloor + \\lfloor 705/6 \\rfloor + \\lfloor 705/9 \\rfloor - \\lfloor 705/12 \\rfloor - \\lfloor 705/18 \\rfloor = 176 + 117 + 78 - 58 - 39 = 274$.\n\nSubtracting these gives $4667 - 274 = 4393$.\n\n**Part D**\n$30012 \\times 1337 \\times 788 \\times 9704 = 306833907209088$.\nSum of the decimal digits: $3 + 0 + 6 + 8 + 3 + 3 + 9 + 0 + 7 + 2 + 0 + 9 + 0 + 8 + 8 = 66$.\n\nFINAL: 765; 11604.63; 4393; 66"
+}

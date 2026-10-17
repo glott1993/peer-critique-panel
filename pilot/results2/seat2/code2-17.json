@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 11.6,
- "tokens": 6261,
- "prompt_tokens": 4146,
- "completion_tokens": 2115,
- "cost": 0.00337,
+ "seconds": 9.6,
+ "tokens": 6061,
+ "prompt_tokens": 4190,
+ "completion_tokens": 1871,
+ "cost": 0.00308,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef sudoku_valid(board) -> bool:\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be a 9x9 list of lists.\")\n\n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be a 9x9 list of lists.\")\n        for value in row:\n            if isinstance(value, bool) or not isinstance(value, int) or not 0 <= value <= 9:\n                raise ValueError(\"Board values must be integers from 0 to 9.\")\n\n    for row in board:\n        values = [value for value in row if value != 0]\n        if len(values) != len(set(values)):\n            return False\n\n    for col in range(9):\n        values = [board[row][col] for row in range(9) if board[row][col] != 0]\n        if len(values) != len(set(values)):\n            return False\n\n    for box_row in range(0, 9, 3):\n        for box_col in range(0, 9, 3):\n            values = [\n                board[row][col]\n                for row in range(box_row, box_row + 3)\n                for col in range(box_col, box_col + 3)\n                if board[row][col] != 0\n            ]\n            if len(values) != len(set(values)):\n                return False\n\n    return True\n```"
+ "answer": "```python\ndef sudoku_valid(board) -> bool:\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be a 9x9 list of lists\")\n\n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be a 9x9 list of lists\")\n        for value in row:\n            if not isinstance(value, int) or isinstance(value, bool) or not 0 <= value <= 9:\n                raise ValueError(\"Board values must be integers from 0 to 9\")\n\n    for row in board:\n        values = [value for value in row if value != 0]\n        if len(values) != len(set(values)):\n            return False\n\n    for col in range(9):\n        values = [board[row][col] for row in range(9) if board[row][col] != 0]\n        if len(values) != len(set(values)):\n            return False\n\n    for box_row in range(0, 9, 3):\n        for box_col in range(0, 9, 3):\n            values = [\n                board[row][col]\n                for row in range(box_row, box_row + 3)\n                for col in range(box_col, box_col + 3)\n                if board[row][col] != 0\n            ]\n            if len(values) != len(set(values)):\n                return False\n\n    return True\n```"
 }

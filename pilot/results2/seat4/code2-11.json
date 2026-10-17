@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-11",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 64.9,
+ "tokens": 3607,
+ "prompt_tokens": 321,
+ "completion_tokens": 3286,
+ "cost": 0.00975,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom datetime import datetime\n\ndef reconcile(bank, ledger, window=2):\n    bank_items = []\n    for idx, (id_, date_str, amount) in enumerate(bank):\n        d = datetime.fromisoformat(date_str).date()\n        bank_items.append({'idx': idx, 'id': id_, 'date': d, 'amount': amount})\n\n    ledger_items = []\n    for idx, (id_, date_str, amount) in enumerate(ledger):\n        d = datetime.fromisoformat(date_str).date()\n        ledger_items.append({'idx': idx, 'id': id_, 'date': d, 'amount': amount})\n\n    bank_sorted = sorted(bank_items, key=lambda x: (x['date'], x['id']))\n    ledger_sorted = sorted(ledger_items, key=lambda x: (x['date'], x['id']))\n\n    matched_ledger_indices = set()\n    matched_bank_indices = set()\n    matches = []\n\n    for b in bank_sorted:\n        for l in ledger_sorted:\n            if l['idx'] in matched_ledger_indices:\n                continue\n            if l['amount'] == b['amount'] and abs((l['date'] - b['date']).days) <= window:\n                matches.append((b['id'], l['id']))\n                matched_ledger_indices.add(l['idx'])\n                matched_bank_indices.add(b['idx'])\n                break\n\n    unmatched_bank = [bank[i][0] for i in range(len(bank)) if i not in matched_bank_indices]\n    unmatched_ledger = [ledger[i][0] for i in range(len(ledger)) if i not in matched_ledger_indices]\n\n    return matches, unmatched_bank, unmatched_ledger\n```"
+}

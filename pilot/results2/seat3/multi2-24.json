@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-24",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "ok: got 4509.3, expected 4509.3 | no: got '2026-07-16', expected '2026-07-17' | ok: got 4283.0, expected 4283.0",
+ "error": null,
+ "seconds": 8.1,
+ "tokens": 1719,
+ "prompt_tokens": 472,
+ "completion_tokens": 1247,
+ "cost": 0.00503,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\nTotal units sold = 86 + 98 + 66 + 52 + 80 + 73 = 455 units.\nUsing FIFO:\n- Lot 1: 110 units @ $9.33 = $1,026.30 (Remaining to sell: 455 - 110 = 345)\n- Lot 2: 152 units @ $12.18 = $1,851.36 (Remaining to sell: 345 - 152 = 193)\n- Lot 3: 88 units @ $12.48 = $1,098.24 (Remaining to sell: 193 - 88 = 105)\n- Lot 4: 105 units @ $5.08 = $533.40 (Remaining to sell: 0)\nTotal COGS = 1,026.30 + 1,851.36 + 1,098.24 + 533.40 = $4,509.30.\n\n**Part B:**\nStarting date: 2026-03-16 (Monday).\nWe need 85 business days after 2026-03-16:\nWithout holidays: 85 business days = 17 full weeks (17 * 5 = 85).\n17 weeks after Monday, 2026-03-16 is Monday, 2026-07-13.\nNow check holidays between 2026-03-17 and 2026-07-13 (inclusive):\n- 2026-04-14 (Tuesday): weekday, falls in range (+1 day)\n- 2026-04-21 (Tuesday): weekday, falls in range (+1 day)\n- 2026-05-15 (Friday): weekday, falls in range (+1 day)\n- 2026-07-14 (Tuesday): outside initial range.\nAdding 3 business days from 2026-07-13:\n- Day 83: 2026-07-13 (Monday)\n- Day 84: 2026-07-14 (Tuesday) is a specified holiday, so skip!\n- Day 84: 2026-07-15 (Wednesday)\n- Day 85: 2026-07-16 (Thursday).\nTarget date is 2026-07-16.\n\n**Part C:**\nLet $N = 12000$. We want numbers divisible by at least one of $\\{5, 7, 11\\}$ and not divisible by $19$.\nThis is equivalent to $N(A \\cup B \\cup C) - N((A \\cup B \\cup C) \\cap D)$, where $A, B, C, D$ are multiples of $5, 7, 11, 19$.\nLet $f(m) = \\lfloor 12000 / m \\rfloor$.\nBy Inclusion-Exclusion for $S_1 = A \\cup B \\cup C$:\n- $f(5) = 2400$\n- $f(7) = 1714$\n- $f(11) = 1090$\n- $f(35) = 342$\n- $f(55) = 218$\n- $f(77) = 155$\n- $f(385) = 31$\n$|S_1| = (2400 + 1714 + 1090) - (342 + 218 + 155) + 31 = 5204 - 715 + 31 = 4520$.\n\nNow for $S_2 = (A \\cup B \\cup C) \\cap D$:\n- $f(5 \\times 19) = f(95) = 126$\n- $f(7 \\times 19) = f(133) = 90$\n- $f(11 \\times 19) = f(209) = 57$\n- $f(35 \\times 19) = f(665) = 18$\n- $f(55 \\times 19) = f(1045) = 11$\n- $f(77 \\times 19) = f(1463) = 8$\n- $f(385 \\times 19) = f(7315) = 1$\n$|S_2| = (126 + 90 + 57) - (18 + 11 + 8) + 1 = 273 - 37 + 1 = 237$.\n\nTotal = $|S_1| - |S_2| = 4520 - 237 = 4283$.\n\nFINAL: 4509.30; 2026-07-16; 4283"
+}

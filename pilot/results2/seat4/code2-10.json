@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-10",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 30.1,
+ "tokens": 2223,
+ "prompt_tokens": 225,
+ "completion_tokens": 1998,
+ "cost": 0.0041,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom datetime import date, timedelta\n\ndef nth_weekday(year, month, weekday, n):\n    if weekday not in range(7):\n        raise ValueError(\"weekday must be 0-6\")\n    if n != -1 and n not in range(1, 6):\n        raise ValueError(\"n must be 1-5 or -1\")\n\n    first = date(year, month, 1)\n    offset = (weekday - first.weekday()) % 7\n    first_occurrence = first + timedelta(days=offset)\n\n    if n == -1:\n        # Last occurrence: find last day of the month, then adjust backward\n        if month == 12:\n            next_month = date(year + 1, 1, 1)\n        else:\n            next_month = date(year, month + 1, 1)\n        last_day = next_month - timedelta(days=1)\n        last_offset = (last_day.weekday() - weekday) % 7\n        target = last_day - timedelta(days=last_offset)\n        return target.isoformat()\n\n    target = first_occurrence + timedelta(weeks=n - 1)\n    if target.month != month:\n        raise ValueError(f\"No {n}th weekday {weekday} in {year}-{month:02d}\")\n    return target.isoformat()\n```"
+}

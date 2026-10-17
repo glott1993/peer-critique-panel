@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-21",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "ok: got -1417.12, expected -1417.12 | ok: got 4063.14, expected 4063.14 | no: got 7192.75, expected 7194.84",
+ "error": null,
+ "seconds": 21.7,
+ "tokens": 4183,
+ "prompt_tokens": 646,
+ "completion_tokens": 3537,
+ "cost": 0.01375,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nFollowing each month's sequence (transaction, then $8 fee if balance < $1,500, then 0.25% interest):\n- Months 1\u20135 stay above $1,500, ending at $1,580.18.\n- Month 6: $1,580.18 - $650 = $930.18 (< $1,500) - $8 fee = $922.18; with interest: $924.48.\n- Months 7\u201315 all end below $1,500 and incur the $8 fee each month, resulting in a final balance after month 15 of -$1,417.12.\n\nPart B:\nTotal units sold = 69 + 36 + 40 + 89 + 43 + 76 = 353 units.\nUnder FIFO costing:\n- Lot 1: 90 units @ $12.06 = $1,085.40\n- Lot 2: 115 units @ $13.43 = $1,544.45\n- Lot 3: 65 units @ $10.75 = $698.75\n- Lot 4: 79 units @ $8.82 = $696.78\n- Lot 5: 4 units @ $9.44 = $37.76\nTotal COGS = $1,085.40 + $1,544.45 + $698.75 + $696.78 + $37.76 = $4,063.14.\n\nPart C:\nThe monthly interest rate is $r = 0.078 / 12 = 0.0065$.\nFor $P = \\$12,000$ and $n = 60$, the monthly payment is:\n$M = \\frac{12000 \\times 0.0065}{1 - (1.0065)^{-60}} \\approx \\$242.156739$\n- Balance after month 9: $B_9 \\approx \\$10,481.34241$\n- Balance after month 10 (extra $1,000 paid): $B_{10} = B_9 \\times 1.0065 - (M + 1000) \\approx \\$9,307.31440$\n- Balance after month 11 (extra $600 paid): $B_{11} = B_{10} \\times 1.0065 - (M + 600) \\approx \\$8,525.65520$\n- After 7 more regular monthly payments, the balance after month 18 is:\n$B_{18} = B_{11}(1.0065)^7 - M \\frac{(1.0065)^7 - 1}{0.0065} \\approx \\$7,192.75$\n\nFINAL: -1417.12; 4063.14; 7192.75"
+}

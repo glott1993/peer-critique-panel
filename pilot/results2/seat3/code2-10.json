@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-10",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.3,
+ "tokens": 526,
+ "prompt_tokens": 237,
+ "completion_tokens": 289,
+ "cost": 0.00126,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete function definition:\n\n```python\nimport calendar\nfrom datetime import date\n\n\ndef nth_weekday(year: int, month: int, weekday: int, n: int) -> str:\n    \"\"\"Return the ISO date 'YYYY-MM-DD' of the n-th given weekday in the month.\n\n    weekday: 0 for Monday through 6 for Sunday.\n    n: 1 to 5 for the 1st through 5th occurrence, or -1 for the last occurrence.\n    Raises ValueError if no such occurrence exists.\n    \"\"\"\n    cal = calendar.Calendar()\n    # Find all days in the specified month that match the given weekday\n    matching_days = [\n        day\n        for day, wd in cal.itermonthdays2(year, month)\n        if day != 0 and wd == weekday\n    ]\n\n    if n == -1:\n        target_day = matching_days[-1]\n    elif 1 <= n <= len(matching_days):\n        target_day = matching_days[n - 1]\n    else:\n        raise ValueError(f\"No {n}-th occurrence of weekday {weekday} in {year}-{month:02d}\")\n\n    return date(year, month, target_day).isoformat()\n```"
+}

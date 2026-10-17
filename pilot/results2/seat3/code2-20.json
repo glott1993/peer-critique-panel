@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-20",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.7,
+ "tokens": 684,
+ "prompt_tokens": 219,
+ "completion_tokens": 465,
+ "cost": 0.00191,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of the `justify` function:\n\n```python\ndef justify(words: list[str], width: int) -> list[str]:\n    if not words:\n        return []\n\n    lines = []\n    current_line = []\n    current_len = 0  # Total length of words in current_line (excluding spaces)\n\n    for word in words:\n        # Check if adding this word (plus at least one space if not the first word) exceeds width\n        if current_line and current_len + len(current_line) + len(word) > width:\n            # Need to format current_line\n            if len(current_line) == 1:\n                # Single word: left-justified with trailing spaces\n                lines.append(current_line[0] + \" \" * (width - current_len))\n            else:\n                total_spaces = width - current_len\n                num_gaps = len(current_line) - 1\n                base_space = total_spaces // num_gaps\n                extra_spaces = total_spaces % num_gaps\n\n                line_parts = []\n                for i, w in enumerate(current_line):\n                    line_parts.append(w)\n                    if i < num_gaps:\n                        # Add extra space to the leftmost gaps\n                        spaces_to_add = base_space + (1 if i < extra_spaces else 0)\n                        line_parts.append(\" \" * spaces_to_add)\n                lines.append(\"\".join(line_parts))\n\n            current_line = []\n            current_len = 0\n\n        current_line.append(word)\n        current_len += len(word)\n\n    # Format the last line: left-justified, single space between words, padded with trailing spaces\n    last_line_str = \" \".join(current_line)\n    last_line_str += \" \" * (width - len(last_line_str))\n    lines.append(last_line_str)\n\n    return lines\n```"
+}

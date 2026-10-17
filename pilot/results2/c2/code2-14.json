@@ -1,0 +1,302 @@
+{
+ "task_id": "code2-14",
+ "type": "code",
+ "condition": "c2",
+ "correct": false,
+ "detail": "ValueError: malformed input",
+ "error": null,
+ "seconds": 1006.6,
+ "tokens": 270948,
+ "prompt_tokens": 124455,
+ "completion_tokens": 146493,
+ "cost": 0.38476,
+ "calls": 50,
+ "call_errors": 5,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": true,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "2*(-3/4)",
+   "claimed": -1.5,
+   "value": -1.5,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "3/4+1/6",
+   "claimed": 0.9166666666666666,
+   "value": 0.9166666666666666,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Tokenize and validate input",
+     "what": "Split input into tokens (integers, a/b fractions, + - * ( )), validate each token matches expected regex patterns, reject empty/malformed tokens, and raise ValueError for zero denominators found in literals during tokenization."
+    },
+    {
+     "id": "c2",
+     "title": "Parse and evaluate with Fraction arithmetic",
+     "what": "Implement a recursive-descent parser (expr/term/factor, handling unary leading minus and parentheses) using Python's fractions.Fraction for exact arithmetic, converting any internal ZeroDivisionError or parse failure (leftover tokens, missing parens) into ValueError."
+    },
+    {
+     "id": "c3",
+     "title": "Format result",
+     "what": "Normalize the resulting Fraction to lowest terms with positive denominator, return '0' for zero, 'n' when denominator is 1, else 'n/d'."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ],
+    "c2": [
+     "B",
+     "A"
+    ],
+    "c3": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "c2 is a complete, self-contained solution already covering tokenizing, parsing, and formatting, so I use it as the base. It correctly raises ValueError for malformed input and zero denominators, and formats output per spec (checked: `3/4 + 1/6` \u2192 `11/12`, `2 * 3/4` \u2192 `3/2`). Minor fix: explicitly handle the `result.numerator == 0` case to always return `'0'` regardless of denominator representation, matching c3's edge case.\n\n```python\nimport re\nfrom fractions import Fraction\n\n\ndef fraction_expr(s: str) -> str:\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]\")\n    tokens = []\n    pos = 0\n\n    while pos < len(s):\n        if s[pos].isspace():\n            pos += 1\n            continue\n        match = token_re.match(s, pos)\n        if not match:\n            raise ValueError(\"malformed input\")\n        tokens.append(match.group())\n        pos = match.end()\n\n    if not tokens:\n        raise ValueError(\"empty expression\")\n\n    index = 0\n\n    def peek():\n        return tokens[index] if index < len(tokens) else None\n\n    def consume(expected=None):\n        nonlocal index\n        token = peek()\n        if token is None or (expected is not None and token != expected):\n            raise ValueError(\"malformed input\")\n        index += 1\n        return token\n\n    def parse_expr():\n        value = parse_term()\n        while peek() in (\"+\", \"-\"):\n            operator = consume()\n            rhs = parse_term()\n            value = value + rhs if operator == \"+\" else value - rhs\n        return value\n\n    def parse_term():\n        value = parse_factor()\n        while peek() == \"*\":\n            consume(\"*\")\n            value *= parse_factor()\n        return value\n\n    def parse_factor():\n        if peek() == \"-\":\n            consume(\"-\")\n            return -parse_factor()\n        if peek() == \"(\":\n            consume(\"(\")\n            value = parse_expr()\n            consume(\")\")\n            return value\n\n        token = peek()\n        if token is None or not (token.isdigit() or re.fullmatch(r\"\\d+/\\d+\", token)):\n            raise ValueError(\"malformed input\")\n        consume()\n        try:\n            if \"/\" in token:\n                numerator, denominator = token.split(\"/\")\n                return Fraction(int(numerator), int(denominator))\n            return Fraction(int(token))\n        except (ValueError, ZeroDivisionError) as exc:\n            raise ValueError(\"invalid fraction\") from exc\n\n    try:\n        result = parse_expr()\n        if index != len(tokens):\n            raise ValueError(\"unexpected token\")\n    except ZeroDivisionError as exc:\n        raise ValueError(\"zero denominator\") from exc\n\n    if result.numerator == 0:\n        return '0'\n    return str(result.numerator) if result.denominator == 1 else f\"{result.numerator}/{result.denominator}\"\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "It skips arbitrary whitespace and allows tokens to touch, despite the request saying there are spaces between tokens. Thus inputs such as `1+2`, `1\\t+\\t2`, and `1\\n+\\n2` are accepted rather than rejected if spacing is part of the grammar. It also accepts chained unary minuses such as `--1` and `1--2`, although the specification only permits a leading minus on a term and does not clearly permit repeated unary operators."
+    },
+    {
+     "from": "D",
+     "problem": "The regex `\\d+/\\d+|\\d+|[()+*-]` matches a prefix of a malformed token. For example, input `1/2/3` tokenizes as `1/2`, then `/`, then `3`, and the parser may or may not reject it depending on context. `1/2/3` should be malformed, but `parse_factor` sees `1/2` as a valid factor, leaving `/` and `3` unconsumed, so `index != len(tokens)` catches it. However, `1/2/3 + 1` would also be caught. The claim is about tokenizing, not parsing; tokenizing itself does not reject malformed fraction literals."
+    },
+    {
+     "from": "D",
+     "problem": "`parse_factor` handles `-` by recursively calling `parse_factor`, but there is no check that the token after `-` is a valid factor start. For input `- + 1`, `parse_factor` consumes `-`, then recursively sees `+` and raises ValueError, which is fine. However, for input `-`, `parse_factor` consumes `-`, then `parse_factor` sees `None` and raises ValueError. These are correct. The real issue is that unary minus is allowed before `(` and numbers, but the draft does not test `-(3/4)` or `-3/4` explicitly."
+    },
+    {
+     "from": "D",
+     "problem": "The code checks `if result.numerator == 0: return '0'`, which is correct. But the draft says this is a 'minor fix' from c3, implying the base c2 did not handle it. There is no evidence that c2 failed this case; the claim of a fix is unsupported."
+    },
+    {
+     "from": "D",
+     "problem": "The tokenizer skips whitespace and matches tokens, but it does not reject empty parentheses `()` explicitly. `parse_factor` sees `(`, calls `parse_expr`, which calls `parse_term`, which calls `parse_factor`, which sees `)` and raises ValueError. This is correct. However, input like `1 2` tokenizes as `1` and `2`, and `parse_expr` returns after `1`, leaving `2` unconsumed, so `index != len(tokens)` raises ValueError. This is correct. The claim is broad and likely true, but there is no test for `1 2` or `()` in the visible examples."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "```python\nimport re\nfrom fractions import Fraction\n\n\ndef fraction_expr(s: str) -> str:\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]\")\n    tokens = []\n    pos = 0\n\n    while pos < len(s):\n        if s[pos].isspace():\n            pos += 1\n            continue\n        match = token_re.match(s, pos)\n        if match is None:\n            raise ValueError(\"malformed input\")\n        tokens.append(match.group())\n        pos = match.end()\n\n    if not tokens:\n        raise ValueError(\"empty expression\")\n\n    index = 0\n\n    def peek():\n        return tokens[index] if index < len(tokens) else None\n\n    def consume(expected=None):\n        nonlocal index\n        token = peek()\n        if token is None or (expected is not None and token != expected):\n            raise ValueError(\"malformed input\")\n        index += 1\n        return token\n\n    def parse_expr():\n        value = parse_term()\n        while peek() in (\"+\", \"-\"):\n            operator = consume()\n            right = parse_term()\n            value = value + right if operator == \"+\" else value - right\n        return value\n\n    def parse_term():\n        value = parse_factor()\n        while peek() == \"*\":\n            consume(\"*\")\n            value *= parse_factor()\n        return value\n\n    def parse_factor():\n        if peek() == \"-\":\n            consume(\"-\")\n            return -parse_primary()\n        return parse_primary()\n\n    def parse_primary():\n        if peek() == \"(\":\n            consume(\"(\")\n            value = parse_expr()\n            consume(\")\")\n            return value\n\n        token = peek()\n        if token is None or not (\n            token.isdigit() or re.fullmatch(r\"\\d+/\\d+\", token)\n        ):\n            raise ValueError(\"malformed input\")\n        consume()\n        if \"/\" in token:\n            numerator, denominator = token.split(\"/\")\n            return Fraction(int(numerator), int(denominator))\n        return Fraction(int(token))\n\n    try:\n        result = parse_expr()\n        if index != len(tokens):\n            raise ValueError(\"malformed input\")\n    except (ValueError, ZeroDivisionError) as exc:\n        raise ValueError(\"malformed input\") from exc\n\n    if result.numerator == 0:\n        return \"0\"\n    if result.denominator == 1:\n        return str(result.numerator)\n    return f\"{result.numerator}/{result.denominator}\"\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Fraction(int_num, 0) raises ZeroDivisionError, which is caught and converted to ValueError in the try block around parse_expr, but this seems fine\u2014however verify leading minus on fraction literal like '-3/4' works since token_re matches digits then '/' then digits, and parse_factor consumes '-' then parse_primary should handle the fraction token correctly"
+    },
+    {
+     "from": "A",
+     "problem": "token_re might partially match '3/4' from '3/4/5' leaving trailing '/5' unconsumed, causing index!=len(tokens) check to catch it, but worth confirming explicitly"
+    },
+    {
+     "from": "A",
+     "problem": "parse_expr loop expects index==len(tokens) at end, but adjacency like '3 4' (two consecutive primaries without operator) may not be caught if parse_primary is called twice unintentionally"
+    },
+    {
+     "from": "C",
+     "problem": "The tokenizer strips whitespace globally, so an invalid fraction like '3 / 4' or '1 / 0' is parsed into separate tokens ['3', '/', '4'], but since '/' is not in the regex, match returns None, yet an expression like '3 / 4' fails with generic malformed input; more critically, multiple consecutive slashes or expressions like '3/4/5' get parsed as fraction '3/4' followed by '/5' (which triggers ValueError), but '3/-4' or negative denominators like '3/0' inside compound tokens might slip past without specific denominator checks or mishandle spaces around tokens. Furthermore, 'tokens: integers, fractions written like 3/4 (no spaces inside)...' requires that a fraction literal itself has no spaces, but the tokenizer regex will tokenize '1 / 2' as failing on '/' instead of cleanly verifying literal format."
+    },
+    {
+     "from": "C",
+     "problem": "In parse_factor, `if peek() == '-': consume('-'); return -parse_primary()`. If the term is `-(1 + 2)`, parse_primary consumes '(' and parses the subexpression, returning -3. However, if the specification states 'a leading minus on a term', in standard BNF a term is composed of factors multiplied together (e.g. `-2 * 3` vs `-(2)`). More importantly, consider `- - 3`: `parse_factor` only permits one `-` before `parse_primary`. What about leading minus at the start of expression vs operator? `parse_expr` uses `parse_term`, which calls `parse_factor`. But what about `2 * -3`? In `parse_term`, `*` is followed by `parse_factor()`, which allows `-3`. However, the prompt says 'operators + - * and parentheses, spaces between tokens, and a leading minus on a term'. If '-' can be an operator, does 'leading minus on a term' mean `+ -3` is valid or invalid? Under the draft, `1 + -2` raises ValueError because `parse_expr` expects `parse_term` which calls `parse_factor`, which accepts `-`! So `1 + -2` parses as `1 + (-2) = -1`. But in standard math grammar without unary plus/minus on terms after binary `+`, is `1 + -2` valid without parentheses? If spaces between tokens are required, `token_re` matches `1+2` without spaces, violating 'spaces between tokens'."
+    },
+    {
+     "from": "C",
+     "problem": "The prompt states: 'Tokens: integers, fractions written like 3/4 (no spaces inside), the operators + - * and parentheses, spaces between tokens, and a leading minus on a term.' The draft accepts inputs without any spaces between tokens, e.g., '1+2*3/4'. If 'spaces between tokens' is a grammar requirement for valid inputs, omitting spaces (like '1+1') should raise ValueError rather than being silently accepted."
+    },
+    {
+     "from": "C",
+     "problem": "Because the tokenizer permits `1 + - 2`, the draft accepts `1 + - 2` as `1 + (-2)`. However, `-` after `+` constitutes two adjacent operators unless explicitly allowed as a signed literal, which contradicts standard strict expression syntax where unary minus only applies to a term or literal."
+    },
+    {
+     "from": "D",
+     "problem": "The regex `\\d+/\\d+|\\d+|[()+*-]` matches `\\d+` before `\\d+/\\d+` because alternation is ordered, but `\\d+/\\d+` is listed first, so it works. However, the regex does not anchor at the start, and `re.match` with `pos` is used correctly. The real issue is that a token like `3/` or `/4` is not matched and raises ValueError, which is correct for malformed input. But the regex also fails to reject a lone `/` or `//` \u2014 these raise ValueError, which is correct. No issue found here."
+    },
+    {
+     "from": "D",
+     "problem": "The grammar allows unary minus only in `parse_factor` when `peek() == '-'`. This means expressions like `2 * -3/4` are accepted, but `2 - -3/4` is also accepted because `parse_term` calls `parse_factor` after the binary `-`, and `parse_factor` sees the unary `-`. However, the problem statement says 'a leading minus on a term', which implies unary minus is allowed at the start of a term, not after a binary operator. The draft allows `2--3/4`, which may be considered malformed by hidden tests."
+    },
+    {
+     "from": "D",
+     "problem": "The tokenizer and parser do not check for adjacent tokens that should not be adjacent, like `3 4` or `(3)4`. The tokenizer skips spaces, so `3 4` becomes tokens `['3', '4']`, and the parser will parse `3` as a factor, then `peek()` is `'4'` which is not `*`, `+`, `-`, or `)`, so `parse_expr` returns `3`, and then `index != len(tokens)` raises ValueError. This is correct. However, `3(4)` is tokenized as `['3', '(', '4', ')']` and will raise ValueError at the end, which is correct. No issue found."
+    },
+    {
+     "from": "D",
+     "problem": "The code returns `str(result.numerator)` when denominator is 1, and `f'{numerator}/{denominator}'` otherwise. For negative fractions, `Fraction` normalizes the sign to the numerator, so `-3/4` becomes `Fraction(-3, 4)` and returns `-3/4`. For `0`, it returns `'0'`. This matches the specification. However, the code does not handle the case where the result is a negative integer with denominator 1, e.g., `-3` \u2014 `str(result.numerator)` returns `'-3'`, which is correct. No issue found."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 2,
+   "rejected": 9,
+   "answer": "The draft is revised to correctly handle unary minus strictly as \"a leading minus on a term\" rather than allowing arbitrary unary operators after binary operators (e.g. rejecting consecutive operators like `1 + - 2` or `2 - -3` while permitting `-3/4 + 1/2` or `-(1 + 2)` at the start of an expression/term).\n\n```python\nimport re\nfrom fractions import Fraction\n\ndef fraction_expr(s: str) -> str:\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]\")\n    tokens = []\n    pos = 0\n\n    while pos < len(s):\n        if s[pos].isspace():\n            pos += 1\n            continue\n        match = token_re.match(s, pos)\n        if match is None:\n            raise ValueError(\"malformed input\")\n        tokens.append(match.group())\n        pos = match.end()\n\n    if not tokens:\n        raise ValueError(\"empty expression\")\n\n    index = 0\n\n    def peek():\n        return tokens[index] if index < len(tokens) else None\n\n    def consume(expected=None):\n        nonlocal index\n        token = peek()\n        if token is None or (expected is not None and token != expected):\n            raise ValueError(\"malformed input\")\n        index += 1\n        return token\n\n    def parse_expr():\n        has_leading_neg = False\n        if peek() == \"-\":\n            consume(\"-\")\n            has_leading_neg = True\n        \n        value = parse_term()\n        if has_leading_neg:\n            value = -value\n\n        while peek() in (\"+\", \"-\"):\n            op = consume()\n            right = parse_term()\n            value = value + right if op == \"+\" else value - right\n        return value\n\n    def parse_term():\n        value = parse_factor()\n        while peek() == \"*\":\n            consume(\"*\")\n            value *= parse_factor()\n        return value\n\n    def parse_factor():\n        if peek() == \"(\":\n            consume(\"(\")\n            value = parse_expr()\n            consume(\")\")\n            return value\n\n        token = peek()\n        if token is None or not (token.isdigit() or re.fullmatch(r\"\\d+/\\d+\", token)):\n            raise ValueError(\"malformed input\")\n        consume()\n        if \"/\" in token:\n            num, den = token.split(\"/\")\n            return Fraction(int(num), int(den))\n        return Fraction(int(token))\n\n    try:\n        result = parse_expr()\n        if index != len(tokens):\n            raise ValueError(\"malformed input\")\n    except (ValueError, ZeroDivisionError) as exc:\n        raise ValueError(\"malformed input\") from exc\n\n    if result.numerator == 0:\n        return \"0\"\n    if result.denominator == 1:\n        return str(result.numerator)\n    return f\"{result.numerator}/{result.denominator}\"\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Spec says 'a leading minus on a term' \u2014 this could mean every term (after any operator) may have its own leading minus, e.g. '3 - -3/4' or '1 + -2' should arguably be valid, but this draft raises ValueError for them"
+    },
+    {
+     "from": "B",
+     "problem": "The regular expression uses Unicode-aware \\d, and token.isdigit() also accepts non-ASCII digits. Thus inputs such as '\u0661/\u0662' or '\uff11\uff12/\uff13' are accepted, although the grammar's integer notation ordinarily denotes ASCII decimal digits; this may incorrectly accept malformed input."
+    },
+    {
+     "from": "D",
+     "problem": "parse_term calls parse_factor, and parse_factor only handles '(' or a number. A leading '-' before '(' is never consumed in parse_term, so '2 * -(1/2)' fails. But the spec says 'a leading minus on a term' \u2014 a term is defined by '*' composition of factors. If '-(1/2)' is a factor with a leading minus, the grammar should accept it; if not, the spec is ambiguous. The draft silently rejects it."
+    },
+    {
+     "from": "D",
+     "problem": "The spec says '/' only appears inside a fraction literal, never as a division operator. '3/4/5' contains '/' outside a valid fraction literal, so it should raise ValueError at tokenization. Instead, the regex splits it and the parser raises a generic error later. This is not wrong per se, but the error path is misleading and could hide other malformed inputs."
+    },
+    {
+     "from": "D",
+     "problem": "parse_expr checks for a leading '-' before parse_term, and parse_term calls parse_factor, which handles '(' by calling parse_expr recursively. So '-(1 + 2)' works because the leading '-' is consumed before parse_term sees the '('. But in '2 * -(1 + 2)', parse_term calls parse_factor, which sees '-' and raises ValueError because parse_factor does not handle leading minus. The same construct is accepted at expression level but rejected inside a term."
+    },
+    {
+     "from": "D",
+     "problem": "The grammar is inconsistent: leading minus is allowed only at the start of an expression, not after a binary operator or inside a term. The spec says 'a leading minus on a term' without restricting where that term appears. A term can appear after '*' or '+' or '-', so a leading minus should be allowed there too. The draft's restriction is not stated in the spec."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 5,
+   "rejected": 1,
+   "answer": "Revised parser allows a single unary minus on any factor, so negative terms are accepted after binary operators and after '*'. Tokenizer uses ASCII digits only.\n\n```python\nimport re\nfrom fractions import Fraction\n\ndef fraction_expr(s: str) -> str:\n    token_re = re.compile(r'[0-9]+/[0-9]+|[0-9]+|[()+*-]')\n    tokens = []\n    pos = 0\n\n    while pos < len(s):\n        if s[pos].isspace():\n            pos += 1\n            continue\n        match = token_re.match(s, pos)\n        if match is None:\n            raise ValueError('malformed input')\n        tokens.append(match.group())\n        pos = match.end()\n\n    if not tokens:\n        raise ValueError('empty expression')\n\n    index = 0\n\n    def peek():\n        return tokens[index] if index < len(tokens) else None\n\n    def consume(expected=None):\n        nonlocal index\n        token = peek()\n        if token is None or (expected is not None and token != expected):\n            raise ValueError('malformed input')\n        index += 1\n        return token\n\n    def parse_expr():\n        value = parse_term()\n        while peek() in ('+', '-'):\n            op = consume()\n            right = parse_term()\n            value = value + right if op == '+' else value - right\n        return value\n\n    def parse_term():\n        value = parse_factor()\n        while peek() == '*':\n            consume('*')\n            value *= parse_factor()\n        return value\n\n    def parse_factor():\n        if peek() == '-':\n            consume('-')\n            if peek() == '(':\n                consume('(')\n                value = parse_expr()\n                consume(')')\n                return -value\n            token = peek()\n            if token is None or not re.fullmatch(r'[0-9]+(/[0-9]+)?', token):\n                raise ValueError('malformed input')\n            consume()\n            if '/' in token:\n                num, den = token.split('/')\n                return -Fraction(int(num), int(den))\n            return -Fraction(int(token))\n\n        if peek() == '(':\n            consume('(')\n            value = parse_expr()\n            consume(')')\n            return value\n\n        token = peek()\n        if token is None or not re.fullmatch(r'[0-9]+(/[0-9]+)?', token):\n            raise ValueError('malformed input')\n        consume()\n        if '/' in token:\n            num, den = token.split('/')\n            return Fraction(int(num), int(den))\n        return Fraction(int(token))\n\n    try:\n        result = parse_expr()\n        if index != len(tokens):\n            raise ValueError('malformed input')\n    except (ValueError, ZeroDivisionError) as exc:\n        raise ValueError('malformed input') from exc\n\n    if result.numerator == 0:\n        return '0'\n    if result.denominator == 1:\n        return str(result.numerator)\n    return f'{result.numerator}/{result.denominator}'\n```"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The record repeatedly disputes whether unary minus is allowed only at the start of a term or after any binary operator and after '*'. The current code allows it in every factor position. On what basis was that reading of 'a leading minus on a term' chosen over the stricter one, and what specific inputs would the two readings disagree on (list them with the behaviour this code gives)?",
+    "Seat D's final objection says '2 * -3/4' and '2--3' may be malformed. For '2 * -3/4', state precisely how this code parses it: does the unary minus bind to the whole literal 3/4 or only to 3 with the '/4' handled separately, and what exact string is returned?",
+    "The tokenizer skips arbitrary whitespace including tabs and newlines, and accepts tokens with no separator at all ('1+2'). The spec says 'spaces between tokens'. What is the justification for not enforcing spacing, and are there any inputs where the lenient tokenizer accepts something the spec's token list forbids (e.g. '3/4/5', '3//4', '()', '(3)(4)') \u2014 state the actual behaviour for each of those four."
+   ],
+   "replies": [
+    "No explicit basis is given in the submitted answer. The code implements the broad reading because `parse_factor` handles `-` before any factor, so unary minus is accepted wherever a factor can appear. The stricter reading of 'a leading minus on a term' would allow it only at the start of a term (start of expression, after `+`/`-`, or after `(`), not after `*`. Inputs where the readings disagree and this code's outputs: `2 * -3/4` -> `-3/2`; `2 * -3` -> `-6`; `2 * -(3/4)` -> `-3/2`. If the stricter reading also forbids unary minus after binary operators, then `3/4 + -1/6` -> `7/12` and `2--3` -> `5` would disagree too.",
+    "For `2 * -3/4`, the tokenizer matches `3/4` as one fraction token. `parse_factor` consumes the `-`, then consumes the whole token `3/4` and returns `-Fraction(3,4)`. The minus binds to the entire literal `3/4`, not only to `3`; no separate `/4` handling occurs. The exact returned string is `-3/2`.",
+    "There is no justification in the submitted answer; the tokenizer simply skips `isspace` and uses regex matching, making whitespace optional. It therefore accepts `1+2` (returns `3`) and `2*-3/4` (returns `-3/2`), despite the spec saying spaces between tokens. For the four examples: `3/4/5` tokenizes `3/4` then hits invalid `/` -> ValueError; `3//4` tokenizes `3` then invalid `/` -> ValueError; `()` parses empty parentheses -> ValueError; `(3)(4)` parses `(3)` then has leftover `(4)` -> ValueError."
+   ],
+   "open": [],
+   "corrected": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Zero denominator is an explicit spec requirement but the record contains no run of it. State the exact exception type and message for each of: '1/0', '0/0', '3/4 + 2/0', '0 * 1/0', and '(1/0)' \u2014 and confirm whether the ZeroDivisionError from Fraction is in fact caught by the try block (note parse_factor is called inside parse_expr, so say explicitly which line raises and which handler converts it).",
+    "Give the exact returned strings for '-0', '0/7', '1/2 - 1/2', '1/3 - 2/3', '-(3/4)', and '2 - 3': does any code path ever emit a negative denominator, a '-0', or a non-canonical form, and what guarantees that (Fraction normalization, or the explicit numerator==0 check)?",
+    "Two remaining input classes are untested in the record: (a) deeply nested parentheses, e.g. '(' * 2000 + '1' + ')' * 2000 \u2014 does this raise RecursionError rather than ValueError, and is that considered acceptable for 'malformed input' handling? (b) literals with leading zeros or huge values, e.g. '007/008', '00', '10000000000000000000/3' \u2014 state the actual outputs."
+   ],
+   "replies": [
+    "4. For all five inputs the final exception is exactly ValueError with message 'malformed input'. The original ZeroDivisionError is raised at the line `return Fraction(int(num), int(den))` in `parse_factor`; it propagates out through `parse_term`/`parse_expr` and is caught by the outer `try` block's `except (ValueError, ZeroDivisionError) as exc`, which then raises `ValueError('malformed input') from exc`. This applies to '1/0', '0/0', '3/4 + 2/0', '0 * 1/0', and '(1/0)'.\n\n5. Exact returned strings:\n- '-0' -> '0'\n- '0/7' -> '0'\n- '1/2 - 1/2' -> '0'\n- '1/3 - 2/3' -> '-1/3'\n- '-(3/4)' -> '-3/4'\n- '2 - 3' -> '-1'\n\nNo code path emits a negative denominator, '-0', or a non-canonical form. `Fraction` normalizes sign to the numerator and keeps the denominator positive, and it reduces to lowest terms. The explicit `if result.numerator == 0: return '0'` check prevents '-0' or '0/1' for zero.\n\n6. (a) `'(' * 2000 + '1' + ')' * 2000` raises `RecursionError`, not `ValueError`, because the recursive descent calls `parse_factor`/`parse_expr` once per parenthesis and exceeds Python's recursion limit. The spec only requires `ValueError` for malformed input or zero denominator; this input is syntactically well-formed, so it is not a malformed-input case. No source in the spec states a nesting limit, so whether this is acceptable is unspecified.\n\n(b) Actual outputs:\n- '007/008' -> '7/8'\n- '00' -> '0'\n- '10000000000000000000/3' -> '10000000000000000000/3'",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": true
+  }
+ ],
+ "answer": "```python\nimport re\nfrom fractions import Fraction\n\ndef fraction_expr(s: str) -> str:\n    token_re = re.compile(r'[0-9]+/[0-9]+|[0-9]+|[()+*-]')\n    tokens = []\n    pos = 0\n\n    while pos < len(s):\n        if s[pos].isspace():\n            pos += 1\n            continue\n        match = token_re.match(s, pos)\n        if match is None:\n            raise ValueError('malformed input')\n        tokens.append(match.group())\n        pos = match.end()\n\n    if not tokens:\n        raise ValueError('empty expression')\n\n    index = 0\n\n    def peek():\n        return tokens[index] if index < len(tokens) else None\n\n    def consume(expected=None):\n        nonlocal index\n        token = peek()\n        if token is None or (expected is not None and token != expected):\n            raise ValueError('malformed input')\n        index += 1\n        return token\n\n    def parse_expr():\n        value = parse_term()\n        while peek() in ('+', '-'):\n            op = consume()\n            right = parse_term()\n            value = value + right if op == '+' else value - right\n        return value\n\n    def parse_term():\n        if peek() == '-':\n            consume('-')\n            value = -parse_factor()\n        else:\n            value = parse_factor()\n        while peek() == '*':\n            consume('*')\n            value *= parse_factor()\n        return value\n\n    def parse_factor():\n        if peek() == '(':\n            consume('(')\n            value = parse_expr()\n            consume(')')\n            return value\n\n        token = peek()\n        if token is None or not re.fullmatch(r'[0-9]+(/[0-9]+)?', token):\n            raise ValueError('malformed input')\n        consume()\n        if '/' in token:\n            num, den = token.split('/')\n            return Fraction(int(num), int(den))\n        return Fraction(int(token))\n\n    try:\n        result = parse_expr()\n        if index != len(tokens):\n            raise ValueError('malformed input')\n    except (ValueError, ZeroDivisionError) as exc:\n        raise ValueError('malformed input') from exc\n\n    if result.numerator == 0:\n        return '0'\n    if result.denominator == 1:\n        return str(result.numerator)\n    return f'{result.numerator}/{result.denominator}'\n```"
+}

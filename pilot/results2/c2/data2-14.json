@@ -1,0 +1,255 @@
+{
+ "task_id": "data2-14",
+ "type": "data",
+ "condition": "c2",
+ "correct": true,
+ "detail": "got -19023.85, expected -19023.85",
+ "error": null,
+ "seconds": 253.8,
+ "tokens": 292076,
+ "prompt_tokens": 240846,
+ "completion_tokens": 51230,
+ "cost": 0.48971,
+ "calls": 42,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "41*5.35 + 25*124.18 + 39*54.17 + 16*125.74",
+   "claimed": 7448.32,
+   "value": 7448.32,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "6*112.69 + 35*61.84 + 2*11.50 + 12*101.44",
+   "claimed": 4080.82,
+   "value": 4080.8199999999997,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(1*97.87 + 8*68.20 + 17*135.54 + 33*115.76 + 32*56.98) + (6*96.98 + 37*53.97 + 38*18.23)",
+   "claimed": 11862.6,
+   "value": 11862.6,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Identify Gold and Silver customers",
+     "what": "From Customers table, list customer_ids with tier Gold (C100, C110) and Silver (C102, C104, C105, C106, C109)."
+    },
+    {
+     "id": "c2",
+     "title": "Filter and dedupe orders",
+     "what": "Remove exact duplicate order rows (same order_id and all fields), then keep only orders with order_date between 2026-04-01 and 2026-06-30 inclusive and status shipped or pending."
+    },
+    {
+     "id": "c3",
+     "title": "Compute revenue by tier",
+     "what": "For filtered orders, join to customer tier via customer_id, compute units*unit_price per order, sum separately for Gold-tier and Silver-tier customers."
+    },
+    {
+     "id": "c4",
+     "title": "Compute difference",
+     "what": "Subtract total Silver revenue from total Gold revenue, rounding final result to nearest cent."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "A",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ],
+    "c4": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Gold-tier customers: C100, C110. Silver-tier customers: C102, C104, C105, C106, C109. Exact duplicate rows are counted once; only shipped or pending orders from 2026-04-01 through 2026-06-30 count.\n\nGold revenue:\n- O2578: 41 \u00d7 5.35 = 219.35\n- O2567: 25 \u00d7 124.18 = 3104.50\n- O2048: 39 \u00d7 54.17 = 2112.63\n- O2824: 16 \u00d7 125.74 = 2011.84\n\nGold total = 7448.32\n\nSilver revenue:\n- C102: 676.14 + 2164.40 + 23.00 + 1217.28 = 4080.82\n- C104: 127.36 + 19.72 + 27.84 + 3980.28 = 4155.20\n- C105: 2130.63 + 751.92 + 3491.00 = 6373.55\n- C106: 97.87 + 545.60 + 2304.18 + 3820.08 + 1823.36 = 8591.09\n- C109: 581.88 + 1996.89 + 692.74 = 3271.51\n\nSilver total = 26472.17\n\nDifference = 7448.32 \u2212 26472.17 = -19023.85\n\nFINAL: -19023.85"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Need to confirm no other C100/C110 orders fall in Apr-Jun range were missed, e.g. O2074 (C100, 2026-07-11) correctly excluded as outside range but should double check all C100/C110 rows were scanned, not just a subset"
+    },
+    {
+     "from": "A",
+     "problem": "C106 order O2763 (shipped, 2026-07-11) and O2432 (pending, 2026-07-11) were excluded as outside range - confirm these dates are correctly outside Apr1-Jun30 window and not mis-keyed as June"
+    },
+    {
+     "from": "A",
+     "problem": "Should explicitly verify no duplicate order_id appears among Gold or Silver customer rows that would double count revenue"
+    },
+    {
+     "from": "A",
+     "problem": "Given the large magnitude difference, worth sanity-checking by recomputing one or two line items independently, e.g. O2839: 33*115.76=3820.08 and O2454:17*135.54=2304.18, to rule out multiplication errors"
+    },
+    {
+     "from": "B",
+     "problem": "The C109 Silver revenue omits two qualifying orders in the date range with shipped or pending status: O2276 (10 \u00d7 134.41 = 1344.10, pending on 2026-07-06?) and O2627 (18 \u00d7 37.61 = 676.98, shipped on 2026-07-20?). However, both dates are after June 30, so they should not be included; the apparent omission is not an error. The listed C109 orders are correctly limited to the date range."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 4,
+   "rejected": 1,
+   "answer": "Gold-tier customers are C100 and C110; Silver-tier customers are C102, C104, C105, C106, and C109. Counting each exact duplicate order once, and including only shipped or pending orders dated 2026-04-01 through 2026-06-30:\n\nGold revenue:\n- C100: O2578 219.35 + O2567 3104.50 = 3323.85\n- C110: O2048 2112.63 + O2824 2011.84 = 4124.47\n- Gold total: 7448.32\n\nSilver revenue:\n- C102: 4080.82\n- C104: 4155.20\n- C105: 6373.55\n- C106: 8591.09\n- C109: 3271.51\n- Silver total: 26472.17\n\nDifference = 7448.32 - 26472.17 = -19023.85\n\nFINAL: -19023.85"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Need to confirm no other Gold-tier customers exist and that all C100/C110 orders in range were considered (e.g., could any duplicate rows affect totals if either customer had dupes)"
+    },
+    {
+     "from": "A",
+     "problem": "Verify no Silver customer orders were mistakenly excluded due to status misclassification (e.g., confirm O2432 for C106 dated 07-11 is correctly excluded as outside window, not mis-dated)"
+    },
+    {
+     "from": "A",
+     "problem": "These duplicates belong to C108 and C111, neither Gold nor Silver, so dedup has no effect on the stated answer \u2014 but this should be explicitly confirmed, not assumed, since if any duplicate belonged to a Gold/Silver customer it would change totals"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: O2578 for C100 is 41 units x 5.35 = 219.35, and O2567 is 25 x 124.18 = 3104.50, sum 3323.85; C110 O2048 is 39 x 54.17 = 2112.63, O2824 is 16 x 125.74 = 2011.84, sum 4124.47; total 7448.32. This is correct, but the draft omits any cancelled/returned Gold orders in the date range, which is fine since they contribute nothing. No issue found."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: The draft lists only totals for C102, C104, C105, C106, C109 without itemizing, making verification impossible. C102 has O2449 (6 x 112.69 = 676.14 pending), O2304 (35 x 61.84 = 2164.40 pending), O2385 (2 x 11.50 = 23.00 shipped), O2235 (12 x 101.44 = 1217.28 shipped) = 4080.82. C104 has O2536 (32 x 3.98 = 127.36 shipped), O2866 (2 x 9.86 = 19.72 pending), O2628 (6 x 4.64 = 27.84 shipped), O2657 (41 x 97.08 = 3980.28 shipped) = 4155.20. C105 has O2787 (31 x 68.73 = 2130.63 shipped), O2742 (12 x 62.66 = 751.92 shipped), O2190 (9 x 74.65 = 671.85 pending), O2046 (25 x 139.64 = 3491.00 pending) = 7045.40, not 6373.55 as claimed. This error alone changes the final answer."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: C106 has O2133 (1 x 97.87 = 97.87 pending), O2773 (8 x 68.20 = 545.60 shipped), O2454 (17 x 135.54 = 2304.18 shipped), O2839 (33 x 115.76 = 3820.08 shipped), O2763 (32 x 44.15 = 1412.80 shipped), O2432 (15 x 11.01 = 165.15 pending), O2078 (32 x 56.98 = 1823.36 shipped). Sum = 10169.04, not 8591.09."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: C109 has O2276 (10 x 134.41 = 1344.10 pending), O2627 (18 x 37.61 = 676.98 shipped), O2421 (6 x 96.98 = 581.88 pending), O2339 (37 x 53.97 = 1996.89 shipped), O2616 (38 x 18.23 = 692.74 shipped). Sum = 5292.59, not 3271.51."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 4,
+   "rejected": 3,
+   "answer": "Gold customers: C100, C110.\nSilver customers: C102, C104, C105, C106, C109.\nDate range: 2026-04-01 to 2026-06-30. Status: shipped or pending.\n\nGold orders:\n- C100: O2578 (41 x 5.35 = 219.35, shipped 2026-05-18), O2567 (25 x 124.18 = 3104.50, shipped 2026-05-29) -> 3323.85 (O2074 is July; O2117 returned, O2478 cancelled, O2009 returned)\n- C110: O2048 (39 x 54.17 = 2112.63, shipped 2026-06-17), O2824 (16 x 125.74 = 2011.84, shipped 2026-06-24) -> 4124.47\nTotal Gold Revenue = 7448.32\n\nSilver orders:\n- C102: O2449 (6 x 112.69 = 676.14), O2304 (35 x 61.84 = 2164.40), O2385 (2 x 11.50 = 23.00), O2235 (12 x 101.44 = 1217.28) -> 4080.82\n- C104: O2536 (32 x 3.98 = 127.36), O2866 (2 x 9.86 = 19.72), O2628 (6 x 4.64 = 27.84), O2657 (41 x 97.08 = 3980.28) -> 4155.20\n- C105: O2787 (31 x 68.73 = 2130.63, 2026-04-23), O2742 (12 x 62.66 = 751.92, 2026-06-04), O2046 (25 x 139.64 = 3491.00, 2026-05-02) -> 6373.55 (O2190 is 2026-07-15, outside window)\n- C106: O2133 (1 x 97.87 = 97.87), O2773 (8 x 68.20 = 545.60), O2454 (17 x 135.54 = 2304.18), O2839 (33 x 115.76 = 3820.08), O2078 (32 x 56.98 = 1823.36) -> 8591.09 (O2763 is 2026-07-11, O2432 is 2026-07-11, both outside window)\n- C109: O2421 (6 x 96.98 = 581.88), O2339 (37 x 53.97 = 1996.89), O2616 (38 x 18.23 = 692.74) -> 3271.51 (O2276 is 2026-07-06, O2627 is 2026-07-20, both outside window)\nTotal Silver Revenue = 4080.82 + 4155.20 + 6373.55 + 8591.09 + 3271.51 = 26472.17\n\nDifference: 7448.32 - 26472.17 = -19023.85\n\nFINAL: -19023.85"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "List every orders row (order_id, date, status, units, unit_price) belonging to C100 and C110 across the full table, and state for each whether it is inside the 2026-04-01 to 2026-06-30 window and whether its status qualifies \u2014 so the Gold set can be confirmed complete rather than asserted.",
+    "The record notes the duplicate rows (O2152, O2559, O2044) belong to C108 and C111. Confirm by exhaustive scan that no order_id appears more than once among rows for C100, C102, C104, C105, C106, C109, or C110; name any repeats found.",
+    "For each Silver customer, state the count of qualifying in-window orders you used and the count of their rows excluded, with the exclusion reason (date vs status), so that the per-customer totals can be reconciled against the full row list."
+   ],
+   "replies": [
+    "Exhaustive list of orders for Gold customers:\nC100:\n- O2117: 2026-05-06, returned, 31, 137.62 (In-window: Yes, Status qualifies: No)\n- O2074: 2026-07-11, shipped, 30, 21.07 (In-window: No, Status qualifies: Yes)\n- O2578: 2026-05-18, shipped, 41, 5.35 (In-window: Yes, Status qualifies: Yes)\n- O2567: 2026-05-29, shipped, 25, 124.18 (In-window: Yes, Status qualifies: Yes)\n- O2478: 2026-04-12, cancelled, 27, 134.85 (In-window: Yes, Status qualifies: No)\n- O2009: 2026-05-21, returned, 7, 41.35 (In-window: Yes, Status qualifies: No)\nC110:\n- O2048: 2026-06-17, shipped, 39, 54.17 (In-window: Yes, Status qualifies: Yes)\n- O2824: 2026-06-24, shipped, 16, 125.74 (In-window: Yes, Status qualifies: Yes)\nQualifying Gold rows are exactly O2578, O2567, O2048, and O2824.",
+    "Scanning all rows for C100, C102, C104, C105, C106, C109, and C110 across the entire table shows the following unique order IDs:\n- C100 (6): O2117, O2074, O2578, O2567, O2478, O2009\n- C102 (5): O2449, O2210, O2304, O2385, O2235\n- C104 (6): O2507, O2536, O2866, O2019, O2628, O2657\n- C105 (6): O2410, O2787, O2895, O2742, O2190, O2046\n- C106 (7): O2133, O2773, O2454, O2839, O2763, O2432, O2078\n- C109 (9): O2276, O2587, O2627, O2421, O2291, O2857, O2339, O2616, O2177\n- C110 (2): O2048, O2824\nEvery order_id appears exactly once in this subset; zero repeats exist among these customers.",
+    "Per-customer breakdown for Silver customers:\n- C102 (5 total rows): 4 qualifying (O2449, O2304, O2385, O2235). 1 excluded: O2210 (status: cancelled).\n- C104 (6 total rows): 4 qualifying (O2536, O2866, O2628, O2657). 2 excluded: O2507 (status: returned), O2019 (status: cancelled).\n- C105 (6 total rows): 3 qualifying (O2787, O2742, O2046). 3 excluded: O2410 (status: returned), O2895 (status: returned), O2190 (date: 2026-07-15 outside window).\n- C106 (7 total rows): 5 qualifying (O2133, O2773, O2454, O2839, O2078). 2 excluded: O2763 (date: 2026-07-11 outside window), O2432 (date: 2026-07-11 outside window).\n- C109 (9 total rows): 3 qualifying (O2421, O2339, O2616). 6 excluded: O2587 (status: cancelled), O2291 (status: returned), O2177 (status: cancelled), O2857 (status: returned & date: 2026-07-28), O2276 (date: 2026-07-06 outside window), O2627 (date: 2026-07-20 outside window)."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Independently recompute, line by line, units x unit_price for each of the 4 qualifying Gold rows and each of the 19 qualifying Silver rows, then the two tier subtotals and the difference; report each line amount and state whether any value differs from the figures in the current working (Gold 7448.32, Silver 26472.17, difference -19023.85).",
+    "Verify the tier mapping directly against the customers table: list every customer_id whose tier is Gold and every one whose tier is Silver, confirm none were omitted (e.g., any Gold/Silver customer with zero qualifying orders), and confirm every customer_id appearing in the orders table exists in the customers table so no order is silently unassigned to a tier."
+   ],
+   "replies": [
+    "Line-by-line recomputation:\n\nGold qualifying rows (4 rows):\n- O2578 (C100): 41 * 5.35 = 219.35\n- O2567 (C100): 25 * 124.18 = 3104.50\n- O2048 (C110): 39 * 54.17 = 2112.63\n- O2824 (C110): 16 * 125.74 = 2011.84\nGold subtotal = 219.35 + 3104.50 + 2112.63 + 2011.84 = 7448.32.\n\nSilver qualifying rows (19 rows):\n- O2449 (C102): 6 * 112.69 = 676.14\n- O2304 (C102): 35 * 61.84 = 2164.40\n- O2385 (C102): 2 * 11.50 = 23.00\n- O2235 (C102): 12 * 101.44 = 1217.28\n- O2536 (C104): 32 * 3.98 = 127.36\n- O2866 (C104): 2 * 9.86 = 19.72\n- O2628 (C104): 6 * 4.64 = 27.84\n- O2657 (C104): 41 * 97.08 = 3980.28\n- O2787 (C105): 31 * 68.73 = 2130.63\n- O2742 (C105): 12 * 62.66 = 751.92\n- O2046 (C105): 25 * 139.64 = 3491.00\n- O2133 (C106): 1 * 97.87 = 97.87\n- O2773 (C106): 8 * 68.20 = 545.60\n- O2454 (C106): 17 * 135.54 = 2304.18\n- O2839 (C106): 33 * 115.76 = 3820.08\n- O2078 (C106): 32 * 56.98 = 1823.36\n- O2421 (C109): 6 * 96.98 = 581.88\n- O2339 (C109): 37 * 53.97 = 1996.89\n- O2616 (C109): 38 * 18.23 = 692.74\nSilver subtotal = 676.14 + 2164.40 + 23.00 + 1217.28 + 127.36 + 19.72 + 27.84 + 3980.28 + 2130.63 + 751.92 + 3491.00 + 97.87 + 545.60 + 2304.18 + 3820.08 + 1823.36 + 581.88 + 1996.89 + 692.74 = 26472.17.\n\nDifference = 7448.32 - 26472.17 = -19023.85.\n\nNo value differs from the figures in the current working.",
+    "Customer tier mapping verification:\n- Gold customers in Customers table: C100, C110. (Both have qualifying orders).\n- Silver customers in Customers table: C102, C104, C105, C106, C109. (All 5 have qualifying orders).\n- Bronze customers in Customers table: C101, C103, C107, C108, C111.\nNo Gold or Silver customers were omitted.\nUnique customer IDs present across all rows in the Orders table are {C100, C101, C102, C103, C104, C105, C106, C107, C108, C109, C110, C111}, exactly matching the Customers table, so every order maps to a known customer tier."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Working only from the raw Orders CSV, (a) list every order_id that appears more than once with identical fields and state the customer_id and tier of each, saying explicitly whether any duplicate belongs to a Gold or Silver customer; and (b) enumerate ALL orders belonging to C100, C110, C102, C104, C105, C106, C109 (every status, every date), and for each give date, status, and a keep/drop verdict with the reason (out of window / cancelled / returned / duplicate), then confirm the kept set is exactly the 4 Gold and 19 Silver rows already costed, and note any order dated exactly 2026-04-01 or 2026-06-30."
+   ],
+   "replies": [
+    "(a) The duplicate order_ids in the CSV are:\n- O2152 (C108, Bronze): appears twice\n- O2559 (C111, Bronze): appears twice\n- O2044 (C108, Bronze): appears twice\nNone of the duplicates belong to Gold or Silver customers.\n\n(b) Enumerating all orders for Gold (C100, C110) and Silver (C102, C104, C105, C106, C109):\n\nGold:\n- C100:\n  - O2117 (2026-05-06, returned) -> DROP (returned)\n  - O2074 (2026-07-11, shipped) -> DROP (out of window: July)\n  - O2578 (2026-05-18, shipped) -> KEEP\n  - O2567 (2026-05-29, shipped) -> KEEP\n  - O2478 (2026-04-12, cancelled) -> DROP (cancelled)\n  - O2009 (2026-05-21, returned) -> DROP (returned)\n- C110:\n  - O2048 (2026-06-17, shipped) -> KEEP\n  - O2824 (2026-06-24, shipped) -> KEEP\nKept Gold: exactly 4 orders.\n\nSilver:\n- C102:\n  - O2449 (2026-05-07, pending) -> KEEP\n  - O2210 (2026-05-13, cancelled) -> DROP (cancelled)\n  - O2304 (2026-05-07, pending) -> KEEP\n  - O2385 (2026-06-19, shipped) -> KEEP\n  - O2235 (2026-06-23, shipped) -> KEEP\n- C104:\n  - O2507 (2026-06-29, returned) -> DROP (returned)\n  - O2536 (2026-05-28, shipped) -> KEEP\n  - O2866 (2026-05-21, pending) -> KEEP\n  - O2019 (2026-04-15, cancelled) -> DROP (cancelled)\n  - O2628 (2026-04-29, shipped) -> KEEP\n  - O2749 (2026-06-25, returned) -> DROP (returned)\n  - O2657 (2026-04-08, shipped) -> KEEP\n- C105:\n  - O2410 (2026-04-10, returned) -> DROP (returned)\n  - O2787 (2026-04-23, shipped) -> KEEP\n  - O2895 (2026-06-30, returned) -> DROP (returned)\n  - O2742 (2026-06-04, shipped) -> KEEP\n  - O2190 (2026-07-15, pending) -> DROP (out of window: July)\n  - O2046 (2026-05-02, pending) -> KEEP\n- C106:\n  - O2133 (2026-04-26, pending) -> KEEP\n  - O2773 (2026-04-17, shipped) -> KEEP\n  - O2454 (2026-06-17, shipped) -> KEEP\n  - O2839 (2026-06-29, shipped) -> KEEP\n  - O2763 (2026-07-11, shipped) -> DROP (out of window: July)\n  - O2432 (2026-07-11, pending) -> DROP (out of window: July)\n  - O2078 (2026-05-13, shipped) -> KEEP\n- C109:\n  - O2276 (2026-07-06, pending) -> DROP (out of window: July)\n  - O2587 (2026-04-15, cancelled) -> DROP (cancelled)\n  - O2627 (2026-07-20, shipped) -> DROP (out of window: July)\n  - O2421 (2026-06-24, pending) -> KEEP\n  - O2291 (2026-04-25, returned) -> DROP (returned)\n  - O2857 (2026-07-28, returned) -> DROP (returned & out of window: July)\n  - O2339 (2026-06-02, shipped) -> KEEP\n  - O2616 (2026-04-05, shipped) -> KEEP\n  - O2177 (2026-04-25, cancelled) -> DROP (cancelled)\n\nKept Silver: exactly 19 orders (4 for C102, 4 for C104, 3 for C105, 5 for C106, 3 for C109).\nBoundary dates check: No order for Gold or Silver customers is dated 2026-04-01. Order O2895 (C105) is dated 2026-06-30, but it is dropped because its status is 'returned'."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Gold customers: C100, C110.\nSilver customers: C102, C104, C105, C106, C109.\nDate range: 2026-04-01 to 2026-06-30. Status: shipped or pending.\n\nGold orders:\n- C100: O2578 (41 x 5.35 = 219.35, shipped 2026-05-18), O2567 (25 x 124.18 = 3104.50, shipped 2026-05-29) -> 3323.85 (O2074 is July; O2117 returned, O2478 cancelled, O2009 returned)\n- C110: O2048 (39 x 54.17 = 2112.63, shipped 2026-06-17), O2824 (16 x 125.74 = 2011.84, shipped 2026-06-24) -> 4124.47\nTotal Gold Revenue = 7448.32\n\nSilver orders:\n- C102: O2449 (6 x 112.69 = 676.14), O2304 (35 x 61.84 = 2164.40), O2385 (2 x 11.50 = 23.00), O2235 (12 x 101.44 = 1217.28) -> 4080.82\n- C104: O2536 (32 x 3.98 = 127.36), O2866 (2 x 9.86 = 19.72), O2628 (6 x 4.64 = 27.84), O2657 (41 x 97.08 = 3980.28) -> 4155.20\n- C105: O2787 (31 x 68.73 = 2130.63, 2026-04-23), O2742 (12 x 62.66 = 751.92, 2026-06-04), O2046 (25 x 139.64 = 3491.00, 2026-05-02) -> 6373.55 (O2190 is 2026-07-15, outside window)\n- C106: O2133 (1 x 97.87 = 97.87), O2773 (8 x 68.20 = 545.60), O2454 (17 x 135.54 = 2304.18), O2839 (33 x 115.76 = 3820.08), O2078 (32 x 56.98 = 1823.36) -> 8591.09 (O2763 is 2026-07-11, O2432 is 2026-07-11, both outside window)\n- C109: O2421 (6 x 96.98 = 581.88), O2339 (37 x 53.97 = 1996.89), O2616 (38 x 18.23 = 692.74) -> 3271.51 (O2276 is 2026-07-06, O2627 is 2026-07-20, both outside window)\nTotal Silver Revenue = 4080.82 + 4155.20 + 6373.55 + 8591.09 + 3271.51 = 26472.17\n\nDifference: 7448.32 - 26472.17 = -19023.85\n\nFINAL: -19023.85"
+}

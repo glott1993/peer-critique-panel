@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-30",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.6,
+ "tokens": 484,
+ "prompt_tokens": 160,
+ "completion_tokens": 324,
+ "cost": 0.00134,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of the `wildcard_match` function:\n\n```python\ndef wildcard_match(pattern: str, text: str) -> bool:\n    p_ptr = 0\n    t_ptr = 0\n    star_idx = -1\n    match_ptr = 0\n\n    while t_ptr < len(text):\n        # Characters match, or pattern has '?'\n        if p_ptr < len(pattern) and (pattern[p_ptr] == text[t_ptr] or pattern[p_ptr] == '?'):\n            p_ptr += 1\n            t_ptr += 1\n        # Pattern has '*'\n        elif p_ptr < len(pattern) and pattern[p_ptr] == '*':\n            star_idx = p_ptr\n            match_ptr = t_ptr\n            p_ptr += 1\n        # Last pattern character was '*', backtrack to try matching more characters\n        elif star_idx != -1:\n            p_ptr = star_idx + 1\n            match_ptr += 1\n            t_ptr = match_ptr\n        # Current characters don't match and no previous '*'\n        else:\n            return False\n\n    # Check for any remaining characters in pattern, which must all be '*'\n    while p_ptr < len(pattern) and pattern[p_ptr] == '*':\n        p_ptr += 1\n\n    return p_ptr == len(pattern)\n```"
+}

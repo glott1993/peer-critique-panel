@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 10.3,
- "tokens": 5510,
- "prompt_tokens": 3731,
- "completion_tokens": 1779,
- "cost": 0.00288,
+ "seconds": 5.9,
+ "tokens": 4094,
+ "prompt_tokens": 3189,
+ "completion_tokens": 905,
+ "cost": 0.00172,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    if not isinstance(s, str):\n        return False\n\n    isbn = s.replace(\"-\", \"\").replace(\" \", \"\")\n\n    if len(isbn) == 10:\n        if any(c not in \"0123456789\" for c in isbn[:9]):\n            return False\n        if isbn[9] not in \"0123456789X\":\n            return False\n\n        digits = [int(c) for c in isbn[:9]]\n        digits.append(10 if isbn[9] == \"X\" else int(isbn[9]))\n        return sum((i + 1) * digit for i, digit in enumerate(digits)) % 11 == 0\n\n    if len(isbn) == 13:\n        if any(c not in \"0123456789\" for c in isbn):\n            return False\n\n        return sum(\n            int(digit) * (1 if i % 2 == 0 else 3)\n            for i, digit in enumerate(isbn)\n        ) % 10 == 0\n\n    return False\n```"
+ "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    if not isinstance(s, str):\n        return False\n\n    s = s.replace(\"-\", \"\").replace(\" \", \"\")\n\n    if len(s) == 10:\n        if not all(\"0\" <= c <= \"9\" for c in s[:9]):\n            return False\n        if not (\"0\" <= s[9] <= \"9\" or s[9] == \"X\"):\n            return False\n\n        digits = [int(c) for c in s[:9]]\n        digits.append(10 if s[9] == \"X\" else int(s[9]))\n        return sum((i + 1) * digit for i, digit in enumerate(digits)) % 11 == 0\n\n    if len(s) == 13:\n        if not all(\"0\" <= c <= \"9\" for c in s):\n            return False\n\n        return sum(\n            int(digit) * (1 if i % 2 == 0 else 3)\n            for i, digit in enumerate(s)\n        ) % 10 == 0\n\n    return False\n```"
 }

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-03",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 238.1,
+ "tokens": 33708,
+ "prompt_tokens": 639,
+ "completion_tokens": 33069,
+ "cost": 0.13129,
+ "calls": 3,
+ "call_errors": 2,
+ "answer": "```python\nimport heapq\n\ndef topo_order(nodes, edges):\n    # Build the full set of nodes, including any that appear only in edges.\n    all_nodes = set(nodes)\n    for a, b in edges:\n        all_nodes.add(a)\n        all_nodes.add(b)\n\n    # Initialize graph and indegree for every node.\n    graph = {node: [] for node in all_nodes}\n    indegree = {node: 0 for node in all_nodes}\n\n    for a, b in edges:\n        graph[a].append(b)\n        indegree[b] += 1\n\n    # Min-heap for available nodes, so we always pick the smallest string.\n    heap = [node for node in all_nodes if indegree[node] == 0]\n    heapq.heapify(heap)\n\n    result = []\n\n    while heap:\n        node = heapq.heappop(heap)\n        result.append(node)\n\n        for neighbor in graph[node]:\n            indegree[neighbor] -= 1\n            if indegree[neighbor] == 0:\n                heapq.heappush(heap, neighbor)\n\n    # If not all nodes were processed, there is a cycle.\n    if len(result) != len(all_nodes):\n        raise ValueError(\"cycle detected in graph\")\n\n    return result\n```"
+}

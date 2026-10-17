@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-04",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 63.0, expected 63.0 | ok: got 26485.0, expected 26485.0 | ok: got 15634.07, expected 15634.06",
+ "error": null,
+ "seconds": 20.5,
+ "tokens": 3745,
+ "prompt_tokens": 413,
+ "completion_tokens": 3332,
+ "cost": 0.0128,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nFirst, compute the product:\n76,054 \u00d7 4,261 = 324,066,094\n736 \u00d7 8,118 = 5,974,848\n324,066,094 \u00d7 5,974,848 = 1,936,245,653,603,712\n\nSum of the digits:\n1 + 9 + 3 + 6 + 2 + 4 + 5 + 6 + 5 + 3 + 6 + 0 + 3 + 7 + 1 + 2 = 63\n\n**Part B**\nTax brackets:\n- 12% on the first $12,500 = $1,500.00\n- 24% on ($52,000 \u2212 $12,500 = $39,500) = $9,480.00\n- 35% on ($96,300 \u2212 $52,000 = $44,300) = $15,505.00\nTotal tax before credit = $1,500 + $9,480 + $15,505 = $26,485.00\n\nTax credit phaseout:\n- Excess over $60,000 = $96,300 \u2212 $60,000 = $36,300\n- Reduction = 5% of $36,300 = $1,815.00\n- Since the reduction ($1,815) exceeds the $1,800 credit, the credit is reduced to $0.00.\n\nTotal tax owed = $26,485.00\n\n**Part C**\n- Monthly interest rate $r = \\frac{0.078}{12} = 0.0065$\n- Number of payments $n = 36$\n- Standard payment $M = \\frac{31200 \\times 0.0065}{1 - (1.0065)^{-36}} \\approx 974.8185$\n- Standard balance at month 18 without extra payments:\n  $B_{18,\\text{std}} = \\frac{M(1 - (1.0065)^{-18})}{0.0065} \\approx 16508.625$\n- Compounded value of extra principal payments at month 18:\n  - Month 3 extra payment of $300: $300 \\times (1.0065)^{15} \\approx 330.619$\n  - Month 5 extra payment of $500: $500 \\times (1.0065)^{13} \\approx 543.938$\n- Remaining balance = $16508.625 - 330.619 - 543.938 \\approx 15634.07$\n\nFINAL: 63; 26485.00; 15634.07"
+}

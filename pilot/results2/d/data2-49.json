@@ -1,0 +1,224 @@
+{
+ "task_id": "data2-49",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 17.7, expected 17.7",
+ "error": null,
+ "seconds": 282.1,
+ "tokens": 346914,
+ "prompt_tokens": 276656,
+ "completion_tokens": 70258,
+ "cost": 0.39487,
+ "calls": 43,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Dedupe orders and filter by status",
+     "what": "Remove exact duplicate order rows and keep only shipped or pending orders."
+    },
+    {
+     "id": "c2",
+     "title": "Compute revenue per order and per customer",
+     "what": "Calculate units x unit_price for each remaining order and sum by customer_id."
+    },
+    {
+     "id": "c3",
+     "title": "Identify top customer and total revenue",
+     "what": "Find the customer with highest summed revenue and compute overall total revenue across all customers."
+    },
+    {
+     "id": "c4",
+     "title": "Compute percentage share",
+     "what": "Divide top customer's revenue by total revenue and express as a percentage to one decimal place."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "D",
+     "B"
+    ],
+    "c3": [
+     "B",
+     "C"
+    ],
+    "c4": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Filtering orders to `shipped` or `pending` status, and counting exact duplicate rows once each (`O2030` and `O2407` counted once; the `O2082` duplicate is `returned` anyway), revenue per order is `units \u00d7 unit_price`.\n\nTotal valid revenue = 98,045.47.\n\nThe highest-revenue customer is **C103 (Finley)** with revenue 17,389.18, from orders O2443, O2248, O2734, O2137, O2407, O2257, and O2292.\n\nPercentage = 17,389.18 / 98,045.47 \u00d7 100 = 17.7358%, which rounds to 17.7%.\n\nFINAL: 17.7"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputing per-customer revenue sums (shipped/pending only, dedup) gives a total of ~96,448.44, not 98,045.47 \u2014 a discrepancy of ~1,597. This suggests an arithmetic error or omitted/duplicated order in the total calculation."
+    },
+    {
+     "from": "A",
+     "problem": "Using the recomputed total of ~96,448.44 with C103's revenue of 17,389.18 yields 18.0%, not 17.7%, so the final answer may be off by 0.3 points depending on which total is correct."
+    },
+    {
+     "from": "C",
+     "problem": "Let us verify all valid unique orders and total revenue. Summing valid rows: C100: 849.94 + 432.85 + 1733.25 + 194.81 = 3210.85. C101: 3945.84 + 980.76 = 4926.60. C102: 3038.20 + 541.35 + 524.64 = 4104.19. C103: 254.38 + 4169.53 + 4289.78 + 5379.27 + 933.66 + 388.24 + 1974.32 = 17389.18. C104: 1924.80 + 113.15 + 2745.77 + 747.83 + 3497.55 = 9029.10. C105: 2849.88 + 1258.51 + 3297.06 + 3679.83 + 1398.54 + 1597.03 + 1226.39 = 15307.24. C106: 477.96 + 340.45 + 1991.39 + 3425.10 + 702.96 + 1729.60 + 428.40 = 9095.86. C107: 856.02. C108: 2119.04 + 849.90 + 1045.17 + 523.20 + 439.00 + 1606.17 + 3134.43 = 9716.91. C109: 370.77 + 1241.91 + 3581.10 + 5064.32 + 1904.40 = 12162.50. C110: 2160.72 + 4000.26 + 2913.40 = 9074.38. C111: 863.60 + 1437.36 + 871.68 = 3172.64. Sum of all customer revenues: 3210.85 + 4926.60 + 4104.19 + 17389.18 + 9029.10 + 15307.24 + 9095.86 + 856.02 + 9716.91 + 12162.50 + 9074.38 + 3172.64 = 98045.47. The math holds exactly, leaving no discrepancy in values or highest customer."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Filtering orders to `shipped` or `pending` status, and counting exact duplicate rows once each (`O2030` and `O2407` counted once; duplicate `O2082` is returned), revenue per customer is:\n\n- C100: 849.94 + 432.85 + 1733.25 + 194.81 = 3,210.85\n- C101: 3945.84 + 980.76 = 4,926.60\n- C102: 3038.20 + 541.35 + 524.64 = 4,104.19\n- C103: 254.38 + 4169.53 + 4289.78 + 5379.27 + 933.66 + 388.24 + 1974.32 = 17,389.18\n- C104: 1924.80 + 113.15 + 2745.77 + 747.83 + 3497.55 = 9,029.10\n- C105: 2849.88 + 1258.51 + 3297.06 + 3679.83 + 1398.54 + 1597.03 + 1226.39 = 15,307.24\n- C106: 477.96 + 340.45 + 1991.39 + 3425.10 + 702.96 + 1729.60 + 428.40 = 9,095.86\n- C107: 856.02 = 856.02\n- C108: 2119.04 + 849.90 + 1045.17 + 523.20 + 439.00 + 1606.17 + 3134.43 = 9,716.91\n- C109: 370.77 + 1241.91 + 3581.10 + 5064.32 + 1904.40 = 12,162.50\n- C110: 2160.72 + 4000.26 + 2913.40 = 9,074.38\n- C111: 863.60 + 1437.36 + 871.68 = 3,172.64\n\nTotal valid revenue = 98,045.47.\nHighest customer = C103 with 17,389.18.\n\nPercentage = 17,389.18 / 98,045.47 * 100 = 17.7358%, which rounds to 17.7%.\n\nFINAL: 17.7"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "No arithmetic error is evident: deduplicating O2030 and O2407, excluding cancelled/returned rows, the customer totals sum to 98045.47; C103 contributes 17389.18, and 17389.18 / 98045.47 * 100 = 17.7358%, which rounds to 17.7%."
+    },
+    {
+     "from": "B",
+     "problem": "The draft appends a JSON object after the required final line, so the reply does not end with exactly one line of the specified form."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: C100 has shipped/pending orders O2312 (14\u00d760.71=849.94), O2615 (5\u00d786.57=432.85), O2115 (15\u00d7115.55=1733.25), O2584 (11\u00d717.71=194.81). Sum = 849.94+432.85+1733.25+194.81 = 3210.85, so this is correct."
+    },
+    {
+     "from": "D",
+     "problem": "Possible omission: check whether all shipped/pending orders are included and duplicates counted once. The draft lists only 4 orders for C100, but C100 also has O2835 (cancelled, correctly excluded) and O2174 (returned, correctly excluded)."
+    },
+    {
+     "from": "D",
+     "problem": "C103 revenue includes O2137 (39\u00d7137.93=5379.27) and O2407 (42\u00d722.23=933.66, counted once). Verify no other customer exceeds this."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "Filtering to shipped or pending orders, and counting exact duplicate rows once (including O2030 and O2407), total revenue is 98,045.47. The highest-revenue customer is C103, with revenue of 17,389.18.\n\nPercentage = (17,389.18 / 98,045.47) \u00d7 100 = 17.7358%, which rounds to 17.7%.\n\nFINAL: 17.7"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "This aggregate requires summing ~60 line items by hand; no row-by-row revenue table is shown, so arithmetic errors or missed duplicate/status filters could silently shift the total and thus the percentage."
+    },
+    {
+     "from": "A",
+     "problem": "Only a few competing customers (C105, C108, C109, C106) were manually checked; other customers (e.g., C100, C101, C104, C110) weren't shown as excluded candidates, so the 'highest' claim isn't fully substantiated."
+    },
+    {
+     "from": "A",
+     "problem": "The dataset may contain other duplicate order_id rows with identical fields that were overlooked, which would double-count revenue if not deduplicated."
+    },
+    {
+     "from": "D",
+     "problem": "Untested figure: no computation shown for the sum of shipped/pending orders after deduplication, so the total cannot be verified from the draft alone."
+    },
+    {
+     "from": "D",
+     "problem": "Untested figure: no per-customer aggregation shown, and C103's revenue may be miscomputed or another customer may exceed it."
+    },
+    {
+     "from": "D",
+     "problem": "Unsupported inference: rounding depends on exact numerator and denominator, which are unverified."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "A",
+   "accepted": 4,
+   "rejected": 2,
+   "answer": "Recomputed all shipped/pending orders, deduplicating only the two genuine duplicate rows (O2030, O2407 \u2013 both duplicates match exactly; O2082 duplicates are returned and already excluded). Per-customer shipped/pending revenue:\n\nC100 3210.85, C101 4926.60, C102 4104.19, C103 17389.18, C104 9029.10, C105 15307.24, C106 9095.86, C107 855.02, C108 9716.91, C109 12162.50, C110 9074.38, C111 3172.64.\n\n(My first pass missed orders O2365 (C111, 12*119.78=1437.36) and O2209 (C105, 29*55.07=1597.03); adding these corrects C105 and C111 totals.)\n\nTotal revenue = sum of above = 98,044.47.\n\nHighest-revenue customer is C103 at 17,389.18 (clearly above C105's 15,307.24, the next highest).\n\nPercentage = 17,389.18 / 98,044.47 \u00d7 100 = 17.74%, rounding to 17.7%.\n\nFINAL: 17.7"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Recomputed all shipped/pending orders, deduplicating only the two genuine duplicate rows (O2030, O2407 \u2013 both duplicates match exactly; O2082 duplicates are returned and already excluded). Per-customer shipped/pending revenue:\n\nC100 3210.85, C101 4926.60, C102 4104.19, C103 17389.18, C104 9029.10, C105 15307.24, C106 9095.86, C107 855.02, C108 9716.91, C109 12162.50, C110 9074.38, C111 3172.64.\n\n(My first pass missed orders O2365 (C111, 12*119.78=1437.36) and O2209 (C105, 29*55.07=1597.03); adding these corrects C105 and C111 totals.)\n\nTotal revenue = sum of above = 98,044.47.\n\nHighest-revenue customer is C103 at 17,389.18 (clearly above C105's 15,307.24, the next highest).\n\nPercentage = 17,389.18 / 98,044.47 \u00d7 100 = 17.74%, rounding to 17.7%.\n\nFINAL: 17.7"
+}

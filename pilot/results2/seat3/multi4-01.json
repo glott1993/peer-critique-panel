@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-01",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 3178.09, expected 3178.09 | ok: got 1214928.0, expected 1214928.0 | ok: got 58.0, expected 58.0 | ok: got 9268.0, expected 9268.0",
+ "error": null,
+ "seconds": 16.3,
+ "tokens": 2981,
+ "prompt_tokens": 555,
+ "completion_tokens": 2426,
+ "cost": 0.00951,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nTotal units sold = $72 + 49 + 120 + 76 + 63 + 33 = 413$ units.\nUsing FIFO, we draw from the inventory lots in order:\n- Lot 1: 124 units at $\\$12.34 = \\$1,530.16$\n- Lot 2: 128 units at $\\$3.67 = \\$469.76$\n- Lot 3: 154 units at $\\$7.10 = \\$1,093.40$\n- Lot 4: $413 - (124 + 128 + 154) = 7$ units at $\\$12.11 = \\$84.77$\n\nTotal COGS = $\\$1,530.16 + \\$469.76 + \\$1,093.40 + \\$84.77 = \\$3,178.09$.\n\n**Part B**\nThe integers divisible by 13 in the range $[362, 6506]$ correspond to $13k$ for $k$ from $28$ to $500$:\n$$\\sum_{k=28}^{500} 13k = 13 \\times \\frac{(28 + 500) \\times 473}{2} = 1,623,336$$\nIntegers also divisible by 4 are multiples of $52 = 13 \\times 4$, which corresponds to $k$ divisible by 4 ($k = 4m$ for $m$ from $7$ to $125$):\n$$\\sum_{m=7}^{125} 52m = 52 \\times \\frac{(7 + 125) \\times 119}{2} = 408,408$$\nSubtracting these gives:\n$$1,623,336 - 408,408 = 1,214,928$$\n\n**Part C**\nMultiplying the terms:\n$$22027 \\times 1894 \\times 664 \\times 2791 = 77,314,907,800,912$$\nSum of the digits:\n$$7 + 7 + 3 + 1 + 4 + 9 + 0 + 7 + 8 + 0 + 0 + 9 + 1 + 2 = 58$$\n\n**Part D**\nIncome = $\\$57,400$.\n- Bracket 1 (10% on first $\\$12,500$): $\\$1,250.00$\n- Bracket 2 (22% on $\\$52,000 - \\$12,500 = \\$39,500$): $\\$8,690.00$\n- Bracket 3 (32% on $\\$57,400 - \\$52,000 = \\$5,400$): $\\$1,728.00$\n\nTotal tax before credit = $\\$1,250 + \\$8,690 + \\$1,728 = \\$11,668.00$.\nSince income does not exceed $\\$60,000$, the $\\$2,400.00$ credit is not reduced:\n$$\\text{Tax owed} = \\$11,668.00 - \\$2,400.00 = \\$9,268.00$$\n\nFINAL: 3178.09; 1214928; 58; 9268.00"
+}

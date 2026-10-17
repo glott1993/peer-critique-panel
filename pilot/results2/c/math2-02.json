@@ -1,0 +1,176 @@
+{
+ "task_id": "math2-02",
+ "type": "math",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 3868.8, expected 3868.8",
+ "error": null,
+ "seconds": 202.7,
+ "tokens": 88046,
+ "prompt_tokens": 56148,
+ "completion_tokens": 31898,
+ "cost": 0.24577,
+ "calls": 31,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "8+8+9.5+9.5+7.5+6+9+10+6+10+8+13+0+11",
+   "claimed": 115.5,
+   "value": 115.5,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "99.5*31.20+15*31.20*1.5+1*31.20*2",
+   "claimed": 3868.8,
+   "value": 3868.8,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "8+8+8+8+7.5+6+8+8+6+8+8+8+0+8",
+   "claimed": 99.5,
+   "value": 99.5,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Daily hours classification",
+     "what": "For each day, split hours into regular (up to 8), overtime (hours 8 through 12), and double-time (hours over 12)."
+    },
+    {
+     "id": "c2",
+     "title": "Sum hour categories",
+     "what": "Total regular=97.5, overtime=15, double-time=1 hours across the 14 days."
+    },
+    {
+     "id": "c3",
+     "title": "Apply pay rates",
+     "what": "Calculate gross pay as 97.5\u00d731.20 + 15\u00d7(1.5\u00d731.20) + 1\u00d7(2\u00d731.20), rounded to the nearest cent."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Daily hours split into regular (\u22648), overtime (>8 and \u226412), and double-time (>12):\n\n- Regular hours: 8+8+8+8+7.5+6+8+8+6+8+8+8+0+8 = 99.5\n- Overtime hours: 1.5+1.5+1+2+2+4+3 = 15.0\n- Double-time hours: 1.0\n\nCheck: 99.5 + 15.0 + 1.0 = 115.5 total hours, matching the listed daily hours.\n\nPay:\n- Regular: 99.5 \u00d7 31.20 = 3104.40\n- Overtime: 15.0 \u00d7 31.20 \u00d7 1.5 = 702.00\n- Double-time: 1.0 \u00d7 31.20 \u00d7 2 = 62.40\n\nTotal gross pay = 3104.40 + 702.00 + 62.40 = 3868.80\n\nFINAL: 3868.80"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The wording \u201chours over 12 in a day at 2 times\u201d is ambiguous: it could mean all hours beyond 12 are double-time, as drafted, or that a day exceeding 12 has its overtime hours paid at double-time. The numerical result depends on this interpretation."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 1,
+   "answer": "Daily hours split into regular (\u22648), overtime (>8 and \u226412), and double-time (>12), using the standard tiered/marginal interpretation (each tier applies only to hours within that range):\n\n- Regular hours: 8+8+8+8+7.5+6+8+8+6+8+8+8+0+8 = 99.5\n- Overtime (1.5x) hours: day3:1.5, day4:1.5, day7(9):1, day8(10):2, day10(10):2, day12(13):4, day14(11):3 = 15.0\n- Double-time (2x) hours: day12(13): 1.0\n\nCheck: 99.5+15.0+1.0 = 115.5, matches total hours worked.\n\nPay:\n- Regular: 99.5 \u00d7 31.20 = 3104.40\n- Overtime: 15.0 \u00d7 31.20 \u00d7 1.5 = 702.00\n- Double-time: 1.0 \u00d7 31.20 \u00d7 2 = 62.40\n\nTotal = 3104.40 + 702.00 + 62.40 = 3868.80\n\nNote on challenge: the alternative reading (all overtime hours on a day exceeding 12 paid at 2x) is less standard; typical overtime statutes define tiers marginally (hours over 8 up to 12 at 1.5x, hours over 12 at 2x), so the marginal interpretation is retained.\n\nFINAL: 3868.80"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The day-by-day tier split lists overtime hours for days 3,4,7,8,10,12,14 but omits day 11 (8 hours) and day 13 (0) \u2014 confirm no day was dropped: can you restate each of the 14 days with its regular/1.5x/2x hours and show the three column totals summing to 115.5?",
+    "Day 12 has 13 hours: under the marginal reading that is 8 regular + 4 at 1.5x + 1 at 2x. Can you confirm the 2x hours are only the hours strictly above 12 (1 hour), and state explicitly what the gross pay would be under the rejected alternative reading (all overtime hours that day at 2x) so the difference is on the record?",
+    "Is there any source or jurisdictional citation (e.g. a specific state daily-overtime statute) supporting the marginal-tier reading, and does the problem's lack of a weekly rule affect anything given the 14-day period spans two weeks?"
+   ],
+   "replies": [
+    "1. Full day-by-day table (regular / 1.5x / 2x hours):\nDay1:8=8,0,0\nDay2:8=8,0,0\nDay3:9.5=8,1.5,0\nDay4:9.5=8,1.5,0\nDay5:7.5=7.5,0,0\nDay6:6=6,0,0\nDay7:9=8,1,0\nDay8:10=8,2,0\nDay9:6=6,0,0\nDay10:10=8,2,0\nDay11:8=8,0,0\nDay12:13=8,4,1\nDay13:0=0,0,0\nDay14:11=8,3,0\nColumn totals: Regular=99.5, 1.5x=15.0, 2x=1.0, sum=115.5 \u2713 matches total hours worked. No day was dropped; days 11 and 13 simply contribute 8/0/0 and 0/0/0 respectively, which is why they didn't appear in the earlier non-zero overtime list.\n\n2. Confirmed: under the marginal/tiered reading, day 12 (13 hrs) = 8 regular + 4 hrs at 1.5x (hours 9\u201312) + 1 hr at 2x (hour 13, strictly above 12). Pay for that day = 8(31.20)+4(46.80)+1(62.40)=249.60+187.20+62.40=499.20.\nUnder the rejected alternative (all hours over 8 on a day exceeding 12 paid at 2x instead of split into 1.5x/2x tiers), day 12 would be 8 regular + 5 hrs at 2x = 249.60+5(62.40)=249.60+312.00=561.60, a difference of +62.40 for that day. Total gross under that alternative reading = 3868.80+62.40 = 3931.20.\n\n3. No specific statute or jurisdiction was cited in the original problem, and none is supplied here \u2014 this is a plain stated assumption, not sourced to any real law (e.g., California Labor Code \u00a7510 does use a similar marginal tiered structure: >8\u201312 at 1.5x, >12 at 2x, but the problem never names a jurisdiction, so this is offered only as an analogous real-world precedent, not proof). The marginal-tier reading is retained purely as the standard/default interpretation absent other instruction.\nThe lack of a weekly overtime rule does not need reconciliation with the two-week span: the problem explicitly states 'there is no weekly overtime rule,' so no weekly threshold calculation applies regardless of how the 14 days align with calendar weeks. This does not affect the $3868.80 total under the stated marginal rule.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Independent arithmetic cross-check not yet on record: does the straight-time-plus-premium method reproduce 3868.80 exactly \u2014 i.e. 115.5 total hours x 31.20 base, plus a 0.5x premium on the 15.0 overtime hours and a 1.0x premium on the 1.0 double-time hour \u2014 and do the day-by-day pay figures sum to the same total?"
+   ],
+   "replies": [
+    "Check: 115.5*31.20=3603.60 base; premium=15.0*0.5*31.20=234.00; double premium=1.0*1.0*31.20=31.20. Sum=3603.60+234.00+31.20=3868.80, matches. Day-by-day verification of tier splits: day3(9.5)=1.5OT, day4(9.5)=1.5OT, day7(9)=1OT, day8(10)=2OT, day10(10)=2OT, day12(13)=4OT+1DT, day14(11)=3OT -> OT sum=1.5+1.5+1+2+2+4+3=15.0, DT=1.0, regular=115.5-15-1=99.5, consistent with original breakdown. No error found."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Term-by-term verification not yet on record: adding the 14 listed figures in the given order (8, 8, 9.5, 9.5, 7.5, 6, 9, 10, 6, 10, 8, 13, 0, 11), does the running total actually reach 115.5, and does the day indexing used in the breakdown map correctly onto that sequence (i.e. is the 12th entry 13, the 13th entry 0, and the 14th entry 11)?",
+    "On the disputed tier reading: can you cite the specific statutory or regulatory text relied on for 'hours over 12 at 2x' applying marginally, and state what total the alternative reading (entire day's post-8 hours at 2x when the day exceeds 12) would produce, so the size of the discrepancy is on the record?"
+   ],
+   "replies": [
+    "5. Running sum check: 8+8+9.5+9.5+7.5+6+9+10+6+10+8+13+0+11 = 115.5 \u2014 confirmed correct. Indexing also confirmed: 12th entry=13, 13th entry=0, 14th entry=11. No error here.\n\n6. No specific statute was cited in the original answer, and none exists to cite here \u2014 the 'marginal tier' interpretation (hours over 8 up to 12 at 1.5x, only hours over 12 at 2x) is a common payroll-software convention, not a universal legal rule; actual statutes (e.g., California daily OT law) do use this marginal approach, but the problem itself doesn't specify a jurisdiction, so the choice is an assumption, not a sourced fact. This should have been flagged as an assumption rather than asserted as 'standard.'\n\nAlternative reading computation: Under the alternative (entire day's hours over 8 paid at 2x once the day exceeds 12), only day 12 (13 hours) changes: instead of 4 hrs@1.5x + 1 hr@2x, it becomes 5 hrs@2x.\nOriginal equivalent-hours for day 12 overtime: 4*1.5+1*2 = 8\nAlternative equivalent-hours: 5*2 = 10\nDifference = 2 extra equivalent hours * $31.20 = $62.40 more.\nAlternative total = 3868.80 + 62.40 = 3931.20.\n\nSince no authoritative source was actually cited for the marginal-tier choice, this is a genuine unresolved ambiguity in the problem, but the original computation under the stated (and more commonly implemented) marginal convention stands as the primary answer.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Daily hours split into regular (\u22648), overtime (>8 and \u226412), and double-time (>12), using the standard tiered/marginal interpretation (each tier applies only to hours within that range):\n\n- Regular hours: 8+8+8+8+7.5+6+8+8+6+8+8+8+0+8 = 99.5\n- Overtime (1.5x) hours: day3:1.5, day4:1.5, day7(9):1, day8(10):2, day10(10):2, day12(13):4, day14(11):3 = 15.0\n- Double-time (2x) hours: day12(13): 1.0\n\nCheck: 99.5+15.0+1.0 = 115.5, matches total hours worked.\n\nPay:\n- Regular: 99.5 \u00d7 31.20 = 3104.40\n- Overtime: 15.0 \u00d7 31.20 \u00d7 1.5 = 702.00\n- Double-time: 1.0 \u00d7 31.20 \u00d7 2 = 62.40\n\nTotal = 3104.40 + 702.00 + 62.40 = 3868.80\n\nNote on challenge: the alternative reading (all overtime hours on a day exceeding 12 paid at 2x) is less standard; typical overtime statutes define tiers marginally (hours over 8 up to 12 at 1.5x, hours over 12 at 2x), so the marginal interpretation is retained.\n\nFINAL: 3868.80"
+}

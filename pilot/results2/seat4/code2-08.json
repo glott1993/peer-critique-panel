@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-08",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 847.6,
+ "tokens": 72385,
+ "prompt_tokens": 1040,
+ "completion_tokens": 71345,
+ "cost": 0.07098,
+ "calls": 5,
+ "call_errors": 4,
+ "answer": "```python\ndef rle_decode(s: str) -> str:\n    result = []\n    i = 0\n    n = len(s)\n\n    while i < n:\n        c = s[i]\n\n        if c == '#':\n            raise ValueError(\"'#' must be preceded by a character\")\n\n        if i + 1 < n and s[i + 1] == '#':\n            # Run token: character '#' digits\n            j = i + 2\n            if j >= n or not s[j].isdigit():\n                raise ValueError(\"'#' must be followed by at least one digit\")\n\n            while j < n and s[j].isdigit():\n                j += 1\n\n            count = int(s[i + 2:j])\n            if count < 4:\n                raise ValueError(\"run length must be at least 4\")\n\n            result.append(c * count)\n            i = j\n        else:\n            result.append(c)\n            i += 1\n\n    return ''.join(result)\n```"
+}

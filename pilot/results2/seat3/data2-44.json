@@ -1,0 +1,16 @@
+{
+ "task_id": "data2-44",
+ "type": "data",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 'blake', expected 'blake'",
+ "error": null,
+ "seconds": 10.5,
+ "tokens": 5275,
+ "prompt_tokens": 3367,
+ "completion_tokens": 1908,
+ "cost": 0.00968,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the customer with the highest total revenue, we calculate the sum of revenue (`units` \u00d7 `unit_price`) for valid orders (status `shipped` or `pending`), counting duplicate rows once:\n\n- **Blake (C103):**\n  - O2776: 27 \u00d7 86.68 = 2,340.36\n  - O2444: 35 \u00d7 101.88 = 3,565.80\n  - O2202: 35 \u00d7 135.50 = 4,742.50\n  - O2576: 23 \u00d7 15.89 = 365.47\n  - O2840: 18 \u00d7 138.89 = 2,500.02\n  - O2197: 29 \u00d7 8.54 = 247.66\n  - O2379: 35 \u00d7 42.92 = 1,502.20\n  - **Total:** 15,264.01\n\n- Emery (C107): 13,741.09\n- Parker (C100): 11,627.96\n- Avery (C108): 11,545.14\n- Harper (C101): 11,131.10\n- All other customers have lower totals.\n\nFINAL: Blake"
+}

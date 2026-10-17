@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-08",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.9,
+ "tokens": 461,
+ "prompt_tokens": 208,
+ "completion_tokens": 253,
+ "cost": 0.0011,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of `rle_decode`:\n\n```python\ndef rle_decode(s: str) -> str:\n    res = []\n    i = 0\n    n = len(s)\n    \n    while i < n:\n        if s[i] == '#':\n            # '#' must be preceded by a character\n            if not res:\n                raise ValueError(\"Marker '#' must be preceded by a character.\")\n            \n            char = res.pop()\n            i += 1\n            start = i\n            while i < n and s[i].isdigit():\n                i += 1\n            \n            # Must be followed by at least one digit\n            if start == i:\n                raise ValueError(\"Marker '#' must be followed by at least one digit.\")\n            \n            count = int(s[start:i])\n            if count < 4:\n                raise ValueError(\"Run count must be at least 4.\")\n            \n            res.append(char * count)\n        else:\n            res.append(s[i])\n            i += 1\n            \n    return \"\".join(res)\n```"
+}

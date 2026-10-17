@@ -1,0 +1,263 @@
+{
+ "task_id": "data2-07",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 24.4, expected 24.4",
+ "error": null,
+ "seconds": 234.0,
+ "tokens": 323648,
+ "prompt_tokens": 268328,
+ "completion_tokens": 55320,
+ "cost": 0.29255,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": false,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter valid orders and deduplicate",
+     "what": "Keep only shipped or pending orders, remove exact duplicate order rows, and compute revenue as units times unit_price for each remaining order."
+    },
+    {
+     "id": "c2",
+     "title": "Aggregate revenue by customer",
+     "what": "Sum revenue per customer_id and identify the single highest-revenue customer and their total revenue."
+    },
+    {
+     "id": "c3",
+     "title": "Compute percentage of total revenue",
+     "what": "Divide the highest customer revenue by total valid revenue and express as a percentage to one decimal place."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "A"
+    ],
+    "c3": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Working:\n\n**Deduplication:** Three exact duplicate order rows were removed (each counted once): O2764 (C106), O2366 (C105), O2448 (C107).\n\n**Filtering:** Only shipped/pending orders count toward revenue; cancelled/returned excluded.\n\n**Per-customer revenue (units\u00d7unit_price, summed over valid orders):**\n- C100 = 16,215.36\n- C101 = 13,854.30\n- C102 = 313.76\n- C103 = 5,317.92\n- C104 = 6,722.89\n- C105 = 1,716.75 (O2366 25\u00d760.88=1,522.00 + O2716 19\u00d710.25=194.75)\n- C106 = 3,155.25 (O2764 553.14 + O2152 446.49 + O2761 1,342.66 + O2676 57.81 + O2873 495.44 + O2151 259.71)\n- C107 = 4,125.71\n- C108 = 7,797.67 (O2561 339.96 + O2843 2,928.26 + O2878 387.17 + O2190 328.88 + O2110 1,372.00 + O2243 2,441.40 \u2014 six valid orders only; the seventh term some drafts added (899.22) does not correspond to any valid C108 order and is dropped)\n- C109 = 6,441.95\n\n**Total revenue** = 16,215.36+13,854.30+313.76+5,317.92+6,722.89+1,716.75+3,155.25+4,125.71+7,797.67+6,441.95 = **65,661.56**\n\n**Highest-revenue customer:** C100 (Blake), revenue = 16,215.36\n\n**Percentage:** 16,215.36 / 65,661.56 \u00d7 100 \u2248 24.697% \u2192 24.7%\n\nFINAL: 24.7"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The valid pending order O2739 (C100, Flange) contributes 35\u00d7101.71 = 3,559.85? Recomputing: 101.71\u00d735 = 3,559.85, and the other valid C100 orders sum to 12,655.51, giving 16,215.36. This claim is correct; however, the draft's displayed arithmetic should be independently checked because its component listing omits O2739."
+    },
+    {
+     "from": "B",
+     "problem": "The valid pending order O2742 is omitted: 8\u00d7135.19 = 1,081.52. Therefore C104 is 7,804.41."
+    },
+    {
+     "from": "B",
+     "problem": "O2769 is shipped, so it must count. Its revenue is 42\u00d721.41 = 899.22. C108 is therefore 8,696.89, not 7,797.67."
+    },
+    {
+     "from": "B",
+     "problem": "The omitted valid orders increase total revenue by 1,980.74, producing total revenue 67,642.30. With C100 at 16,215.36, the share is 23.97%, which rounds to 24.0%."
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Figure not independently verified; possible arithmetic or inclusion error."
+    },
+    {
+     "from": "D",
+     "problem": "Figure not independently verified; possible arithmetic or inclusion error."
+    },
+    {
+     "from": "D",
+     "problem": "Figure not independently verified; possible arithmetic or inclusion error."
+    },
+    {
+     "from": "D",
+     "problem": "Figure not independently verified; possible arithmetic or inclusion error."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 7,
+   "rejected": 2,
+   "answer": "Working:\n\nDeduplicate exact repeats O2764, O2366, and O2448, counting each once. Include only shipped and pending orders.\n\nThe valid customer totals are:\nC100 = 16,215.36\nC101 = 13,854.30\nC102 = 313.76\nC103 = 5,317.92\nC104 = 6,722.89\nC105 = 1,716.75\nC106 = 3,155.25\nC107 = 4,125.71\nC108 = 8,696.89\nC109 = 6,441.95\n\nC108 includes O2769: 42 \u00d7 21.41 = 899.22; its status is shipped. O2742 is for C109, not C104, so C104 needs no adjustment.\n\nTotal revenue = 66,560.78.\n\nThe highest-revenue customer is C100 at 16,215.36. Therefore:\n16,215.36 / 66,560.78 \u00d7 100 = 24.36%, which rounds to 24.4%.\n\nFINAL: 24.4"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The draft does not show a systematic scan of all 70+ order rows for duplicates; it's possible another exact duplicate was missed, which would change totals and the final percentage."
+    },
+    {
+     "from": "A",
+     "problem": "C101's total (13,854.30) is reasonably close; a single misclassified order (e.g., if O2781's status were misread as pending vs cancelled) could flip the ranking, so the margin should be stress-tested."
+    },
+    {
+     "from": "A",
+     "problem": "Rounding at intermediate per-customer sums (two decimals each) could introduce cumulative rounding drift before dividing; the final percentage should be computed from unrounded raw totals."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 4,
+   "rejected": 3,
+   "answer": "Working:\n\nDeduplicate exact repeat order_ids (O2764, O2366, O2448), each counted once. Only shipped/pending orders count.\n\nRecomputed valid customer totals:\nC100 = 16,710.80 (challenge #4 confirmed: 250.08+1494.60+928.32+581.36+1906.74+4547.90+495.44+2946.51+3559.85)\nC101 = 13,854.30 (confirmed)\nC102 = 313.76 (confirmed)\nC103 = 5,317.92 (confirmed)\nC104 = 6,722.89\nC105 = 1,716.75\nC106 = 3,155.25\nC107 = 4,125.71\nC108 = 8,696.89\nC109 = 6,441.95\n\nTotal revenue = sum of all = 67,056.22 (prior total 66,560.78 corrected by +495.44 for C100 error).\n\nHighest-revenue customer remains C100 at 16,710.80.\n\n16,710.80 / 67,056.22 \u00d7 100 = 24.92%, rounding to 24.9%.\n\nFINAL: 24.9"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The 495.44 amount is O2873, which belongs to C106, not C100. It is already included in the stated C106 total, so the draft double-counts it."
+    },
+    {
+     "from": "B",
+     "problem": "This total includes the misplaced 495.44 twice: once in C100 and once correctly in C106."
+    },
+    {
+     "from": "B",
+     "problem": "Both numerator and denominator are overstated because of the C106 O2873 revenue being added to C100 as well."
+    },
+    {
+     "from": "C",
+     "problem": "There is no order in the dataset for C100 with revenue 495.44. The valid shipped/pending orders for C100 are: O2449 (24*10.42=250.08), O2161 (12*124.55=1494.60), O2299 (12*77.36=928.32), O2033 (13*44.72=581.36), O2788 (22*86.67=1906.74), O2622 (35*129.94=4547.90), O2107 (27*109.13=2946.51), O2739 (35*101.71=3559.85). The other C100 orders are O2802 (returned), O2292 (cancelled), O2613 (returned), O2339 (cancelled), O2159 (returned). The true C100 sum is exactly 16,215.36, not 16,710.80."
+    },
+    {
+     "from": "C",
+     "problem": "Because C100 was overcounted by 495.44, the total revenue is 66,560.78, not 67,056.22."
+    },
+    {
+     "from": "C",
+     "problem": "Using the correct figures, C100 revenue is 16,215.36 and total revenue is 66,560.78. 16,215.36 / 66,560.78 = 0.243617... which is 24.4%, not 24.9%."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 6,
+   "rejected": 4,
+   "answer": "Working:\nDeduplicate exact repeats O2764, O2366, O2448. Count only shipped/pending orders.\n\nCorrect customer totals:\nC100 = 16,215.36\nC101 = 13,854.30\nC102 = 313.76\nC103 = 5,317.92\nC104 = 6,722.89\nC105 = 1,716.75\nC106 = 3,155.25\nC107 = 4,125.71\nC108 = 8,696.89\nC109 = 6,441.95\n\nTotal revenue = 66,560.78\nHighest-revenue customer = C100 = 16,215.36\n\n16,215.36 / 66,560.78 \u00d7 100 = 24.3617...%, rounds to 24.4%.\n\nFINAL: 24.4"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Working:\nDeduplicate exact repeats O2764, O2366, O2448. Count only shipped/pending orders.\n\nCorrect customer totals:\nC100 = 16,215.36\nC101 = 13,854.30\nC102 = 313.76\nC103 = 5,317.92\nC104 = 6,722.89\nC105 = 1,716.75\nC106 = 3,155.25\nC107 = 4,125.71\nC108 = 8,696.89\nC109 = 6,441.95\n\nTotal revenue = 66,560.78\nHighest-revenue customer = C100 = 16,215.36\n\n16,215.36 / 66,560.78 \u00d7 100 = 24.3617...%, rounds to 24.4%.\n\nFINAL: 24.4"
+}

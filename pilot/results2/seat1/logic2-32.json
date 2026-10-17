@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'horse', expected 'horse'",
  "error": null,
- "seconds": 28.1,
- "tokens": 3651,
+ "seconds": 23.8,
+ "tokens": 2515,
  "prompt_tokens": 508,
- "completion_tokens": 3143,
- "cost": 0.03245,
+ "completion_tokens": 2007,
+ "cost": 0.02109,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Working:**\n\nFrom clues 8,9,5: house5 = cat, water, white.\nClue6 \u2192 house4 = blue.\n\nClues 3 & 11 force a pattern: horse\u2013tea\u2013dog in three consecutive houses, with dog owner = Eli (clue1). Since house5 is cat (not dog), the dog house must be \u22644.\n\nTesting possibilities, the only consistent option is:\n- House2 = horse, House3 = tea, House4 = dog.\n\nAssigning remaining pets: houses 1 and 3 get fish/bird. Testing clues 10 & 12 for Ben's position, the only consistent placement is **Ben in house3** (tea), giving:\n- Drinks: house1 coffee, house2 juice, house3 tea, house4 milk, house5 water.\n\nResidents: Ada=house2, Eli=house4(dog). Remaining Cleo/Dev in houses1,5. Since Cleo is in the green house (clue2) and house5 is white, Cleo=house1, Dev=house5.\n\nColors: house1 green (Cleo), house4 blue, house5 white \u2192 remaining red/yellow for houses2,3.\nFish requires yellow (clue4); fish is either house1 or house3 (remaining pets after horse/dog/cat assigned). House1 is green, so fish must be house3, making house3 yellow, house1 bird, house2 red.\n\nFinal grid:\n- House1: Cleo, bird, green, coffee\n- House2: Ada, horse, red, juice\n- House3: Ben, fish, yellow, tea\n- House4: Eli, dog, blue, milk\n- House5: Dev, cat, white, water\n\nAll clues check out.\n\nFINAL: horse"
+ "answer": "FINAL: horse"
 }

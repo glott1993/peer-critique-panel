@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-12",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 3093.75, expected 3093.75 | ok: got 9912.0, expected 9912.0 | ok: got 10446.0, expected 10446.02 | ok: got 156.0, expected 156.0",
+ "error": null,
+ "seconds": 11.5,
+ "tokens": 2314,
+ "prompt_tokens": 597,
+ "completion_tokens": 1717,
+ "cost": 0.00689,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nRate = $24.75/hr. Over 8 up to 12 is 1.5x ($37.125), over 12 is 2x ($49.50).\nDays:\n- 7.5: 7.5 reg = 7.5\n- 8: 8 reg = 8\n- 9.5: 8 reg + 1.5 OT\n- 0: 0\n- 12.5: 8 reg + 4 OT + 0.5 DT\n- 6: 6 reg\n- 11: 8 reg + 3 OT\n- 10: 8 reg + 2 OT\n- 13: 8 reg + 4 OT + 1 DT\n- 12.5: 8 reg + 4 OT + 0.5 DT\n- 6: 6 reg\n- 7.5: 7.5 reg\n- 9.5: 8 reg + 1.5 OT\n- 0: 0\n\nTotal Regular hours: 7.5 + 8 + 8 + 8 + 6 + 8 + 8 + 8 + 8 + 6 + 7.5 + 8 = 91 hours.\nTotal Overtime hours (1.5x): 1.5 + 4 + 3 + 2 + 4 + 4 + 1.5 = 20 hours.\nTotal Double time hours (2x): 0.5 + 1 + 0.5 = 2 hours.\nEquivalent regular hours = 91 + 20 * 1.5 + 2 * 2 = 91 + 30 + 4 = 125 hours.\nGross pay = 125 * 24.75 = $3,093.75.\n\nPart B:\nIncome = $57,400.\nBrackets:\n- First $12,500 at 8% = $1,000.\n- $12,500 to $52,000 ($39,500) at 20% = $7,900.\n- Above $52,000 ($5,400) at 30% = $1,620.\nTotal tax before credit = 1000 + 7900 + 1620 = $10,520.\nTax credit:\nBase credit = $1,200.\nIncome above $50,000 = $7,400.\nReduction = 8% of $7,400 = $592.\nCredit remaining = 1200 - 592 = $608.\nTax owed = 10520 - 608 = $9,912.00.\n\nPart C:\nMultiplier each period after contribution is added:\nGrows by 1.5%, then 0.5% fee deducted:\nBalance becomes (B + C) * 1.015 * (1 - 0.005) = (B + C) * 1.015 * 0.995 = (B + C) * 1.009925.\nLet r = 1.009925.\nPeriod 1: (5000 + 250) * r = 5250 * r = 5302.10625\nPeriod 2: (5302.10625 + 900) * r = 6202.10625 * r = 6263.662153\nPeriod 3: (6263.662153 + 250) * r = 6513.662153 * r = 6578.30907\nPeriod 4: (6578.30907 + 250) * r = 6828.30907 * r = 6896.08053\nPeriod 5: (6896.08053 + 250) * r = 7146.08053 * r = 7216.99522\nPeriod 6: (7216.99522 + 400) * r = 7616.99522 * r = 7692.59765\nPeriod 7: (7692.59765 + 400) * r = 8092.59765 * r = 8172.91572\nPeriod 8: (8172.91572 + 250) * r = 8422.91572 * r = 8506.51268\nPeriod 9: (8506.51268 + 900) * r = 9406.51268 * r = 9499.87037\nPeriod 10: (9499.87037 + 0) * r = 9594.15684\nPeriod 11: (9594.15684 + 400) * r = 9994.15684 * r = 10093.34887\nPeriod 12: (10093.34887 + 250) * r = 10343.34887 * r = 10445.996\n\nRounding to the nearest cent: 10446.00.\n\nPart D:\nx = 2 mod 11\nx = 1 mod 5\nx = 12 mod 16\n\nFrom x = 12 mod 16: x = 16k + 12.\nMod 5: 16k + 12 = k + 2 = 1 mod 5 => k = 4 mod 5.\nSo k = 4, 9, 14, 19, ...\nFor k = 4: x = 16(4) + 12 = 76.\nMod 16*5 = 80: x = 76 mod 80.\nSo x = 80m + 76.\nMod 11:\n80m + 76 = 3m + 10 = 2 mod 11\n3m = -8 = 3 mod 11\nm = 1 mod 11.\nSmallest positive integer with m >= 0:\nIf m = 1, x = 80(1) + 76 = 156.\nCheck:\n156 / 11 = 14 R 2. (Correct)\n156 / 5 = 31 R 1. (Correct)\n156 / 16 = 9 R 12. (Correct)\n\nFINAL: 3093.75; 9912.00; 10446.00; 156"
+}

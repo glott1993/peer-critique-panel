@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 76.0, expected 76.0",
  "error": null,
- "seconds": 5.2,
- "tokens": 774,
+ "seconds": 4.6,
+ "tokens": 459,
  "prompt_tokens": 161,
- "completion_tokens": 613,
- "cost": 0.00645,
+ "completion_tokens": 298,
+ "cost": 0.0033,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Solution:**\n\nSince 151 is prime and gcd(75,151)=1, Fermat's Little Theorem gives 75^150 \u2261 1 (mod 151).\n\n616 = 4\u00b7150 + 16, so 75^616 \u2261 75^16 (mod 151).\n\nCompute powers by repeated squaring:\n\n- 75\u00b2 = 5625 \u2261 5625 \u2212 37\u00b7151 = 5625 \u2212 5587 = 38 (mod 151)\n- 75\u2074 \u2261 38\u00b2 = 1444 \u2261 1444 \u2212 9\u00b7151 = 1444 \u2212 1359 = 85 (mod 151)\n- 75\u2078 \u2261 85\u00b2 = 7225 \u2261 7225 \u2212 47\u00b7151 = 7225 \u2212 7097 = 128 (mod 151)\n- 75\u00b9\u2076 \u2261 128\u00b2 = 16384 \u2261 16384 \u2212 108\u00b7151 = 16384 \u2212 16308 = 76 (mod 151)\n\nSo 75^616 \u2261 76 (mod 151).\n\nFINAL: 76"
+ "answer": "75^150\u22611 mod151 (Fermat). 616=150*4+16, so need 75^16 mod151.\n\n75^2=5625\u226138\n75^4\u226138^2=1444\u226185\n75^8\u226185^2=7225\u2261128\n75^16\u2261128^2=16384\u226176\n\nFINAL: 76"
 }

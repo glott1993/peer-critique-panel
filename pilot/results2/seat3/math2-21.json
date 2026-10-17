@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-21",
+ "type": "math",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 6954.0, expected 6954.0",
+ "error": null,
+ "seconds": 8.5,
+ "tokens": 1691,
+ "prompt_tokens": 146,
+ "completion_tokens": 1545,
+ "cost": 0.0059,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the number of integers from 1 to 20,000 inclusive that are divisible by at least one of 5, 7, or 11, but not by 13, we use the Principle of Inclusion-Exclusion.\n\nLet $N = 20000$.\n1. Size of the union of multiples of 5, 7, and 11:\n- $|A| = \\lfloor 20000/5 \\rfloor = 4000$\n- $|B| = \\lfloor 20000/7 \\rfloor = 2857$\n- $|C| = \\lfloor 20000/11 \\rfloor = 1818$\n- $|A \\cap B| = \\lfloor 20000/35 \\rfloor = 571$\n- $|A \\cap C| = \\lfloor 20000/55 \\rfloor = 363$\n- $|B \\cap C| = \\lfloor 20000/77 \\rfloor = 259$\n- $|A \\cap B \\cap C| = \\lfloor 20000/385 \\rfloor = 51$\n\n$|A \\cup B \\cup C| = 4000 + 2857 + 1818 - (571 + 363 + 259) + 51 = 7533$\n\n2. Size of the union of multiples of 5, 7, and 11 that are also divisible by 13:\n- $|A \\cap D| = \\lfloor 20000/65 \\rfloor = 307$\n- $|B \\cap D| = \\lfloor 20000/91 \\rfloor = 219$\n- $|C \\cap D| = \\lfloor 20000/143 \\rfloor = 139$\n- $|A \\cap B \\cap D| = \\lfloor 20000/455 \\rfloor = 43$\n- $|A \\cap C \\cap D| = \\lfloor 20000/715 \\rfloor = 27$\n- $|B \\cap C \\cap D| = \\lfloor 20000/1001 \\rfloor = 19$\n- $|A \\cap B \\cap C \\cap D| = \\lfloor 20000/5005 \\rfloor = 3$\n\n$|(A \\cup B \\cup C) \\cap D| = 307 + 219 + 139 - (43 + 27 + 19) + 3 = 579$\n\n3. Subtracting the multiples of 13:\n$7533 - 579 = 6954$\n\nFINAL: 6954"
+}

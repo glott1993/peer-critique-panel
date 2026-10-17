@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-22",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.4,
+ "tokens": 408,
+ "prompt_tokens": 197,
+ "completion_tokens": 211,
+ "cost": 0.00094,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete `knapsack` function implementation:\n\n```python\ndef knapsack(items: list[tuple[int, int]], capacity: int) -> int:\n    # Separate items with weight 0 since they can always be taken\n    base_value = 0\n    filtered_items = []\n    for weight, value in items:\n        if weight == 0:\n            base_value += value\n        elif weight <= capacity:\n            filtered_items.append((weight, value))\n\n    # Standard 1D DP array for 0/1 Knapsack\n    dp = [0] * (capacity + 1)\n\n    for weight, value in filtered_items:\n        for w in range(capacity, weight - 1, -1):\n            if dp[w - weight] + value > dp[w]:\n                dp[w] = dp[w - weight] + value\n\n    return dp[capacity] + base_value\n```"
+}

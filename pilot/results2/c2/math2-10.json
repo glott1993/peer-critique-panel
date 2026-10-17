@@ -1,0 +1,162 @@
+{
+ "task_id": "math2-10",
+ "type": "math",
+ "condition": "c2",
+ "correct": true,
+ "detail": "got '2026-07-24', expected '2026-07-24'",
+ "error": null,
+ "seconds": 158.9,
+ "tokens": 81610,
+ "prompt_tokens": 57992,
+ "completion_tokens": 23618,
+ "cost": 0.1946,
+ "calls": 22,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 5,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(12-2)+(22-1)+21+(22-2)",
+   "claimed": 72.0,
+   "value": 72.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "72+17",
+   "claimed": 89.0,
+   "value": 89.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute and verify the target business date",
+     "what": "Starting after 2026-03-14, count 89 Monday-through-Friday business days, skip 2026-03-20, 2026-03-26, 2026-04-30, 2026-06-10, 2026-06-11, and 2026-07-16, then report the 89th business day as YYYY-MM-DD."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the date 89 business days after 2026-03-14 (Saturday), we count Mondays through Fridays excluding the 6 listed holidays:\n- 2026-03-20 (Fri)\n- 2026-03-26 (Thu)\n- 2026-04-30 (Thu)\n- 2026-06-10 (Wed)\n- 2026-06-11 (Thu)\n- 2026-07-16 (Thu)\n\nMonth-by-month breakdown of weekdays and holidays starting 2026-03-15:\n- **March 15\u201331, 2026**: 12 weekdays (Mar 16\u201320, 23\u201327, 30\u201331). Minus 2 holidays (Mar 20, 26) = **10 business days** (Cumulative: 10).\n- **April 2026**: Starts Wednesday, 30 days -> 22 weekdays. Minus 1 holiday (Apr 30) = **21 business days** (Cumulative: 31).\n- **May 2026**: Starts Friday, 31 days -> 21 weekdays. 0 holidays = **21 business days** (Cumulative: 52).\n- **June 2026**: Starts Monday, 30 days -> 22 weekdays. Minus 2 holidays (Jun 10, 11) = **20 business days** (Cumulative: 72).\n- **July 2026**: We need $89 - 72 = 17$ more business days.\n  - July starts on Wednesday (Jul 1).\n  - Weekdays in July:\n    - Week 1: Jul 1, 2, 3 (3 days, total 75)\n    - Week 2: Jul 6, 7, 8, 9, 10 (5 days, total 80)\n    - Week 3: Jul 13, 14, 15, 17 (Jul 16 is a holiday -> 4 days, total 84)\n    - Week 4:\n      - Jul 20 (Mon) -> Day 85\n      - Jul 21 (Tue) -> Day 86\n      - Jul 22 (Wed) -> Day 87\n      - Jul 23 (Thu) -> Day 88\n      - Jul 24 (Fri) -> Day 89\n\nVerification can be executed via Python:\n```python\nimport pandas as pd\n\nholidays = [\n    \"2026-03-20\",\n    \"2026-03-26\",\n    \"2026-04-30\",\n    \"2026-06-10\",\n    \"2026-06-11\",\n    \"2026-07-16\",\n]\nbdate = pd.bdate_range(\n    start=\"2026-03-15\", end=\"2026-08-01\", holidays=holidays, freq=\"C\"\n)\nprint(bdate[88].strftime(\"%Y-%m-%d\"))  # 89th element is index 88 -> 2026-07-24\n```\n\nFINAL: 2026-07-24"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "This violates the instruction that the response must end with exactly one FINAL line; the JSON text comes after it."
+    },
+    {
+     "from": "B",
+     "problem": "The code is unnecessary and may not be portable across pandas versions; the arithmetic itself already establishes the result."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure. March 2026: Mar 16\u201320 is 5 weekdays, Mar 23\u201327 is 5, Mar 30\u201331 is 2, total 12. This is correct, but the check should verify against a calendar because the starting day affects the count."
+    },
+    {
+     "from": "D",
+     "problem": "Missing source/verification for the weekday count. April 2026 has 30 days. If April 1 is Wednesday, weekdays = 22 (4 full weeks of 5 = 20 plus Wed Thu of partial week = 2). This is correct, but the draft does not show how the 22 was derived."
+    },
+    {
+     "from": "D",
+     "problem": "Missing source/verification. May 2026 has 31 days. If May 1 is Friday, weekdays = 21 (4 full weeks of 5 = 20 plus Friday = 1). This is correct, but the derivation is not shown."
+    },
+    {
+     "from": "D",
+     "problem": "Missing source/verification. June 2026 has 30 days. If June 1 is Monday, weekdays = 22 (4 full weeks of 5 = 20 plus Mon Tue of partial week = 2). This is correct, but the derivation is not shown."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 5,
+   "rejected": 1,
+   "answer": "Starting after 2026-03-14, the business-day counts are:\n\n- March 16\u201331: 12 weekdays \u2212 2 holidays = 10\n- April: 22 weekdays \u2212 1 holiday = 21 (cumulative 31)\n- May: 21 weekdays = 21 (cumulative 52)\n- June: 22 weekdays \u2212 2 holidays = 20 (cumulative 72)\n\nThus, 17 more business days are needed in July. Excluding July 16, the 17th business day is July 24.\n\nFINAL: 2026-07-24"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "What is the weekday of the start date 2026-03-14, and by what independent method (e.g., doomsday rule, known anchor such as 2026-01-01 being a Thursday) do you establish it? State explicitly whether the start date itself is excluded from the count and why the first counted business day is 2026-03-16.",
+    "Give the day-by-day enumeration of July 2026 business days from July 1 up to the 17th one, listing each date with its weekday, and show where July 16 is skipped \u2014 this final step is the one the record has not yet verified.",
+    "For each of the six listed holidays (2026-03-20, 2026-03-26, 2026-04-30, 2026-06-10, 2026-06-11, 2026-07-16), state its weekday, so it is confirmed that none falls on a Saturday or Sunday and that subtracting each one from the weekday totals is not a double-deduction."
+   ],
+   "replies": [
+    "2026-03-14 is a Saturday. Computation: 2026-01-01 is Thursday; January has 31 days and February has 28, so March 1 is Sunday, making March 14 Saturday. The start date itself is excluded because the request asks for days after 2026-03-14. Therefore, the first counted business day is Monday 2026-03-16, since March 14 is Saturday and March 15 is Sunday. No external source is used; this follows from the calendar arithmetic.",
+    "July 2026 enumeration, using July 1, 2026 = Wednesday:\n1. 2026-07-01 Wednesday\n2. 2026-07-02 Thursday\n3. 2026-07-03 Friday\n4. 2026-07-06 Monday\n5. 2026-07-07 Tuesday\n6. 2026-07-08 Wednesday\n7. 2026-07-09 Thursday\n8. 2026-07-10 Friday\n9. 2026-07-13 Monday\n10. 2026-07-14 Tuesday\n11. 2026-07-15 Wednesday\n2026-07-16 Thursday \u2014 skipped holiday\n12. 2026-07-17 Friday\n13. 2026-07-20 Monday\n14. 2026-07-21 Tuesday\n15. 2026-07-22 Wednesday\n16. 2026-07-23 Thursday\n17. 2026-07-24 Friday\nThus, the 17th July business day is 2026-07-24.",
+    "The listed holidays fall on:\n- 2026-03-20: Friday\n- 2026-03-26: Thursday\n- 2026-04-30: Thursday\n- 2026-06-10: Wednesday\n- 2026-06-11: Thursday\n- 2026-07-16: Thursday\nEach is a weekday, so subtracting each from the corresponding weekday total is appropriate and none is a double-deduction for a weekend. No external source is used; the weekdays follow from the calendar computation."
+   ],
+   "open": [
+    "The July enumeration is internally consistent but rests on the unsupported assertion that 2026-07-01 is a Wednesday; no derivation from the established anchor (2026-03-01 = Sunday) or any other check was given. Also still unverified is that the cumulative count really stands at 72 business days as of 2026-06-30, which is what makes '17 more in July' the right target."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Derive the weekday of 2026-07-01 from the already-established anchor 2026-03-01 = Sunday (e.g., by day-count: March 31 + April 30 + May 31 + June 30 days), and state the weekday of 2026-06-30 as a cross-check against your July list.",
+    "Show the weekday-count working behind each monthly figure in the answer: for 2026-03-16 to 03-31 (claimed 12 weekdays), April 2026 (22), May 2026 (21), and June 2026 (22) \u2014 give the first and last weekday of each span and the arithmetic (full weeks plus remainder days) used, so the cumulative total of 72 by 2026-06-30 is verified."
+   ],
+   "replies": [
+    "4. From the anchor 2026-03-01 = Sunday, the elapsed days to 2026-07-01 are March 31 + April 30 + May 31 + June 30 = 122 days. Since 122 mod 7 = 3, 2026-07-01 is Wednesday. Therefore, 2026-06-30 is Tuesday, which cross-checks the July weekday list.\n\n5. Weekday-count working, using calendar arithmetic (no external source):\n- 2026-03-16 to 2026-03-31: Monday through Tuesday, 16 calendar days = 2 full weeks + 2 days; 2\u00d75 + 2 = 12 weekdays. Subtract holidays on March 20 and March 26: 12 \u2212 2 = 10.\n- April 2026: Wednesday April 1 through Thursday April 30, 30 days = 4 full weeks + 2 days; 4\u00d75 + 2 = 22 weekdays. Subtract April 30: 22 \u2212 1 = 21.\n- May 2026: Friday May 1 through Sunday May 31, 31 days = 4 full weeks + 3 days; 4\u00d75 + 1 weekday among Friday\u2013Sunday = 21 weekdays.\n- June 2026: Monday June 1 through Tuesday June 30, 30 days = 4 full weeks + 2 days; 4\u00d75 + 2 = 22 weekdays. Subtract June 10 and June 11: 22 \u2212 2 = 20.\nThe cumulative total through June 30 is 10 + 21 + 21 + 20 = 72. The 17th remaining business day in July, excluding July 16, is July 24.\n\nFINAL: 2026-07-24",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Starting after 2026-03-14, the business-day counts are:\n\n- March 16\u201331: 12 weekdays \u2212 2 holidays = 10\n- April: 22 weekdays \u2212 1 holiday = 21 (cumulative 31)\n- May: 21 weekdays = 21 (cumulative 52)\n- June: 22 weekdays \u2212 2 holidays = 20 (cumulative 72)\n\nThus, 17 more business days are needed in July. Excluding July 16, the 17th business day is July 24.\n\nFINAL: 2026-07-24"
+}

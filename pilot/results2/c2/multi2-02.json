@@ -1,0 +1,234 @@
+{
+ "task_id": "multi2-02",
+ "type": "multi",
+ "condition": "c2",
+ "correct": false,
+ "detail": "ok: got 3709.68, expected 3709.68 | ok: got 3689.4, expected 3689.4 | no: got 9518.0, expected 10090.0",
+ "error": null,
+ "seconds": 235.8,
+ "tokens": 138434,
+ "prompt_tokens": 108377,
+ "completion_tokens": 30057,
+ "cost": 0.28983,
+ "calls": 39,
+ "call_errors": 0,
+ "pre_hub_correct": false,
+ "pre_critique_correct": false,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "100*6.40+200*5.44+427*4.48",
+   "claimed": 3640.96,
+   "value": 3640.96,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "9+9.5+7.5+13+7.5+7.5+7.5+7.5+9+7.5+10+6+0+10",
+   "claimed": 111.5,
+   "value": 111.5,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "14000*0.10+(57400-14000)*0.22",
+   "claimed": 10948.0,
+   "value": 10948.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Tiered pricing, discount, and sales-tax calculation",
+     "what": "Calculate the 727-unit subtotal using the three marginal unit-price tiers, apply the 5% whole-subtotal discount because applicable, then add 7.25% sales tax and round to the nearest cent."
+    },
+    {
+     "id": "c2",
+     "title": "Daily overtime gross-pay calculation",
+     "what": "Calculate pay for each of the 14 days at the regular rate through 8 hours, 1.5 times the rate for hours over 8 through 12, and 2 times the rate for hours over 12; sum and round to the nearest cent, with no weekly overtime."
+    },
+    {
+     "id": "c3",
+     "title": "Progressive income tax and phased tax-credit calculation",
+     "what": "Calculate tax on $57,400 using the stated progressive brackets, reduce the $1,800 credit by 5% of income above $50,000 subject to the zero floor, subtract the credit subject to the nonnegative-tax floor, and round to the nearest cent."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ],
+    "c2": [
+     "C",
+     "D"
+    ],
+    "c3": [
+     "B",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "**Part A:**\n- Tier 1 (first 100 units): $100 \\times \\$6.40 = \\$640.00$\n- Tier 2 (next 200 units): $200 \\times \\$5.44 = \\$1,088.00$\n- Tier 3 (remaining $727 - 300 = 427$ units): $427 \\times \\$4.48 = \\$1,912.96$\n- Subtotal: $\\$640.00 + \\$1,088.00 + \\$1,912.96 = \\$3,640.96$\n- 5% discount (subtotal exceeds $\\$2,500$): $\\$3,640.96 \\times 0.95 = \\$3,458.912$\n- Total with 7.25% sales tax: $\\$3,458.912 \\times 1.0725 = \\$3,709.68312 \\approx \\$3,709.68$\n\n**Part B:**\nBase rate = $\\$31.20$/hour. \nEquivalent regular hours per day:\n- $h \\le 8$: $h$\n- $8 < h \\le 12$: $8 + 1.5(h - 8)$\n- $h > 12$: $8 + 1.5(4) + 2(h - 12) = 14 + 2(h - 12)$\n\nDaily hours breakdown:\n- 9: $8 + 1.5(1) = 9.5$\n- 9.5: $8 + 1.5(1.5) = 10.25$\n- 7.5 (worked 6 days): $7.5 \\times 6 = 45.0$\n- 13: $14 + 2(1) = 16.0$\n- 9: $8 + 1.5(1) = 9.5$\n- 10 (worked 2 days): $(8 + 1.5(2)) \\times 2 = 11.0 \\times 2 = 22.0$\n- 6: $6.0$\n- 0: $0.0$\n\nTotal equivalent hours = $9.5 + 10.25 + 45.0 + 16.0 + 9.5 + 22.0 + 6.0 + 0.0 = 118.25$.\nGross pay = $118.25 \\times \\$31.20 = \\$3,689.40$.\n\n**Part C:**\n- Base tax on $\\$57,400$:\n  - $10\\%$ on first $\\$14,000 = \\$1,400.00$\n  - $22\\%$ on remaining $\\$43,400$ ($57,400 - 14,000$) $= \\$9,548.00$\n  - Base tax = $\\$1,400.00 + \\$9,548.00 = \\$10,948.00$\n- Tax credit:\n  - Phase-out: $5\\%$ of excess over $\\$50,000 = (\\$57,400 - \\$50,000) \\times 0.05 = \\$7,400 \\times 0.05 = \\$370.00$\n  - Net credit: $\\max(0, \\$1,800 - \\$370) = \\$1,430.00$\n- Final tax owed: $\\max(0, \\$10,948.00 - \\$1,430.00) = \\$9,518.00$\n\nFINAL: 3709.68; 3689.40; 9518.00"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The discount threshold is stated as 'if the subtotal exceeds $2,500'. The subtotal of $3,640.96 does exceed $2,500, so the discount applies. However, the draft rounds the discounted subtotal to $3,458.912 before applying tax. The arithmetic is correct, but the final answer may be off by one cent if rounding is done at the wrong step. Recomputing: $3,640.96 \u00d7 0.95 = $3,458.912; $3,458.912 \u00d7 1.0725 = $3,709.68312, which rounds to $3,709.68. This appears correct."
+    },
+    {
+     "from": "D",
+     "problem": "The draft's method of converting overtime hours to equivalent regular hours assumes that all hours are paid at the same base rate after conversion. This is mathematically valid for straight hourly pay with overtime multipliers. However, the draft's daily breakdown appears to double-count the 9-hour day: it lists '9' twice, once as a standalone 9-hour day and once as part of the grouped 9-hour day. The hours worked list is: 9, 9.5, 7.5, 13, 7.5, 7.5, 7.5, 7.5, 9, 7.5, 10, 6, 0, 10. There are two 9-hour days and two 10-hour days. The draft's breakdown shows '9: 8 + 1.5(1) = 9.5' once, then later '9: 8 + 1.5(1) = 9.5' again, which accounts for both 9-hour days. It also shows '10 (worked 2 days): (8 + 1.5(2)) \u00d7 2 = 11.0 \u00d7 2 = 22.0', which accounts for both 10-hour days. The 7.5-hour days are grouped as 'worked 6 days', but the list contains seven 7.5-hour days (positions 3, 5, 6, 7, 8, 10, and 14? No, position 14 is 10). Let's count: 7.5 appears at positions 3, 5, 6, 7, 8, 10. That's six 7.5-hour days. The draft says 'worked 6 days', which matches. The 6-hour day and 0-hour day are accounted for. The total equivalent hours of 118.25 appears correct."
+    },
+    {
+     "from": "D",
+     "problem": "The draft's calculation of the credit phase-out is correct: $7,400 \u00d7 5% = $370, net credit $1,430. However, the draft does not explicitly state whether the credit is applied before or after the tax owed is floored at zero. Since the base tax is $10,948 and the credit is $1,430, the result is positive, so the floor does not matter. The arithmetic is correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Part A:\nSubtotal = 100(6.40) + 200(5.44) + 427(4.48) = 3640.96.\nAfter the 5% discount: 3640.96(0.95) = 3458.912.\nIncluding 7.25% tax: 3458.912(1.0725) = 3709.68312, which rounds to 3709.68.\n\nPart B:\nEquivalent paid hours are:\n9-hour days: 2[8 + 1.5(1)] = 19;\n9.5-hour day: 10.25;\n7.5-hour days: 6(7.5) = 45;\n13-hour day: 8 + 1.5(4) + 2(1) = 16;\n10-hour days: 2[8 + 1.5(2)] = 22;\n6-hour day: 6.\nTotal equivalent hours = 118.25, so gross pay = 118.25(31.20) = 3689.40.\n\nPart C:\nBase tax = 14000(0.10) + (57400 - 14000)(0.22) = 10948.\nCredit reduction = (57400 - 50000)(0.05) = 370, so the credit is 1800 - 370 = 1430.\nTax owed = 10948 - 1430 = 9518.00.\n\nFINAL: 3709.68; 3689.40; 9518.00"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Draft shows aggregated math (e.g. 2[8+1.5(1)]=19) which could mask arithmetic slips if the day count is miscounted"
+    },
+    {
+     "from": "A",
+     "problem": "Problem says discount applies 'if subtotal exceeds $2,500' \u2014 need to confirm subtotal of 3640.96 is the correct 'subtotal' referenced (before tax, before discount), not after any other adjustment"
+    },
+    {
+     "from": "A",
+     "problem": "Draft computes credit=1430 and tax=9518 without checking these satisfy the stated floors"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure: there are three 9-hour days in the list (days 1, 9, and 13), not two."
+    },
+    {
+     "from": "D",
+     "problem": "Untested arithmetic: the sum of the listed equivalent hours should be checked."
+    },
+    {
+     "from": "D",
+     "problem": "Missing source: the tax brackets state 22% from $14,000 up to $60,000, but the draft does not account for the 32% bracket above $60,000. However, income is $57,400, which is below $60,000, so this is not an error."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 6,
+   "answer": "Part A:\nTier 1 (100 units): 100 \u00d7 $6.40 = $640.00\nTier 2 (200 units): 200 \u00d7 $5.44 = $1,088.00\nTier 3 (427 units): 427 \u00d7 $4.48 = $1,912.96\nSubtotal = $640 + $1,088 + $1,912.96 = $3,640.96.\nSince $3,640.96 > $2,500, a 5% discount applies:\nDiscounted subtotal = $3,640.96 \u00d7 0.95 = $3,458.912.\nWith 7.25% sales tax: $3,458.912 \u00d7 1.0725 = $3,709.68312, which rounds to 3709.68.\n\nPart B:\nHours per day across the 14 days:\n- Two 9 h days: 2 \u00d7 [8 + 1.5(1)] = 19.0 equivalent hours\n- One 9.5 h day: 8 + 1.5(1.5) = 10.25 equivalent hours\n- Six 7.5 h days: 6 \u00d7 7.5 = 45.0 equivalent hours\n- One 13 h day: 8 + 1.5(4) + 2(1) = 16.0 equivalent hours\n- Two 10 h days: 2 \u00d7 [8 + 1.5(2)] = 22.0 equivalent hours\n- One 6 h day: 6.0 equivalent hours\n- One 0 h day: 0.0 equivalent hours\nTotal equivalent hours = 19 + 10.25 + 45 + 16 + 22 + 6 + 0 = 118.25.\nGross pay = 118.25 \u00d7 $31.20 = 3689.40.\n\nPart C:\nIncome = $57,400 (falls within the 22% bracket, below $60,000):\nBase tax = 14,000 \u00d7 0.10 + (57,400 - 14,000) \u00d7 0.22 = 1,400 + 9,548 = $10,948.00.\nCredit reduction = (57,400 - 50,000) \u00d7 0.05 = $370.00.\nNet credit = max(0, 1,800 - 370) = $1,430.00.\nTax owed = max(0, 10,948 - 1,430) = 9518.00.\n\nFINAL: 3709.68; 3689.40; 9518.00"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: which units fall in each tier \u2014 does 'first 100' cover units 1\u2013100, 'next 200' units 101\u2013300, and 'beyond 300' units 301\u2013727 (i.e., 427 units at $4.48)? Please confirm the tier counts used and that they sum to 727.",
+    "Part B: please give the full day-by-day list in the order stated, with each day's equivalent-hour figure, confirming all 14 days are used exactly once and that the raw hours total matches the listed hours.",
+    "Part C: is the base tax before the credit computed on $43,400 of income in the 22% band (57,400 \u2212 14,000), and does any part of the question's phrasing ('from $14,000 up to $60,000') leave the boundary treatment in doubt?"
+   ],
+   "replies": [
+    "Yes. Tier 1 covers units 1 to 100 (count = 100). Tier 2 covers units 101 to 300 (count = 200). Tier 3 covers units 301 to 727 (count = 727 - 300 = 427). The tier counts are 100 + 200 + 427 = 727 units exactly.",
+    "Day-by-day list in order (raw hours -> equivalent hours):\nDay 1: 9 h -> 8 + 1.5(1) = 9.5\nDay 2: 9.5 h -> 8 + 1.5(1.5) = 10.25\nDay 3: 7.5 h -> 7.5\nDay 4: 13 h -> 8 + 1.5(4) + 2(1) = 16.0\nDay 5: 7.5 h -> 7.5\nDay 6: 7.5 h -> 7.5\nDay 7: 7.5 h -> 7.5\nDay 8: 7.5 h -> 7.5\nDay 9: 9 h -> 8 + 1.5(1) = 9.5\nDay 10: 7.5 h -> 7.5\nDay 11: 10 h -> 8 + 1.5(2) = 11.0\nDay 12: 6 h -> 6.0\nDay 13: 0 h -> 0.0\nDay 14: 10 h -> 8 + 1.5(2) = 11.0\nAll 14 days are accounted for. Raw total = 9 + 9.5 + 7.5 + 13 + 7.5 + 7.5 + 7.5 + 7.5 + 9 + 7.5 + 10 + 6 + 0 + 10 = 112.0 hours. Equivalent hours total = 9.5 + 10.25 + 7.5 + 16.0 + 7.5 + 7.5 + 7.5 + 7.5 + 9.5 + 7.5 + 11.0 + 6.0 + 0.0 + 11.0 = 118.25.",
+    "Yes, base tax in the 22% band is calculated on exactly $43,400 ($57,400 - $14,000 = $43,400). Standard progressive tax bracket phrasing 'from $14,000 up to $60,000' is unambiguous and continuous; whether boundary endpoints are inclusive or exclusive has zero measure and thus zero impact on the continuous integral/sum of marginal tax."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: please verify the final arithmetic both ways \u2014 (i) 3640.96 x 0.95 = 3458.912 then x 1.0725 unrounded, and (ii) rounding the discounted subtotal to 3458.91 before applying 7.25% tax \u2014 and state the cent-rounded result in each case, confirming they agree on 3709.68."
+   ],
+   "replies": [
+    "Computation for both methods:\n(i) Unrounded: $3,640.96 \u00d7 0.95 = $3,458.912. Then $3,458.912 \u00d7 1.0725 = $3,709.68312, which rounds to nearest cent as $3,709.68.\n(ii) Rounded discounted subtotal: $3,458.91. Then $3,458.91 \u00d7 1.0725 = $3,709.680975 (or sales tax = $3,458.91 \u00d7 0.0725 = $250.771 \u2192 $250.77, giving $3,458.91 + $250.77 = $3,709.68), which also rounds to nearest cent as $3,709.68.\nBoth methods agree on 3709.68."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part B: please re-tally the 14 listed daily hours (9, 9.5, 7.5, 13, 7.5, 7.5, 7.5, 7.5, 9, 7.5, 10, 6, 0, 10) and report (a) the count of each distinct value and the raw hour total, (b) for each day the split into straight-time, 1.5x and 2x hours under the daily-only rules, and (c) the resulting equivalent-hour total and its product with 31.20 to the cent \u2014 stating whether these match 118.25 and 3689.40.",
+    "Part C: please verify independently (a) the base tax at income 57,400 using the stated brackets, confirming the 22% band applies to 57,400 - 14,000 and that nothing falls in the 32% band, (b) the credit taper computed as 5% of (57,400 - 50,000) and whether the problem's wording supports that base rather than any alternative reading, and (c) the final figure after subtracting the reduced credit, stating the cent-rounded result."
+   ],
+   "replies": [
+    "(a) Counts of distinct daily hours across the 14 days:\n- 0 h: 1 day\n- 6 h: 1 day\n- 7.5 h: 5 days (wait, let us recount: list is 9, 9.5, 7.5, 13, 7.5, 7.5, 7.5, 7.5, 9, 7.5, 10, 6, 0, 10 -> indices: 3: 7.5, 5: 7.5, 6: 7.5, 7: 7.5, 8: 7.5, 10: 7.5. That is exactly 6 days of 7.5).\nLet us verify all 14 entries: [9 (1), 9.5 (1), 7.5 (1), 13 (1), 7.5 (2), 7.5 (3), 7.5 (4), 7.5 (5), 9 (2), 7.5 (6), 10 (1), 6 (1), 0 (1), 10 (2)]. Total days = 2 + 1 + 6 + 1 + 2 + 1 + 1 = 14 days.\nRaw hour sum = 2(9) + 9.5 + 6(7.5) + 13 + 2(10) + 6 + 0 = 18 + 9.5 + 45 + 13 + 20 + 6 + 0 = 111.5 raw hours.\n(b) Breakdown into straight-time (ST, <=8h), 1.5x (>8h to 12h), and 2x (>12h):\n- 0 h (1 day): 0 ST, 0 (1.5x), 0 (2x) -> 0 eq h\n- 6 h (1 day): 6 ST, 0 (1.5x), 0 (2x) -> 6 eq h\n- 7.5 h (6 days): 6 \u00d7 7.5 = 45 ST, 0 (1.5x), 0 (2x) -> 45 eq h\n- 9 h (2 days): 2 \u00d7 8 = 16 ST, 2 \u00d7 1 = 2 (1.5x), 0 (2x) -> 16 + 1.5(2) = 19 eq h\n- 9.5 h (1 day): 8 ST, 1.5 (1.5x), 0 (2x) -> 8 + 1.5(1.5) = 10.25 eq h\n- 10 h (2 days): 2 \u00d7 8 = 16 ST, 2 \u00d7 2 = 4 (1.5x), 0 (2x) -> 16 + 1.5(4) = 22 eq h\n- 13 h (1 day): 8 ST, 4 (1.5x), 1 (2x) -> 8 + 1.5(4) + 2(1) = 16 eq h\nTotals: ST = 0 + 6 + 45 + 16 + 8 + 16 + 8 = 99 hours; 1.5x = 0 + 0 + 0 + 2 + 1.5 + 4 + 4 = 11.5 hours; 2x = 1 hour.\n(c) Total equivalent hours = 99 + 1.5(11.5) + 2(1) = 99 + 17.25 + 2 = 118.25 equivalent hours.\nProduct with $31.20: 118.25 \u00d7 31.20 = 3,689.40. These exactly match 118.25 and 3689.40.",
+    "(a) Income = $57,400. Brackets:\n- Tier 1: first $14,000 at 10% = 14,000 \u00d7 0.10 = $1,400.00.\n- Tier 2: from $14,000 up to $60,000 at 22%. Since $57,400 <= $60,000, exactly $57,400 - $14,000 = $43,400 falls in this band: 43,400 \u00d7 0.22 = $9,548.00.\n- Tier 3: above $60,000 at 32%. Income does not exceed $60,000, so $0 falls in the 32% band.\nBase tax = $1,400.00 + $9,548.00 = $10,948.00.\n(b) Credit taper wording: 'reduced by 5% of any income above $50,000'. Excess income above $50,000 is $57,400 - $50,000 = $7,400. Reduction = 0.05 \u00d7 $7,400 = $370.00. This directly implements the plain reading of the text; no alternative base is supported by the prompt.\n(c) Net credit = $1,800 - $370 = $1,430.00 (which is >= 0). Final tax owed = $10,948.00 - $1,430.00 = $9,518.00. Cent-rounded result is 9518.00."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Part A:\nTier 1 (100 units): 100 \u00d7 $6.40 = $640.00\nTier 2 (200 units): 200 \u00d7 $5.44 = $1,088.00\nTier 3 (427 units): 427 \u00d7 $4.48 = $1,912.96\nSubtotal = $640 + $1,088 + $1,912.96 = $3,640.96.\nSince $3,640.96 > $2,500, a 5% discount applies:\nDiscounted subtotal = $3,640.96 \u00d7 0.95 = $3,458.912.\nWith 7.25% sales tax: $3,458.912 \u00d7 1.0725 = $3,709.68312, which rounds to 3709.68.\n\nPart B:\nHours per day across the 14 days:\n- Two 9 h days: 2 \u00d7 [8 + 1.5(1)] = 19.0 equivalent hours\n- One 9.5 h day: 8 + 1.5(1.5) = 10.25 equivalent hours\n- Six 7.5 h days: 6 \u00d7 7.5 = 45.0 equivalent hours\n- One 13 h day: 8 + 1.5(4) + 2(1) = 16.0 equivalent hours\n- Two 10 h days: 2 \u00d7 [8 + 1.5(2)] = 22.0 equivalent hours\n- One 6 h day: 6.0 equivalent hours\n- One 0 h day: 0.0 equivalent hours\nTotal equivalent hours = 19 + 10.25 + 45 + 16 + 22 + 6 + 0 = 118.25.\nGross pay = 118.25 \u00d7 $31.20 = 3689.40.\n\nPart C:\nIncome = $57,400 (falls within the 22% bracket, below $60,000):\nBase tax = 14,000 \u00d7 0.10 + (57,400 - 14,000) \u00d7 0.22 = 1,400 + 9,548 = $10,948.00.\nCredit reduction = (57,400 - 50,000) \u00d7 0.05 = $370.00.\nNet credit = max(0, 1,800 - 370) = $1,430.00.\nTax owed = max(0, 10,948 - 1,430) = 9518.00.\n\nFINAL: 3709.68; 3689.40; 9518.00"
+}

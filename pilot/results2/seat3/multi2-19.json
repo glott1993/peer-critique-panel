@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-19",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 72.0, expected 72.0 | ok: got '41/56', expected '41/56' | ok: got 4533.1, expected 4533.1",
+ "error": null,
+ "seconds": 23.0,
+ "tokens": 3833,
+ "prompt_tokens": 442,
+ "completion_tokens": 3391,
+ "cost": 0.01305,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nFirst, compute the product:\n34,607 \u00d7 9,538 = 330,081,566\n187 \u00d7 9,639 = 1,802,493\n330,081,566 \u00d7 1,802,493 = 594,969,712,144,038\n\nSum of the decimal digits:\n5 + 9 + 4 + 9 + 6 + 9 + 7 + 1 + 2 + 1 + 4 + 4 + 0 + 3 + 8 = 72\n\n**Part B**\nTotal marbles: 5 + 6 + 5 = 16.\nTotal ways to choose 3 marbles: $\\binom{16}{3} = \\frac{16 \\times 15 \\times 14}{6} = 560$.\nThe complement is drawing three marbles of different colors (one red, one green, one blue):\nNumber of ways = $5 \\times 6 \\times 5 = 150$.\nProbability of all three colors being distinct = $\\frac{150}{560} = \\frac{15}{56}$.\nProbability of at least two sharing a color = $1 - \\frac{15}{56} = \\frac{41}{56}$.\n\n**Part C**\nTotal units sold = 95 + 35 + 56 + 71 + 106 + 47 = 410 units.\nUnder FIFO, the 410 units are drawn from the earliest lots:\n- Lot 1: 61 units \u00d7 $11.00 = $671.00\n- Lot 2: 59 units \u00d7 $8.53 = $503.27\n- Lot 3: 48 units \u00d7 $5.92 = $284.16\n- Lot 4: 127 units \u00d7 $11.56 = $1,468.12\n- Lot 5: 115 units (out of 131) \u00d7 $13.97 = $1,606.55\n\nTotal Cost of Goods Sold = 671.00 + 503.27 + 284.16 + 1468.12 + 1606.55 = $4,533.10.\n\nFINAL: 72; 41/56; 4533.10"
+}

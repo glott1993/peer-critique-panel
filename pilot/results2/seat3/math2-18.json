@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-18",
+ "type": "math",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 19233.91, expected 19235.46",
+ "error": null,
+ "seconds": 8.8,
+ "tokens": 1541,
+ "prompt_tokens": 215,
+ "completion_tokens": 1326,
+ "cost": 0.00513,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the remaining balance immediately after the 18th payment:\n\n1. Monthly interest rate:\n   r = 0.078 / 12 = 0.0065\n\n2. Total number of payments:\n   n = 4 \u00d7 12 = 48\n\n3. Standard monthly payment:\n   M = P * [r(1 + r)^n] / [(1 + r)^n - 1]\n   M = 31200 * [0.0065(1.0065)^48] / [(1.0065)^48 - 1] \u2248 759.186637\n\n4. Unadjusted balance at month 18:\n   B_18 = 31200 * (1.0065)^18 - M * [((1.0065)^18 - 1) / 0.0065] \u2248 20618.67163\n\n5. Future value of extra payments at month 18:\n   Month 6 extra: 1000 * (1.0065)^12 \u2248 1080.84985\n   Month 16 extra: 300 * (1.0065)^2 \u2248 303.91268\n   Total reduction = 1080.84985 + 303.91268 = 1384.76252\n\n6. Final balance:\n   20618.67163 - 1384.76252 \u2248 19233.91\n\nFINAL: 19233.91"
+}

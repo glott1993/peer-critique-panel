@@ -1,0 +1,184 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "c2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 409.2,
+ "tokens": 108604,
+ "prompt_tokens": 39252,
+ "completion_tokens": 69352,
+ "cost": 0.18148,
+ "calls": 25,
+ "call_errors": 3,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": false,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 1,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "1*365*86400+2*30*86400+3*86400+4*3600+5*60+6",
+   "claimed": 37094706.0,
+   "value": 36993906.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "1*3600+30*60",
+   "claimed": 5400.0,
+   "value": 5400.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Parse and validate ISO 8601 duration",
+     "what": "Implement parse_iso_duration with regex validation and component extraction, then convert to seconds."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\nimport re\n\n\ndef parse_iso_duration(s: str) -> int:\n    match = re.fullmatch(\n        r\"P\"\n        r\"(?:(?P<years>[0-9]+)Y)?\"\n        r\"(?:(?P<months>[0-9]+)M)?\"\n        r\"(?:(?P<days>[0-9]+)D)?\"\n        r\"(?:(?P<t>T)\"\n        r\"(?:(?P<hours>[0-9]+)H)?\"\n        r\"(?:(?P<minutes>[0-9]+)M)?\"\n        r\"(?:(?P<seconds>[0-9]+)S)?\"\n        r\")?\",\n        s,\n    )\n    if match is None:\n        raise ValueError(\"invalid ISO 8601 duration\")\n\n    parts = match.groupdict()\n    if not any(parts[name] is not None for name in (\n        \"years\", \"months\", \"days\", \"hours\", \"minutes\", \"seconds\"\n    )):\n        raise ValueError(\"duration must contain at least one component\")\n\n    if parts[\"t\"] is not None and not any(\n        parts[name] is not None for name in (\"hours\", \"minutes\", \"seconds\")\n    ):\n        raise ValueError(\"T must be followed by a time component\")\n\n    years = int(parts[\"years\"] or 0)\n    months = int(parts[\"months\"] or 0)\n    days = int(parts[\"days\"] or 0)\n    hours = int(parts[\"hours\"] or 0)\n    minutes = int(parts[\"minutes\"] or 0)\n    seconds = int(parts[\"seconds\"] or 0)\n\n    return (\n        years * 365 * 86400\n        + months * 30 * 86400\n        + days * 86400\n        + hours * 3600\n        + minutes * 60\n        + seconds\n    )\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "since all groups incl T are optional, 'P' matches fullmatch with all None, relying solely on post-check for 'at least one component' - this works but needs explicit test"
+    },
+    {
+     "from": "A",
+     "problem": "fullmatch should fail on unmatched trailing chars, but verify no partial match issue since all groups optional and regex could match prefix only if fullmatch not strictly enforced"
+    },
+    {
+     "from": "A",
+     "problem": "regex uses uppercase literals only, should fail on lowercase, but confirm 'p1d' and 'P1d' raise ValueError"
+    },
+    {
+     "from": "C",
+     "problem": "The regex pattern allows time components to match only if 'T' is present because they are enclosed in the same non-capturing group as T (`(?:(?P<t>T)...)?`). However, this group makes T mandatory for any time component, but allows `T` without time components to match the regex (which is then caught by python code). While functionally compliant with standard requirements, the draft does not reject input strings where `s` is not a string (e.g. TypeError instead of handled/specified) or inputs with negative sign representations like `-P1Y` or `P-1Y` properly matching digits, though regex handles non-digits. More critically, the prompt specifies: \"the 'T' may appear only if at least one time component follows\". The regex structure `(?:(?P<t>T)(?:(?P<hours>[0-9]+)H)?(?:(?P<minutes>[0-9]+)M)?(?:(?P<seconds>[0-9]+)S)?)?` allows `P1YT` to pass regex matching and relies on manual post-check; but if `s` contains trailing whitespace, `re.fullmatch` rejects it correctly. What about `P1W`? In ISO 8601, weeks 'W' is a standard designator, but the spec says 'Every designator is optional but they must appear in order (Y M D, then T, then H M S)' omitting W. Check if empty string or None raises ValueError: `parse_iso_duration(None)` raises TypeError rather than ValueError."
+    },
+    {
+     "from": "C",
+     "problem": "If an integer has leading plus signs (e.g., 'P+1Y') or scientific notation, `[0-9]+` rejects it as required. However, the draft's regex matches empty string if prefixed with P, which is then caught. But consider string input type validation: if `s` is not a string, e.g. `parse_iso_duration(123)`, it raises `TypeError: expected string or bytes-like object` instead of `ValueError`."
+    },
+    {
+     "from": "D",
+     "problem": "Untested code: no test or assertion is provided for the full example from the prompt, so the conversion factors and component parsing for all six components are not verified."
+    },
+    {
+     "from": "D",
+     "problem": "The code has an explicit check for this case, but it is untested against the hidden-test requirement; a regex alone would allow 'PT'."
+    },
+    {
+     "from": "D",
+     "problem": "No test is shown for lowercase rejection, and re.fullmatch is case-sensitive by default, but this behavior is not demonstrated."
+    },
+    {
+     "from": "D",
+     "problem": "Untested code: the regex pattern appears to reject decimals, but no assertion is provided."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 8,
+   "rejected": 1,
+   "answer": "```python\nimport re\n\n\ndef parse_iso_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError('duration must be a string')\n\n    match = re.fullmatch(\n        r'P'\n        r'(?:(?P<years>[0-9]+)Y)?'\n        r'(?:(?P<months>[0-9]+)M)?'\n        r'(?:(?P<days>[0-9]+)D)?'\n        r'(?:(?P<t>T)'\n        r'(?:(?P<hours>[0-9]+)H)?'\n        r'(?:(?P<minutes>[0-9]+)M)?'\n        r'(?:(?P<seconds>[0-9]+)S)?'\n        r')?',\n        s,\n    )\n    if match is None:\n        raise ValueError('invalid ISO 8601 duration')\n\n    parts = match.groupdict()\n    if not any(parts[name] is not None for name in (\n        'years', 'months', 'days', 'hours', 'minutes', 'seconds'\n    )):\n        raise ValueError('duration must contain at least one component')\n\n    if parts['t'] is not None and not any(\n        parts[name] is not None for name in ('hours', 'minutes', 'seconds')\n    ):\n        raise ValueError('T must be followed by a time component')\n\n    years = int(parts['years'] or 0)\n    months = int(parts['months'] or 0)\n    days = int(parts['days'] or 0)\n    hours = int(parts['hours'] or 0)\n    minutes = int(parts['minutes'] or 0)\n    seconds = int(parts['seconds'] or 0)\n\n    return (\n        years * 365 * 86400\n        + months * 30 * 86400\n        + days * 86400\n        + hours * 3600\n        + minutes * 60\n        + seconds\n    )\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The record notes the full prompt example was never verified: what exactly does parse_iso_duration('P1Y2M3DT4H5M6S') return under this code, digit for digit, and does it equal the value implied by 1 year = 365 days and 1 month = 30 days?",
+    "The regex places minutes ('M' for time) only inside the T group and months ('M' for date) only before it. For inputs 'P1M' and 'PT1M', what does each return, and is there any input where the two 'M' designators are confused or where 'P1MT1M' fails to parse as 30 days plus 60 seconds?",
+    "The 'at least one component' post-check inspects the six value groups but not the 't' group. For the bare inputs 'P', 'PT', '' (empty string), 'T1H', '1D', and 'P1DT' \u2014 which branch (regex failure, component check, or T check) rejects each, and does every one of them raise ValueError rather than returning a number or another exception type?"
+   ],
+   "replies": [
+    "Computation: 1*365*86400 = 31,536,000; 2*30*86400 = 5,184,000; 3*86400 = 259,200; 4*3600 = 14,400; 5*60 = 300; +6. Sum = 31,536,000 + 5,184,000 + 259,200 + 14,400 + 300 + 6 = 36,993,906. This equals the value implied by 1 year = 365 days and 1 month = 30 days.",
+    "'P1M' returns 2,592,000 (1 month = 30 days = 30*86400). 'PT1M' returns 60 (1 minute). 'P1MT1M' returns 2,592,060 = 2,592,000 + 60, so it parses as 30 days plus 60 seconds. The regex does not confuse the two M designators: M before T is months, M after T is minutes.",
+    "'P': regex matches; component check rejects because all six value groups are None. 'PT': regex matches; component check rejects because all six value groups are None (the T check is not reached). '': regex failure because the pattern requires a leading 'P'. 'T1H': regex failure because the pattern requires a leading 'P'. '1D': regex failure because the pattern requires a leading 'P'. 'P1DT': regex matches; component check passes because days is present; T check rejects because T is present but no hours/minutes/seconds follow. All six raise ValueError and do not return a number or another exception type."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The prompt explicitly lists lowercase and decimals as rejects, but the record has no trace for them: under this code, what happens for 'p1d', 'P1d', 'P1.5D', 'P1,5D', 'P-1D', 'P+1D', and 'P 1D' \u2014 which branch rejects each, and does any of them return a number?",
+    "Does re.fullmatch (not re.match) guarantee rejection of trailing or embedded junk and repeated/out-of-order designators? Specifically, what is the outcome for 'P1D ', 'P1D\\n', 'P1DX', 'P1D1D', 'PT1M1H', 'P1DT1H1D', 'P1S', and 'P1H'?",
+    "For non-string input the code raises ValueError('duration must be a string') rather than TypeError: what is the evidence that hidden tests expect ValueError here \u2014 does the spec's 'Raise ValueError otherwise' cover type errors, or is there a stated source? Also, for very large inputs like 'P999999999999999999999Y', does the code return an exact int or raise/overflow?"
+   ],
+   "replies": [
+    "All seven are rejected by the same branch: `match = re.fullmatch(...)` returns `None`, so `if match is None: raise ValueError('invalid ISO 8601 duration')`. None of them returns a number. Specifically: 'p1d' fails because the pattern requires uppercase 'P'; 'P1d' fails because 'D' is uppercase but the input has lowercase 'd'; 'P1.5D', 'P1,5D', 'P-1D', 'P+1D', and 'P 1D' fail because `[0-9]+` cannot match '.', ',', '-', '+', or space at the expected component position, and `fullmatch` leaves unconsumed input.",
+    "Yes. `re.fullmatch` requires the entire string to match the pattern, so any trailing or embedded character not consumed by the pattern causes `match is None` and `ValueError`. The pattern has one optional group per designator in fixed order Y M D, then optional T, then H M S; repeated or out-of-order designators leave unconsumed input. Outcomes: 'P1D ', 'P1D\\n', 'P1DX', 'P1D1D', 'PT1M1H', 'P1DT1H1D', 'P1S', and 'P1H' all raise `ValueError('invalid ISO 8601 duration')` via `match is None`.",
+    "No source exists for hidden tests. The prompt states 'Raise ValueError otherwise' and lists examples of invalid strings; it does not explicitly mention non-string input. The code's `isinstance` check raises `ValueError`, which is consistent with the broad wording, but if hidden tests expect `TypeError`, that expectation is not stated in the prompt. For 'P999999999999999999999Y', the code returns an exact Python `int`: `int` is arbitrary precision, the regex matches the digits, and the arithmetic uses only integer multiplication with no float or overflow."
+   ],
+   "open": [
+    "Partially answered: the large-integer behavior is settled (exact arbitrary-precision int, no overflow), but the non-string branch remains unresolved by evidence. The reply confirms no source exists for hidden-test expectations and that the prompt never addresses non-string input, so whether ValueError('duration must be a string') or TypeError is correct is still an open judgment call, not a documented fact."
+   ],
+   "corrected": false
+  }
+ ],
+ "answer": "```python\nimport re\n\n\ndef parse_iso_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError('duration must be a string')\n\n    match = re.fullmatch(\n        r'P'\n        r'(?:(?P<years>[0-9]+)Y)?'\n        r'(?:(?P<months>[0-9]+)M)?'\n        r'(?:(?P<days>[0-9]+)D)?'\n        r'(?:(?P<t>T)'\n        r'(?:(?P<hours>[0-9]+)H)?'\n        r'(?:(?P<minutes>[0-9]+)M)?'\n        r'(?:(?P<seconds>[0-9]+)S)?'\n        r')?',\n        s,\n    )\n    if match is None:\n        raise ValueError('invalid ISO 8601 duration')\n\n    parts = match.groupdict()\n    if not any(parts[name] is not None for name in (\n        'years', 'months', 'days', 'hours', 'minutes', 'seconds'\n    )):\n        raise ValueError('duration must contain at least one component')\n\n    if parts['t'] is not None and not any(\n        parts[name] is not None for name in ('hours', 'minutes', 'seconds')\n    ):\n        raise ValueError('T must be followed by a time component')\n\n    years = int(parts['years'] or 0)\n    months = int(parts['months'] or 0)\n    days = int(parts['days'] or 0)\n    hours = int(parts['hours'] or 0)\n    minutes = int(parts['minutes'] or 0)\n    seconds = int(parts['seconds'] or 0)\n\n    return (\n        years * 365 * 86400\n        + months * 30 * 86400\n        + days * 86400\n        + hours * 3600\n        + minutes * 60\n        + seconds\n    )\n```"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-03",
+ "type": "math",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 19519.35, expected 19519.36",
+ "error": null,
+ "seconds": 23.6,
+ "tokens": 4152,
+ "prompt_tokens": 213,
+ "completion_tokens": 3939,
+ "cost": 0.01493,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the remaining balance at month 18:\n\n1. **Monthly interest rate and payment:**\n   - Monthly interest rate: $i = \\frac{0.06}{12} = 0.005$\n   - Total months: $n = 4 \\times 12 = 48$\n   - Standard monthly payment:\n     $$M = P \\frac{i}{1 - (1+i)^{-48}} = 31200 \\times \\frac{0.005}{1 - (1.005)^{-48}} \\approx 732.733192$$\n\n2. **Standard balance at month 18:**\n   $$B_{18}^{\\text{std}} = M \\frac{1 - (1+i)^{-30}}{i} \\approx 732.733192 \\times \\frac{1 - (1.005)^{-30}}{0.005} \\approx 20365.6146$$\n\n3. **Impact of extra principal payments:**\n   - Month 3 extra payment of $\\$300$ compounded for 15 months:\n     $$300 \\times (1.005)^{15} \\approx 323.3048$$\n   - Month 9 extra payment of $\\$500$ compounded for 9 months:\n     $$500 \\times (1.005)^9 \\approx 522.9553$$\n\n4. **Remaining balance at month 18:**\n   $$B_{18} = 20365.6146 - (323.3048 + 522.9553) = 19519.3545 \\approx 19519.35$$\n\nFINAL: 19519.35"
+}

@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 6.7,
- "tokens": 1115,
+ "seconds": 2.7,
+ "tokens": 617,
  "prompt_tokens": 327,
- "completion_tokens": 788,
- "cost": 0.00853,
+ "completion_tokens": 290,
+ "cost": 0.00355,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    cleaned = s.replace('-', '').replace(' ', '')\n\n    if len(cleaned) == 10:\n        # first nine must be digits\n        first_nine = cleaned[:9]\n        last = cleaned[9]\n        if not first_nine.isdigit():\n            return False\n        if not (last.isdigit() or last == 'X'):\n            return False\n        digits = [int(c) for c in first_nine]\n        last_val = 10 if last == 'X' else int(last)\n        digits.append(last_val)\n        total = sum((i + 1) * d for i, d in enumerate(digits))\n        return total % 11 == 0\n\n    elif len(cleaned) == 13:\n        if not cleaned.isdigit():\n            return False\n        digits = [int(c) for c in cleaned]\n        total = sum(d * (1 if i % 2 == 0 else 3) for i, d in enumerate(digits))\n        return total % 10 == 0\n\n    else:\n        return False\n```"
+ "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    t = s.replace('-', '').replace(' ', '')\n    if len(t) == 10:\n        total = 0\n        for i, ch in enumerate(t):\n            if i < 9:\n                if not ch.isdigit():\n                    return False\n                total += (i + 1) * int(ch)\n            else:\n                if ch == 'X':\n                    val = 10\n                elif ch.isdigit():\n                    val = int(ch)\n                else:\n                    return False\n                total += 10 * val\n        return total % 11 == 0\n    elif len(t) == 13:\n        if not t.isdigit():\n            return False\n        total = 0\n        for i, ch in enumerate(t):\n            weight = 1 if i % 2 == 0 else 3\n            total += weight * int(ch)\n        return total % 10 == 0\n    else:\n        return False\n```"
 }

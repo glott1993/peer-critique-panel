@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-01",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 120.0, expected 120.0 | ok: got 4173.0, expected 4173.0 | ok: got 19213.46, expected 19213.46",
+ "error": null,
+ "seconds": 23.4,
+ "tokens": 4494,
+ "prompt_tokens": 301,
+ "completion_tokens": 4193,
+ "cost": 0.01595,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nSince 233 is prime, Fermat's Little Theorem gives $66^{232} \\equiv 1 \\pmod{233}$.\nReducing the exponent modulo 232:\n$529 = 2 \\times 232 + 65$, so $66^{529} \\equiv 66^{65} \\pmod{233}$.\nUsing repeated squaring:\n- $66^2 = 4356 \\equiv 162 \\equiv -71 \\pmod{233}$\n- $66^4 \\equiv (-71)^2 = 5041 \\equiv 148 \\equiv -85 \\pmod{233}$\n- $66^8 \\equiv (-85)^2 = 7225 \\equiv 2 \\pmod{233}$\n- $66^{64} = (66^8)^8 \\equiv 2^8 = 256 \\equiv 23 \\pmod{233}$\n- $66^{65} \\equiv 23 \\times 66 = 1518 \\equiv 120 \\pmod{233}$.\n\n**Part B**\nUsing the Principle of Inclusion-Exclusion for $N = 12000$:\nDivisible by at least one of $\\{5, 7, 11\\}$:\n- $\\lfloor 12000/5 \\rfloor + \\lfloor 12000/7 \\rfloor + \\lfloor 12000/11 \\rfloor = 2400 + 1714 + 1090 = 5204$\n- $-\\lfloor 12000/35 \\rfloor - \\lfloor 12000/55 \\rfloor - \\lfloor 12000/77 \\rfloor = -342 - 218 - 155 = -715$\n- $+\\lfloor 12000/385 \\rfloor = 31$\nTotal: $5204 - 715 + 31 = 4520$.\n\nDivisible by at least one of $\\{5, 7, 11\\}$ and also by 13:\n- $\\lfloor 12000/65 \\rfloor + \\lfloor 12000/91 \\rfloor + \\lfloor 12000/143 \\rfloor = 184 + 131 + 83 = 398$\n- $-\\lfloor 12000/455 \\rfloor - \\lfloor 12000/715 \\rfloor - \\lfloor 12000/1001 \\rfloor = -26 - 16 - 11 = -53$\n- $+\\lfloor 12000/5005 \\rfloor = 2$\nTotal: $398 - 53 + 2 = 347$.\n\nSubtracting gives $4520 - 347 = 4173$.\n\n**Part C**\nLet $r = 0.06 / 12 = 0.005$ and $n = 48$. \nThe standard monthly payment is:\n$$M = 31200 \\times \\frac{0.005(1.005)^{48}}{(1.005)^{48} - 1} \\approx 732.733038$$\nThe balance at month 18 without extra payments is:\n$$B_{18}^{\\text{std}} = 31200(1.005)^{18} - M\\frac{(1.005)^{18}-1}{0.005} \\approx 20365.6214$$\nSubtracting the accumulated value of the extra principal payments:\n- Month 6 extra: $500 \\times (1.005)^{12} \\approx 530.8389$\n- Month 11 extra: $600 \\times (1.005)^{7} \\approx 621.3176$\n\nRemaining balance:\n$$20365.6214 - (530.8389 + 621.3176) \\approx 19213.46$$\n\nFINAL: 120; 4173; 19213.46"
+}

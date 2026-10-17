@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'red', expected 'red'",
  "error": null,
- "seconds": 41.3,
- "tokens": 5117,
+ "seconds": 22.4,
+ "tokens": 2763,
  "prompt_tokens": 499,
- "completion_tokens": 4618,
- "cost": 0.04718,
+ "completion_tokens": 2264,
+ "cost": 0.02364,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Solution Walkthrough**\n\nFrom clues 8, 10, 11: House2=Dev, House4=white, House1=yellow.\n\nTesting clue 9 & 7 (Cleo immediately left of both juice\u2011drinker and dog\u2011owner) together with clue 4 (water=4) forces Cleo=4, making juice=house5 and dog=house5.\n\nClue 1 (Eli immediately left of tea) then forces Eli=1, tea=house2.\n\nRemaining drinks (coffee, milk) go to houses 1 and 3. Testing clue 5 (milk immediately left of fish) with milk=3 gives fish=house4, coffee=house1 \u2014 consistent with all other clues.\n\nPets: dog=5, fish=4; house1 (yellow) can't hold cat/bird (needs green/blue), so horse=1. Remaining cat/bird for houses2,3.\n\nHouse5 (dog) can't be green/blue either, so red=5.\n\nTesting clue 6 (Ada adjacent to blue house): Only blue=house2 allows Ada to be placed (Ada=3), giving green=house3, bird=house2, cat=house3.\n\nFinal assignment:\n- House1: Eli, coffee, horse, yellow\n- House2: Dev, tea, bird, blue\n- House3: Ada, milk, cat, green\n- House4: Cleo, water, fish, white\n- House5: Ben, juice, dog, red\n\nAll clues check out consistently.\n\nFINAL: red"
+ "answer": "Working through clues: Eli=house1, Dev=house2(tea), Cleo=house4(water,fish), juice=house5, milk=house3, coffee=house1. House1=yellow\u2192horse, houses2&3 get blue/green with bird/cat, house5=red. Clue6 forces house2=blue(bird), house3=green(cat), and Ada=house3, Ben=house5(red).\n\nFINAL: red"
 }

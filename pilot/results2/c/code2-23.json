@@ -1,0 +1,169 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "c",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 667.7,
+ "tokens": 147901,
+ "prompt_tokens": 43897,
+ "completion_tokens": 104004,
+ "cost": 0.24821,
+ "calls": 27,
+ "call_errors": 5,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "365*86400 + 2*30*86400 + 3*86400 + 4*3600 + 5*60 + 6",
+   "claimed": 36993906.0,
+   "value": 36993906.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "1*3600 + 30*60",
+   "claimed": 5400.0,
+   "value": 5400.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Parse ISO 8601 duration to seconds",
+     "what": "Implement parse_iso_duration with regex validation and component extraction, then convert to seconds."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    pattern = re.compile(\n        r'^P(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)D)?'\n        r'(?:T(?=\\d)(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?$'\n    )\n    m = pattern.match(s)\n    if not m:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n    y, mo, d, h, mi, se = m.groups()\n    if all(g is None for g in (y, mo, d, h, mi, se)):\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    total = 0\n    if y: total += int(y) * 365 * 86400\n    if mo: total += int(mo) * 30 * 86400\n    if d: total += int(d) * 86400\n    if h: total += int(h) * 3600\n    if mi: total += int(mi) * 60\n    if se: total += int(se)\n    return total\n\nassert parse_iso_duration('PT1H30M') == 5400\nassert parse_iso_duration('P1D') == 86400\n```\n\nNotes on checks:\n- The regex requires literal uppercase `P`/`T`/designators, rejecting lowercase and missing leading `P`.\n- `\\d+` only matches non-negative integers (no decimals, no sign).\n- The lookahead `(?=\\d)` after `T` ensures `T` only appears when at least one digit (time component) follows, rejecting `'PT'`.\n- The `all(g is None ...)` check rejects bare `'P'`.\n- Order Y\u2192M\u2192D\u2192T(H\u2192M\u2192S) is enforced structurally by the regex's sequential groups.\n- Verify by running the two asserts plus manual cases: `parse_iso_duration('P')` \u2192 ValueError, `parse_iso_duration('PT')` \u2192 ValueError, `parse_iso_duration('p1d')` \u2192 ValueError, `parse_iso_duration('P1.5D')` \u2192 ValueError."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Using `$` with `re.match` allows a final newline before the end anchor, so `parse_iso_duration('P1D\\n')` matches and returns 86400 even though the input contains an invalid character."
+    },
+    {
+     "from": "B",
+     "problem": "In Python, `\\d` matches many Unicode decimal digits, and `int()` accepts several of them. Thus inputs such as `'P\u0661D'` can be accepted despite ISO duration syntax conventionally requiring ASCII digits."
+    },
+    {
+     "from": "D",
+     "problem": "The lookahead only requires a digit immediately after T, but 'PT1H' is valid and passes. For 'PT', the lookahead fails, so the regex does reject it. However, the claim as stated is not falsified by the code; the code appears correct. No issue found."
+    },
+    {
+     "from": "D",
+     "problem": "The regex pattern allows 'P' with no components because all groups are optional and the T group is optional. The all check does reject it. No issue found."
+    },
+    {
+     "from": "D",
+     "problem": "The regex does enforce order, but it also allows a subtle invalid case: 'P1M2Y' is rejected, but what about 'P1Y2M'? That is valid. No issue found."
+    },
+    {
+     "from": "D",
+     "problem": "The regex is case-sensitive and anchored with ^P, so lowercase 'p' or missing 'P' will not match. No issue found."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 2,
+   "rejected": 4,
+   "answer": "Updated to use `re.fullmatch` and `[0-9]` to reject trailing newlines and non-ASCII digits.\n\n```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    pattern = re.compile(\n        r'P(?:([0-9]+)Y)?(?:([0-9]+)M)?(?:([0-9]+)D)?'\n        r'(?:T(?=[0-9])(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)S)?)?'\n    )\n    m = pattern.fullmatch(s)\n    if not m:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n    y, mo, d, h, mi, se = m.groups()\n    if all(g is None for g in (y, mo, d, h, mi, se)):\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    total = 0\n    if y: total += int(y) * 365 * 86400\n    if mo: total += int(mo) * 30 * 86400\n    if d: total += int(d) * 86400\n    if h: total += int(h) * 3600\n    if mi: total += int(mi) * 60\n    if se: total += int(se)\n    return total\n\nassert parse_iso_duration('PT1H30M') == 5400\nassert parse_iso_duration('P1D') == 86400\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "For zero-valued inputs such as 'PT0S', 'P0D', and 'P0Y0M0DT0H0M0S': what exactly does the function return, and since the per-component guards are written `if y:` on the captured string rather than `is not None`, confirm whether a captured '0' is ever silently skipped and whether any zero-only input is wrongly rejected by the all-None check.",
+    "The prompt lists only Y, M, D, T, H, M, S. The regex rejects week form 'P1W' and also 'P1WT1H'. Is rejecting weeks the intended reading of the spec, and what source (ISO 8601 text or the prompt wording) supports treating 'P1W' as a ValueError rather than 604800?",
+    "For non-string arguments (None, b'P1D', 42), re.fullmatch raises TypeError rather than ValueError. Does the stated contract require ValueError there, and if not, what is the justification for leaving TypeError to propagate?"
+   ],
+   "replies": [
+    "For 'PT0S', the regex groups are (None, None, None, None, None, '0'), so all-None is False and the function reaches the total. The guard `if se:` sees the non-empty string '0', which is truthy, so int('0') is added; total is 0. Similarly 'P0D' gives d='0' and returns 0, and 'P0Y0M0DT0H0M0S' gives all six groups '0', each truthy, total 0. Thus zero-valued inputs return 0. The captured '0' is never skipped because a non-empty string is truthy; the all-None check does not reject any zero-only input because at least one group is '0', not None.",
+    "Rejecting 'P1W' is the intended reading of the prompt, not full ISO 8601. The prompt explicitly lists only Y, M, D, T, H, M, S and says those designators must appear in order; it does not mention W. The parenthetical examples of ValueError are all string forms, and the regex has no W alternative. ISO 8601 itself does define week durations, but the prompt's narrower designator list is the controlling spec here, so 'P1W' and 'P1WT1H' should raise ValueError.",
+    "The stated contract does not clearly require ValueError for non-string arguments. The signature is `s: str`, and the prompt's 'Raise ValueError otherwise' is about invalid ISO 8601 strings, as shown by its examples ('P', 'PT', lowercase, decimals, missing leading 'P'). Passing None, bytes, or 42 violates the type contract, so Python's re.fullmatch raising TypeError is appropriate. If hidden tests expect ValueError for non-strings, that would be an additional unstated requirement; no correction is needed for the given prompt."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Lexical edge cases not yet on the record: what does the current regex do with leading zeros ('P007D'), an explicit sign ('P+1D', 'P-1D'), surrounding or internal whitespace (' P1D', 'P1D ', 'P1 D'), an empty string, and a bare 'T1H' with no 'P' \u2014 and for each, is that behavior the intended one under the prompt?",
+    "Please verify the arithmetic end to end: what integer does the function return for the prompt's own example 'P1Y2M3DT4H5M6S', and does it equal 365*86400 + 2*30*86400 + 3*86400 + 4*3600 + 5*60 + 6? Please state the computed number.",
+    "Disambiguation check: confirm that 'P1M' is parsed as 1 month (2592000) while 'PT1M' is 1 minute (60), and that mixed/out-of-order forms like 'P1M1Y', 'PT1M1H', 'P1DT1M1H', and 'P1H' all raise ValueError under this regex."
+   ],
+   "replies": [
+    "4. Lexical edge cases:\n- 'P007D': regex [0-9]+ matches '007', int('007')=7, so returns 7*86400=604800. The prompt says values are non-negative integers and does not forbid leading zeros, so accepting is intended.\n- 'P+1D', 'P-1D': fullmatch fails because no sign is allowed after P; raises ValueError. Intended: prompt says non-negative integers, signs are not part of the grammar.\n- ' P1D', 'P1D ', 'P1 D': fullmatch fails because pattern has no whitespace; raises ValueError. Intended: strict ISO-like syntax with no spaces.\n- '': fullmatch fails; raises ValueError. Intended.\n- 'T1H': fullmatch fails because missing leading P; raises ValueError. Intended.\n\n5. For 'P1Y2M3DT4H5M6S', groups are y=1, mo=2, d=3, h=4, mi=5, se=6. total = 1*365*86400 + 2*30*86400 + 3*86400 + 4*3600 + 5*60 + 6 = 31,536,000 + 5,184,000 + 259,200 + 14,400 + 300 + 6 = 36,993,906. This equals the stated expression.\n\n6. 'P1M': mo='1', total=1*30*86400=2,592,000. 'PT1M': mi='1', total=1*60=60. Out-of-order forms all fail fullmatch and raise ValueError: 'P1M1Y' leaves '1Y' after matching 'P1M'; 'PT1M1H' leaves '1H' after 'PT1M'; 'P1DT1M1H' leaves '1H' after 'P1DT1M'; 'P1H' leaves '1H' after P with no T. No error found.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Updated to use `re.fullmatch` and `[0-9]` to reject trailing newlines and non-ASCII digits.\n\n```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    pattern = re.compile(\n        r'P(?:([0-9]+)Y)?(?:([0-9]+)M)?(?:([0-9]+)D)?'\n        r'(?:T(?=[0-9])(?:([0-9]+)H)?(?:([0-9]+)M)?(?:([0-9]+)S)?)?'\n    )\n    m = pattern.fullmatch(s)\n    if not m:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n    y, mo, d, h, mi, se = m.groups()\n    if all(g is None for g in (y, mo, d, h, mi, se)):\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    total = 0\n    if y: total += int(y) * 365 * 86400\n    if mo: total += int(mo) * 30 * 86400\n    if d: total += int(d) * 86400\n    if h: total += int(h) * 3600\n    if mi: total += int(mi) * 60\n    if se: total += int(se)\n    return total\n\nassert parse_iso_duration('PT1H30M') == 5400\nassert parse_iso_duration('P1D') == 86400\n```"
+}

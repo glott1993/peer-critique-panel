@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "ok: got '2026-07-29', expected '2026-07-29' | ok: got 4010.0, expected 4010.0 | ok: got 2839.0, expected 2839.0",
  "error": null,
- "seconds": 21.8,
- "tokens": 10435,
- "prompt_tokens": 6358,
- "completion_tokens": 4077,
- "cost": 0.00616,
+ "seconds": 17.2,
+ "tokens": 7879,
+ "prompt_tokens": 5164,
+ "completion_tokens": 2715,
+ "cost": 0.00429,
  "calls": 1,
  "call_errors": 0,
- "answer": "Part A: The 88th weekday after 2026-03-19, ignoring holidays, is 2026-07-21. The six listed holidays each shift the date by one weekday, giving 2026-07-29.\n\nPart B: By inclusion-exclusion, the count divisible by 3, 5, or 7 is\n2666 + 1600 + 1142 - 533 - 380 - 228 + 76 = 4343.\nAmong these, 333 are also divisible by 13, so the result is 4343 - 333 = 4010.\n\nPart C: Let x = 17k. Solving the congruences gives k \u2261 15 mod 19 and then k \u2261 8 mod 23, yielding x = 2839.\n\nFINAL: 2026-07-29; 4010; 2839"
+ "answer": "Part A: Count weekdays after 2026-03-19, excluding the six listed holidays. There are 67 valid business days through 2026-06-30, so 21 more days reaches 2026-07-29.\n\nPart B: By inclusion-exclusion, divisible by 3, 5, or 7:\n2666 + 1600 + 1142 - 533 - 380 - 228 + 76 = 4343.\nAmong these, 333 are also divisible by 13, so the result is 4343 - 333 = 4010.\n\nPart C: Solving the congruences gives x = 255 + 323t and t \u2261 8 mod 23, yielding the smallest positive solution x = 2839.\n\nFINAL: 2026-07-29; 4010; 2839"
 }

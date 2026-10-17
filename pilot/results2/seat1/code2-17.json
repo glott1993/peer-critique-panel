@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 3.7,
- "tokens": 785,
+ "seconds": 3.5,
+ "tokens": 685,
  "prompt_tokens": 327,
- "completion_tokens": 458,
- "cost": 0.00523,
+ "completion_tokens": 358,
+ "cost": 0.00423,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef sudoku_valid(board) -> bool:\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be a 9x9 list of lists\")\n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be a 9x9 list of lists\")\n        for val in row:\n            if not isinstance(val, int) or val < 0 or val > 9:\n                raise ValueError(\"Board values must be integers between 0 and 9\")\n\n    def has_duplicates(cells):\n        seen = set()\n        for v in cells:\n            if v == 0:\n                continue\n            if v in seen:\n                return True\n            seen.add(v)\n        return False\n\n    # Check rows\n    for row in board:\n        if has_duplicates(row):\n            return False\n\n    # Check columns\n    for col in range(9):\n        column = [board[row][col] for row in range(9)]\n        if has_duplicates(column):\n            return False\n\n    # Check 3x3 boxes\n    for box_row in range(0, 9, 3):\n        for box_col in range(0, 9, 3):\n            box = [\n                board[r][c]\n                for r in range(box_row, box_row + 3)\n                for c in range(box_col, box_col + 3)\n            ]\n            if has_duplicates(box):\n                return False\n\n    return True\n```"
+ "answer": "```python\ndef sudoku_valid(board):\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be 9x9\")\n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be 9x9\")\n        for v in row:\n            if not isinstance(v, int) or v < 0 or v > 9:\n                raise ValueError(\"Values must be integers 0-9\")\n\n    def has_dup(vals):\n        seen = set()\n        for v in vals:\n            if v != 0:\n                if v in seen:\n                    return True\n                seen.add(v)\n        return False\n\n    for r in range(9):\n        if has_dup(board[r]):\n            return False\n    for c in range(9):\n        if has_dup(board[r][c] for r in range(9)):\n            return False\n    for br in range(0, 9, 3):\n        for bc in range(0, 9, 3):\n            box = [board[br+i][bc+j] for i in range(3) for j in range(3)]\n            if has_dup(box):\n                return False\n    return True\n```"
 }

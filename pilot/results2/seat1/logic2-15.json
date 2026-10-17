@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'ben', expected 'ben'",
  "error": null,
- "seconds": 28.1,
- "tokens": 3902,
+ "seconds": 13.1,
+ "tokens": 1703,
  "prompt_tokens": 517,
- "completion_tokens": 3385,
- "cost": 0.03488,
+ "completion_tokens": 1186,
+ "cost": 0.01289,
  "calls": 1,
  "call_errors": 0,
- "answer": "Looking at the clues, I can trace through the logic:\n\n- Ada drinks coffee (clue 7), so from clues 5 & 6, Ada must have tea on one side and water on the other side.\n- From clue 8, the water side is also blue; from clue 11, the tea side is also yellow.\n- Testing Ada at position 2: house 1 = tea/yellow, house 3 = water/blue.\n- Remaining drinks (milk, juice) go to houses 4 and 5.\n- Testing juice=4, milk=5: Clue 2 requires Dev at house 3, and clue 1 requires Eli adjacent to house 4, so Eli=5.\n- That leaves Ben and Cleo for houses 1 and 4.\n- If Ben=1: house 1 needs horse (tea-drinker, clue 9), but Ben owns bird (clue 3) \u2014 contradiction.\n- So Ben=4, Cleo=1.\n- Clue 4: Ben+1=green \u2192 house 5 = green. Remaining colors (white, red) go to houses 2,4.\n- Clue 10: white house owns cat. If house 4 (Ben) were white, Ben would need cat, contradicting bird ownership. So house 4 = red, house 2 = white.\n- Ada (house 2) then owns the cat (consistent, no conflict with coffee).\n- Cleo (house 1) drinks tea \u2192 owns horse (clue 9).\n- House 5 drinks milk \u2192 owns dog (clue 12), so Eli owns dog.\n- Remaining pet (fish) goes to house 3 (Dev).\n\nAll clues check out:\n1. Eli(5) next to juice(4) \u2713\n2. Dev(3) immediately left of juice(4) \u2713\n3. Ben owns bird \u2713\n4. Ben(4)+1=green(5) \u2713\n5. Ada(2)+1=water(3) \u2713\n6. Ada(2) next to tea(1) \u2713\n7. Ada drinks coffee \u2713\n8. Ada(2)+1=blue(3) \u2713\n9. Tea(Cleo) owns horse \u2713\n10. White(2,Ada) owns cat \u2713\n11. Ada(2) next to yellow(1) \u2713\n12. Milk(5,Eli) owns dog \u2713\n\nThis configuration is fully consistent, and Ben is the juice drinker (house 4).\n\nFINAL: Ben"
+ "answer": "Ada=2(coffee,tea@1,water@3), Dev=3 juice@4(Ben), Eli=5, consistent with all clues.\n\nFINAL: Ben"
 }

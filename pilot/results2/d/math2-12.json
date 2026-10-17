@@ -1,0 +1,133 @@
+{
+ "task_id": "math2-12",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 13400.0, expected 13400.0",
+ "error": null,
+ "seconds": 50.6,
+ "tokens": 44250,
+ "prompt_tokens": 34791,
+ "completion_tokens": 9459,
+ "cost": 0.04658,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute base tax before credit",
+     "what": "Apply the three marginal brackets to $68,250 to get the tax before any credit."
+    },
+    {
+     "id": "c2",
+     "title": "Compute reduced tax credit",
+     "what": "Reduce the $2,400 credit by 8% of income above $60,000 and check the floor of zero."
+    },
+    {
+     "id": "c3",
+     "title": "Subtract credit and floor at zero",
+     "what": "Subtract the reduced credit from the base tax and ensure the result is not negative."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "First $12,500: $12,500 \u00d7 10% = $1,250.  \nNext $39,500: $39,500 \u00d7 22% = $8,690.  \nRemaining $16,250: $16,250 \u00d7 32% = $5,200.  \n\nBase tax: $1,250 + $8,690 + $5,200 = $15,140.\n\nIncome above $60,000: $68,250 \u2212 $60,000 = $8,250.  \nCredit reduction: $8,250 \u00d7 8% = $660.  \nReduced credit: $2,400 \u2212 $660 = $1,740.\n\nTax owed: $15,140 \u2212 $1,740 = $13,400.\n\nFINAL: 13400.00"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "The prompt requests 'For a number give digits only (no units, no currency sign, no commas; use a decimal point)' and 'to the nearest cent', but integer dollar results are often expected as an integer '13400' rather than '13400.00', or conversely strict nearest-cent formatting requires verifying if .00 is expected."
+    },
+    {
+     "from": "C",
+     "problem": "Verify whether tax credit phase-out applies to total income ($68,250) or marginal excess over $60,000 ($8,250). If calculated on total income, credit is wiped out entirely."
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error: 39,500 \u00d7 0.22 = 8,690 is correct, but the bracket amount from $12,500 up to $52,000 is $52,000 \u2212 $12,500 = $39,500, so this is fine. No issue."
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error: 16,250 \u00d7 0.32 = 5,200, which is correct. No issue."
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error: 1,250 + 8,690 + 5,200 = 15,140, which is correct. No issue."
+    },
+    {
+     "from": "D",
+     "problem": "Arithmetic error: 8,250 \u00d7 0.08 = 660, which is correct. No issue."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 1,
+   "answer": "First $12,500: $12,500 \u00d7 10% = $1,250.\nNext $39,500 (12,500 to 52,000): $39,500 \u00d7 22% = $8,690.\nRemaining $16,250 (52,000 to 68,250): $16,250 \u00d7 32% = $5,200.\n\nBase tax: $1,250 + $8,690 + $5,200 = $15,140.\n\nIncome above $60,000: $68,250 \u2212 $60,000 = $8,250 (credit phases out based on excess over $60,000, not total income).\nCredit reduction: $8,250 \u00d7 8% = $660.\nReduced credit: $2,400 \u2212 $660 = $1,740.\n\nTax owed: $15,140 \u2212 $1,740 = $13,400.00.\n\nFINAL: 13400.00"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "First $12,500: $12,500 \u00d7 10% = $1,250.\nNext $39,500 (12,500 to 52,000): $39,500 \u00d7 22% = $8,690.\nRemaining $16,250 (52,000 to 68,250): $16,250 \u00d7 32% = $5,200.\n\nBase tax: $1,250 + $8,690 + $5,200 = $15,140.\n\nIncome above $60,000: $68,250 \u2212 $60,000 = $8,250 (credit phases out based on excess over $60,000, not total income).\nCredit reduction: $8,250 \u00d7 8% = $660.\nReduced credit: $2,400 \u2212 $660 = $1,740.\n\nTax owed: $15,140 \u2212 $1,740 = $13,400.00.\n\nFINAL: 13400.00"
+}

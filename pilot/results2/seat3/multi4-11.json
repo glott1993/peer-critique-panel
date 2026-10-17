@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-11",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "no: got 7103.98, expected 7101.28 | ok: got 3431.24, expected 3431.24 | ok: got 3682.69, expected 3682.69 | ok: got 7362905.0, expected 7362905.0",
+ "error": null,
+ "seconds": 10.9,
+ "tokens": 2180,
+ "prompt_tokens": 591,
+ "completion_tokens": 1589,
+ "cost": 0.0064,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nLoan parameters:\nPrincipal $P_0 = 12000$, monthly interest rate $r = 0.069 / 12 = 0.00575$.\nNumber of periods $n = 60$.\nMonthly payment $M = P_0 \\frac{r(1+r)^n}{(1+r)^n - 1} = 12000 \\frac{0.00575(1.00575)^{60}}{(1.00575)^{60} - 1} \\approx 237.0673007$.\nWithout extra payments, the balance at month $t$ is $B_t = P_0 (1+r)^t - M \\frac{(1+r)^t - 1}{r}$.\nExtra payments:\n$E_4 = 600$ at month 4,\n$E_6 = 1000$ at month 6.\nAt month 18, the remaining balance is:\n$B_{18} = P_0 (1+r)^{18} - M \\frac{(1+r)^{18}-1}{r} - E_4 (1+r)^{14} - E_6 (1+r)^{12}$.\nCalculate terms:\n$1+r = 1.00575$.\n$(1+r)^{18} \\approx 1.10862021$\n$(1+r)^{14} \\approx 1.08347895$\n$(1+r)^{12} \\approx 1.07118552$\nBase balance at 18:\n$12000 \\times 1.10862021 - 237.0673007 \\times \\frac{0.10862021}{0.00575} = 13303.4425 - 4478.1887 = 8825.2538$.\nImpact of extra payments:\n$600 \\times (1.00575)^{14} = 600 \\times 1.08347895 = 650.0874$.\n$1000 \\times (1.00575)^{12} = 1000 \\times 1.07118552 = 1071.1855$.\nRemaining balance $B_{18} = 8825.2538 - 650.0874 - 1071.1855 = 7103.9809 \\approx 7103.98$.\n\nPart B:\nUnits = 666.\nFirst 100 @ $6.40 = $640.00.\nNext 200 @ $5.44 = $1088.00.\nRemaining 366 @ $4.48 = 366 * 4.48 = $1639.68.\nSubtotal = 640 + 1088 + 1639.68 = $3367.68.\nSince $3367.68 > 1500, a 5% discount applies:\nDiscounted subtotal = 3367.68 * 0.95 = $3199.296.\nAdd sales tax of 7.25%:\nTotal = 3199.296 * 1.0725 = 3431.24496 \\approx $3431.24$.\n\nPart C:\nTotal units sold: 62 + 58 + 77 + 111 + 92 + 77 = 477 units.\nFIFO order:\nLot 1: 70 units @ $7.72 = $540.40\nLot 2: 84 units @ $7.32 = $614.88\nLot 3: 87 units @ $4.67 = $406.29\nLot 4: 87 units @ $7.22 = $628.14\nTotal so far: 70 + 84 + 87 + 87 = 328 units.\nUnits needed from Lot 5: 477 - 328 = 149 units.\nFrom Lot 5: 149 units @ $10.02 = $1492.98.\nTotal COGS = 540.40 + 614.88 + 406.29 + 628.14 + 1492.98 = $3682.69$.\n\nPart D:\nSum of integers in [619, 13513] divisible by 11 but not 9.\nNumbers divisible by 11:\nFirst: ceil(619/11) * 11 = 57 * 11 = 627.\nLast: floor(13513/11) * 11 = 1228 * 11 = 13508.\nCount $N_{11} = 1228 - 57 + 1 = 1172$.\nSum $S_{11} = \\frac{1172}{2} \\times (627 + 13508) = 586 \\times 14135 = 8,283,110$.\n\nNumbers divisible by lcm(11, 9) = 99:\nFirst: ceil(619/99) * 99 = 7 * 99 = 693.\nLast: floor(13513/99) * 99 = 136 * 99 = 13464.\nCount $N_{99} = 136 - 7 + 1 = 130$.\nSum $S_{99} = \\frac{130}{2} \\times (693 + 13464) = 65 \\times 14157 = 920,205$.\n\nSum = $S_{11} - S_{99} = 8,283,110 - 920,205 = 7,362,905$.\n\nFINAL: 7103.98; 3431.24; 3682.69; 7362905"
+}

@@ -1,0 +1,171 @@
+{
+ "task_id": "code2-17",
+ "type": "code",
+ "condition": "c2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 119.6,
+ "tokens": 79127,
+ "prompt_tokens": 63535,
+ "completion_tokens": 15592,
+ "cost": 0.1306,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "9*9",
+   "claimed": 81.0,
+   "value": 81.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(9/3)*(9/3)",
+   "claimed": 9.0,
+   "value": 9.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Whole request",
+     "what": "Write sudoku_valid(board) -> bool: validate board is 9x9 list of lists with integer values 0-9 (raise ValueError otherwise), then check no row, column, or 3x3 box has a repeated non-zero digit, returning True/False accordingly."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\ndef sudoku_valid(board) -> bool:\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be a 9x9 list of lists\")\n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be a 9x9 list of lists\")\n        for v in row:\n            if not isinstance(v, int) or isinstance(v, bool) or v < 0 or v > 9:\n                raise ValueError(\"Values must be integers 0 to 9\")\n\n    def has_dup(seq):\n        nums = [v for v in seq if v != 0]\n        return len(nums) != len(set(nums))\n\n    for row in board:\n        if has_dup(row):\n            return False\n\n    for c in range(9):\n        col = [board[r][c] for r in range(9)]\n        if has_dup(col):\n            return False\n\n    for br in range(0, 9, 3):\n        for bc in range(0, 9, 3):\n            box = [board[r][c] for r in range(br, br + 3) for c in range(bc, bc + 3)]\n            if has_dup(box):\n                return False\n\n    return True\n```\n\nChecks: passes both visible examples (empty board -> True; duplicate 5 in row -> False). ValueError triggers verifiable by testing non-9x9 lists or out-of-range/non-int values, e.g. sudoku_valid([[0]*8]*9) and board with value 10 or -1 or \"5\"."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The specification says 'containing integers 0 to 9' and does not mention excluding bool. In Python, True == 1 and False == 0, so a board containing True or False could reasonably be considered valid input. The draft's isinstance(v, bool) check adds an extra restriction not stated in the request."
+    },
+    {
+     "from": "D",
+     "problem": "If a hidden test uses 5.0 (a float with integral value) expecting it to be treated as 5, the draft would raise ValueError. The request's wording 'integers 0 to 9' could be interpreted as requiring int type, but it is not explicit about rejecting float types that hold integer values."
+    },
+    {
+     "from": "D",
+     "problem": "The request says '9x9 list of lists', which the draft enforces. But if a hidden test passes a board that is a list of 9 tuples (each of length 9), the draft raises ValueError. The request does not explicitly say tuples are invalid \u2014 it says 'list of lists', but some test authors might use tuples interchangeably. This is a potential mismatch."
+    },
+    {
+     "from": "D",
+     "problem": "If the validation is changed to accept floats or other numeric types, has_dup would break because set() requires hashable elements. This is a latent fragility in the draft's design."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 0,
+   "rejected": 4,
+   "answer": "```python\ndef sudoku_valid(board) -> bool:\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be a 9x9 list of lists\")\n\n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be a 9x9 list of lists\")\n        for value in row:\n            if (not isinstance(value, int) or isinstance(value, bool)\n                    or not 0 <= value <= 9):\n                raise ValueError(\"Values must be integers 0 to 9\")\n\n    def has_duplicate(values):\n        seen = set()\n        for value in values:\n            if value != 0:\n                if value in seen:\n                    return True\n                seen.add(value)\n        return False\n\n    for row in board:\n        if has_duplicate(row):\n            return False\n\n    for column in range(9):\n        if has_duplicate(board[row][column] for row in range(9)):\n            return False\n\n    for box_row in range(0, 9, 3):\n        for box_column in range(0, 9, 3):\n            if has_duplicate(\n                board[row][column]\n                for row in range(box_row, box_row + 3)\n                for column in range(box_column, box_column + 3)\n            ):\n                return False\n\n    return True\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The row-loop variable `row` is reused as a comprehension/generator variable name in the column and box checks (`board[row][column] for row in range(9)`). Walk through the exact execution order: at the point the column loop runs, what is the outer name `row` bound to, and does the generator expression's own scope shadow it in Python 3 such that no leakage or mis-indexing occurs? Please confirm the column check actually reads column `c` of all nine rows.",
+    "Since `has_duplicate` is called with a generator in two places and a list in one place, state what happens if the generator is exhausted early via the `return True` short-circuit, and confirm there is no shared-state or reuse bug across the 9 column calls and 9 box calls.",
+    "Enumerate the exact ValueError-raising behaviour for these inputs and say which message/branch fires for each: (a) a list of 9 lists where one row has 8 entries, (b) a list of 10 rows of 9, (c) a board containing the value 10 or -1, (d) a board containing the string \"5\", (e) a non-list such as None or a numpy array; and state whether validation of all cells completes before any duplicate checking begins (i.e., does a board that is both invalid-valued and duplicate-containing raise rather than return False)?"
+   ],
+   "replies": [
+    "At the start of the row-validation loop, `row` is each complete row in turn; after that loop finishes, the name `row` is still bound to the last row list. However, this outer binding is irrelevant to the generator expressions. In Python 3, the generator expression has its own iteration-variable scope, so in `board[row][column] for row in range(9)`, the inner `row` shadows the outer name and takes values 0 through 8. For each outer `column` value `c`, it therefore evaluates `board[0][c]` through `board[8][c]`, confirming that every cell in column `c` is checked. The same scoping rule applies to the `row` and `column` variables in each box generator.",
+    "`has_duplicate` consumes each iterable only during that single call. If a duplicate is found, `return True` stops iteration immediately, so an input generator may be left partially unconsumed; that does not matter because the generator is discarded after the call. Each column expression creates a fresh generator for its call, and each box expression likewise creates a fresh generator. There is no generator reuse or shared mutable state between the 9 column calls or 9 box calls. Row checks receive lists, while the helper's `for` loop works identically with either lists or generators.",
+    "(a) A list of 9 rows with one row of length 8 raises `ValueError(\"Board must be a 9x9 list of lists\")` in the inner `if not isinstance(row, list) or len(row) != 9` branch. (b) A list of 10 rows raises the same message in the initial `if not isinstance(board, list) or len(board) != 9` branch. (c) A value of `10` or `-1` raises `ValueError(\"Values must be integers 0 to 9\")` in the value-range condition. (d) The string `\"5\"` raises that same value message because `not isinstance(value, int)` is true. (e) `None` raises `ValueError(\"Board must be a 9x9 list of lists\")` in the initial branch. A numpy array also raises that same message because `not isinstance(board, list)` is true. Validation of every row and every cell completes before any row, column, or box duplicate check begins: the duplicate-checking loops occur only after the validation loops. Thus a board containing both an invalid value and a duplicate raises `ValueError` rather than returning `False`. No external source was used; these conclusions follow directly from the shown control flow and Python 3 comprehension/generator scoping."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Three type-edge cases the record hasn't addressed: (a) a cell holding a float like 5.0 or 5.0-valued Decimal, (b) a board given as a list of 9 tuples (tuple rows) rather than lists, and (c) booleans, which the code explicitly rejects via `isinstance(value, bool)` even though `True == 1` in Python. For each, state what the current code does and what evidence (spec wording 'list of lists containing integers 0 to 9') supports that being the intended behaviour rather than a hidden-test failure.",
+    "Does the function leave `board` completely unmutated, and does it ever raise anything other than ValueError (e.g., TypeError from `len()` on a sized-but-non-list object, or on a row that is a generator/iterator) for plausible malformed inputs? Point to the exact lines that guarantee this."
+   ],
+   "replies": [
+    "(a) A float such as 5.0 and a Decimal representing 5 are rejected with ValueError at `if (not isinstance(value, int) ... )`, because neither is an `int` instance. (b) A list of nine tuple rows is rejected with ValueError at `if not isinstance(row, list) or len(row) != 9`. (c) `True` and `False` are rejected with ValueError by the explicit `isinstance(value, bool)` check, even though `bool` subclasses `int` and `True == 1`. The evidence supporting all three behaviors is the specification's wording that the board is a \u201c9x9 list of lists containing integers 0 to 9\u201d: floats and Decimals are not integers, tuple rows are not lists, and booleans are not ordinarily intended as Sudoku digit values. No separate source defines whether Python's `bool` subtype behavior should count, so the explicit rejection is a defensible interpretation rather than something guaranteed by a hidden-test specification.",
+    "For ordinary lists and integer cells, the function does not mutate `board`: it only reads cells, while `seen` is a new local set and no assignment targets `board` or its rows. The initial `isinstance(board, list)` check occurs before `len(board)`, and each row's `isinstance(row, list)` check occurs before `len(row)`, so ordinary non-list boards and generator/iterator rows produce ValueError rather than TypeError. Once a row is confirmed to be a list, iteration and indexing used by the function are supported; value validation also occurs before duplicate checking. However, the code does not absolutely guarantee that no non-ValueError can ever escape for adversarial subclasses: a custom `list` subclass could override `__len__`, `__iter__`, or `__getitem__` and raise another exception, and an unusual `int` subclass could override comparison or hashing behavior. No source requires handling such hostile subclasses. For ordinary malformed inputs covered by the stated contract, the explicit validation paths raise ValueError."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please run the exact code block as written and report the observed outputs, verbatim, for: (1) the two visible asserts; (2) a board whose only duplicate is in a column (e.g. b[0][3]=7, b[5][3]=7) -> expected False; (3) a board whose only duplicate is inside one 3x3 box but not in any shared row or column (e.g. b[0][0]=4, b[1][1]=4) -> expected False; (4) a complete valid solved grid -> expected True; (5) shape errors: a list of 8 rows, and a 9-row board whose row 3 has length 8 -> expected ValueError each; (6) value errors: a cell set to 10 and a cell set to -1 -> expected ValueError each. State pass/fail per case with the actual return value or exception text."
+   ],
+   "replies": [
+    "Evidence: tracing the submitted function's row, column, and 3x3-box checks gives these results; no external source is applicable.\n\n(1) The two visible asserts produce no output; both pass.\n\n(2) With b[0][3] = 7 and b[5][3] = 7, the function returns False. PASS.\n\n(3) With b[0][0] = 4 and b[1][1] = 4, the function returns False. PASS.\n\n(4) For the complete valid solved grid [[5,3,4,6,7,8,9,1,2],[6,7,2,1,9,5,3,4,8],[1,9,8,3,4,2,5,6,7],[8,5,9,7,6,1,4,2,3],[4,2,6,8,5,3,7,9,1],[7,1,3,9,2,4,8,5,6],[9,6,1,5,3,7,2,8,4],[2,8,7,4,1,9,6,3,5],[3,4,5,2,8,6,1,7,9]], the function returns True. PASS.\n\n(5) A list of 8 rows raises ValueError('Board must be a 9x9 list of lists'). A 9-row board whose row 3 has length 8 raises ValueError('Board must be a 9x9 list of lists'). Both PASS.\n\n(6) A cell set to 10 raises ValueError('Values must be integers 0 to 9'). A cell set to -1 raises ValueError('Values must be integers 0 to 9'). Both PASS.\n\nNo error was revealed, so no corrected answer is needed."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "```python\ndef sudoku_valid(board) -> bool:\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be a 9x9 list of lists\")\n\n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be a 9x9 list of lists\")\n        for value in row:\n            if (not isinstance(value, int) or isinstance(value, bool)\n                    or not 0 <= value <= 9):\n                raise ValueError(\"Values must be integers 0 to 9\")\n\n    def has_duplicate(values):\n        seen = set()\n        for value in values:\n            if value != 0:\n                if value in seen:\n                    return True\n                seen.add(value)\n        return False\n\n    for row in board:\n        if has_duplicate(row):\n            return False\n\n    for column in range(9):\n        if has_duplicate(board[row][column] for row in range(9)):\n            return False\n\n    for box_row in range(0, 9, 3):\n        for box_column in range(0, 9, 3):\n            if has_duplicate(\n                board[row][column]\n                for row in range(box_row, box_row + 3)\n                for column in range(box_column, box_column + 3)\n            ):\n                return False\n\n    return True\n```"
+}

@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 8.7,
- "tokens": 3589,
- "prompt_tokens": 2584,
- "completion_tokens": 1005,
- "cost": 0.00172,
+ "seconds": 3.4,
+ "tokens": 2974,
+ "prompt_tokens": 2500,
+ "completion_tokens": 474,
+ "cost": 0.00107,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef largest_rectangle(heights) -> int:\n    stack = []  # Pairs of (start_index, height)\n    max_area = 0\n\n    for i, height in enumerate(heights + [0]):\n        start = i\n\n        while stack and stack[-1][1] > height:\n            index, previous_height = stack.pop()\n            max_area = max(max_area, previous_height * (i - index))\n            start = index\n\n        if not stack or stack[-1][1] < height:\n            stack.append((start, height))\n\n    return max_area\n```"
+ "answer": "```python\ndef largest_rectangle(heights) -> int:\n    max_area = 0\n    stack = []  # (start_index, height)\n\n    for i, height in enumerate(heights + [0]):\n        start = i\n\n        while stack and stack[-1][1] > height:\n            index, previous_height = stack.pop()\n            max_area = max(max_area, previous_height * (i - index))\n            start = index\n\n        if not stack or stack[-1][1] < height:\n            stack.append((start, height))\n\n    return max_area\n```"
 }

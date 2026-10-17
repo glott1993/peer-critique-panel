@@ -1,0 +1,125 @@
+{
+ "task_id": "multi2-35",
+ "type": "multi",
+ "condition": "c2",
+ "correct": true,
+ "detail": "ok: got '2026-11-10', expected '2026-11-10' | ok: got 16076.21, expected 16076.21 | ok: got 3193.48, expected 3193.48",
+ "error": null,
+ "seconds": 555.8,
+ "tokens": 142254,
+ "prompt_tokens": 66835,
+ "completion_tokens": 75419,
+ "cost": 0.78396,
+ "calls": 30,
+ "call_errors": 5,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A business day date",
+     "what": "Count 80 business days from 2026-07-13 skipping weekends and the listed holidays."
+    },
+    {
+     "id": "c2",
+     "title": "Part B loan balance",
+     "what": "Compute monthly payment for 5-year amortization, apply extra principal in months 11 and 12, then find balance after month 18."
+    },
+    {
+     "id": "c3",
+     "title": "Part C FIFO COGS",
+     "what": "Apply FIFO costing to the six sales against the eight inventory lots and sum cost of goods sold."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "C",
+     "A"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Part A: Counting starts 2026-07-14. After skipping the listed weekday holidays, the 80th business day is 2026-11-10.\n\nPart B: With monthly rate \\(r=0.054/12=0.0045\\), the standard payment is  \n\\[\nM=24000\\frac{0.0045(1.0045)^{60}}{(1.0045)^{60}-1}\\approx 457.3209478.\n\\]\nIncluding the extra principal in months 11 and 12:\n\\[\nB_{18}=24000(1.0045)^{18}-M\\frac{(1.0045)^{18}-1}{0.0045}\n-600(1.0045)^7-750(1.0045)^6\n\\approx 16076.2084.\n\\]\nSo the balance is 16076.21.\n\nPart C: Total units sold = 460. The first four lots total 438 units, so FIFO consumes those lots plus 22 units from lot 5.  \n\\[\n106(4.67)+88(7.60)+136(5.50)+108(10.48)+22(6.81)=3193.48.\n\\]\n\nFINAL: 2026-11-10; 16076.21; 3193.48"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "80-business-day count with 6 holidays removed needs independent verification; off-by-one errors are common when starting count at 2026-07-14 vs 2026-07-13."
+    },
+    {
+     "from": "A",
+     "problem": "Value not verified to sufficient precision; small errors compound over 18 periods of compounding."
+    },
+    {
+     "from": "A",
+     "problem": "Extra principal payments reduce balance starting the month they're paid; need to confirm these terms correctly represent future-valuing the principal reduction from month 11/12 to month 18 (7 and 6 periods respectively) rather than being off by one period."
+    },
+    {
+     "from": "A",
+     "problem": "Assumes lots 1-4 exactly cover 438 units before dipping into lot 5, but total sold is stated as 460; must verify lot 5 usage (22 units) is consistent with sale order/quantities matching 460 total exactly."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 4,
+   "answer": "Part A: Counting begins on Tuesday, 2026-07-14.\n- July 2026 (from July 14): 14 weekdays, 0 holidays = 14 days (cum. 14)\n- August 2026: 21 weekdays minus 2 holidays (Aug 14, Aug 18) = 19 days (cum. 33)\n- September 2026: 22 weekdays minus 3 holidays (Sep 10, Sep 14, Sep 23) = 19 days (cum. 52)\n- October 2026: 22 weekdays minus 1 holiday (Oct 21) = 21 days (cum. 73)\n- November 2026: Need 7 more days. Nov 2 (Mon) to Nov 10 (Tue) is 7 weekdays (Nov 2, 3, 4, 5, 6, 9, 10). The 80th business day is 2026-11-10.\n\nPart B: Monthly interest rate r = 0.054 / 12 = 0.0045, n = 60.\nMonthly payment M = 24000 * (0.0045 * 1.0045^60) / (1.0045^60 - 1) \u2248 457.320947754.\nBalance immediately after month 18 payment:\nB_18 = 24000 * 1.0045^18 - M * ((1.0045^18 - 1) / 0.0045) - 600 * 1.0045^7 - 750 * 1.0045^6 \u2248 16076.2084.\nRounding to the nearest cent gives 16076.21.\n\nPart C: Total units sold = 52 + 74 + 53 + 87 + 84 + 110 = 460 units.\nUnder FIFO:\n- Lot 1: 106 units @ $4.67 = $495.02\n- Lot 2: 88 units @ $7.60 = $668.80\n- Lot 3: 136 units @ $5.50 = $748.00\n- Lot 4: 108 units @ $10.48 = $1131.84\n- Lot 5: 22 units (460 - 438) @ $6.81 = $149.82\nTotal COGS = 495.02 + 668.80 + 748.00 + 1131.84 + 149.82 = $3193.48.\n\nFINAL: 2026-11-10; 16076.21; 3193.48"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Part A: Counting begins on Tuesday, 2026-07-14.\n- July 2026 (from July 14): 14 weekdays, 0 holidays = 14 days (cum. 14)\n- August 2026: 21 weekdays minus 2 holidays (Aug 14, Aug 18) = 19 days (cum. 33)\n- September 2026: 22 weekdays minus 3 holidays (Sep 10, Sep 14, Sep 23) = 19 days (cum. 52)\n- October 2026: 22 weekdays minus 1 holiday (Oct 21) = 21 days (cum. 73)\n- November 2026: Need 7 more days. Nov 2 (Mon) to Nov 10 (Tue) is 7 weekdays (Nov 2, 3, 4, 5, 6, 9, 10). The 80th business day is 2026-11-10.\n\nPart B: Monthly interest rate r = 0.054 / 12 = 0.0045, n = 60.\nMonthly payment M = 24000 * (0.0045 * 1.0045^60) / (1.0045^60 - 1) \u2248 457.320947754.\nBalance immediately after month 18 payment:\nB_18 = 24000 * 1.0045^18 - M * ((1.0045^18 - 1) / 0.0045) - 600 * 1.0045^7 - 750 * 1.0045^6 \u2248 16076.2084.\nRounding to the nearest cent gives 16076.21.\n\nPart C: Total units sold = 52 + 74 + 53 + 87 + 84 + 110 = 460 units.\nUnder FIFO:\n- Lot 1: 106 units @ $4.67 = $495.02\n- Lot 2: 88 units @ $7.60 = $668.80\n- Lot 3: 136 units @ $5.50 = $748.00\n- Lot 4: 108 units @ $10.48 = $1131.84\n- Lot 5: 22 units (460 - 438) @ $6.81 = $149.82\nTotal COGS = 495.02 + 668.80 + 748.00 + 1131.84 + 149.82 = $3193.48.\n\nFINAL: 2026-11-10; 16076.21; 3193.48"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-33",
+ "type": "math",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 5217.98, expected 5217.89",
+ "error": null,
+ "seconds": 10.5,
+ "tokens": 1765,
+ "prompt_tokens": 214,
+ "completion_tokens": 1551,
+ "cost": 0.00598,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the remaining balance after month 18:\n\n1. **Monthly interest rate and payment:**\n   $r = \\frac{0.069}{12} = 0.00575$\n   $n = 36$\n   $M = 12000 \\times \\frac{0.00575(1 + 0.00575)^{36}}{(1 + 0.00575)^{36} - 1} \\approx 369.970204$\n\n2. **Standard balance after 18 months without extra payments:**\n   $B_{18}^{\\text{std}} = 12000(1 + r)^{18} - M \\frac{(1 + r)^{18} - 1}{r} \\approx 6309.419983$\n\n3. **Adjustment for extra principal payments:**\n   - Month 9 payment of $750 compounded for 9 months:\n     $750 \\times (1 + r)^9 \\approx 789.717540$\n   - Month 17 payment of $300 compounded for 1 month:\n     $300 \\times (1 + r)^1 = 301.725$\n\n4. **Remaining balance at month 18:**\n   $B_{18} = 6309.419983 - 789.717540 - 301.725 = 5217.977443$\n\nFINAL: 5217.98"
+}

@@ -1,0 +1,184 @@
+{
+ "task_id": "math2-12",
+ "type": "math",
+ "condition": "c",
+ "correct": true,
+ "detail": "got 13400.0, expected 13400.0",
+ "error": null,
+ "seconds": 85.3,
+ "tokens": 53490,
+ "prompt_tokens": 42998,
+ "completion_tokens": 10492,
+ "cost": 0.12471,
+ "calls": 31,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "0.10*12500 + 0.22*(52000-12500) + 0.32*(68250-52000) - (2400 - 0.08*(68250-60000))",
+   "claimed": 13400.0,
+   "value": 13400.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "2400/0.08 + 60000",
+   "claimed": 90000.0,
+   "value": 90000.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute gross income tax before credit",
+     "what": "Apply the 10%, 22%, and 32% brackets to $68,250 to find the tax before the credit."
+    },
+    {
+     "id": "c2",
+     "title": "Calculate reduced tax credit",
+     "what": "Reduce the $2,400 credit by 8% of income above $60,000, ensuring it does not go below zero."
+    },
+    {
+     "id": "c3",
+     "title": "Subtract credit and floor at zero",
+     "what": "Subtract the reduced credit from gross tax and take the maximum of that result and zero."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "10% of the first $12,500: $1,250.00.  \n22% of the next $39,500: $8,690.00.  \n32% of the remaining $16,250: $5,200.00.  \n\nGross tax before credit: $15,140.00.\n\nIncome above $60,000: $8,250. The credit reduction is 8% of this amount, or $660.00. The reduced credit is $2,400.00 \u2212 $660.00 = $1,740.00, which remains above zero.\n\nTax after credit: $15,140.00 \u2212 $1,740.00 = $13,400.00. The zero floor does not change this amount.\n\nFINAL: 13400.00"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "The prompt requires digits only without non-digit characters other than a decimal point, but if the answer is an integer number of dollars, trailing zeros might be challenged, or conversely, the draft's formatting matches cents precision. More substantially, 'from $12,500 up to $52,000' is ambiguous as to whether $12,500 is taxed twice if brackets are inclusive on both ends, though standard tax brackets avoid double taxation."
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "Wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 5,
+   "answer": "Bracket 1: 10% of $12,500 = $1,250.00.\nBracket 2: 22% of ($52,000-$12,500)=$39,500 = $8,690.00.\nBracket 3: 32% of ($68,250-$52,000)=$16,250 = $5,200.00.\nGross tax = 1,250+8,690+5,200 = $15,140.00.\nIncome above $60,000 = $8,250; credit reduction = 8%\u00d78,250 = $660.00.\nReduced credit = 2,400-660 = $1,740.00 (above zero, so stands).\nTax after credit = 15,140 - 1,740 = $13,400.00 (above zero, so floor doesn't apply).\n\nFINAL: 13400.00"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The credit taper is 8% of income above $60,000 \u2014 is this 8% of the excess ($8,250) or 8% per some other base, and does any reading of the wording support tapering against a different threshold or rate that would change the reduction from $660?",
+    "The phrase 'the credit is reduced by 8% of any income above $60,000' combined with 'it cannot go below zero' \u2014 at what income would the credit fully vanish, and does $68,250 sit below that point as the draft assumes?",
+    "Is there any reading under which the 32% bracket applies to income above $52,000 only up to some cap, or under which the credit is applied before rather than after computing gross tax, and would either change the final figure?"
+   ],
+   "replies": [
+    "1. Plain reading: 8% of the excess over $60,000, i.e. 8%\u00d78,250=$660. No alternate base is suggested by the wording. 2. Credit hits zero when 2400-0.08(x-60000)=0 \u2192 x-60000=30000 \u2192 x=$90,000. $68,250<$90,000, so the taper floor doesn't bind; the draft's assumption holds. 3. No cap on the 32% bracket is stated (it applies to all income above $52,000), and 'subtracted' after describing bracket tax computation implies credit applies after gross tax, not before. Neither alternate reading is supported by the text, so the original computation stands.",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Can someone independently recompute and confirm the arithmetic: 22% of $39,500, 32% of $16,250, the gross-tax sum $15,140, and the final $15,140 \u2212 $1,740, including that $68,250 \u2212 $52,000 = $16,250 is the correct top-bracket base?"
+   ],
+   "replies": [
+    "Recomputed: 22%\u00d739,500=8,690.00; 32%\u00d716,250=5,200.00 (68,250-52,000=16,250 correct); gross=1,250+8,690+5,200=15,140.00; credit reduction=8%\u00d78,250=660, credit=1,740; final=15,140-1,740=13,400.00. All arithmetic confirmed correct, no errors found."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Does the wording 'income tax is 10% on the first $12,500, 22% from $12,500 up to $52,000, and 32% above $52,000' unambiguously indicate marginal/slice taxation, and does the phrase 'income above $60,000' for the 8% taper refer to gross income ($68,250) rather than any post-bracket or taxable figure? Please cite the specific clause supporting each reading, and state what the answer would be under the alternative flat-rate reading.",
+    "Does the required output format ('For a number give digits only... use a decimal point', amount to the nearest cent) accept '13400.00', or should trailing cents be omitted when the value is exact?"
+   ],
+   "replies": [
+    "Math checks out: 1250+8690+5200=15140; 8%*8250=660; 2400-660=1740; 15140-1740=13400.00. On Q5: the phrase 'X% on the first $12,500, Y% from $12,500 up to $52,000, Z% above $52,000' is the standard slice/marginal-bracket phrasing (each rate attaches to a distinct income band), not a flat/avg rate applied to total income - there's no clause suggesting whichever bracket contains total income determines a single flat rate, so marginal is the only textually supported reading. Under a (nonstandard) flat-rate misreading, tax would be 32%*68,250=21,840, then credit steps the same way: 21,840-1,740=20,100.00 - but this isn't supported by the wording. On 'income above $60,000': the problem never defines a separate 'taxable income' distinct from gross income, and gives no post-bracket adjustment concept, so $68,250 (gross) is the only figure available - 68,250-60,000=8,250 is correct. Q6: the format instructions explicitly say 'to the nearest cent,' which implies two decimal places are expected/acceptable; '13400.00' conforms. No evidence trailing zeros should be stripped.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Bracket 1: 10% of $12,500 = $1,250.00.\nBracket 2: 22% of ($52,000-$12,500)=$39,500 = $8,690.00.\nBracket 3: 32% of ($68,250-$52,000)=$16,250 = $5,200.00.\nGross tax = 1,250+8,690+5,200 = $15,140.00.\nIncome above $60,000 = $8,250; credit reduction = 8%\u00d78,250 = $660.00.\nReduced credit = 2,400-660 = $1,740.00 (above zero, so stands).\nTax after credit = 15,140 - 1,740 = $13,400.00 (above zero, so floor doesn't apply).\n\nFINAL: 13400.00"
+}

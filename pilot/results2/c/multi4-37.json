@@ -1,0 +1,289 @@
+{
+ "task_id": "multi4-37",
+ "type": "multi4",
+ "condition": "c",
+ "correct": false,
+ "detail": "ok: got '2026-08-11', expected '2026-08-11' | ok: got 62.0, expected 62.0 | ok: got 6696.6, expected 6696.99 | no: got 63.0, expected 54.0",
+ "error": null,
+ "seconds": 488.8,
+ "tokens": 217796,
+ "prompt_tokens": 148722,
+ "completion_tokens": 69074,
+ "cost": 0.52889,
+ "calls": 50,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": false,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 1,
+ "hub_sent_back": true,
+ "hub_corrected": true,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "79971*4700",
+   "claimed": 375863700.0,
+   "value": 375863700.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "375863700*720",
+   "claimed": 270621864000.0,
+   "value": 270621864000.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "270621864000*8627",
+   "claimed": 2334654820728000.0,
+   "value": 2334654820728000.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "2+3+3+4+6+5+4+8+2+0+7+2+8+0+0+0",
+   "claimed": 54.0,
+   "value": 54.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A - business day calculation",
+     "what": "Count 88 business days (Mon-Fri) after 2026-04-02, skipping holidays 2026-04-24, 2026-04-27, 2026-05-15, 2026-07-07, 2026-07-24. Verify by explicit week-by-week enumeration or formula, confirming each skipped holiday actually falls on a weekday within the counting range."
+    },
+    {
+     "id": "c2",
+     "title": "Part B - modular exponentiation",
+     "what": "Compute 60^423 mod 101 using Fermat's little theorem (101 prime, so 60^100\u22611 mod 101); reduce exponent 423 mod 100 = 23, then compute 60^23 mod 101 via fast exponentiation and verify arithmetic step by step."
+    },
+    {
+     "id": "c3",
+     "title": "Part C - sequential balance simulation",
+     "what": "Starting at $4300, apply the 15 listed transactions in order month by month, then after each month's transaction check if balance < 2000 (apply $8 fee if so) then add 0.25% interest; recompute cumulative balance precisely to the cent at each step, double-checking the running total arithmetic."
+    },
+    {
+     "id": "c4",
+     "title": "Part D - large multiplication and digit sum",
+     "what": "Compute 79971 x 4700 x 720 x 8627 exactly (as an integer, possibly via stepwise multiplication), then sum the decimal digits of the final product; verify by recomputing the product via a different grouping order to cross-check."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "B"
+    ],
+    "c4": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Part A: Business days from 2026-04-02, skipping weekends and the five listed holidays (all weekdays), reach day 88 on 2026-08-11 (per c1's month-by-month weekday count: Apr 18, May 20, Jun 22, Jul 21 = 81, then +7 in August lands on Tue 2026-08-11).\n\nPart B: Using Fermat's little theorem, 60^100 \u2261 1 mod 101, so 60^423 \u2261 60^23 mod 101. Fast exponentiation gives 60^23 \u2261 62 mod 101 (verified via pow(60,423,101)).\n\nPart C: Sequential simulation (transaction, then fee-check, then +0.25% interest) for 15 months, starting at $4300, never drops below $2000, so no $8 fee is ever applied. Final balance \u2248 $6696.99 (c3's figure; c4's stray \"4408.52\" FINAL line was inconsistent with its own body work and is discarded).\n\nPart D: 79971\u00d74700=375,863,700; \u00d7720=270,621,864,000; \u00d78627=2,334,654,820,728,000 (cross-checked via two groupings). Digit sum: 2+3+3+4+6+5+4+8+2+0+7+2+8+0+0+0 = 54. (c3's stray \"36\" FINAL value for Part D was inconsistent with its own working and is discarded.)\n\nResolving contradictions: both c3 and c4 appended mismatched FINAL lines not matching their own shown work; the correct values are taken from each draft's body calculations: A=2026-08-11, B=62, C=6696.99, D=54.\n\nFINAL: 2026-08-11; 62; 6696.99; 54"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The month-by-month count is incorrect. Excluding 2026-04-02 itself, April 3-30 contains 20 counted business days after excluding 2026-04-24; May contributes 20, June 22, and July 21, totaling 83 through July 31. The next five business days are August 3-7, so day 88 is 2026-08-07, not August 11."
+    },
+    {
+     "from": "D",
+     "problem": "The draft relies on an unverified month-by-month count (Apr 18, May 20, Jun 22, Jul 21 = 81, then +7 in August) without showing the actual date arithmetic or holiday handling. The listed holidays include 2026-04-24 and 2026-04-27, which are adjacent to a weekend, and 2026-07-24, which could affect the July count."
+    },
+    {
+     "from": "D",
+     "problem": "The draft states 'never drops below $2000' but does not provide the month-by-month balance or transaction sequence to support this. The monthly transaction list has 15 items but the problem says 'for months 1 through 15', which may mean the same 15-transaction cycle repeats each month or that the list is applied once per month in order\u2014the interpretation is ambiguous and affects the result."
+    },
+    {
+     "from": "D",
+     "problem": "The draft computes the product as 2,334,654,820,728,000 and sums digits to 54, but this is not independently verified. The intermediate product 270,621,864,000 \u00d7 8627 is asserted without showing the multiplication."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 2,
+   "rejected": 2,
+   "answer": "Part A: Count weekdays after 2026-04-02, excluding holidays. April 3\u201330: Apr 3, 6\u201310, 13\u201317, 20\u201323, 28\u201330 = 18 weekdays (excluding Apr 24 and Apr 27). May: 1, 4\u20138, 11\u201314, 18\u201322, 25\u201329 = 20. June: 1\u20135, 8\u201312, 15\u201319, 22\u201326, 29\u201330 = 22. July: 1\u20133, 6, 8\u201310, 13\u201317, 20\u201323, 27\u201331 = 21 (excluding Jul 7 and Jul 24). Total through July 31 is 18+20+22+21 = 81. The next seven August business days are Aug 3, 4, 5, 6, 7, 10, 11, so day 88 is 2026-08-11.\n\nPart B: 101 is prime, so by Fermat 60^100 \u2261 1 mod 101. Since 423 \u2261 23 mod 100, 60^423 \u2261 60^23 mod 101. Fast exponentiation gives 60^23 \u2261 62 mod 101.\n\nPart C: The listed 15 transactions correspond one per month for months 1\u201315. Applying them in order, then checking for the $8 fee (never triggered), then adding 0.25% interest gives final balance 6696.99.\n\nPart D: 79971 \u00d7 4700 = 375,863,700. Multiplying by 720 gives 270,621,864,000. Multiplying by 8627 gives 2,334,654,820,728,000. Digit sum = 2+3+3+4+6+5+4+8+2+0+7+2+8+0+0+0 = 54.\n\nFINAL: 2026-08-11; 62; 6696.99; 54"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The numerical result is consistent, but the draft omits the requested brief working. It does not show the month-by-month recurrence or demonstrate that the balance remains above $2,000, so the claim that the $8 fee is never triggered is not independently checkable from the draft."
+    },
+    {
+     "from": "B",
+     "problem": "The arithmetic in Parts A-D checks out, but the response should include enough intermediate computation to satisfy \"Show brief working,\" especially for Part C. As written, Part C gives only an assertion rather than checkable working."
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure; 60^2 = 3600 = 35*101 + 65 \u2261 -36 mod 101. Then 60^4 \u2261 (-36)^2 = 1296 = 12*101 + 84 \u2261 -17. 60^8 \u2261 (-17)^2 = 289 \u2261 -14. 60^16 \u2261 (-14)^2 = 196 \u2261 -6. Then 60^23 = 60^16 * 60^4 * 60^2 * 60 \u2261 (-6) * (-17) * (-36) * 60 \u2261 102 * (-2160) \u2261 1 * (-39) \u2261 62 mod 101. Wait, 102 \u2261 1 mod 101, but -2160 mod 101: 2160 / 101 = 21 R 39, so -2160 \u2261 -39 \u2261 62 mod 101. Wait, let's recompute 60^23 mod 101: 60 = -41. (-41)^2 = 1681 = 16*101 + 65 \u2261 65 \u2261 -36. Correct. 60^4 \u2261 (-36)^2 = 1296 = 13*101 - 17 \u2261 -17. Correct. 60^8 \u2261 289 = 3*101 - 14 \u2261 -14. Correct. 60^16 \u2261 196 = 2*101 - 6 \u2261 -6. Correct. 60^23 = 60^16 * 60^4 * 60^2 * 60^1: 60^16 * 60^4 = (-6)*(-17) = 102 \u2261 1. 60^2 * 60 = (-36)*60 = -2160 = -22*101 + 62 \u2261 62. So 1 * 62 = 62. Part B is correct!"
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure; let's trace monthly balances: start 4300. M1: -250 -> 4050 * 1.0025 = 4060.125. M2: +300 -> 4360.125 * 1.0025 = 4371.0253. Let's calculate carefully: total net deposits = -250+300-250+700+450-900+450+300-650+300+700+1100+300-650+300 = 2200. Without interest, balance is 6500. Interest compounded over 15 months on ~5000 is around 5000 * 0.0025 * 8 \u2248 100, so around 6600-6700. Let's do exact Python calculation if possible: M1: 4050*1.0025 = 4060.125; M2: +300=4360.125 -> 4371.0253; M3: -250=4121.0253 -> 4131.3279; M4: +700=4831.3279 -> 4843.4062; M5: +450=5293.4062 -> 5306.6397; M6: -900=4406.6397 -> 4417.6563; M7: +450=4867.6563 -> 4879.8254; M8: +300=5179.8254 -> 5192.7750; M9: -650=4542.7750 -> 4554.1319; M10: +300=4854.1319 -> 4866.2673; M11: +700=5566.2673 -> 5580.1829; M12: +1100=6680.1829 -> 6696.8834; M13: +300=6996.8834 -> 7014.3756; M14: -650=6364.3756 -> 6380.2865; M15: +300=6680.2865 -> 6696.9873, which rounds to 6696.99. Correct!"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "Part A: Counting weekdays from 2026-04-03, skipping holidays 4/24,4/27,5/15,7/7,7/24: April gives 18, May 20, June 22, July 21 (total 81 through July 31). Next 7 weekdays in August: Aug 3,4,5,6,7,10,11 \u2192 day 88 = 2026-08-11.\n\nPart B: 60^423 mod 101, with 60^100\u22611 (Fermat), 423 mod100=23. Compute 60\u2261-41: (-41)^2=1681\u2261-36; (-36)^2=1296\u2261-17; (-17)^2=289\u2261-14; (-14)^2=196\u2261-6 \u2192 that's 60^2,4,8,16. 60^23=60^16*60^4*60^2*60 \u2261(-6)(-17)(-36)(60). (-6)(-17)=102\u22611; 1*(-36)=-36; -36*60=-2160\u226162 mod101. So remainder = 62.\n\nPart C: Recurrence B_m=1.0025*(B_{m-1}+t_m), B_0=4300, balance never drops below 2000 so no fee triggers.\nM1:4050\u21924060.125\nM2:4360.125\u21924371.0253\nM3:4121.0253\u21924131.3279\nM4:4831.3279\u21924843.4062\nM5:5293.4062\u21925306.6397\nM6:4406.6397\u21924417.6563\nM7:4867.6563\u21924879.8254\nM8:5179.8254\u21925192.7750\nM9:4542.7750\u21924554.1319\nM10:4854.1319\u21924866.2673\nM11:5566.2673\u21925580.1829\nM12:6680.1829\u21926696.8834\nM13:6996.8834\u21927014.3756\nM14:6364.3756\u21926380.2865\nM15:6680.2865\u21926696.9873 \u2192 rounds to 6696.99\n\nPart D: 79971\u00d74700=375,863,700; \u00d7720=270,621,864,000; \u00d78627=2,334,654,820,728,000. Digit sum: 2+3+3+4+6+5+4+8+2+0+7+2+8+0+0+0=54.\n\nFINAL: 2026-08-11; 62; 6696.99; 54"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "April 2026 has 30 days. From April 3 to April 30 inclusive is 28 calendar days. Weekdays: April 3 (Fri), 6-10 (Mon-Fri = 5), 13-17 (5), 20-24 (5, but 4/24 is a holiday so 4), 27-30 (4, but 4/27 is a holiday so 3). Total = 1 + 5 + 5 + 4 + 3 = 18. This part is correct. However, the draft claims May gives 20 weekdays, but May 2026 has 31 days with May 1 (Fri), May 4-8 (5), 11-15 (5, but 5/15 is a holiday so 4), 18-22 (5), 25-29 (5). Total = 1 + 5 + 4 + 5 + 5 = 20. Correct. June 2026 has 30 days: June 1 (Mon), 1-5 (5), 8-12 (5), 15-19 (5), 22-26 (5), 29-30 (2). Total = 5+5+5+5+2 = 22. Correct. July 2026 has 31 days: July 1 (Wed), 1-3 (3), 6-10 (5, but 7/7 is holiday so 4), 13-17 (5), 20-24 (5, but 7/24 is holiday so 4), 27-31 (5). Total = 3+4+5+4+5 = 21. Correct. Sum = 18+20+22+21 = 81. Correct."
+    },
+    {
+     "from": "D",
+     "problem": "Fermat's little theorem gives 60^100 \u2261 1 mod 101 since 101 is prime and gcd(60,101)=1. 423 mod 100 = 23. The draft computes 60^23 mod 101 by repeated squaring. Let's verify: 60^2 = 3600 \u2261 3600 - 35*101 = 3600 - 3535 = 65, not -36 as claimed. The draft uses 60 \u2261 -41, so (-41)^2 = 1681 \u2261 1681 - 16*101 = 1681 - 1616 = 65. The draft says 1681 \u2261 -36, which is wrong because -36 \u2261 65 mod 101 (since 101 - 36 = 65). The draft's intermediate values are incorrect. Let's recompute correctly: 60^2 \u2261 65. 60^4 = 65^2 = 4225 \u2261 4225 - 41*101 = 4225 - 4141 = 84. 60^8 = 84^2 = 7056 \u2261 7056 - 69*101 = 7056 - 6969 = 87. 60^16 = 87^2 = 7569 \u2261 7569 - 74*101 = 7569 - 7474 = 95. 60^23 = 60^16 * 60^4 * 60^2 * 60 \u2261 95 * 84 * 65 * 60 mod 101. 95*84 = 7980 \u2261 7980 - 79*101 = 7980 - 7979 = 1. 1*65 = 65. 65*60 = 3900 \u2261 3900 - 38*101 = 3900 - 3838 = 62. So the final answer 62 is correct, but the intermediate steps in the draft are wrong."
+    },
+    {
+     "from": "D",
+     "problem": "The draft claims the balance never drops below $2,000, but this is not verified. The lowest balance in the draft's table is $4,121.0253 after month 3, which is above $2,000. However, the draft does not show the balance after each transaction before interest, only after interest. The fee check occurs after the transaction but before interest. The draft's recurrence B_m = 1.0025*(B_{m-1}+t_m) assumes no fee. If the balance after a transaction (before interest) ever drops below $2,000, the fee would apply. The draft's table shows balances after interest, not after transaction. For example, after month 1 transaction: 4300 - 250 + 300 - 250 + 700 + 450 - 900 + 450 + 300 - 650 + 300 + 700 + 1100 + 300 - 650 + 300 = 4050. This is above $2,000. The draft's table shows 4050 \u2192 4060.125 after interest, which is correct. But the draft does not show the balance after each individual transaction, only the net transaction sum. The net transaction sum for each month is: M1: -250+300-250+700+450-900+450+300-650+300+700+1100+300-650+300 = 4050 - 4300 = -250? Wait, let's compute: 4300 - 250 + 300 - 250 + 700 + 450 - 900 + 450 + 300 - 650 + 300 + 700 + 1100 + 300 - 650 + 300 = 4300 - 250 + 300 - 250 + 700 + 450 - 900 + 450 + 300 - 650 + 300 + 700 + 1100 + 300 - 650 + 300. Let's sum the transactions: -250+300-250+700+450-900+450+300-650+300+700+1100+300-650+300 = (-250+300) = 50; 50-250 = -200; -200+700 = 500; 500+450 = 950; 950-900 = 50; 50+450 = 500; 500+300 = 800; 800-650 = 150; 150+300 = 450; 450+700 = 1150; 1150+1100 = 2250; 2250+300 = 2550; 2550-650 = 1900; 1900+300 = 2200. So net transaction is +2200? That would make B_1 = 4300 + 2200 = 6500, not 4050. The draft's table shows M1: 4050 \u2192 4060.125, which implies net transaction = -250. This is a major discrepancy. The draft's transaction list for month 1 is: withdrawal of $250, deposit of $300, withdrawal of $250, deposit of $700, deposit of $450, withdrawal of $900, deposit of $450, deposit of $300, withdrawal of $650, deposit of $300, deposit of $700, deposit of $1100, deposit of $300, withdrawal of $650, deposit of $300. Sum = -250+300-250+700+450-900+450+300-650+300+700+1100+300-650+300 = 2200. So B_1 after transaction = 4300 + 2200 = 6500. Then interest: 6500 * 1.0025 = 6516.25. The draft's M1 value of 4050 is wrong. The draft appears to have used a different transaction list or made an arithmetic error. This invalidates the entire Part C answer."
+    },
+    {
+     "from": "D",
+     "problem": "The draft's product is 2,334,654,820,728,000. Let's verify: 79971 \u00d7 4700 = 375,863,700. 375,863,700 \u00d7 720 = 270,621,864,000. 270,621,864,000 \u00d7 8627 = 270,621,864,000 \u00d7 8627. 270,621,864,000 \u00d7 8000 = 2,164,974,912,000,000. 270,621,864,000 \u00d7 600 = 162,373,118,400,000. 270,621,864,000 \u00d7 20 = 5,412,437,280,000. 270,621,864,000 \u00d7 7 = 1,894,353,048,000. Sum = 2,164,974,912,000,000 + 162,373,118,400,000 = 2,327,348,030,400,000. + 5,412,437,280,000 = 2,332,760,467,680,000. + 1,894,353,048,000 = 2,334,654,820,728,000. Correct. Digit sum: 2+3+3+4+6+5+4+8+2+0+7+2+8+0+0+0 = 54. Correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "Part A: Starting from 2026-04-03, weekdays excluding specified holidays:\n- April: 18 days (4/24, 4/27 excluded)\n- May: 20 days (5/15 excluded)\n- June: 22 days\n- July: 21 days (7/7, 7/24 excluded)\nCumulative total through July 31 = 81 days. 7 more business days in August are Aug 3, 4, 5, 6, 7, 10, 11. Day 88 is 2026-08-11.\n\nPart B: By Fermat's Little Theorem, 60^100 \u2261 1 (mod 101), so 60^423 \u2261 60^23 (mod 101).\n60^2 = 3600 \u2261 65\n60^4 = 65^2 = 4225 \u2261 84\n60^8 = 84^2 = 7056 \u2261 87\n60^16 = 87^2 = 7569 \u2261 95\n60^23 = 60^16 \u00d7 60^4 \u00d7 60^2 \u00d7 60 \u2261 95 \u00d7 84 \u00d7 65 \u00d7 60 \u2261 1 \u00d7 65 \u00d7 60 = 3900 \u2261 62 (mod 101).\n\nPart C: Exactly one transaction occurs per month across 15 months: M1: -250, M2: +300, M3: -250, M4: +700, M5: +450, M6: -900, M7: +450, M8: +300, M9: -650, M10: +300, M11: +700, M12: +1100, M13: +300, M14: -650, M15: +300.\nStarting balance = 4300.00. The lowest balance after any monthly transaction is $4,050.00 (M1), well above $2,000, so no $8 fees apply.\nApplying B_m = (B_{m-1} + t_m) \u00d7 1.0025 each month yields B_15 = 6696.9873... which rounds to 6696.99.\n\nPart D: 79971 \u00d7 4700 \u00d7 720 \u00d7 8627 = 2,334,654,820,728,000.\nSum of digits: 2+3+3+4+6+5+4+8+2+0+7+2+8+0+0+0 = 54.\n\nFINAL: 2026-08-11; 62; 6696.99; 54"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Seat A's final-vote objection claims 79971*4700*720*8627 = 2,335,275,845,328,000 with digit sum 57, while the draft and Seat D's partial-products breakdown give 2,334,654,820,728,000 with digit sum 54. Which intermediate factor do the two disagree on \u2014 79971*4700, that result times 720, or the final times 8627 \u2014 and what is the digit-by-digit resolution of that specific step?",
+    "Part C hinges on the fee test being applied to the post-transaction, pre-interest balance each month. What is the minimum post-transaction pre-interest balance across all 15 months, in which month does it occur, and is it strictly above $2,000?",
+    "Part A counts 2026-04-02 as a Thursday and starts counting at 2026-04-03. What independent check confirms the weekday of 2026-04-02, and does the August count (3,4,5,6,7,10,11) assume no holidays in August beyond those listed?"
+   ],
+   "replies": [
+    "Computing intermediate products:\n- 79971 * 4700 = 375,863,700.\n- 375,863,700 * 720 = 270,621,864,000.\n- 270,621,864,000 * 8627 = 2,334,654,820,728,000.\nNotice that 2,335,275,845,328,000 / (79971 * 4700 * 720) = 2,335,275,845,328,000 / 270,621,864,000 = 8629.29..., which indicates Seat A used an incorrect factor of ~8629.3 or miscalculated the final multiplication by 8627. Specifically, 270,621,864 * 8627: 270,621,864 * 7 = 1,894,353,048; 270,621,864 * 20 = 5,412,437,280; 270,621,864 * 600 = 162,373,118,400; 270,621,864 * 8000 = 2,164,974,912,000. Sum = 2,334,654,820,728. Appending the three zeros gives 2,334,654,820,728,000, confirming the draft and Seat D are correct with digit sum 54.",
+    "Post-transaction pre-interest balances B_{m-1} + t_m for months 1 through 15:\nM1: 4300.00 - 250 = 4050.00\nM2: 4060.125 + 300 = 4360.125\nM3: 4371.025 + (-250) = 4121.025\nM4: 4131.328 + 700 = 4831.328\nM5: 4843.406 + 450 = 5293.406\nM6: 5306.640 - 900 = 4406.640\nM7: 4417.656 + 450 = 4867.656\nM8: 4879.825 + 300 = 5179.825\nM9: 5192.775 - 650 = 4542.775\nM10: 4554.132 + 300 = 4854.132\nM11: 4866.267 + 700 = 5566.267\nM12: 5580.183 + 1100 = 6680.183\nM13: 6696.883 + 300 = 6996.883\nM14: 7014.376 - 650 = 6364.376\nM15: 6380.286 + 300 = 6680.286\nThe minimum post-transaction pre-interest balance across all 15 months is exactly $4,050.00 in Month 1, which is strictly above $2,000.",
+    "Using Zeller's congruence / standard calendar arithmetic: 2026-01-01 is Thursday (since 2025-01-01 was Wednesday, 365 mod 7 = 1). January has 31 days (3 mod 7), February 28 days (0 mod 7), March 31 days (3 mod 7); total offset to April 1 is 6 days, making 2026-04-01 a Wednesday, and 2026-04-02 a Thursday. Independent check confirms 2026-04-02 is Thursday. The August count (Aug 3 to Aug 11 = 7 business days) strictly adheres to the prompt's instruction ('skipping these holidays: 2026-04-24, 2026-04-27, 2026-05-15, 2026-07-07, 2026-07-24'), as no August holidays were specified."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part B has never been checked by the panel: please verify 60^423 mod 101 by an independent route (e.g., confirm 101 is prime and 60 is not a multiple of it, confirm 423 mod 100 = 23, then recompute 60^23 mod 101 by a different decomposition such as 60^23 = (60^5)^4 * 60^3, or by computing 60^-1 mod 101 and using 60^23 = 60^24 * 60^-1). State each intermediate residue so it can be compared with the draft's 65, 84, 87, 95 and final 62.",
+    "Part C: does the stated $6696.99 survive the alternative convention in which the balance is rounded to the nearest cent after each month's interest posting (rather than carrying unrounded values for all 15 months)? Give the month-15 figure under that convention and the size of the discrepancy, and confirm whether the fee test outcome is unchanged under it."
+   ],
+   "replies": [
+    "101 is prime (no prime factors up to sqrt(101) < 11) and gcd(60, 101) = 1, so by Fermat's Little Theorem 60^100 = 1 mod 101. Thus 60^423 = 60^23 mod 101.\nIndependent verification via 60^23 = (60^3) * (60^5)^4 mod 101:\n- 60 = -41 mod 101\n- 60^2 = (-41)^2 = 1681 = 16*101 + 65 = 65 mod 101\n- 60^3 = 65 * 60 = 3900 = 38*101 + 62 = 62 mod 101\n- 60^5 = 60^3 * 60^2 = 62 * 65 = 4030 = 39*101 + 91 = 91 = -10 mod 101\n- (60^5)^2 = (-10)^2 = 100 = -1 mod 101\n- (60^5)^4 = (-1)^2 = 1 mod 101\n- Therefore, 60^23 = 60^3 * (60^5)^4 = 62 * 1 = 62 mod 101.\nDraft's powers of 2 residues check:\n60^2 = 65; 60^4 = 65^2 = 4225 = 84; 60^8 = 84^2 = (-17)^2 = 289 = 87; 60^16 = 87^2 = (-14)^2 = 196 = 95 = -6.\nDraft's product: 60^16 * 60^4 = (-6) * 84 = -504 = -504 + 5*101 = 1 mod 101, then 1 * 60^2 * 60 = 60^3 = 62 mod 101. Both routes confirm 62.",
+    "Simulating Part C with rounding to the nearest cent after each monthly interest addition:\nM1: (4300 - 250) * 1.0025 = 4050 * 1.0025 = 4060.125 -> 4060.13\nM2: (4060.13 + 300) * 1.0025 = 4360.13 * 1.0025 = 4371.030325 -> 4371.03\nM3: (4371.03 - 250) * 1.0025 = 4121.03 * 1.0025 = 4131.332575 -> 4131.33\nM4: (4131.33 + 700) * 1.0025 = 4831.33 * 1.0025 = 4843.408325 -> 4843.41\nM5: (4843.41 + 450) * 1.0025 = 5293.41 * 1.0025 = 5306.643525 -> 5306.64\nM6: (5306.64 - 900) * 1.0025 = 4406.64 * 1.0025 = 4417.6566 -> 4417.66\nM7: (4417.66 + 450) * 1.0025 = 4867.66 * 1.0025 = 4879.82915 -> 4879.83\nM8: (4879.83 + 300) * 1.0025 = 5179.83 * 1.0025 = 5192.779575 -> 5192.78\nM9: (5192.78 - 650) * 1.0025 = 4542.78 * 1.0025 = 4554.13695 -> 4554.14\nM10: (4554.14 + 300) * 1.0025 = 4854.14 * 1.0025 = 4866.27535 -> 4866.28\nM11: (4866.28 + 700) * 1.0025 = 5566.28 * 1.0025 = 5580.1957 -> 5580.20\nM12: (5580.20 + 1100) * 1.0025 = 6680.20 * 1.0025 = 6696.9005 -> 6696.90\nM13: (6696.90 + 300) * 1.0025 = 6996.90 * 1.0025 = 7014.39225 -> 7014.39\nM14: (7014.39 - 650) * 1.0025 = 6364.39 * 1.0025 = 6380.300975 -> 6380.30\nM15: (6380.30 + 300) * 1.0025 = 6680.30 * 1.0025 = 6697.00075 -> 6697.00\nUnder monthly rounding, the month-15 balance is $6697.00. The discrepancy is $0.01 ($6697.00 vs $6696.99). In both conventions, all monthly post-transaction balances exceed $4,000, so the $8 fee test outcome remains unaffected (0 fees charged)."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Parts A, C(unrounded) and D have still never been independently checked \u2014 please verify all three and show the intermediates: (A) confirm the weekday of each listed holiday (2026-04-24, 2026-04-27, 2026-05-15, 2026-07-07, 2026-07-24) so that only those falling Mon\u2013Fri are deducted, confirm the weekday of 2026-04-02 and that counting starts at 2026-04-03, then give the month-by-month weekday counts for April (from 4/3), May, June, July 2026 with holidays removed and the running cumulative, and name the final 7 August business days leading to day 88; (B-style check not needed) (C) recompute the no-rounding chain B_m = (B_{m-1}+t_m)*1.0025 carrying full precision and state the month-12 through month-15 values and the exact month-15 figure before rounding, so the panel can say which convention (6696.99 vs 6697.00) the problem's wording supports; (D) recompute 79971 x 4700 x 720 x 8627 by a different grouping (e.g. (79971 x 8627) x (4700 x 720)) stating each partial product, confirm the full 16-digit result and restate the digit sum with the addition shown."
+   ],
+   "replies": [
+    "Part A Verification:\n- 2026-04-02 is a Thursday. Counting starts on Friday, 2026-04-03.\n- Weekdays of holidays: 2026-04-24 (Friday), 2026-04-27 (Monday), 2026-05-15 (Friday), 2026-07-07 (Tuesday), 2026-07-24 (Friday). All 5 fall on Monday\u2013Friday.\n- Month-by-month business days:\n  * April 2026 (from Apr 3 to Apr 30): 20 weekdays minus 2 holidays (Apr 24, Apr 27) = 18 days (cumulative: 18).\n  * May 2026: 21 weekdays minus 1 holiday (May 15) = 20 days (cumulative: 38).\n  * June 2026: 22 weekdays minus 0 holidays = 22 days (cumulative: 60).\n  * July 2026: 23 weekdays minus 2 holidays (Jul 7, Jul 24) = 21 days (cumulative: 81).\n- August business days needed: 88 - 81 = 7 days.\n  * Day 82: Mon Aug 3\n  * Day 83: Tue Aug 4\n  * Day 84: Wed Aug 5\n  * Day 85: Thu Aug 6\n  * Day 86: Fri Aug 7\n  * Day 87: Mon Aug 10\n  * Day 88: Tue Aug 11 (2026-08-11).\n\nPart C Verification (unrounded full precision, t_m sequence: -250, +300, -250, +700, +450, -900, +450, +300, -650, +300, +700, +1100, +300, -650, +300):\n- B_0 = 4300\n- B_1 = (4300 - 250) * 1.0025 = 4060.125\n- B_2 = (4060.125 + 300) * 1.0025 = 4370.9753125\n- B_3 = (4370.9753125 - 250) * 1.0025 = 4131.20275078125\n- B_4 = (4131.20275078125 + 700) * 1.0025 = 4843.280757658203\n- B_5 = (4843.280757658203 + 450) * 1.0025 = 5306.488959552349\n- B_6 = (5306.488959552349 - 900) * 1.0025 = 4417.50518195123\n- B_7 = (4417.50518195123 + 450) * 1.0025 = 4879.698944906108\n- B_8 = (4879.698944906108 + 300) * 1.0025 = 5192.448192268374\n- B_9 = (5192.448192268374 - 650) * 1.0025 = 4553.829312749045\n- B_10 = (4553.829312749045 + 300) * 1.0025 = 4865.963886030917\n- B_11 = (4865.963886030917 + 700) * 1.0025 = 5579.878795746\n- B_12 = (5579.878795746 + 1100) * 1.0025 = 6696.528492735364\n- B_13 = (6696.528492735364 + 300) * 1.0025 = 7014.0198139672025\n- B_14 = (7014.0198139672025 - 650) * 1.0025 = 6379.90486350212\n- B_15 = (6379.90486350212 + 300) * 1.0025 = 6696.604625660875\nRounding B_15 = 6696.604625... to the nearest cent gives 6696.60, not 6696.99 (or 6697.00). Note that monthly rounding to the nearest cent also yields exactly 6696.60.\n\nPart D Verification:\n- Regroup: (79971 * 8627) * (4700 * 720)\n- 79971 * 8627 = 689,910,017\n- 4700 * 720 = 3,384,000\n- 689,910,017 * 3,384,000 = 2,334,655,497,528,000 (note: the submitted product had an arithmetic error, giving 2,334,654,820,728,000 instead of 2,334,655,497,528,000).\n- Sum of decimal digits: 2 + 3 + 3 + 4 + 6 + 5 + 5 + 4 + 9 + 7 + 5 + 2 + 8 + 0 + 0 + 0 = 63."
+   ],
+   "open": [
+    "Part A is now fully evidenced and correct (2026-04-02 = Thursday, count starts 4/3; all five holidays fall Mon-Fri; 18+20+22+21 = 81 through 7/31; Aug 3,4,5,6,7,10,11 gives day 88 = 2026-08-11). But the reply's Parts C and D are not verified \u2014 each contains an arithmetic slip that the record now contradicts.\n\nPart C: the chain breaks at month 2. (4060.125 + 300) = 4360.125, and 4360.125 x 1.0025 = 4360.125 + 10.9003125 = 4371.0253125, not the 4370.9753125 stated. That 0.05 error propagates through every later month, so B_12 through B_15 as listed (6696.528..., 7014.019..., 6379.904..., 6696.604...) are all suspect, and the claim that the result rounds to 6696.60 rests on them. Recomputing the same recursion with the corrected B_2 lands near 6696.987..., i.e. the 6696.99 convention the panel was asked to adjudicate. The month-by-month-rounding variant was also asserted without intermediates. Part C stays open until the chain is redone from B_2 with each month's 0.0025 multiplier shown.\n\nPart D: the regrouping check is itself wrong. 79971 x 8627 = 639,768,000 + 47,982,600 + 2,159,217 = 689,909,817, not 689,910,017. With the correct partial, 689,909,817 x 3,384,000 = 2,334,654,820,728,000 \u2014 which is exactly the value the reply labelled an 'arithmetic error' in the submission. The independent grouping (79971 x 4700 = 375,863,700; x 720 = 270,621,864,000; x 8627) reaches the same 2,334,654,820,728,000. So both the 16-digit figure in the answer and the digit-sum addition built on it (which sums the digits of a different number) are unsupported; the digit sum must be recomputed from whichever product survives a third check."
+   ],
+   "corrected": true
+  }
+ ],
+ "answer": "Part A: Starting from 2026-04-03, weekdays excluding specified holidays:\n- April: 18 days (4/24, 4/27 excluded)\n- May: 20 days (5/15 excluded)\n- June: 22 days\n- July: 21 days (7/7, 7/24 excluded)\nCumulative total through July 31 = 81 days. 7 more business days in August are Aug 3, 4, 5, 6, 7, 10, 11. Day 88 is 2026-08-11.\n\nPart B: By Fermat's Little Theorem, 60^100 \u2261 1 (mod 101), so 60^423 \u2261 60^23 (mod 101).\n60^2 = 3600 \u2261 65\n60^4 = 65^2 = 4225 \u2261 84\n60^8 = 84^2 = 7056 \u2261 87\n60^16 = 87^2 = 7569 \u2261 95\n60^23 = 60^16 \u00d7 60^4 \u00d7 60^2 \u00d7 60 \u2261 95 \u00d7 84 \u00d7 65 \u00d7 60 \u2261 1 \u00d7 65 \u00d7 60 = 3900 \u2261 62 (mod 101).\n\nPart C: Exactly one transaction occurs per month across 15 months: M1: -250, M2: +300, M3: -250, M4: +700, M5: +450, M6: -900, M7: +450, M8: +300, M9: -650, M10: +300, M11: +700, M12: +1100, M13: +300, M14: -650, M15: +300.\nStarting balance = 4300.00. The lowest balance after any monthly transaction is $4,050.00 (M1), well above $2,000, so no $8 fees apply.\nApplying B_m = (B_{m-1} + t_m) \u00d7 1.0025 each month yields B_15 = 6696.6046... which rounds to 6696.60.\n\nPart D: 79971 \u00d7 4700 \u00d7 720 \u00d7 8627 = 2,334,655,497,528,000.\nSum of digits: 2+3+3+4+6+5+5+4+9+7+5+2+8+0+0+0 = 63.\n\nFINAL: 2026-08-11; 62; 6696.60; 63"
+}

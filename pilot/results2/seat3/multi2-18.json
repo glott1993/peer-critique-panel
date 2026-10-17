@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-18",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got '2027-02-26', expected '2027-02-26' | ok: got 27435.0, expected 27435.0 | ok: got 52.0, expected 52.0",
+ "error": null,
+ "seconds": 18.9,
+ "tokens": 3372,
+ "prompt_tokens": 406,
+ "completion_tokens": 2966,
+ "cost": 0.01143,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:** \nStarting after Saturday, 2026-10-24, we count business days (Monday\u2013Friday), excluding the specified holidays:\n- October 2026: Oct 26\u201330 = 5 business days (running total: 5)\n- November 2026: 21 business days (running total: 26)\n- December 2026: 23 weekdays minus 1 holiday (2026-12-28) = 22 business days (running total: 48)\n- January 2027: 21 weekdays minus 3 holidays (2027-01-15, 2027-01-18, 2027-01-28) = 18 business days (running total: 66)\n- February 2027: We need $84 - 66 = 18$ more business days. In February, there are holidays on Feb 5 and Feb 15.\n  - Feb 1\u20134: 4 days (total: 70)\n  - Feb 8\u201312: 5 days (total: 75)\n  - Feb 16\u201319: 4 days (total: 79)\n  - Feb 22\u201326: 5 days (total: 84)\n\nThe 84th business day is 2027-02-26.\n\n**Part B:** \n- Tax on the first $11,000 at 12%: $11,000 \\times 0.12 = \\$1,320$\n- Tax on income from $11,000 to $45,000 ($34,000) at 24%: $34,000 \\times 0.24 = \\$8,160$\n- Tax on income above $45,000 ($96,300 - $45,000 = $51,300) at 35%: $51,300 \\times 0.35 = \\$17,955$\n- Total initial tax: $\\$1,320 + \\$8,160 + \\$17,955 = \\$27,435$\n- Credit phase-out: Income above $50,000 is $\\$96,300 - \\$50,000 = \\$46,300$. \n  Reduction = $5\\% \\times \\$46,300 = \\$2,315$.\n  Since $\\$2,315 \\ge \\$1,200$, the credit is reduced to $\\$0$.\n- Total tax owed: $\\$27,435.00$\n\n**Part C:** \nSince 101 is prime, by Fermat's Little Theorem, $54^{100} \\equiv 1 \\pmod{101}$.\nThus, $54^{871} \\equiv 54^{71} \\pmod{101}$.\n- $54^2 = 2916 \\equiv -13 \\pmod{101}$\n- $54^3 \\equiv -13 \\times 54 = -702 \\equiv 5 \\pmod{101}$\n- $54^6 \\equiv 5^2 = 25 \\pmod{101}$\n- $54^7 \\equiv 25 \\times 54 = 1350 \\equiv 37 \\pmod{101}$\n- $54^4 \\equiv (-13)^2 = 169 \\equiv -33 \\pmod{101}$\n- $54^8 \\equiv (-33)^2 = 1089 \\equiv -22 \\pmod{101}$\n- $54^{16} \\equiv (-22)^2 = 484 \\equiv -21 \\pmod{101}$\n- $54^{32} \\equiv (-21)^2 = 441 \\equiv 37 \\pmod{101}$\n- $54^{64} \\equiv 37^2 = 1369 \\equiv 56 \\pmod{101}$\n- $54^{71} = 54^{64} \\times 54^7 \\equiv 56 \\times 37 = 2072 \\equiv 52 \\pmod{101}$.\n\nFINAL: 2027-02-26; 27435; 52"
+}

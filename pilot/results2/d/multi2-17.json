@@ -1,0 +1,137 @@
+{
+ "task_id": "multi2-17",
+ "type": "multi",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got 89.0, expected 89.0 | ok: got 4166.86, expected 4166.86 | ok: got 4753469.0, expected 4753469.0",
+ "error": null,
+ "seconds": 69.2,
+ "tokens": 73385,
+ "prompt_tokens": 52479,
+ "completion_tokens": 20906,
+ "cost": 0.093,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Modular exponentiation",
+     "what": "Compute 46^783 mod 101 using modular arithmetic."
+    },
+    {
+     "id": "c2",
+     "title": "FIFO cost of goods sold",
+     "what": "Apply FIFO to the given lot purchases and sales to calculate total COGS."
+    },
+    {
+     "id": "c3",
+     "title": "Sum filtered integers",
+     "what": "Sum integers from 809 to 9450 divisible by 7 but not by 4."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Part A: Using Fermat's little theorem (101 prime), 46^100\u22611 mod 101, and 783=7\u00b7100+83, so 46^783\u226146^83 mod 101. Repeated squaring: 46^2\u226196, 46^4\u226125, 46^8\u226119, 46^16\u226158, 46^32\u226131, 46^64\u226152. Since 83=64+16+2+1: 52\u00b758\u00b796\u00b746 \u2261 89 mod 101.\n\nPart B: Total units sold = 76+73+52+92+64+57 = 414. FIFO consumes: Lot1 (159 @ $11.86 = $1885.74), Lot2 (128 @ $13.61 = $1742.08), Lot3 (120 @ $3.96 = $475.20), Lot4 (7 @ $9.12 = $63.84), totaling 159+128+120+7=414 units. Sum = 1885.74+1742.08+475.20+63.84 = $4166.86.\n\nPart C: Multiples of 7 in [809,9450]: first 812, last 9450, count 1235, sum = 1235\u00d7(812+9450)/2 = 6,336,785. Multiples of 28 (div by both 7 and 4) in range: first 812, last 9436, count 309, sum = 309\u00d7(812+9436)/2 = 1,583,316. Answer = 6,336,785 \u2212 1,583,316 = 4,753,469.\n\nFINAL: 89; 4166.86; 4753469"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "No arithmetic error is evident: the listed repeated-squaring residues and product reduce to 89 modulo 101; 46 is nonzero modulo prime 101, so Fermat's theorem applies."
+    },
+    {
+     "from": "B",
+     "problem": "The FIFO allocation is complete and reaches exactly 414 units: 159+128+120+7. Multiplying the stated lot quantities by their prices and summing gives 4166.86."
+    },
+    {
+     "from": "B",
+     "problem": "The inclusion-exclusion calculation is consistent: multiples of 7 run from 812 through 9450, while multiples of 28 run from 812 through 9436. Their arithmetic-series sums differ by 4753469."
+    },
+    {
+     "from": "D",
+     "problem": "The repeated-squaring residues are not independently verified, and the final multiplication 52\u00b758\u00b796\u00b746 \u2261 89 mod 101 is unsupported by shown arithmetic."
+    },
+    {
+     "from": "D",
+     "problem": "The sales total 414 units, but the draft does not show that the first three lots (159+128+120=407) leave exactly 7 units from Lot4; this is an unsupported inference, and the arithmetic for the sum is not shown."
+    },
+    {
+     "from": "D",
+     "problem": "The count and sum are not independently verified; the count formula (9450-812)/7+1 = 1235 is plausible but the sum is unsupported by shown arithmetic."
+    },
+    {
+     "from": "D",
+     "problem": "The last multiple of 28 is claimed as 9436, but 9450/28 = 337.5, so 28*337 = 9436 is correct; however, the count and sum are unsupported by shown arithmetic."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 3,
+   "rejected": 4,
+   "answer": "Part A: By Fermat's little theorem, since 101 is prime and gcd(46, 101) = 1, 46^100 \u2261 1 (mod 101). Thus, 46^783 \u2261 46^83 (mod 101). We express 83 = 64 + 16 + 2 + 1. By repeated squaring:\n46^2 = 2116 \u2261 96 \u2261 -5 (mod 101)\n46^4 \u2261 (-5)^2 = 25 (mod 101)\n46^8 \u2261 25^2 = 625 \u2261 19 (mod 101)\n46^16 \u2261 19^2 = 361 \u2261 58 (mod 101)\n46^32 \u2261 58^2 = 3364 \u2261 31 (mod 101)\n46^64 \u2261 31^2 = 961 \u2261 52 (mod 101)\nThen 46^83 \u2261 46^64 \u00b7 46^16 \u00b7 46^2 \u00b7 46 \u2261 52 \u00b7 58 \u00b7 (-5) \u00b7 46 \u2261 (3016 mod 101) \u00b7 (-230 mod 101) \u2261 87 \u00b7 (-28) = -2436 \u2261 89 (mod 101).\n\nPart B: Total units sold = 76 + 73 + 52 + 92 + 64 + 57 = 414 units. Cumulative lot sizes: Lot 1 has 159, Lots 1\u20132 have 159 + 128 = 287, Lots 1\u20133 have 287 + 120 = 407. Under FIFO, the remaining 414 - 407 = 7 units are taken from Lot 4.\n- Lot 1: 159 units \u00d7 $11.86 = $1885.74\n- Lot 2: 128 units \u00d7 $13.61 = $1742.08\n- Lot 3: 120 units \u00d7 $3.96 = $475.20\n- Lot 4: 7 units \u00d7 $9.12 = $63.84\nTotal COGS = $1885.74 + $1742.08 + $475.20 + $63.84 = $4166.86.\n\nPart C: Integers divisible by 7 in [809, 9450]: first is 812 (7\u00d7116), last is 9450 (7\u00d71350). Count = 1350 - 116 + 1 = 1235. Sum = 1235 \u00d7 (812 + 9450) / 2 = 1235 \u00d7 5131 = 6,336,785.\nThose also divisible by 4 (divisible by lcm(7,4) = 28): first is 812 (28\u00d729), last is 9436 (28\u00d7337). Count = 337 - 29 + 1 = 309. Sum = 309 \u00d7 (812 + 9436) / 2 = 309 \u00d7 5124 = 1,583,316.\nSum divisible by 7 but not 4 = 6,336,785 - 1,583,316 = 4,753,469.\n\nFINAL: 89; 4166.86; 4753469"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Part A: By Fermat's little theorem, since 101 is prime and gcd(46, 101) = 1, 46^100 \u2261 1 (mod 101). Thus, 46^783 \u2261 46^83 (mod 101). We express 83 = 64 + 16 + 2 + 1. By repeated squaring:\n46^2 = 2116 \u2261 96 \u2261 -5 (mod 101)\n46^4 \u2261 (-5)^2 = 25 (mod 101)\n46^8 \u2261 25^2 = 625 \u2261 19 (mod 101)\n46^16 \u2261 19^2 = 361 \u2261 58 (mod 101)\n46^32 \u2261 58^2 = 3364 \u2261 31 (mod 101)\n46^64 \u2261 31^2 = 961 \u2261 52 (mod 101)\nThen 46^83 \u2261 46^64 \u00b7 46^16 \u00b7 46^2 \u00b7 46 \u2261 52 \u00b7 58 \u00b7 (-5) \u00b7 46 \u2261 (3016 mod 101) \u00b7 (-230 mod 101) \u2261 87 \u00b7 (-28) = -2436 \u2261 89 (mod 101).\n\nPart B: Total units sold = 76 + 73 + 52 + 92 + 64 + 57 = 414 units. Cumulative lot sizes: Lot 1 has 159, Lots 1\u20132 have 159 + 128 = 287, Lots 1\u20133 have 287 + 120 = 407. Under FIFO, the remaining 414 - 407 = 7 units are taken from Lot 4.\n- Lot 1: 159 units \u00d7 $11.86 = $1885.74\n- Lot 2: 128 units \u00d7 $13.61 = $1742.08\n- Lot 3: 120 units \u00d7 $3.96 = $475.20\n- Lot 4: 7 units \u00d7 $9.12 = $63.84\nTotal COGS = $1885.74 + $1742.08 + $475.20 + $63.84 = $4166.86.\n\nPart C: Integers divisible by 7 in [809, 9450]: first is 812 (7\u00d7116), last is 9450 (7\u00d71350). Count = 1350 - 116 + 1 = 1235. Sum = 1235 \u00d7 (812 + 9450) / 2 = 1235 \u00d7 5131 = 6,336,785.\nThose also divisible by 4 (divisible by lcm(7,4) = 28): first is 812 (28\u00d729), last is 9436 (28\u00d7337). Count = 337 - 29 + 1 = 309. Sum = 309 \u00d7 (812 + 9436) / 2 = 309 \u00d7 5124 = 1,583,316.\nSum divisible by 7 but not 4 = 6,336,785 - 1,583,316 = 4,753,469.\n\nFINAL: 89; 4166.86; 4753469"
+}

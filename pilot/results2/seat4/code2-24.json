@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-24",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 31.3,
+ "tokens": 1436,
+ "prompt_tokens": 160,
+ "completion_tokens": 1276,
+ "cost": 0.0038,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom typing import List\n\ndef min_coins(coins: List[int], amount: int) -> int:\n    # dp[i] = minimum coins needed to make amount i\n    dp = [amount + 1] * (amount + 1)\n    dp[0] = 0\n\n    for coin in coins:\n        for x in range(coin, amount + 1):\n            if dp[x - coin] + 1 < dp[x]:\n                dp[x] = dp[x - coin] + 1\n\n    return dp[amount] if dp[amount] <= amount else -1\n```"
+}

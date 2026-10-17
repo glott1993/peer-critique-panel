@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-24",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 1.9,
+ "tokens": 314,
+ "prompt_tokens": 159,
+ "completion_tokens": 155,
+ "cost": 0.0007,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete function using dynamic programming to find the minimum number of coins:\n\n```python\nfrom typing import List\n\n\ndef min_coins(coins: List[int], amount: int) -> int:\n    if amount == 0:\n        return 0\n\n    # Initialize dp array with infinity\n    dp = [float(\"inf\")] * (amount + 1)\n    dp[0] = 0\n\n    for coin in coins:\n        for x in range(coin, amount + 1):\n            dp[x] = min(dp[x], dp[x - coin] + 1)\n\n    return dp[amount] if dp[amount] != float(\"inf\") else -1\n```"
+}

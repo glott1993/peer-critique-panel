@@ -1,0 +1,103 @@
+{
+ "task_id": "data2-12",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 286.0, expected 286.0",
+ "error": null,
+ "seconds": 107.8,
+ "tokens": 91469,
+ "prompt_tokens": 80746,
+ "completion_tokens": 10723,
+ "cost": 0.07194,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Sum units for returned orders",
+     "what": "Filter orders to status returned, dedupe exact duplicate rows by order_id, sum the units column (result: 286)."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Returned orders (checking for duplicates - none found among these):\n\nO2791 Anvil 14\nO2423 Anvil 36\nO2419 Anvil 1\nO2866 Easel 40\nO2451 Flange 36\nO2569 Bolt 27\nO2279 Crate 34\nO2704 Anvil 12\nO2701 Flange 7\nO2204 Bolt 41\nO2396 Crate 38\n\nSum: 14+36+1+40+36+27+34+12+7+41+38 = 286\n\nNo duplicate order_ids appear in this returned-status subset, so no dedup adjustment needed.\n\nFINAL: 286"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The draft's dedup check is correct for returned rows, but it does not verify whether any returned order_id also appears elsewhere with a different status, which would not affect this query but could be a hidden trap."
+    },
+    {
+     "from": "D",
+     "problem": "No issue with arithmetic, but the draft does not explicitly state that only 'returned' rows are included and that cancelled/pending/shipped rows are excluded, even though the request says 'across all orders with status returned'."
+    },
+    {
+     "from": "D",
+     "problem": "The full table has 12 rows with status 'returned' if the duplicate O2576/O2720 (both shipped) are ignored, but the returned rows themselves are unique. However, the draft may have missed a returned row: O2866 (Easel 40) is listed, O2451 (Flange 36) listed, O2569 (Bolt 27) listed, O2279 (Crate 34) listed, O2704 (Anvil 12) listed, O2701 (Flange 7) listed, O2204 (Bolt 41) listed, O2396 (Crate 38) listed. Are there any other returned rows? O2314 is cancelled, O2791 returned, O2423 returned, O2419 returned, O2866 returned, O2451 returned, O2569 returned, O2279 returned, O2704 returned, O2701 returned, O2204 returned, O2396 returned. That is 11 returned rows."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 2,
+   "answer": "Returned orders only:\nO2791 14, O2423 36, O2419 1, O2866 40, O2451 36, O2569 27, O2279 34, O2704 12, O2701 7, O2204 41, O2396 38.\nSum: 14+36+1+40+36+27+34+12+7+41+38 = 286.\nNo returned order_id is duplicated, so no duplicate adjustment is needed.\nFINAL: 286"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Returned orders only:\nO2791 14, O2423 36, O2419 1, O2866 40, O2451 36, O2569 27, O2279 34, O2704 12, O2701 7, O2204 41, O2396 38.\nSum: 14+36+1+40+36+27+34+12+7+41+38 = 286.\nNo returned order_id is duplicated, so no duplicate adjustment is needed.\nFINAL: 286"
+}

@@ -1,0 +1,186 @@
+{
+ "task_id": "code2-20",
+ "type": "code",
+ "condition": "c",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 189.7,
+ "tokens": 58855,
+ "prompt_tokens": 37136,
+ "completion_tokens": 21719,
+ "cost": 0.17166,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "16-(4+2+2)",
+   "claimed": 8.0,
+   "value": 8.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(16-(4+2+2))/2",
+   "claimed": 4.0,
+   "value": 4.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "16-(7+2+4)",
+   "claimed": 3.0,
+   "value": 3.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Greedy line packing and justification with edge cases",
+     "what": "Packs words greedily into lines not exceeding width, distributes extra spaces left-to-right across gaps for full lines with multiple words, left-justifies single-word or last lines with trailing spaces, and returns [] for empty input."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\ndef justify(words, width):\n    if not words:\n        return []\n    lines = []\n    cur = []\n    cur_len = 0\n    for w in words:\n        extra = 1 if cur else 0\n        if cur_len + extra + len(w) <= width:\n            cur_len += extra + len(w)\n            cur.append(w)\n        else:\n            lines.append(cur)\n            cur = [w]\n            cur_len = len(w)\n    lines.append(cur)\n\n    result = []\n    for i, line in enumerate(lines):\n        if i == len(lines) - 1 or len(line) == 1:\n            s = ' '.join(line)\n            s += ' ' * (width - len(s))\n            result.append(s)\n        else:\n            total_chars = sum(len(w) for w in line)\n            gaps = len(line) - 1\n            total_spaces = width - total_chars\n            base = total_spaces // gaps\n            extra = total_spaces % gaps\n            s = ''\n            for j, w in enumerate(line[:-1]):\n                s += w\n                sp = base + (1 if j < extra else 0)\n                s += ' ' * sp\n            s += line[-1]\n            result.append(s)\n    return result\n```\n\nCheck: traced manually against both given examples; line-breaking follows greedy packing (each word added if fits with one space separator), space distribution gives extra spaces to leftmost gaps per `j < extra` condition."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Its repeated `s += ...` concatenation inside the justification loop can cause quadratic copying for very long lines, making otherwise valid large inputs unnecessarily slow."
+    },
+    {
+     "from": "B",
+     "problem": "It relies on the stated precondition that every word has length at most `width`; if hidden tests include an overlong word, it appends that word without truncation or validation, producing a line longer than `width`."
+    },
+    {
+     "from": "D",
+     "problem": "The condition uses `extra = 1 if cur else 0`, but when `cur` is empty, `cur_len` is 0 and there is no need for a separator. This is correct for the first word, but the variable name `extra` is misleading and the logic is untested for edge cases like a word exactly equal to `width` followed by another word."
+    },
+    {
+     "from": "D",
+     "problem": "The code appends trailing spaces using `s += ' ' * (width - len(s))`, but if the last line already has length exactly `width`, this adds zero spaces. This is correct, but the claim is untested for the case where the last line has multiple words and the total length is exactly `width`."
+    },
+    {
+     "from": "D",
+     "problem": "The logic correctly implements the leftmost-extra rule, but the claim is unsupported by a test where `total_spaces` is not divisible by `gaps` and `extra` is greater than zero."
+    },
+    {
+     "from": "D",
+     "problem": "The code checks `if not words: return []`, but this is untested for an empty list input."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 5,
+   "answer": "Revised function; accepted challenge 1 for performance, rejected the others as not defects or relying on inputs outside the stated contract.\n\n```python\nfrom typing import List\n\ndef justify(words: List[str], width: int) -> List[str]:\n    if not words:\n        return []\n\n    lines = []\n    cur = []\n    cur_len = 0\n\n    for w in words:\n        needed = len(w) + (1 if cur else 0)\n        if cur_len + needed <= width:\n            cur_len += needed\n            cur.append(w)\n        else:\n            lines.append(cur)\n            cur = [w]\n            cur_len = len(w)\n    lines.append(cur)\n\n    result = []\n    last = len(lines) - 1\n\n    for i, line in enumerate(lines):\n        if i == last or len(line) == 1:\n            s = ' '.join(line)\n            s += ' ' * (width - len(s))\n            result.append(s)\n        else:\n            total_chars = sum(len(w) for w in line)\n            gaps = len(line) - 1\n            total_spaces = width - total_chars\n            base, extra = divmod(total_spaces, gaps)\n            parts = []\n            for j, w in enumerate(line):\n                parts.append(w)\n                if j < gaps:\n                    parts.append(' ' * (base + (1 if j < extra else 0)))\n            result.append(''.join(parts))\n\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The greedy packing loop appends `cur` to `lines` when a word doesn't fit, but there is no check that `cur` is non-empty at that point. Under the stated contract (every word length <= width) can `cur` ever be empty when that branch is taken, and if a word of length exactly `width` follows a non-empty `cur`, trace the resulting lines for input ['ab','cdef'] with width 4 and state the exact output list.",
+    "For a fully justified (non-last, multi-word) line, is the invariant `width - total_chars >= gaps` guaranteed by the packing rule, i.e. can `base` ever be 0 or `total_spaces` be less than `gaps`? Give the reasoning tied to the packing condition `cur_len + len(w) + 1 <= width`.",
+    "What does the function return for width values that no word can satisfy only in degenerate cases \u2014 specifically, what is the exact output for justify(['a','b','c'], 1) and for justify([''], 3), and are those within or outside the stated contract?"
+   ],
+   "replies": [
+    "Under the stated contract, cur cannot be empty in the else branch. The first word always fits because cur is empty, needed = len(w), and len(w) <= width, so cur_len + needed = len(w) <= width. After the else branch runs, cur is set to [w], so it is non-empty. Trace for ['ab','cdef'], width=4: 'ab' fits with cur_len=2; 'cdef' would need 4+1=5, so lines becomes [['ab']] and cur becomes ['cdef']; final lines are [['ab'], ['cdef']]. Both are single-word lines, so output is ['ab  ', 'cdef'].",
+    "The invariant is guaranteed. For a packed line with k >= 2 words, cur_len equals total_chars + (k - 1), because the packing loop adds one space per gap. Since every word in that line was accepted by the condition cur_len + len(w) + 1 <= width, the final cur_len <= width. Therefore total_chars + gaps <= width, so total_spaces = width - total_chars >= gaps. Thus base = total_spaces // gaps is at least 1 and total_spaces is never less than gaps.",
+    "justify(['a','b','c'], 1) returns ['a', 'b', 'c']. Each word has length 1 <= width, so this is within the stated contract. justify([''], 3) returns ['   ']. The empty string has length 0 <= width, and the request does not exclude empty words, so this is also within the stated contract."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please run and report the exact returned list for justify(['What','must','be','acknowledgment','shall','be'], 16) and for justify(['Science','is','what','we','understand','well','enough','to','explain','to','a','computer.','Art','is','everything','else','we','do'], 20), confirming character counts per line and the leftmost-gap bias on uneven splits.",
+    "What is the exact output for inputs mixing empty strings with real words, e.g. justify(['a','','b'], 5) and justify(['','',''], 3) \u2014 do the empty words consume gap slots in the packing condition, and does any produced line exceed or fall short of width?"
+   ],
+   "replies": [
+    "Ran the function. justify(['What','must','be','acknowledgment','shall','be'], 16) returns ['What   must   be', 'acknowledgment  ', 'shall be        ']. Line lengths: 4+3+4+3+2=16; 14+2=16; 8+8=16. This input has no uneven split in a multi-word non-last line (line 0 gaps both get 3 spaces).\n\nFor justify(['Science','is','what','we','understand','well','enough','to','explain','to','a','computer.','Art','is','everything','else','we','do'], 20) returns ['Science  is  what we', 'understand      well', 'enough to explain to', 'a  computer.  Art is', 'everything  else  we', 'do                  ']. Line lengths: 7+2+2+2+4+1+2=20; 10+6+4=20; 6+1+2+1+7+1+2=20; 1+2+9+2+3+1+2=20; 10+2+4+2+2=20; 2+18=20. Leftmost-gap bias on uneven splits: line 0 total spaces=5 over 3 gaps -> base=1 extra=2, so gaps are 2,2,1; line 3 total spaces=5 over 3 gaps -> gaps are 2,2,1.",
+    "Exact outputs: justify(['a','','b'], 5) returns ['a  b '] (a + two spaces + b + one trailing space; length 5). justify(['','',''], 3) returns ['   '] (three spaces; length 3). Empty words do consume gap slots in the packing condition after the first word: needed = len(w) + (1 if cur else 0), so each subsequent empty word adds 1 to cur_len. For ['a','','b'], cur_len becomes 1, then 2, then 4; for ['','',''], cur_len becomes 0, then 1, then 2. No produced line exceeds or falls short of width in these cases."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please run and report the exact returned lists, with per-line character counts, for: justify(['abc'], 3); justify(['ab','cd'], 5); justify(['aaa','b','ccc'], 3); and justify(['ab','cd','ef','gh'], 5) \u2014 confirming no line exceeds or falls short of width when the words plus single spaces exactly fill the line or when a single word already equals width."
+   ],
+   "replies": [
+    "Computed with the provided function:\n\n1. justify(['abc'], 3) -> ['abc']; per-line lengths: [3].\n2. justify(['ab','cd'], 5) -> ['ab cd']; per-line lengths: [5].\n3. justify(['aaa','b','ccc'], 3) -> ['aaa', 'b  ', 'ccc']; per-line lengths: [3, 3, 3].\n4. justify(['ab','cd','ef','gh'], 5) -> ['ab cd', 'ef gh']; per-line lengths: [5, 5].\n\nIn all cases every line length equals width, so no line exceeds or falls short. Single-word lines and lines where words plus single spaces exactly fill the width are left-justified with no extra spaces needed."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Revised function; accepted challenge 1 for performance, rejected the others as not defects or relying on inputs outside the stated contract.\n\n```python\nfrom typing import List\n\ndef justify(words: List[str], width: int) -> List[str]:\n    if not words:\n        return []\n\n    lines = []\n    cur = []\n    cur_len = 0\n\n    for w in words:\n        needed = len(w) + (1 if cur else 0)\n        if cur_len + needed <= width:\n            cur_len += needed\n            cur.append(w)\n        else:\n            lines.append(cur)\n            cur = [w]\n            cur_len = len(w)\n    lines.append(cur)\n\n    result = []\n    last = len(lines) - 1\n\n    for i, line in enumerate(lines):\n        if i == last or len(line) == 1:\n            s = ' '.join(line)\n            s += ' ' * (width - len(s))\n            result.append(s)\n        else:\n            total_chars = sum(len(w) for w in line)\n            gaps = len(line) - 1\n            total_spaces = width - total_chars\n            base, extra = divmod(total_spaces, gaps)\n            parts = []\n            for j, w in enumerate(line):\n                parts.append(w)\n                if j < gaps:\n                    parts.append(' ' * (base + (1 if j < extra else 0)))\n            result.append(''.join(parts))\n\n    return result\n```"
+}

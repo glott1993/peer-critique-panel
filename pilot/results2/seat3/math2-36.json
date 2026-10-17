@@ -1,0 +1,16 @@
+{
+ "task_id": "math2-36",
+ "type": "math",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "got 1970.0, expected 1970.0",
+ "error": null,
+ "seconds": 17.8,
+ "tokens": 1524,
+ "prompt_tokens": 148,
+ "completion_tokens": 1376,
+ "cost": 0.00527,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To find the number of integers from 1 to 8,000 divisible by at least one of 6, 10, or 15:\n- Divisible by 6: $\\lfloor 8000/6 \\rfloor = 1333$\n- Divisible by 10: $\\lfloor 8000/10 \\rfloor = 800$\n- Divisible by 15: $\\lfloor 8000/15 \\rfloor = 533$\n- Divisible by $\\text{lcm}(6,10) = 30$: $\\lfloor 8000/30 \\rfloor = 266$\n- Divisible by $\\text{lcm}(6,15) = 30$: $\\lfloor 8000/30 \\rfloor = 266$\n- Divisible by $\\text{lcm}(10,15) = 30$: $\\lfloor 8000/30 \\rfloor = 266$\n- Divisible by $\\text{lcm}(6,10,15) = 30$: $\\lfloor 8000/30 \\rfloor = 266$\n\nTotal divisible by at least one of 6, 10, or 15:\n$1333 + 800 + 533 - 3(266) + 266 = 2666 - 532 = 2134$\n\nNext, find how many of these are divisible by 13:\n- Divisible by $\\text{lcm}(6,13) = 78$: $\\lfloor 8000/78 \\rfloor = 102$\n- Divisible by $\\text{lcm}(10,13) = 130$: $\\lfloor 8000/130 \\rfloor = 61$\n- Divisible by $\\text{lcm}(15,13) = 195$: $\\lfloor 8000/195 \\rfloor = 41$\n- Divisible by $\\text{lcm}(30,13) = 390$: $\\lfloor 8000/390 \\rfloor = 20$\n\nTotal divisible by 13 as well:\n$102 + 61 + 41 - 3(20) + 20 = 204 - 40 = 164$\n\nSubtracting those divisible by 13:\n$2134 - 164 = 1970$\n\nFINAL: 1970"
+}

@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 7.4,
- "tokens": 3699,
- "prompt_tokens": 2894,
- "completion_tokens": 805,
- "cost": 0.00154,
+ "seconds": 3.3,
+ "tokens": 2760,
+ "prompt_tokens": 2475,
+ "completion_tokens": 285,
+ "cost": 0.00084,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef top_k_by_score(items, k):\n    if k <= 0:\n        return []\n\n    ordered = sorted(items, key=lambda item: (-item[1], item[0]))\n    return [name for name, score in ordered[:k]]\n```"
+ "answer": "```python\ndef top_k_by_score(items, k):\n    \"\"\"Return up to k names ordered by descending score, then ascending name.\"\"\"\n    if k <= 0:\n        return []\n\n    ordered = sorted(items, key=lambda item: (-item[1], item[0]))\n    return [name for name, _ in ordered[:k]]\n```"
 }

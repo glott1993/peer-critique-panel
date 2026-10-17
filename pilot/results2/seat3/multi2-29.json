@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-29",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 6173.0, expected 6173.0 | ok: got 454.0, expected 454.0 | ok: got 3064.81, expected 3064.81",
+ "error": null,
+ "seconds": 12.7,
+ "tokens": 2595,
+ "prompt_tokens": 422,
+ "completion_tokens": 2173,
+ "cost": 0.00847,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\nTo find the number of integers from 1 to 12,000 divisible by at least one of 3, 5, or 7:\n- Multiples of 3: $\\lfloor 12000/3 \\rfloor = 4000$\n- Multiples of 5: $\\lfloor 12000/5 \\rfloor = 2400$\n- Multiples of 7: $\\lfloor 12000/7 \\rfloor = 1714$\n- Multiples of 15: $\\lfloor 12000/15 \\rfloor = 800$\n- Multiples of 21: $\\lfloor 12000/21 \\rfloor = 571$\n- Multiples of 35: $\\lfloor 12000/35 \\rfloor = 342$\n- Multiples of 105: $\\lfloor 12000/105 \\rfloor = 114$\n\nBy the Principle of Inclusion-Exclusion (PIE):\n$|A \\cup B \\cup C| = 4000 + 2400 + 1714 - 800 - 571 - 342 + 114 = 6515$\n\nNow, find those that are also divisible by 19 by considering multiples of 19 up to $\\lfloor 12000/19 \\rfloor = 631$:\n- Multiples of $3 \\times 19$: $\\lfloor 631/3 \\rfloor = 210$\n- Multiples of $5 \\times 19$: $\\lfloor 631/5 \\rfloor = 126$\n- Multiples of $7 \\times 19$: $\\lfloor 631/7 \\rfloor = 90$\n- Multiples of $15 \\times 19$: $\\lfloor 631/15 \\rfloor = 42$\n- Multiples of $21 \\times 19$: $\\lfloor 631/21 \\rfloor = 30$\n- Multiples of $35 \\times 19$: $\\lfloor 631/35 \\rfloor = 18$\n- Multiples of $105 \\times 19$: $\\lfloor 631/105 \\rfloor = 6$\n\nBy PIE:\n$210 + 126 + 90 - 42 - 30 - 18 + 6 = 342$\n\nSubtracting the multiples of 19:\n$6515 - 342 = 6173$\n\n**Part B:**\nWe are given the system of congruences:\n- $x \\equiv 6 \\equiv -1 \\pmod 7$\n- $x \\equiv 12 \\equiv -1 \\pmod{13}$\n- $x \\equiv 17 \\pmod{23}$\n\nFrom the first two congruences:\n$x \\equiv -1 \\pmod{\\text{lcm}(7, 13)} \\implies x \\equiv -1 \\pmod{91}$\nThus, $x = 91k - 1$.\n\nSubstituting into the third congruence:\n$91k - 1 \\equiv 17 \\pmod{23}$\n$-k - 1 \\equiv 17 \\pmod{23}$ (since $91 = 4 \\times 23 - 1$)\n$-k \\equiv 18 \\equiv -5 \\pmod{23} \\implies k \\equiv 5 \\pmod{23}$\n\nFor the smallest positive integer, take $k = 5$:\n$x = 91(5) - 1 = 454$\n\n**Part C:**\nTotal units sold:\n$64 + 84 + 114 + 42 + 35 + 51 = 390\\text{ units}$\n\nUnder FIFO costing, inventory is consumed from the earliest lots:\n- Lot 1: 121 units at $\\$4.84 = \\$585.64$\n- Lot 2: 145 units at $\\$6.81 = \\$987.45$\n- Lot 3: $390 - 121 - 145 = 124$ units at $\\$12.03 = \\$1491.72$\n\nTotal COGS:\n$\\$585.64 + \\$987.45 + \\$1491.72 = \\$3064.81$\n\nFINAL: 6173; 454; 3064.81"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-09",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.4,
+ "tokens": 409,
+ "prompt_tokens": 189,
+ "completion_tokens": 220,
+ "cost": 0.00097,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of `brackets_balanced`:\n\n```python\ndef brackets_balanced(s: str) -> bool:\n    stack = []\n    matching = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\n    in_string = False\n    escaped = False\n\n    for char in s:\n        if in_string:\n            if escaped:\n                escaped = False\n            elif char == \"\\\\\":\n                escaped = True\n            elif char == '\"':\n                in_string = False\n        else:\n            if char == '\"':\n                in_string = True\n            elif char in \"([{\":\n                stack.append(char)\n            elif char in \")]}\":\n                if not stack or stack[-1] != matching[char]:\n                    return False\n                stack.pop()\n\n    # If a string is unterminated, or if there are unmatched opening brackets\n    if in_string or stack:\n        return False\n\n    return True\n```"
+}

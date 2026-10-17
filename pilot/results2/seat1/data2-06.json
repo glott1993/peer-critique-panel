@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 78.31, expected 78.31",
  "error": null,
- "seconds": 26.4,
- "tokens": 6456,
+ "seconds": 14.1,
+ "tokens": 4798,
  "prompt_tokens": 2847,
- "completion_tokens": 3609,
- "cost": 0.04178,
+ "completion_tokens": 1951,
+ "cost": 0.0252,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Working:**\n\nFiltered all orders (any status) with order_date between 2026-04-15 and 2026-05-20 inclusive, removing exact duplicate rows (O2542, O2417, O2010 duplicates counted once each).\n\nQualifying unit_prices (23 orders):\n23.93, 92.76, 91.07, 40.58, 106.84, 86.99, 46.54, 139.31, 39.98, 10.73, 64.55, 113.16, 7.97, 64.55, 78.31, 80.87, 37.28, 122.64, 41.46, 116.49, 123.94, 104.70, 31.80\n\nSorted:\n7.97, 10.73, 23.93, 31.80, 37.28, 39.98, 40.58, 41.46, 46.54, 64.55, 64.55, **78.31**, 80.87, 86.99, 91.07, 92.76, 104.70, 106.84, 113.16, 116.49, 122.64, 123.94, 139.31\n\nn = 23 (odd), median = 12th value = 78.31\n\nFINAL: 78.31"
+ "answer": "Filtering orders with order_date between 2026-04-15 and 2026-05-20 (inclusive), deduplicating exact duplicate rows, gives 23 unique orders with unit_prices:\n\n7.97, 10.73, 23.93, 31.80, 37.28, 39.98, 40.58, 41.46, 46.54, 64.55, 64.55, 78.31, 80.87, 86.99, 91.07, 92.76, 104.70, 106.84, 113.16, 116.49, 122.64, 123.94, 139.31\n\nSorted, 23 values \u2192 median is the 12th value = 78.31\n\nFINAL: 78.31"
 }

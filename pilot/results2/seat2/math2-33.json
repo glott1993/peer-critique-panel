@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 5217.89, expected 5217.89",
  "error": null,
- "seconds": 32.5,
- "tokens": 16188,
- "prompt_tokens": 9020,
- "completion_tokens": 7168,
- "cost": 0.01041,
+ "seconds": 24.4,
+ "tokens": 12312,
+ "prompt_tokens": 7212,
+ "completion_tokens": 5100,
+ "cost": 0.00756,
  "calls": 1,
  "call_errors": 0,
- "answer": "Monthly rate: i = 0.069/12 = 0.00575\n\nRegular payment:\nPMT = 12000(0.00575) / [1 \u2212 (1.00575)^\u221236] = 369.976750...\n\nThe balance after 18 regular payments is:\n369.976750... [1 \u2212 (1.00575)^\u221218]/0.00575 = 6309.336208\n\nAccounting for the extra principal payments:\nB18 = 6309.336208 \u2212 750(1.00575)^9 \u2212 300(1.00575)\n= 5217.893939...\n\nFINAL: 5217.89"
+ "answer": "Monthly rate: r = 0.069/12 = 0.00575\n\nRegular payment:\nP = 12000r/[1 \u2212 (1+r)^\u221236] = 369.978899\n\nBalance after month 18 before extra payments:\n12000(1+r)^18 \u2212 P[(1+r)^18\u22121]/r = 6309.334015\n\nAdjusting for the extra principal payments:\n6309.334015 \u2212 750(1+r)^9 \u2212 300(1+r) = 5217.891747\n\nFINAL: 5217.89"
 }

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-30",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 21718.88, expected 21717.91 | ok: got 2828.42, expected 2828.42 | ok: got 38.0, expected 38.0",
+ "error": null,
+ "seconds": 22.0,
+ "tokens": 4083,
+ "prompt_tokens": 464,
+ "completion_tokens": 3619,
+ "cost": 0.01392,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nThe monthly interest rate is $r = 0.06 / 12 = 0.005$. For a 60-month loan of $31,200, the standard monthly payment is:\n$$M = \\frac{31200 \\times 0.005}{1 - (1.005)^{-60}} \\approx 603.183416$$\n\nThe standard balance after 18 months without extra payments is:\n$$B_{18} = 31200(1.005)^{18} - M \\frac{(1.005)^{18} - 1}{0.005} \\approx 22800.2839$$\n\nAccounting for the extra payments compounded to month 18:\n- Extra payment of $300 at month 5 reduces the balance at month 18 by $300 \\times (1.005)^{13} \\approx 320.0960$\n- Extra payment of $750 at month 15 reduces the balance at month 18 by $750 \\times (1.005)^{3} \\approx 761.3063$\n\nRemaining balance:\n$$22800.2839 - 320.0960 - 761.3063 = 21718.88$$\n\n**Part B**\nTotal units sold: $40 + 52 + 93 + 31 + 109 + 95 = 420$ units.\nUsing FIFO, these are fulfilled by:\n- Lot 1: 154 units at $\\$6.41 = \\$987.14$\n- Lot 2: 62 units at $\\$6.88 = \\$426.56$\n- Lot 3: 92 units at $\\$8.48 = \\$780.16$\n- Lot 4: 68 units at $\\$4.44 = \\$301.92$\n- Lot 5: $420 - (154 + 62 + 92 + 68) = 44$ units at $\\$7.56 = \\$332.64$\n\nTotal COGS:\n$$987.14 + 426.56 + 780.16 + 301.92 + 332.64 = 2828.42$$\n\n**Part C**\nThe divisor 163 is prime, so by Fermat's Little Theorem, $16^{162} \\equiv 1 \\pmod{163}$.\n$$639 = 3 \\times 162 + 153 \\implies 16^{639} \\equiv 16^{153} \\equiv 16^{-9} \\pmod{163}$$\nComputing $16^9 \\pmod{163}$:\n- $16^2 = 256 \\equiv 93 \\pmod{163}$\n- $16^3 \\equiv 93 \\times 16 = 1488 \\equiv 21 \\pmod{163}$\n- $16^9 \\equiv 21^3 = 9261 \\equiv -30 \\pmod{163}$\n\nFinding the modular inverse of $-30 \\pmod{163}$:\n$$-30x \\equiv 1 \\pmod{163} \\iff 30x \\equiv 162 \\pmod{163} \\iff 5x \\equiv 27 \\equiv 190 \\pmod{163} \\iff x = 38$$\n\nFINAL: 21718.88; 2828.42; 38"
+}

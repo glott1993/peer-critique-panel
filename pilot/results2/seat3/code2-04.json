@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-04",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.5,
+ "tokens": 543,
+ "prompt_tokens": 238,
+ "completion_tokens": 305,
+ "cost": 0.00132,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete function using Dijkstra's algorithm. To resolve ties correctly by lexicographical path order, the priority queue stores the tuple `(cost, path)` so that ties in path cost naturally break by the smallest path list.\n\n```python\nimport heapq\n\ndef shortest_path(graph, src, dst):\n    if src == dst:\n        return [src] if src in graph or any(src in neighbors for neighbors in graph.values()) else []\n\n    # Priority queue stores tuples of (cumulative_cost, path)\n    # Python tuples are compared element-wise, breaking ties by path lexicographically.\n    pq = [(0, [src])]\n    best_cost = {}\n\n    while pq:\n        cost, path = heapq.heappop(pq)\n        u = path[-1]\n\n        if u == dst:\n            return path\n\n        # If we have already visited u with a strictly better cost, skip\n        if u in best_cost and best_cost[u] < cost:\n            continue\n        best_cost[u] = cost\n\n        for v, weight in graph.get(u, {}).items():\n            new_cost = cost + weight\n            if v not in best_cost or new_cost <= best_cost[v]:\n                heapq.heappush(pq, (new_cost, path + [v]))\n\n    return []\n```"
+}

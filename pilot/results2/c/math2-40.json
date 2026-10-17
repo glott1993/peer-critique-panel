@@ -1,0 +1,180 @@
+{
+ "task_id": "math2-40",
+ "type": "math",
+ "condition": "c",
+ "correct": true,
+ "detail": "got '2027-01-25', expected '2027-01-25'",
+ "error": null,
+ "seconds": 195.9,
+ "tokens": 96228,
+ "prompt_tokens": 65512,
+ "completion_tokens": 30716,
+ "cost": 0.26556,
+ "calls": 31,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "10+19+21+22",
+   "claimed": 72.0,
+   "value": 72.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "88-72",
+   "claimed": 16.0,
+   "value": 16.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Set counting convention",
+     "what": "Treat 2026-09-16 as day zero; count subsequent Monday-Friday dates only, excluding the listed holidays when they occur."
+    },
+    {
+     "id": "c2",
+     "title": "Count qualifying business days",
+     "what": "Enumerate dates after 2026-09-16 until exactly 88 eligible business days have been counted, explicitly skipping 2026-10-07, 2026-10-19, 2026-10-22, 2026-12-17, and 2027-01-01."
+    },
+    {
+     "id": "c3",
+     "title": "Verify final date",
+     "what": "Confirm the 88th counted date is Monday-Friday and is not one of the excluded holidays, then format it as YYYY-MM-DD."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine the date that is 88 business days after 2026-09-16 (Wednesday), counting begins on Thursday, 2026-09-17 (Day 1). Qualifying business days are Monday through Friday, excluding the five specified weekday holidays: 2026-10-07 (Wed), 2026-10-19 (Mon), 2026-10-22 (Thu), 2026-12-17 (Thu), and 2027-01-01 (Fri).\n\n**Monthly Breakdown of Qualifying Business Days:**\n- **September 2026 (Sep 17\u201330):** 10 weekdays, 0 holidays = **10 days** (Remaining: 78)\n- **October 2026:** 22 weekdays \u2212 3 holidays (Oct 7, 19, 22) = **19 days** (Remaining: 59)\n- **November 2026:** 21 weekdays, 0 holidays = **21 days** (Remaining: 38)\n- **December 2026:** 23 weekdays \u2212 1 holiday (Dec 17) = **22 days** (Remaining: 16)\n- **January 2027:**\n  - Jan 1 (Fri): Skipped (Holiday)\n  - Jan 4\u20138 (Mon\u2013Fri): 5 days (Remaining: 11)\n  - Jan 11\u201315 (Mon\u2013Fri): 5 days (Remaining: 6)\n  - Jan 18\u201322 (Mon\u2013Fri): 5 days (Remaining: 1)\n  - Jan 25 (Mon): 1 day (Remaining: 0)\n\nFrom 2026-09-17 through 2027-01-25 inclusive, there are 131 calendar days, consisting of 38 weekend days, 5 holidays, and exactly 88 qualifying business days ($131 - 38 - 5 = 88$).\n\n**Verification Script:**\n```python\nfrom datetime import date, timedelta\n\nholidays = {\n    date(2026, 10, 7),\n    date(2026, 10, 19),\n    date(2026, 10, 22),\n    date(2026, 12, 17),\n    date(2027, 1, 1),\n}\nd = date(2026, 9, 17)\nc = 0\nwhile c < 88:\n    if d.weekday() < 5 and d not in holidays:\n        c += 1\n        if c == 88:\n            print(d)  # 2027-01-25\n    d += timedelta(days=1)\n```\n\nFINAL: 2027-01-25"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "No issue with the start date."
+    },
+    {
+     "from": "D",
+     "problem": "October 2026 has 23 weekdays, not 22. This would change the count of qualifying business days."
+    },
+    {
+     "from": "D",
+     "problem": "No issue with December count."
+    },
+    {
+     "from": "D",
+     "problem": "No issue with the script logic."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "Counting starts on the next business day, 2026-09-17 (Thursday), as Day 1.\n\n- Sep 17\u201330: 10 weekdays\n- October: 22 weekdays \u2212 3 holidays = 19\n- November: 21 weekdays\n- December: 23 weekdays \u2212 1 holiday = 22\n\nTotal through December: 72 business days, leaving 16. In January 2027, after skipping the Jan 1 holiday, the 16th qualifying day is Monday, Jan 25.\n\nFINAL: 2027-01-25"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "How was November 2026's count of 21 weekdays derived \u2014 what weekday is 2026-11-01, and does the count include Monday 2026-11-30?",
+    "For January 2027, what weekday is 2027-01-01, and can you list the 16 qualifying dates from the first business day through 2027-01-25 to confirm the 16th is Jan 25?",
+    "Do any of the five listed holidays fall on a Saturday or Sunday (which would mean subtracting a day that was never counted as a weekday), and what is the weekday of each of 2026-10-07, 2026-10-19, 2026-10-22, 2026-12-17 and 2027-01-01?"
+   ],
+   "replies": [
+    "2026-11-01 was Sunday. November therefore had 21 weekdays: Mondays through Fridays on Nov 2-6, 9-13, 16-20, 23-27, plus Monday Nov 30. The count includes Nov 30.",
+    "2027-01-01 was Friday and is a listed holiday. The 16 qualifying dates are 2027-01-04, 2027-01-05, 2027-01-06, 2027-01-07, 2027-01-08, 2027-01-11, 2027-01-12, 2027-01-13, 2027-01-14, 2027-01-15, 2027-01-18, 2027-01-19, 2027-01-20, 2027-01-21, 2027-01-22, and 2027-01-25. Thus the 16th is Jan 25.",
+    "None of the five holidays fall on a Saturday or Sunday. Their weekdays are: 2026-10-07 Wednesday, 2026-10-19 Monday, 2026-10-22 Thursday, 2026-12-17 Thursday, and 2027-01-01 Friday. This follows by weekday-calendar computation; each listed date is a Monday-Friday date, so each was correctly subtracted."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The October (22) and December (23) weekday totals were never itemized: given 2026-10-01 and 2026-12-01 fall on which weekdays, can you list the weekday runs for each month (e.g. Oct 1-2, 5-9, ...) to confirm those totals, and confirm 2026-10-31 and 2026-12-31 land where you say?"
+   ],
+   "replies": [
+    "Computation: 2026-10-01 is Thursday and 2026-10-31 is Saturday. October weekday runs are Oct 1-2, 5-9, 12-16, 19-23, and 26-30, totaling 2+5+5+5+5=22 weekdays. Excluding holidays Oct 7, Oct 19, and Oct 22 leaves 19 qualifying days.\n\n2026-12-01 is Tuesday and 2026-12-31 is Thursday. December weekday runs are Dec 1-4, 7-11, 14-18, 21-25, and 28-31, totaling 4+5+5+5+4=23 weekdays. Excluding holiday Dec 17 leaves 22 qualifying days. Thus the submitted date remains correct."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Given 2026-12-31 is Thursday, what weekday is 2027-01-01, and can you list the January 2027 weekday runs with the Jan 1 holiday removed, numbering them 1 through 16, and state the weekday of 2027-01-25?",
+    "Can you itemize the Sep 17-30 weekday runs (with 2026-09-16's weekday stated) and the November 2026 weekday runs to confirm the 10 and 21 figures, and state explicitly whether 2026-09-16 itself is excluded from the count?"
+   ],
+   "replies": [
+    "Since 2026-12-31 is Thursday, the next day, 2027-01-01, is Friday. Removing the Jan 1 holiday, the January 2027 qualifying weekdays are: 1: Jan 4 (Mon), 2: Jan 5 (Tue), 3: Jan 6 (Wed), 4: Jan 7 (Thu), 5: Jan 8 (Fri); 6: Jan 11 (Mon), 7: Jan 12 (Tue), 8: Jan 13 (Wed), 9: Jan 14 (Thu), 10: Jan 15 (Fri); 11: Jan 18 (Mon), 12: Jan 19 (Tue), 13: Jan 20 (Wed), 14: Jan 21 (Thu), 15: Jan 22 (Fri); 16: Jan 25 (Mon). Thus, 2027-01-25 is Monday.",
+    "2026-09-16 was Wednesday, so it is excluded because counting starts on the next business day. The Sep 17-30 weekday runs are Sep 17-18 (Thu-Fri), Sep 21-25 (Mon-Fri), and Sep 28-30 (Mon-Wed): 2 + 5 + 3 = 10. The November 2026 weekday runs are Nov 2-6, Nov 9-13, Nov 16-20, Nov 23-27, and Nov 30: 5 + 5 + 5 + 5 + 1 = 21. These calendar computations confirm both figures; no external source is needed."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Counting starts on the next business day, 2026-09-17 (Thursday), as Day 1.\n\n- Sep 17\u201330: 10 weekdays\n- October: 22 weekdays \u2212 3 holidays = 19\n- November: 21 weekdays\n- December: 23 weekdays \u2212 1 holiday = 22\n\nTotal through December: 72 business days, leaving 16. In January 2027, after skipping the Jan 1 holiday, the 16th qualifying day is Monday, Jan 25.\n\nFINAL: 2027-01-25"
+}

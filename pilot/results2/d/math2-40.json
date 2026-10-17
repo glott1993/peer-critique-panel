@@ -1,0 +1,146 @@
+{
+ "task_id": "math2-40",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got '2027-01-25', expected '2027-01-25'",
+ "error": null,
+ "seconds": 116.5,
+ "tokens": 74058,
+ "prompt_tokens": 50394,
+ "completion_tokens": 23664,
+ "cost": 0.14508,
+ "calls": 27,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Find the provisional weekday endpoint",
+     "what": "Count 88 Monday-through-Friday dates beginning with 2026-09-17, excluding the start date, without holidays."
+    },
+    {
+     "id": "c2",
+     "title": "Identify skipped holidays",
+     "what": "List each supplied holiday that falls on a weekday on or before the provisional endpoint or any subsequently extended range."
+    },
+    {
+     "id": "c3",
+     "title": "Extend for holidays",
+     "what": "Move the endpoint forward by one weekday for each skipped holiday, continuing to check the newly included dates for additional listed holidays."
+    },
+    {
+     "id": "c4",
+     "title": "Verify the final date",
+     "what": "Recount Monday-through-Friday dates after 2026-09-16 through the final endpoint, excluding all five listed holidays, and confirm the total is 88."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ],
+    "c4": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To find the date 88 business days after Wednesday, 2026-09-16 (excluding weekends and the 5 specified holidays):\n\n1. **Baseline Weekday Count:**\n   Decomposing 88 weekdays gives $88 = (17 \\times 5) + 3$ days. \n   - Adding 17 full calendar weeks (119 calendar days) to Wednesday, 2026-09-16 reaches Wednesday, 2027-01-13 (accounting for 85 weekdays; note that the arithmetic in [c1] erroneously summed the intervening calendar days to reach Jan 6 instead of Jan 13).\n   - Adding the remaining 3 weekdays leads to Monday, 2027-01-18.\n\n2. **Account for Holidays:**\n   All 5 listed holidays fall on weekdays on or before 2027-01-18:\n   - 2026-10-07 (Wednesday)\n   - 2026-10-19 (Monday)\n   - 2026-10-22 (Thursday)\n   - 2026-12-17 (Thursday)\n   - 2027-01-01 (Friday)\n\n3. **Extend Endpoint:**\n   Compensating for these 5 skipped days requires adding 5 more weekdays starting after Monday, 2027-01-18:\n   - 2027-01-19 (Tuesday), 2027-01-20 (Wednesday), 2027-01-21 (Thursday), 2027-01-22 (Friday), and 2027-01-25 (Monday).\n   None of these additional days are in the holiday list, landing on **2027-01-25**.\n\n4. **Monthly Verification:**\n   - **September 2026 (Sep 17\u201330):** 10 weekdays \u2212 0 holidays = **10 days**\n   - **October 2026:** 22 weekdays \u2212 3 holidays = **19 days**\n   - **November 2026:** 21 weekdays \u2212 0 holidays = **21 days**\n   - **December 2026:** 23 weekdays \u2212 1 holiday = **22 days**\n   - **January 2027 (Jan 1\u201325):** 17 weekdays \u2212 1 holiday = **16 days**\n   - **Total:** $10 + 19 + 21 + 22 + 16 = 88$ business days.\n\n```python\nimport pandas as pd\n\nholidays = [\n    \"2026-10-07\",\n    \"2026-10-19\",\n    \"2026-10-22\",\n    \"2026-12-17\",\n    \"2027-01-01\",\n]\nrng = pd.bdate_range(\"2026-09-17\", \"2027-01-25\", holidays=holidays, freq=\"C\")\nassert len(rng) == 88\n```\n\nFINAL: 2027-01-25"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Nov 2026 starts Sunday and has 30 days; weekday count should be verified - Nov 2 is Monday, Nov 30 is Monday, so 21 weekdays claim needs recount since this feeds the 88-day total"
+    },
+    {
+     "from": "A",
+     "problem": "Oct 2026 has 31 days starting Thursday; need to verify weekday count of 22 before subtracting 3 holidays"
+    },
+    {
+     "from": "A",
+     "problem": "Code is untested/not run in this environment; assertion result not shown, so correctness is unconfirmed"
+    },
+    {
+     "from": "D",
+     "problem": "If 2027-01-13 is not a Wednesday, the baseline weekday arithmetic and final date both shift."
+    },
+    {
+     "from": "D",
+     "problem": "No error found in October count; this challenge is weak."
+    },
+    {
+     "from": "D",
+     "problem": "If the code silently ignores holidays, the assertion len(rng)==88 could still pass for the wrong reason (e.g., if the range includes holiday dates but still has 88 entries), or fail, undermining the verification."
+    },
+    {
+     "from": "D",
+     "problem": "No error in the extension step; this challenge does not identify a flaw."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 2,
+   "rejected": 5,
+   "answer": "Start: Wednesday 2026-09-16.\n\nCount business weekdays (Mon-Fri) skipping the 5 holidays, month by month, starting Sep 17:\n\n- Sep 17-30: 10 weekdays, 0 holidays \u2192 10\n- Oct 2026: 22 weekdays (Oct1,2,5-9,12-16,19-23,26-30), minus 3 holidays (10/7,10/19,10/22) \u2192 19\n- Nov 2026: 21 weekdays (Nov2-6,9-13,16-20,23-27,30), 0 holidays \u2192 21\n- Dec 2026: 23 weekdays, minus 1 holiday (12/17) \u2192 22\n- Running total through Dec 31: 10+19+21+22 = 72\n- Need 16 more business days into Jan 2027, skipping 1/1 holiday.\n\nJan 2027 weekdays starting 1/1(Fri,holiday),4(Mon)...: count weekdays from Jan 4 onward, excluding 1/1:\nJan 4-8(5),11-15(5),18-22(5),25(1) = 16 \u2192 reaches Monday 2027-01-25.\n\nTotal: 72+16=88. Final date: 2027-01-25.\n\nVerification code (illustrative, not relied upon for correctness claim since CustomBusinessDay with bare freq='C' may not honor the `holidays` kwarg passed to bdate_range reliably):\n\n```python\nimport pandas as pd\nfrom pandas.tseries.offsets import CustomBusinessDay\nholidays = [\"2026-10-07\",\"2026-10-19\",\"2026-10-22\",\"2026-12-17\",\"2027-01-01\"]\ncbd = CustomBusinessDay(holidays=holidays)\nrng = pd.date_range(\"2026-09-17\", periods=88, freq=cbd)\nprint(rng[-1])\n```\n\nManual month-by-month tally (Sep 10, Oct 19, Nov 21, Dec 22, Jan 16 = 88) confirms the result independently of the code's correctness.\n\nFINAL: 2027-01-25"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Start: Wednesday 2026-09-16.\n\nCount business weekdays (Mon-Fri) skipping the 5 holidays, month by month, starting Sep 17:\n\n- Sep 17-30: 10 weekdays, 0 holidays \u2192 10\n- Oct 2026: 22 weekdays (Oct1,2,5-9,12-16,19-23,26-30), minus 3 holidays (10/7,10/19,10/22) \u2192 19\n- Nov 2026: 21 weekdays (Nov2-6,9-13,16-20,23-27,30), 0 holidays \u2192 21\n- Dec 2026: 23 weekdays, minus 1 holiday (12/17) \u2192 22\n- Running total through Dec 31: 10+19+21+22 = 72\n- Need 16 more business days into Jan 2027, skipping 1/1 holiday.\n\nJan 2027 weekdays starting 1/1(Fri,holiday),4(Mon)...: count weekdays from Jan 4 onward, excluding 1/1:\nJan 4-8(5),11-15(5),18-22(5),25(1) = 16 \u2192 reaches Monday 2027-01-25.\n\nTotal: 72+16=88. Final date: 2027-01-25.\n\nVerification code (illustrative, not relied upon for correctness claim since CustomBusinessDay with bare freq='C' may not honor the `holidays` kwarg passed to bdate_range reliably):\n\n```python\nimport pandas as pd\nfrom pandas.tseries.offsets import CustomBusinessDay\nholidays = [\"2026-10-07\",\"2026-10-19\",\"2026-10-22\",\"2026-12-17\",\"2027-01-01\"]\ncbd = CustomBusinessDay(holidays=holidays)\nrng = pd.date_range(\"2026-09-17\", periods=88, freq=cbd)\nprint(rng[-1])\n```\n\nManual month-by-month tally (Sep 10, Oct 19, Nov 21, Dec 22, Jan 16 = 88) confirms the result independently of the code's correctness.\n\nFINAL: 2027-01-25"
+}

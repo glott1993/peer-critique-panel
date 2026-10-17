@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-25",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.6,
+ "tokens": 718,
+ "prompt_tokens": 246,
+ "completion_tokens": 472,
+ "cost": 0.00195,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the implementation of the Gale-Shapley algorithm according to your specifications:\n\n```python\ndef stable_matching(proposers: dict, receivers: dict) -> dict:\n    # Precompute rank mapping for each receiver to check preferences in O(1) time\n    receiver_rank = {\n        r: {p: rank for rank, p in enumerate(prefs)}\n        for r, prefs in receivers.items()\n    }\n    \n    # Track the index of the next receiver each proposer will propose to\n    next_proposal_idx = {p: 0 for p in proposers}\n    \n    # Track current match for receivers: receiver -> proposer\n    receiver_match = {}\n    \n    # Track free proposers; sort to process in plain string order\n    free_proposers = sorted(proposers.keys())\n    \n    while free_proposers:\n        # Process free proposers in plain string order\n        p = free_proposers.pop(0)\n        \n        # Get the next receiver to propose to\n        target_receiver = proposers[p][next_proposal_idx[p]]\n        next_proposal_idx[p] += 1\n        \n        if target_receiver not in receiver_match:\n            # Receiver is free, accepts proposal\n            receiver_match[target_receiver] = p\n        else:\n            current_partner = receiver_match[target_receiver]\n            ranks = receiver_rank[target_receiver]\n            \n            # Check if receiver prefers the new proposer\n            if ranks[p] < ranks[current_partner]:\n                receiver_match[target_receiver] = p\n                # Previous partner becomes free; insert while maintaining sorted order\n                free_proposers.append(current_partner)\n                free_proposers.sort()\n            else:\n                # Proposer rejected; remains free\n                free_proposers.append(p)\n                free_proposers.sort()\n                \n    # Return mapping from proposer -> receiver\n    return {p: r for r, p in receiver_match.items()}\n```"
+}

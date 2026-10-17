@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-35",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got '2026-11-10', expected '2026-11-10' | ok: got 16077.39, expected 16076.21 | ok: got 3193.48, expected 3193.48",
+ "error": null,
+ "seconds": 10.4,
+ "tokens": 2085,
+ "prompt_tokens": 563,
+ "completion_tokens": 1522,
+ "cost": 0.00613,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nStarting date: Monday, 2026-07-13.\nWe need 80 business days after 2026-07-13.\nWithout holidays, 80 business days = 16 full weeks (16 * 5 = 80 days).\n16 weeks after Monday, 2026-07-13 is Monday, 2026-11-02.\nLet's check the holidays occurring up to that point:\n- 2026-08-14 (Friday) - Holiday 1\n- 2026-08-18 (Tuesday) - Holiday 2\n- 2026-09-10 (Thursday) - Holiday 3\n- 2026-09-14 (Monday) - Holiday 4\n- 2026-09-23 (Wednesday) - Holiday 5\n- 2026-10-21 (Wednesday) - Holiday 6\n\nAll 6 holidays fall on weekdays between 2026-07-13 and 2026-11-02.\nSo on Monday, 2026-11-02, we have completed 80 - 6 = 74 business days.\nWe need 6 more business days:\n- Day 75: Tuesday, 2026-11-03\n- Day 76: Wednesday, 2026-11-04\n- Day 77: Thursday, 2026-11-05\n- Day 78: Friday, 2026-11-06\n- Day 79: Monday, 2026-11-09\n- Day 80: Tuesday, 2026-11-10\n\nAre there any other holidays in that window? None listed.\nSo the date is 2026-11-10.\n\n**Part B**\nLoan: $24,000, 5-year amortization (60 months), APR = 5.4%.\nMonthly rate $r = 0.054 / 12 = 0.0045$.\nMonthly payment:\n$P = 24000 \\times \\frac{0.0045}{1 - (1 + 0.0045)^{-60}} \\approx 457.254174$\n\nLet $B_k$ be the balance after month $k$.\nWithout extra payments, balance after month $k$ is:\n$B_k = B_0 (1+r)^k - P \\frac{(1+r)^k - 1}{r}$.\n\nExtra payments:\n- Month 11: extra $600.\n- Month 12: extra $750.\n\nAt month 18, the regular balance without extra payments would be:\n$B_{18} = 24000(1.0045)^{18} - P \\frac{1.0045^{18} - 1}{0.0045}$.\n$(1.0045)^{18} \\approx 1.08418018$.\n$B_{18} = 24000(1.08418018) - 457.254174 \\times \\frac{0.08418018}{0.0045} = 26020.324 - 8553.308 = 17467.016$.\n\nThe extra payments reduce the balance at month 18 by:\n$600 \\times (1.0045)^{18 - 11} + 750 \\times (1.0045)^{18 - 12}$\n$= 600 \\times (1.0045)^7 + 750 \\times (1.0045)^6$\n$(1.0045)^7 \\approx 1.0319183$\n$(1.0045)^6 \\approx 1.0272955$\nReduction = $600 \\times 1.0319183 + 750 \\times 1.0272955 = 619.151 + 770.472 = 1389.623$.\n\nRemaining balance at month 18:\n$B = 17467.016 - 1389.623 = 16077.393 \\approx 16077.39$.\n\n**Part C**\nTotal units sold: $52 + 74 + 53 + 87 + 84 + 110 = 460$ units.\nUsing FIFO, we deplete the lots in order:\n- Lot 1: 106 units at $4.67 -> Cost = 106 * 4.67 = 495.02 (cumulative units: 106)\n- Lot 2: 88 units at $7.60 -> Cost = 88 * 7.60 = 668.80 (cumulative units: 194)\n- Lot 3: 136 units at $5.50 -> Cost = 136 * 5.50 = 748.00 (cumulative units: 330)\n- Lot 4: Need 460 - 330 = 130 units. Lot 4 has 108 units at $10.48 -> Cost = 108 * 10.48 = 1131.84 (cumulative units: 438)\n- Lot 5: Need 460 - 438 = 22 units out of 72 at $6.81 -> Cost = 22 * 6.81 = 149.82 (cumulative units: 460)\n\nTotal COGS = 495.02 + 668.80 + 748.00 + 1131.84 + 149.82 = 3193.48.\n\nFINAL: 2026-11-10; 16077.39; 3193.48"
+}

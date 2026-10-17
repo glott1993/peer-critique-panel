@@ -3,14 +3,14 @@
  "type": "multi4",
  "condition": "seat1",
  "correct": false,
- "detail": "no FINAL line",
+ "detail": "ok: got 2559.53, expected 2559.53 | no: got 3648229.0, expected 3736369.0 | ok: got 2904.0, expected 2904.0 | ok: got '2027-02-11', expected '2027-02-11'",
  "error": null,
- "seconds": 62.7,
- "tokens": 8622,
+ "seconds": 22.4,
+ "tokens": 3251,
  "prompt_tokens": 622,
- "completion_tokens": 8000,
- "cost": 0.08124,
+ "completion_tokens": 2629,
+ "cost": 0.02753,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Part A: Order Total Calculation\n\n**Tiered pricing for 723 units:**\n- First 100 units: 100 \u00d7 $4.25 = $425.00\n- Next 200 units: 200 \u00d7 $3.61 = $722.00\n- Remaining 423 units (723\u2212300): 423 \u00d7 $2.97 = $1,255.71\n\n**Subtotal:** $425.00 + $722.00 + $1,255.71 = **$2,402.71**\n\nSince $2,402.71 does **not** exceed $2,500, no discount applies.\n\n**Apply 6.5% tax:** $2,402.71 \u00d7 1.065 = $2,558.88615 \u2192 **$2,558.89**\n\n# Part B: Sum of Integers Divisible by 13 but not 4 (395 to 11,383)\n\n**Multiples of 13:** first = 403, last = 11,375, count = 845\nSum\u2081\u2083 = 845 \u00d7 (403+11,375)/2 = 845 \u00d7 5,889 = **4,976,205**\n\n**Multiples of 52 (divisible by both 13 & 4):** first = 416, last = 11,336, count = 211\nSum\u2085\u2082 = 211 \u00d7 (416+11,336)/2 = 211 \u00d7 5,876 = **1,239,836**\n\n**Answer:** 4,976,205 \u2212 1,239,836 = **3,736,369**\n\n# Part C: Gross Pay with Daily Overtime\n\nRules: \u22648h \u2192 $22; 8\u201312h \u2192 $22 + 1.5\u00d7$22($33) for excess; >12h \u2192 also 2\u00d7$22($44) beyond 12.\n\n| Hours | P"
+ "answer": "**Part A:**\n- 100\u00d74.25=425.00\n- 200\u00d73.61=722.00\n- 423\u00d72.97=1256.31\n- Subtotal=2403.31 (below 2500, no discount)\n- Tax: 2403.31\u00d71.065=2559.52515 \u2192 **2559.53**\n\n**Part B:**\n- Multiples of 13 in range: 403 to 11375, n=845, sum=4,976,205\n- Multiples of 52 (13&4) in range: 416 to 11336, n=211, sum=1,327,976\n- Difference: 4,976,205 \u2212 1,327,976 = **3,648,229**\n\n**Part C:**\nDaily pay (8h@22, up to4h@33,beyond@44):\n225.5,0,330,242,176,225.5,352,275,275,0,176,176,176,275\nSum = **2904.00**\n\n**Part D:**\nCounting business days skipping weekends/holidays from 2026-10-06, day 86 lands on **2027-02-11**\n\nFINAL: 2559.53; 3648229; 2904.00; 2027-02-11"
 }

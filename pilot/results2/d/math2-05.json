@@ -1,0 +1,124 @@
+{
+ "task_id": "math2-05",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 2828.5, expected 2828.5",
+ "error": null,
+ "seconds": 76.7,
+ "tokens": 42740,
+ "prompt_tokens": 31948,
+ "completion_tokens": 10792,
+ "cost": 0.05185,
+ "calls": 21,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Calculate tiered subtotal",
+     "what": "Compute 100 \u00d7 $4.25 = $425.00, 200 \u00d7 $3.61 = $722.00, and 579 \u00d7 $2.97 = $1,719.63, for a subtotal of $2,866.63."
+    },
+    {
+     "id": "c2",
+     "title": "Apply discount and sales tax",
+     "what": "Because the subtotal exceeds $1,500, apply the 8% discount: $2,866.63 \u00d7 0.92 = $2,637.2996. Add 7.25% tax: $2,637.2996 \u00d7 1.0725 = $2,828.505321, which rounds to $2,828.51."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Tiered subtotal for 879 units:\n- First 100 units: 100 \u00d7 4.25 = 425.00\n- Next 200 units: 200 \u00d7 3.61 = 722.00\n- Remaining 579 units: 579 \u00d7 2.97 = 1719.63\n\nSubtotal = 425.00 + 722.00 + 1719.63 = 2866.63\n\nSince subtotal > 1500, apply 8% discount:\n2866.63 \u00d7 0.92 = 2637.2996\n\nApply 7.25% sales tax:\n2637.2996 \u00d7 1.0725 = 2828.503821\n\nRounded to nearest cent: $2,828.50\n\nFINAL: 2828.50"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The arithmetic is correct under the stated progressive-tier and unrounded-intermediate assumptions, so there is no substantive numerical error to attack."
+    },
+    {
+     "from": "B",
+     "problem": "It does not state whether currency amounts are rounded after the discount before calculating tax. That convention is ambiguous, although it does not change the displayed result here."
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 2,
+   "rejected": 4,
+   "answer": "Tiered subtotal for 879 units:\n- First 100 units: 100 \u00d7 $4.25 = $425.00\n- Next 200 units: 200 \u00d7 $3.61 = $722.00\n- Remaining 579 units: 579 \u00d7 $2.97 = $1,719.63\n\nSubtotal = 425.00 + 722.00 + 1719.63 = $2,866.63\n\nSince the subtotal exceeds $1,500, apply an 8% discount:\nDiscounted subtotal = 2866.63 \u00d7 0.92 = $2,637.2996 (or $2,637.30 rounded)\n\nApply 7.25% sales tax:\nTotal = 2637.2996 \u00d7 1.0725 = 2828.503821\n(Using rounded discounted subtotal: 2637.30 \u00d7 1.0725 = 2828.50425)\n\nBoth rounding intermediate subtotal and rounding only at the end yield $2,828.50.\n\nFINAL: 2828.50"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Tiered subtotal for 879 units:\n- First 100 units: 100 \u00d7 $4.25 = $425.00\n- Next 200 units: 200 \u00d7 $3.61 = $722.00\n- Remaining 579 units: 579 \u00d7 $2.97 = $1,719.63\n\nSubtotal = 425.00 + 722.00 + 1719.63 = $2,866.63\n\nSince the subtotal exceeds $1,500, apply an 8% discount:\nDiscounted subtotal = 2866.63 \u00d7 0.92 = $2,637.2996 (or $2,637.30 rounded)\n\nApply 7.25% sales tax:\nTotal = 2637.2996 \u00d7 1.0725 = 2828.503821\n(Using rounded discounted subtotal: 2637.30 \u00d7 1.0725 = 2828.50425)\n\nBoth rounding intermediate subtotal and rounding only at the end yield $2,828.50.\n\nFINAL: 2828.50"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-11",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.7,
+ "tokens": 894,
+ "prompt_tokens": 337,
+ "completion_tokens": 557,
+ "cost": 0.00234,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the `reconcile` function:\n\n```python\nfrom datetime import date\n\n\ndef reconcile(bank, ledger, window=2):\n    # Parse date strings into date objects for date arithmetic\n    parsed_bank = []\n    for idx, (b_id, d_str, amt) in enumerate(bank):\n        parsed_bank.append((idx, b_id, date.fromisoformat(d_str), amt))\n\n    parsed_ledger = []\n    for idx, (l_id, d_str, amt) in enumerate(ledger):\n        parsed_ledger.append((idx, l_id, date.fromisoformat(d_str), amt))\n\n    # Bank items processed in order of date, then id\n    sorted_bank = sorted(parsed_bank, key=lambda x: (x[2], x[1]))\n\n    matched_bank_orig_indices = set()\n    matched_ledger_orig_indices = set()\n    matches = []\n\n    for b_orig_idx, b_id, b_date, b_amt in sorted_bank:\n        best_candidate = None\n        best_key = None\n\n        for l_orig_idx, l_id, l_date, l_amt in parsed_ledger:\n            if l_orig_idx in matched_ledger_orig_indices:\n                continue\n            if b_amt == l_amt and abs((b_date - l_date).days) <= window:\n                cand_key = (l_date, l_id)\n                if best_key is None or cand_key < best_key:\n                    best_key = cand_key\n                    best_candidate = (l_orig_idx, l_id)\n\n        if best_candidate is not None:\n            l_orig_idx, l_id = best_candidate\n            matched_bank_orig_indices.add(b_orig_idx)\n            matched_ledger_orig_indices.add(l_orig_idx)\n            matches.append((b_id, l_id))\n\n    unmatched_bank = [\n        item[0]\n        for idx, item in enumerate(bank)\n        if idx not in matched_bank_orig_indices\n    ]\n    unmatched_ledger = [\n        item[0]\n        for idx, item in enumerate(ledger)\n        if idx not in matched_ledger_orig_indices\n    ]\n\n    return matches, unmatched_bank, unmatched_ledger\n```"
+}

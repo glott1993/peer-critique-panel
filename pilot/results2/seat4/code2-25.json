@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-25",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 26.7,
+ "tokens": 2139,
+ "prompt_tokens": 250,
+ "completion_tokens": 1889,
+ "cost": 0.00781,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nimport heapq\n\ndef stable_matching(proposers, receivers):\n    # Precompute each receiver's ranking of proposers for quick comparison.\n    rank = {\n        receiver: {proposer: i for i, proposer in enumerate(pref)}\n        for receiver, pref in receivers.items()\n    }\n\n    # Track the next receiver each proposer will propose to.\n    next_idx = {proposer: 0 for proposer in proposers}\n\n    # Current matches: receiver -> proposer and proposer -> receiver\n    receiver_match = {}\n    proposer_match = {}\n\n    # All proposers start free; process them in plain string order using a min-heap.\n    free = list(proposers.keys())\n    heapq.heapify(free)\n\n    while free:\n        proposer = heapq.heappop(free)\n        pref_list = proposers[proposer]\n\n        # Propose to the next receiver on the proposer's list.\n        receiver = pref_list[next_idx[proposer]]\n        next_idx[proposer] += 1\n\n        if receiver not in receiver_match:\n            # Receiver is free, so they accept.\n            receiver_match[receiver] = proposer\n            proposer_match[proposer] = receiver\n        else:\n            current = receiver_match[receiver]\n\n            # If the receiver prefers the new proposer, switch.\n            if rank[receiver][proposer] < rank[receiver][current]:\n                receiver_match[receiver] = proposer\n                proposer_match[proposer] = receiver\n\n                # The previous proposer becomes free.\n                proposer_match.pop(current, None)\n                heapq.heappush(free, current)\n            else:\n                # Rejected; proposer stays free and will propose to the next receiver later.\n                heapq.heappush(free, proposer)\n\n    return proposer_match\n```"
+}

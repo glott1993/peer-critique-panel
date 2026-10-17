@@ -3,14 +3,14 @@
  "type": "data",
  "condition": "seat1",
  "correct": false,
- "detail": "no FINAL number",
+ "detail": "got 17.9, expected 17.7",
  "error": null,
- "seconds": 55.3,
- "tokens": 10851,
+ "seconds": 23.9,
+ "tokens": 6064,
  "prompt_tokens": 2851,
- "completion_tokens": 8000,
- "cost": 0.0857,
+ "completion_tokens": 3213,
+ "cost": 0.03783,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Working\n\n**Step 1: Remove duplicate orders**\nExact duplicate rows found (same order_id + all fields): O2082, O2030, O2407 \u2014 each counted"
+ "answer": "Working:\n- Filtered orders to status shipped/pending, removed exact duplicate rows (O2082, O2030, O2407 duplicates counted once).\n- Computed revenue (units\u00d7unit_price) per order, summed by customer.\n\nCustomer totals (approx):\nC100 3210.85, C101 4926.60, C102 4104.19, C103 17389.18, C104 9029.10, C105 15307.24, C106 9095.86, C107 856.02, C108 8671.74, C109 12162.50, C110 9074.38, C111 3172.64\n\nTotal revenue \u2248 97000.30\n\nHighest: C103 = 17389.18\n\nPercentage = 17389.18 / 97000.30 \u00d7 100 \u2248 17.9%\n\nFINAL: 17.9"
 }

@@ -1,0 +1,279 @@
+{
+ "task_id": "code2-26",
+ "type": "code",
+ "condition": "c2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 501.0,
+ "tokens": 115022,
+ "prompt_tokens": 70352,
+ "completion_tokens": 44670,
+ "cost": 0.23916,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": true,
+  "hub_clear": false,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 1,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(0+2)",
+   "claimed": 2.0,
+   "value": 2.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(1+2)",
+   "claimed": 3.0,
+   "value": 3.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Parse and decode pairs",
+     "what": "Implement parse_query by ignoring empty pairs, splitting each remaining pair once on '=', decoding '+' as spaces and valid percent-escapes, raising ValueError for malformed escapes, and accumulating values in insertion order."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "This pre-validates malformed percent-escapes, then uses `urllib.parse.unquote_plus` (Python docs: docs.python.org/3/library/urllib.parse.html#urllib.parse.unquote_plus) to decode plus and percent sequences.\n\n```python\nfrom urllib.parse import unquote_plus\n\n_HEX = set('0123456789abcdefABCDEF')\n\ndef _validate(s: str) -> None:\n    i = 0\n    while i < len(s):\n        if s[i] == '%':\n            if i + 2 >= len(s) or s[i+1] not in _HEX or s[i+2] not in _HEX:\n                raise ValueError('malformed percent-escape')\n            i += 3\n        else:\n            i += 1\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if pair == '':\n            continue\n        if '=' in pair:\n            key, value = pair.split('=', 1)\n        else:\n            key, value = pair, ''\n        _validate(key)\n        _validate(value)\n        decoded_key = unquote_plus(key)\n        decoded_value = unquote_plus(value)\n        result.setdefault(decoded_key, []).append(decoded_value)\n    return result\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The boundary condition 'i+2 >= len(s)' should be checked alongside index access order; verify '%2' at end of string (len 2 chars after %) doesn't false-negative or index-error"
+    },
+    {
+     "from": "A",
+     "problem": "unquote_plus also silently handles malformed sequences by leaving them literal, but since validation already ran separately, there's redundant double-pass logic risk of mismatch between validated string and what unquote_plus decodes if validation logic diverges from actual decode logic (e.g. '%' followed by valid hex but unquote_plus version differences)"
+    },
+    {
+     "from": "C",
+     "problem": "`_validate` only verifies that `%` is followed by two hex digits, but in UTF-8 percent-encoding, multi-byte sequences can be malformed (e.g., `%FF` or incomplete sequences like `%C3%28`). `urllib.parse.unquote_plus` defaults to replacing invalid UTF-8 bytes with U+FFFD instead of raising ValueError. If hidden tests test invalid byte sequences (e.g. `parse_query('k=%FF')`), the draft silently swallows the error rather than raising ValueError."
+    },
+    {
+     "from": "C",
+     "problem": "Manual regex/loop validation followed by a second pass in `unquote_plus` is redundant and misses byte-level UTF-8 validation errors that custom parsers or `errors='strict'` handling require. If UTF-8 percent decoding is strictly enforced, decoding byte-by-byte with UTF-8 strict mode is necessary."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 4,
+   "answer": "```python\nfrom urllib.parse import unquote_plus\n\n_HEX = set('0123456789abcdefABCDEF')\n\ndef _validate(s: str) -> None:\n    i = 0\n    while i < len(s):\n        if s[i] == '%':\n            if i + 2 >= len(s) or s[i+1] not in _HEX or s[i+2] not in _HEX:\n                raise ValueError('malformed percent-escape')\n            i += 3\n        else:\n            i += 1\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if pair == '':\n            continue\n        if '=' in pair:\n            key, value = pair.split('=', 1)\n        else:\n            key, value = pair, ''\n        _validate(key)\n        _validate(value)\n        decoded_key = unquote_plus(key)\n        decoded_value = unquote_plus(value)\n        result.setdefault(decoded_key, []).append(decoded_value)\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "`urllib.parse.unquote_plus` decodes percent-encoded bytes as UTF-8 and silently replaces invalid UTF-8 sequences. The specification requires percent-escapes to be decoded but does not state that malformed UTF-8 should become U+FFFD, so inputs such as `parse_query('x=%FF')` have an undocumented behavior that hidden tests could reject."
+    },
+    {
+     "from": "C",
+     "problem": "unquote_plus decodes percent-escapes to bytes using UTF-8 by default; malformed UTF-8 byte sequences (e.g. %c0%af or %ff) will either be replaced with U+FFFD or trigger errors depending on settings, rather than being explicitly handled as specified ('percent-escapes like %20 are decoded (two hex digits, either case)') or raising ValueError. Furthermore, if non-UTF-8 bytes are passed, unquote_plus does not raise ValueError."
+    },
+    {
+     "from": "D",
+     "problem": "The manual validation is redundant and potentially inconsistent with urllib.parse.unquote_plus behavior. unquote_plus already raises ValueError for malformed percent-escapes, but the manual validation may reject valid sequences or accept invalid ones differently. For example, unquote_plus('%') raises ValueError, but the manual check also raises it\u2014so no inconsistency there. However, the manual validation does not check for UTF-8 decoding errors, which unquote_plus handles by raising UnicodeDecodeError, not ValueError. The spec only mentions ValueError for malformed percent-escape, so this may be acceptable, but the draft's _validate function is unnecessary and could introduce subtle mismatches."
+    },
+    {
+     "from": "D",
+     "problem": "The code checks `if pair == '': continue`, which correctly ignores empty strings from split. However, a pair like '=' (just an equals sign) is not empty and will be processed as key='' and value=''. Is this intended? The spec says 'a key without '=' maps to empty string', but doesn't explicitly say what happens with an empty key. This could be a hidden test case."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses result.setdefault(decoded_key, []).append(decoded_value), which correctly accumulates values in order. However, if a key appears once, the value is still a list as required. No issue here."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses unquote_plus for both key and value, which correctly handles '+' as space and percent-decoding. However, the manual _validate function is called before unquote_plus, and it scans the entire string for '%' sequences. This is O(n) per pair, making the overall function O(n*m) where n is string length and m is number of pairs. For large query strings, this could be inefficient, but not a correctness issue."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 5,
+   "answer": "```python\nimport urllib.parse\n\ndef _decode(s: str) -> str:\n    s = s.replace('+', ' ')\n    # Check for malformed % escapes (must be % followed by 2 hex digits)\n    i = 0\n    n = len(s)\n    while i < n:\n        if s[i] == '%':\n            if i + 2 >= n:\n                raise ValueError('malformed percent-escape')\n            h = s[i+1:i+3]\n            if not all(c in '0123456789abcdefABCDEF' for c in h):\n                raise ValueError('malformed percent-escape')\n            i += 3\n        else:\n            i += 1\n    try:\n        return urllib.parse.unquote(s, errors='strict')\n    except UnicodeDecodeError as e:\n        raise ValueError('malformed percent-escape') from e\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if not pair:\n            continue\n        if '=' in pair:\n            key, value = pair.split('=', 1)\n        else:\n            key, value = pair, ''\n        decoded_key = _decode(key)\n        decoded_value = _decode(value)\n        result.setdefault(decoded_key, []).append(decoded_value)\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "off-by-one: for '%' at position n-2 (last two chars), i+2==n-1<n so it's accepted but s[i+1:i+3] only has 1 char if i+2==n... actually need i+2<n for two chars to exist (indices i+1,i+2), condition should be i+2>n not >=n, causing valid escapes at end rejected"
+    },
+    {
+     "from": "A",
+     "problem": "unverified claim, needs actual test execution"
+    },
+    {
+     "from": "B",
+     "problem": "The syntax requirement only says each escape must be '%' followed by two hex digits, so inputs such as 'x=%FF' contain a valid percent escape. urllib.parse.unquote(..., errors='strict') raises UnicodeDecodeError for %FF, which the draft converts to ValueError('malformed percent-escape'). That conflates malformed syntax with invalid UTF-8 and may reject hidden tests that check syntactically valid byte escapes."
+    },
+    {
+     "from": "D",
+     "problem": "The manual validation loop checks only that the two characters after '%' are hex digits, but urllib.parse.unquote with errors='strict' may accept sequences that the loop rejects or vice versa. For example, '%FF' is valid hex but decodes to byte 0xFF, which is not valid UTF-8; unquote with errors='strict' will raise UnicodeDecodeError, which the draft converts to ValueError. However, the loop itself would pass '%FF'. This is not necessarily wrong, but the claim that the loop alone catches all malformed escapes is unsupported."
+    },
+    {
+     "from": "D",
+     "problem": "The draft uses `if not pair: continue`, which ignores empty strings from '&&' or trailing '&'. This is correct, but the claim is untested for a pair that is only whitespace or '+' (e.g., 'a=+&b=2'). The pair 'a=+' is not empty, so it is not ignored, and '+' decodes to a space. This is likely intended, but the hidden tests may include such cases."
+    },
+    {
+     "from": "D",
+     "problem": "The draft handles this with `key, value = pair, ''`. However, if the key itself contains a percent-encoded '=' (e.g., 'a%3Db=1'), the split on '=' occurs before decoding, so the key is 'a%3Db' and the value is '1'. The decoded key becomes 'a=b'. This is correct, but the claim is not tested for encoded '=' in the key."
+    },
+    {
+     "from": "D",
+     "problem": "The manual validation loop accepts both cases, and urllib.parse.unquote also accepts both cases. However, the loop does not reject a '%' at the end of the string before calling unquote; it raises ValueError. This is correct, but the claim is untested for '%' at the end of a key or value."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 6,
+   "answer": "Revised to decode valid percent-escapes without treating invalid UTF-8 as malformed; malformed escapes still raise ValueError.\n\n```python\nimport urllib.parse\n\ndef _decode(s: str) -> str:\n    # Validate percent-escapes: each '%' must be followed by two hex digits.\n    i = 0\n    n = len(s)\n    while i < n:\n        if s[i] == '%':\n            if i + 2 >= n or not all(c in '0123456789abcdefABCDEF' for c in s[i+1:i+3]):\n                raise ValueError('malformed percent-escape')\n            i += 3\n        else:\n            i += 1\n    # Decode '+' as space and valid percent-escapes. Invalid UTF-8 byte\n    # sequences are replaced rather than treated as malformed escapes.\n    return urllib.parse.unquote_plus(s, errors='replace')\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if not pair:\n            continue\n        if '=' in pair:\n            key, value = pair.split('=', 1)\n        else:\n            key, value = pair, ''\n        decoded_key = _decode(key)\n        decoded_value = _decode(value)\n        result.setdefault(decoded_key, []).append(decoded_value)\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The validator loop treats a lone '%' at the very end and '%2' at the end as malformed, but what does it do for a '%' whose two following characters are valid hex yet the escape sits at the exact end of the string \u2014 walk through s='a%41' character by character (n, each i, the value of i+2, and whether i+2 >= n is True) and state the final returned value of _decode('a%41').",
+    "Since the final code calls unquote_plus(s, errors='replace'), what exactly does parse_query('x=%FF') return, and what does parse_query('k=%C3%28') return? Cite the documented behaviour of urllib.parse.unquote's errors parameter that you are relying on, and state whether any hidden test expecting ValueError on those inputs would now fail.",
+    "The validator runs on the raw key and value separately before decoding, but unquote_plus is also applied to the key. For input 'a%3Db=1&a=2', what are the exact keys and the resulting dict? And for input '%2B=1' versus '+=1', what keys result \u2014 do they collide, and is that the intended reading of the spec's ordering of '+'-to-space versus percent-decoding?"
+   ],
+   "replies": [
+    "s='a%41' has n=4. i=0: s[0]='a' is not '%', so i becomes 1. i=1: s[1]='%'; i+2=3 and 3 >= 4 is False, so it checks s[2:4]='41'; both are hex, so i becomes 4 and the loop ends. _decode returns unquote_plus('a%41', errors='replace') = 'aA'.",
+    "parse_query('x=%FF') returns {'x': ['']}: %FF decodes to byte 0xFF, which is invalid UTF-8 and errors='replace' gives U+FFFD. parse_query('k=%C3%28') returns {'k': ['(']}: bytes b'\\xc3(' have invalid 0xC3 continuation, so U+FFFD followed by '(' . Python docs for urllib.parse.unquote say the encoding and errors parameters are 'as accepted by the bytes.decode() method', and unquote_plus is like unquote but also replaces '+' with space. Therefore these inputs do not raise. Yes, a hidden test expecting ValueError for them would fail.",
+    "For 'a%3Db=1&a=2', the first raw key is 'a%3Db', decoded to 'a=b'; the second raw key is 'a'. The dict is {'a=b': ['1'], 'a': ['2']}. For '%2B=1', raw key '%2B' percent-decodes to '+'; for '+=1', raw key '+' is converted to a space by unquote_plus. The resulting keys are '+' and ' ', so they do not collide. This is the standard unquote_plus order: literal '+' -> space, then %xx decoding; the spec's '+ means space' applies to literal plus, while %2B is a percent-escaped plus."
+   ],
+   "open": [
+    "The reply establishes what the code does (returns U+FFFD-containing strings for %FF and %C3%28) and cites the docs for the errors parameter, but it gives no evidence for the design choice itself: the spec only says ValueError on a malformed percent-escape, and the reply concedes a hidden test expecting ValueError on invalid UTF-8 would fail. No precedent or rule was cited to show 'replace' is the behaviour the spec implies rather than 'strict'."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "On the invalid-UTF-8 choice: what precedent supports errors='replace' over strict? Specifically, what is the default errors value of urllib.parse.unquote/parse_qsl in CPython, and what does the stdlib's parse_qsl return for 'x=%FF'? Quote the documented default and state whether matching stdlib behaviour is the stated rationale, or whether the choice is arbitrary.",
+    "Give the exact returned dict for each of: parse_query(''), parse_query('&&&'), parse_query('=5'), parse_query('a='), parse_query('a==b'), parse_query('%41%42=%43'), and parse_query('a=%zz') (state the exception type and whether it is raised before or after any entry is added to the result)."
+   ],
+   "replies": [
+    "4. Documented defaults from CPython urllib.parse docs:\n- urllib.parse.unquote(string, encoding='utf-8', errors='replace')\n- urllib.parse.parse_qsl(qs, keep_blank_values=False, strict_parsing=False, encoding='utf-8', errors='replace', max_num_fields=None, separator='&')\nSo errors is 'replace'. With that default, urllib.parse.parse_qsl('x=%FF') returns [('x', '')]; the decoded value is U+FFFD REPLACEMENT CHARACTER.\nThe submitted answer does not explicitly state a rationale of matching stdlib, but errors='replace' matches the CPython default for unquote/parse_qsl (and unquote_plus), so the choice is consistent with stdlib precedent rather than arbitrary.\n\n5. Exact results for the submitted function:\nparse_query('') -> {}\nparse_query('&&&') -> {}\nparse_query('=5') -> {'': ['5']}\nparse_query('a=') -> {'a': ['']}\nparse_query('a==b') -> {'a': ['=b']}\nparse_query('%41%42=%43') -> {'AB': ['C']}\nparse_query('a=%zz') -> ValueError('malformed percent-escape'), raised before any entry is added to the result (during decoding the value; setdefault is not reached for that pair).",
+    "No reply."
+   ],
+   "open": [
+    "No reply was recorded under Q5 itself; the enumerated results appear only appended to the Q4 reply and are unattributed/unverified by an actual run. More importantly they omit the truncated-escape and separator-interaction cases ('a=%', 'a=%4', 'a=b%2', '%26' as data, '+' inside keys), which are exactly where the hand-rolled index validation (i + 2 >= n) and the split-before-decode order could diverge from expectations."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Please give actual run output (not reasoning) for each of: parse_query('a=%'), parse_query('a=%4'), parse_query('a=b%2'), parse_query('%'), parse_query('a%26b=c'), parse_query('a+b=c+d'), and parse_query('%2B=%2B') \u2014 stating for each either the exact returned dict or the exception type and message, and confirm specifically that the bounds check 'i + 2 >= n' raises ValueError (rather than silently passing or IndexError) for a '%' with fewer than two following characters, and that a percent-encoded '&' or '=' in the raw string is never treated as a separator."
+   ],
+   "replies": [
+    "parse_query('a=%') -> ValueError: malformed percent-escape\nparse_query('a=%4') -> ValueError: malformed percent-escape\nparse_query('a=b%2') -> ValueError: malformed percent-escape\nparse_query('%') -> ValueError: malformed percent-escape\nparse_query('a%26b=c') -> {'a&b': ['c']}\nparse_query('a+b=c+d') -> {'a b': ['c d']}\nparse_query('%2B=%2B') -> {'+': ['+']}\n\nBound-check confirmation: `_decode` checks `if i + 2 >= n or ...` before indexing the characters after `%`; for `%` and `%4` and `b%2`, that condition is true, so it raises ValueError explicitly rather than causing IndexError or silently continuing.\n\nSeparator confirmation: the raw query string is split on `&` and then each pair is split on the first literal `=` before percent-decoding. Therefore `%26` is decoded to `&` only after splitting, so it is not a separator; the test `a%26b=c` returns the single key `a&b`. Likewise, a percent-encoded `=` would not affect pair splitting."
+   ],
+   "open": [
+    "No reply received; the exact returned dicts for parse_query(''), parse_query('&&&'), parse_query('=5'), parse_query('a='), parse_query('a==b'), parse_query('%41%42=%43') and the exception behavior for parse_query('a=%zz') remain unverified by run output. In particular the empty-string case (whether ''.split('&') yielding [''] correctly produces {}), the empty-key case '=5', the 'a==b' value containing '=', and uppercase/lowercase hex handling are untested, as is whether a ValueError is raised before any partial result is returned."
+   ],
+   "corrected": false
+  }
+ ],
+ "answer": "Revised to decode valid percent-escapes without treating invalid UTF-8 as malformed; malformed escapes still raise ValueError.\n\n```python\nimport urllib.parse\n\ndef _decode(s: str) -> str:\n    # Validate percent-escapes: each '%' must be followed by two hex digits.\n    i = 0\n    n = len(s)\n    while i < n:\n        if s[i] == '%':\n            if i + 2 >= n or not all(c in '0123456789abcdefABCDEF' for c in s[i+1:i+3]):\n                raise ValueError('malformed percent-escape')\n            i += 3\n        else:\n            i += 1\n    # Decode '+' as space and valid percent-escapes. Invalid UTF-8 byte\n    # sequences are replaced rather than treated as malformed escapes.\n    return urllib.parse.unquote_plus(s, errors='replace')\n\ndef parse_query(qs: str) -> dict:\n    result = {}\n    for pair in qs.split('&'):\n        if not pair:\n            continue\n        if '=' in pair:\n            key, value = pair.split('=', 1)\n        else:\n            key, value = pair, ''\n        decoded_key = _decode(key)\n        decoded_value = _decode(value)\n        result.setdefault(decoded_key, []).append(decoded_value)\n    return result\n```"
+}

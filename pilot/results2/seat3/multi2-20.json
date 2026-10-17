@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-20",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "no: got 1067.0, expected 1231.0 | no: got 2673.0, expected 2717.0 | no: got 68.0, expected 63.0",
+ "error": null,
+ "seconds": 10.1,
+ "tokens": 1881,
+ "prompt_tokens": 349,
+ "completion_tokens": 1532,
+ "cost": 0.00601,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\nLet $S = \\{1, \\dots, 5000\\}$.\nFirst, find the number of integers divisible by at least one of 6, 10, 15 using the principle of inclusion-exclusion:\n- Multiples of 6: $\\lfloor 5000 / 6 \\rfloor = 833$\n- Multiples of 10: $\\lfloor 5000 / 10 \\rfloor = 500$\n- Multiples of 15: $\\lfloor 5000 / 15 \\rfloor = 333$\n- Multiples of $\\text{lcm}(6, 10) = 30$: $\\lfloor 5000 / 30 \\rfloor = 166$\n- Multiples of $\\text{lcm}(6, 15) = 30$: $\\lfloor 5000 / 30 \\rfloor = 166$\n- Multiples of $\\text{lcm}(10, 15) = 30$: $\\lfloor 5000 / 30 \\rfloor = 166$\n- Multiples of $\\text{lcm}(6, 10, 15) = 30$: $\\lfloor 5000 / 30 \\rfloor = 166$\n\nTotal divisible by at least one of 6, 10, 15:\n$N = 833 + 500 + 333 - 166 - 166 - 166 + 166 = 1168$.\n\nNow, subtract those that are also divisible by 13:\n- Divisible by $\\text{lcm}(6, 13) = 78$: $\\lfloor 5000 / 78 \\rfloor = 64$\n- Divisible by $\\text{lcm}(10, 13) = 130$: $\\lfloor 5000 / 130 \\rfloor = 38$\n- Divisible by $\\text{lcm}(15, 13) = 195$: $\\lfloor 5000 / 195 \\rfloor = 25$\n- Divisible by $\\text{lcm}(30, 13) = 390$: $\\lfloor 5000 / 390 \\rfloor = 12$ (this covers pairs and the triple of 6, 10, 15 with 13)\n\nBy inclusion-exclusion for multiples of 13:\n$N_{13} = 64 + 38 + 25 - 12 - 12 - 12 + 12 = 127 - 24 = 101$ (since $64 + 38 + 25 - 3(12) + 12 = 101$).\n\nThus, the count is $1168 - 101 = 1067$.\n\n**Part B:**\nBase rate: $R = 22.00$.\nHours worked each day: 9, 9.5, 8, 0, 9, 13, 0, 9.5, 11, 7.5, 6, 12.5, 8, 10.\nBreakdown per day:\n- $\\le 8$ hours: regular (1x)\n- $8 < h \\le 12$ hours: 1.5x\n- $> 12$ hours: 2x\n\nBreakdown by day (Regular, 1.5x, 2x):\n1. 9: 8, 1, 0\n2. 9.5: 8, 1.5, 0\n3. 8: 8, 0, 0\n4. 0: 0, 0, 0\n5. 9: 8, 1, 0\n6. 13: 8, 4, 1\n7. 0: 0, 0, 0\n8. 9.5: 8, 1.5, 0\n9. 11: 8, 3, 0\n10. 7.5: 7.5, 0, 0\n11. 6: 6, 0, 0\n12. 12.5: 8, 4, 0.5\n13. 8: 8, 0, 0\n14. 10: 8, 2, 0\n\nTotals:\n- Regular hours: $8 + 8 + 8 + 0 + 8 + 8 + 0 + 8 + 8 + 7.5 + 6 + 8 + 8 + 8 = 91.5$ hours\n- Overtime (1.5x): $1 + 1.5 + 0 + 0 + 1 + 4 + 0 + 1.5 + 3 + 0 + 0 + 4 + 0 + 2 = 18$ hours\n- Double time (2x): $0 + 0 + 0 + 0 + 0 + 1 + 0 + 0 + 0 + 0 + 0 + 0.5 + 0 + 0 = 1.5$ hours\n\nEquivalent regular hours:\n$91.5 + 1.5 \\times 18 + 2 \\times 1.5 = 91.5 + 27 + 3 = 121.5$ hours.\n\nGross pay:\n$121.5 \\times 22.00 = 2673.00$.\n\n**Part C:**\nCalculate $49245 \\times 6846 \\times 408 \\times 3656$:\n$49245 \\times 6846 = 337131270$\n$408 \\times 3656 = 1491648$\n$337131270 \\times 1491648 = 502881180299960$\n\nSum of digits of 502881180299960:\n$5 + 0 + 2 + 8 + 8 + 1 + 1 + 8 + 0 + 2 + 9 + 9 + 9 + 6 + 0 = 68$.\n\nFINAL: 1067; 2673.00; 68"
+}

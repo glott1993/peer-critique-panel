@@ -1,0 +1,260 @@
+{
+ "task_id": "code2-14",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 469.4,
+ "tokens": 157892,
+ "prompt_tokens": 112128,
+ "completion_tokens": 45764,
+ "cost": 0.22546,
+ "calls": 49,
+ "call_errors": 6,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Tokenizer",
+     "what": "Scan string into tokens: integers, 'n/d' fraction literals, +, -, *, (, ), validating characters and spacing; raise ValueError on invalid tokens."
+    },
+    {
+     "id": "c2",
+     "title": "Parser/evaluator",
+     "what": "Recursive-descent parser over tokens implementing +,-,* with parentheses and unary minus on terms, producing exact Fraction results; raise ValueError on structural errors (mismatched parens, missing operands) and on zero denominators in literals."
+    },
+    {
+     "id": "c3",
+     "title": "Fraction reduction",
+     "what": "Use math.gcd to reduce n/d to lowest terms with d>0, handling sign normalization."
+    },
+    {
+     "id": "c4",
+     "title": "Output formatting",
+     "what": "Return '0' for zero, 'n' when denominator is 1, else 'n/d'."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ],
+    "c2": [
+     "A",
+     "B"
+    ],
+    "c3": [
+     "C",
+     "B"
+    ],
+    "c4": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "I'll use c3's self-contained regex tokenizer+parser (c2's regex-based tokenization validates malformed input better than c1's manual loop, and c3 already integrates it with parsing/reduction, avoiding component-boundary mismatches). This avoids relying on `Fraction`'s leniency and keeps explicit zero-denominator/malformed checks as required.\n\n```python\nimport re\nimport math\n\n\ndef fraction_expr(s: str) -> str:\n    if not isinstance(s, str):\n        raise ValueError(\"expression must be a string\")\n\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]\")\n    tokens = []\n    pos = 0\n\n    for match in token_re.finditer(s):\n        if s[pos:match.start()].strip():\n            raise ValueError(\"malformed expression\")\n        tokens.append(match.group())\n        pos = match.end()\n\n    if s[pos:].strip() or not tokens:\n        raise ValueError(\"malformed expression\")\n\n    def reduce_fraction(n, d):\n        if d == 0:\n            raise ValueError(\"zero denominator\")\n        if d < 0:\n            n, d = -n, -d\n        g = math.gcd(abs(n), d) or 1\n        return n // g, d // g\n\n    def value_of_literal(token):\n        if \"/\" in token:\n            numerator, denominator = token.split(\"/\")\n            return reduce_fraction(int(numerator), int(denominator))\n        return int(token), 1\n\n    index = 0\n\n    def parse_expression():\n        nonlocal index\n        n, d = parse_term()\n        while index < len(tokens) and tokens[index] in (\"+\", \"-\"):\n            operator = tokens[index]\n            index += 1\n            n2, d2 = parse_term()\n            if operator == \"+\":\n                n, d = n * d2 + n2 * d, d * d2\n            else:\n                n, d = n * d2 - n2 * d, d * d2\n            n, d = reduce_fraction(n, d)\n        return n, d\n\n    def parse_term():\n        nonlocal index\n        n, d = parse_factor()\n        while index < len(tokens) and tokens[index] == \"*\":\n            index += 1\n            n2, d2 = parse_factor()\n            n, d = reduce_fraction(n * n2, d * d2)\n        return n, d\n\n    def parse_factor():\n        nonlocal index\n        if index >= len(tokens):\n            raise ValueError(\"malformed expression\")\n        if tokens[index] == \"-\":\n            index += 1\n            n, d = parse_factor()\n            return -n, d\n        if tokens[index] == \"(\":\n            index += 1\n            n, d = parse_expression()\n            if index >= len(tokens) or tokens[index] != \")\":\n                raise ValueError(\"malformed expression\")\n            index += 1\n            return n, d\n        token = tokens[index]\n        if not re.fullmatch(r\"\\d+/\\d+|\\d+\", token):\n            raise ValueError(\"malformed expression\")\n        index += 1\n        return value_of_literal(token)\n\n    n, d = parse_expression()\n    if index != len(tokens):\n        raise ValueError(\"malformed expression\")\n\n    n, d = reduce_fraction(n, d)\n    if n == 0:\n        return '0'\n    return str(n) if d == 1 else f\"{n}/{d}\"\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "It accepts adjacent tokens without spaces, such as `1+2`, `(1)`, and `2*3/4`, because the gap check only rejects non-whitespace text. The specification says spaces occur between tokens, so these may need to be malformed."
+    },
+    {
+     "from": "C",
+     "problem": "The tokenizer greedily matches chained slashes such as '1/2/3' into '1/2' followed by '/3' or invalid tokens, but more critically, expressions like '3/ 4' or '3 /4' (which violate 'no spaces inside' fractions and where '/' is not an operator) produce isolated '/' characters which are rejected as leftover text, yet '1//2' or '3/+4' may fail unpredictably rather than explicitly. More severely, it permits multiple consecutive unary minuses like '--3' or '---(1/2)', whereas the prompt states 'and a leading minus on a term', implying at most one leading unary minus per term rather than arbitrary chains."
+    },
+    {
+     "from": "C",
+     "problem": "The current draft allows expressions like '2 * -3/4' via recursive `parse_factor()`, but fails to handle negative numbers wrapped in parentheses where unary minus precedes parentheses without explicit testing, or conversely allows '1 - - 2' (double operator without parentheses)."
+    },
+    {
+     "from": "D",
+     "problem": "The regex tokenizer accepts invalid characters between tokens if they are not whitespace, but the check `if s[pos:match.start()].strip()` only catches non-whitespace garbage between matches. However, it does not catch invalid characters that are adjacent to valid tokens without spaces (e.g., '3$4' would tokenize as '3' and '4' with '$' between them, and the strip check would catch it). But what about '3.4'? The regex would match '3' then '.4' would not match, leaving '.4' between matches, which would be caught. The real issue is that the regex `token_re` includes `[()+*-]` but not other characters, so malformed input like '3&4' is caught. The claim is not wrong per se, but it's untested against specific malformed inputs."
+    },
+    {
+     "from": "D",
+     "problem": "The function checks `if d == 0` and raises ValueError. However, in `parse_factor`, when a literal like '3/0' is encountered, `value_of_literal` is called, which calls `reduce_fraction(int('3'), int('0'))` and raises ValueError. This is correct. But the check `if d == 0` is only in `reduce_fraction`. What about a fraction like '0/5'? That reduces to 0, which is fine. The claim is that zero denominator is caught, but it's not tested for negative zero or other edge cases."
+    },
+    {
+     "from": "D",
+     "problem": "In `parse_factor`, when '-' is encountered, it recursively calls `parse_factor`. This allows '--3' to be parsed as -(-3) = 3. However, the problem statement says 'a leading minus on a term' which might mean only one minus is allowed. The draft allows multiple unary minuses, which might be considered malformed. The claim is that the parser handles unary minus, but it's unclear if multiple minuses should be allowed."
+    },
+    {
+     "from": "D",
+     "problem": "The grammar is expression -> term (('+'|'-') term)*, term -> factor ('*' factor)*, factor -> '-' factor | '(' expression ')' | literal. This gives '*' higher precedence than '+' and '-', which is correct. However, the claim is not explicitly tested for expressions like '3 + 4 * 5' or '3 * 4 + 5' or '3 - 4 - 5' (left associativity). The code does implement left associativity for both '+' and '-' and '*' but it's not verified."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 2,
+   "rejected": 5,
+   "answer": "Here is the revised `fraction_expr` function addressing the strict unary minus grammar (\"a leading minus on a term\") and robust tokenization:\n\n```python\nimport re\nimport math\n\n\ndef fraction_expr(s: str) -> str:\n    if not isinstance(s, str):\n        raise ValueError(\"expression must be a string\")\n\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]\")\n    tokens = []\n    pos = 0\n\n    for match in token_re.finditer(s):\n        if s[pos:match.start()].strip():\n            raise ValueError(\"malformed expression\")\n        tokens.append(match.group())\n        pos = match.end()\n\n    if s[pos:].strip() or not tokens:\n        raise ValueError(\"malformed expression\")\n\n    def reduce_fraction(n: int, d: int):\n        if d == 0:\n            raise ValueError(\"zero denominator\")\n        if d < 0:\n            n, d = -n, -d\n        g = math.gcd(abs(n), d) or 1\n        return n // g, d // g\n\n    def value_of_literal(token: str):\n        if \"/\" in token:\n            num, den = token.split(\"/\")\n            return reduce_fraction(int(num), int(den))\n        return int(token), 1\n\n    index = 0\n\n    def parse_expression():\n        nonlocal index\n        n, d = parse_term()\n        while index < len(tokens) and tokens[index] in (\"+\", \"-\"):\n            op = tokens[index]\n            index += 1\n            n2, d2 = parse_term()\n            if op == \"+\":\n                n, d = n * d2 + n2 * d, d * d2\n            else:\n                n, d = n * d2 - n2 * d, d * d2\n            n, d = reduce_fraction(n, d)\n        return n, d\n\n    def parse_term():\n        nonlocal index\n        has_minus = False\n        if index < len(tokens) and tokens[index] == \"-\":\n            has_minus = True\n            index += 1\n            if index >= len(tokens) or tokens[index] == \"-\":\n                raise ValueError(\"malformed expression: consecutive minus\")\n\n        n, d = parse_factor()\n        if has_minus:\n            n = -n\n\n        while index < len(tokens) and tokens[index] == \"*\":\n            index += 1\n            n2, d2 = parse_factor()\n            n, d = reduce_fraction(n * n2, d * d2)\n        return n, d\n\n    def parse_factor():\n        nonlocal index\n        if index >= len(tokens):\n            raise ValueError(\"malformed expression\")\n        if tokens[index] == \"(\":\n            index += 1\n            n, d = parse_expression()\n            if index >= len(tokens) or tokens[index] != \")\":\n                raise ValueError(\"malformed expression\")\n            index += 1\n            return n, d\n        token = tokens[index]\n        if not re.fullmatch(r\"\\d+/\\d+|\\d+\", token):\n            raise ValueError(\"malformed expression\")\n        index += 1\n        return value_of_literal(token)\n\n    n, d = parse_expression()\n    if index != len(tokens):\n        raise ValueError(\"malformed expression\")\n\n    n, d = reduce_fraction(n, d)\n    if n == 0:\n        return \"0\"\n    return str(n) if d == 1 else f\"{n}/{d}\"\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "parse_term only consumes one '-' before parse_factor, but multiplication chains like '-2 * -3' or expressions needing unary minus after '*' (e.g. '2 * -3') aren't handled since parse_factor doesn't handle minus"
+    },
+    {
+     "from": "A",
+     "problem": "regex finds tokens anywhere in string including concatenations like '12' vs '1' '2' adjacency without space, e.g. '1+2' with no spaces would tokenize as '1','+','2' passing validation despite spec requiring spaces between tokens"
+    },
+    {
+     "from": "A",
+     "problem": "token regex doesn't include bare '/' so if input has malformed fraction like '3/4/5' it won't match as a single token, leaving a stray '/' causing 'malformed expression' via gap check \u2014 likely fine, but untested"
+    },
+    {
+     "from": "B",
+     "problem": "It accepts tokens without spaces between them, such as `1+2` or `(1+2)`, because the gap check only rejects non-whitespace text. If \u201cspaces between tokens\u201d is a strict grammar requirement, these inputs should be malformed."
+    },
+    {
+     "from": "B",
+     "problem": "A minus after multiplication is rejected because `parse_term` handles unary minus only at the start of the whole term, while `parse_factor` does not accept `-`. Thus `1 * -2` raises `ValueError`. Whether this is wrong depends on whether the intended grammar permits signed factors after `*`."
+    },
+    {
+     "from": "D",
+     "problem": "If the grammar strictly means a leading minus only at the start of a term (not after a binary operator), then '3 - -4' should be rejected as malformed, but the draft accepts it. Conversely, if '3 - -4' is intended to be valid, the grammar description is ambiguous and hidden tests may reject this input."
+    },
+    {
+     "from": "D",
+     "problem": "The draft's tokenization fails on inputs like '3/-4' which could be interpreted as the fraction 3/(-4) or as a malformed expression. Since the grammar says fractions are written like 3/4 (no spaces inside), a negative denominator like '3/-4' is ambiguous and likely should be rejected, but the current tokenizer produces a confusing error or may accept it in some contexts. Hidden tests may include such edge cases."
+    },
+    {
+     "from": "D",
+     "problem": "The draft's error handling for unary plus is not explicit. If hidden tests include '+3/4' expecting a ValueError, the draft does raise ValueError, but the message is generic. More importantly, if the grammar is interpreted to allow unary plus (some expression grammars do), the draft would incorrectly reject it. The problem statement is silent on unary plus, so this is a potential ambiguity."
+    },
+    {
+     "from": "D",
+     "problem": "The problem statement does not specify performance constraints, but hidden tests may include large numbers to test correctness. Python's arbitrary precision integers prevent overflow, but the intermediate values can become extremely large, leading to slow execution. A better approach would be to reduce only at the end or use a more efficient algorithm. This is a potential weakness if hidden tests include large expressions."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 8,
+   "answer": "```python\nimport math\nimport re\n\n\ndef fraction_expr(s: str) -> str:\n    if not isinstance(s, str):\n        raise ValueError(\"expression must be a string\")\n\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]\")\n    tokens = []\n    pos = 0\n    for match in token_re.finditer(s):\n        gap = s[pos:match.start()]\n        if gap and not gap.isspace():\n            raise ValueError(\"malformed expression\")\n        if tokens and not gap:\n            previous = tokens[-1]\n            current = match.group()\n            # Permit the conventional spelling of a leading negative literal.\n            if not (previous == \"-\" and re.fullmatch(r\"\\d+/\\d+|\\d+\", current)):\n                raise ValueError(\"tokens must be separated by spaces\")\n        tokens.append(match.group())\n        pos = match.end()\n    if s[pos:].strip() or not tokens:\n        raise ValueError(\"malformed expression\")\n\n    def reduce_fraction(n, d):\n        if d == 0:\n            raise ValueError(\"zero denominator\")\n        if d < 0:\n            n, d = -n, -d\n        g = math.gcd(abs(n), d)\n        return n // g, d // g\n\n    def literal(token):\n        if \"/\" in token:\n            n, d = token.split(\"/\")\n            return reduce_fraction(int(n), int(d))\n        return int(token), 1\n\n    index = 0\n\n    def expression():\n        nonlocal index\n        n, d = term()\n        while index < len(tokens) and tokens[index] in (\"+\", \"-\"):\n            op = tokens[index]\n            index += 1\n            n2, d2 = term()\n            n, d = ((n * d2 + n2 * d) if op == \"+\" else\n                    (n * d2 - n2 * d), d * d2)\n            n, d = reduce_fraction(n, d)\n        return n, d\n\n    def term():\n        nonlocal index\n        negative = index < len(tokens) and tokens[index] == \"-\"\n        if negative:\n            index += 1\n        n, d = factor()\n        if negative:\n            n = -n\n        while index < len(tokens) and tokens[index] == \"*\":\n            index += 1\n            n2, d2 = factor()\n            n, d = reduce_fraction(n * n2, d * d2)\n        return n, d\n\n    def factor():\n        nonlocal index\n        if index >= len(tokens):\n            raise ValueError(\"malformed expression\")\n        if tokens[index] == \"(\":\n            index += 1\n            n, d = expression()\n            if index >= len(tokens) or tokens[index] != \")\":\n                raise ValueError(\"malformed expression\")\n            index += 1\n            return n, d\n        token = tokens[index]\n        if not re.fullmatch(r\"\\d+/\\d+|\\d+\", token):\n            raise ValueError(\"malformed expression\")\n        index += 1\n        return literal(token)\n\n    n, d = expression()\n    if index != len(tokens):\n        raise ValueError(\"malformed expression\")\n    n, d = reduce_fraction(n, d)\n    return \"0\" if n == 0 else (str(n) if d == 1 else f\"{n}/{d}\")\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The exception for a leading '-' allows tokens like '-3' or '3/4' to be glued without a space before it is applied, so input like '(-3/4)' or 'x - -3/4' could be accepted differently than spec implies; this edge case is untested"
+    },
+    {
+     "from": "C",
+     "problem": "The tokenizer rejects standard expressions containing parentheses without spaces immediately surrounding them (e.g., '(1 + 2)', '2 * (3/4)', or '(1/2) * 3') because adjacent tokens like '(' and '1' or ')' and '*' have no gap. Furthermore, it strictly requires whitespace before closing parentheses and after opening parentheses, while in conventional arithmetic parsing parentheses are delimiters that do not require whitespace separation unless specified. Even if strict whitespace between all tokens were intended, valid parenthesized expressions like '(3/4)' or '(1 + 2)' fail immediately under this check."
+    },
+    {
+     "from": "C",
+     "problem": "Uniary minus handling inside term() fails on expressions with unary minus after an operator or before a parenthesis, e.g. '-(1/2)' or '1 * -2'. In expression(), tokens[index] == '-' is treated strictly as binary subtraction; expression() consumes '-' and delegates to term(), but term() then also optionally consumes a leading '-' without disambiguation, leading to potential silent parsing bugs or rejecting valid expressions like '-(3/4)'. Specifically, for '-(3/4)', term() parses factor() which correctly handles '(', but the tokenizer rule if not (previous == '-' and re.fullmatch(r'\\d+/\\d+|\\d+', current)) rejects '-(' without a space and requires '-' to be immediately followed by a literal digit."
+    },
+    {
+     "from": "D",
+     "problem": "The tokenizer's gap check between tokens only permits no-space adjacency when the previous token is '-' and the current is a literal. This means '-3/4' is tokenized as ['-', '3/4'] and accepted, but '-(3/4)' would be tokenized as ['-', '(', '3/4', ')'] where the gap between '-' and '(' is empty. The condition `previous == '-' and current is literal` fails for current being '(', so it raises ValueError for a valid expression like '-(3/4)' or '-(1/2 + 1/3)'."
+    },
+    {
+     "from": "D",
+     "problem": "The `term()` function only checks for a leading '-' token before calling `factor()`. If the next token is '(', it treats the '-' as a binary operator in `expression()`'s while loop, but since `expression()` is called from `factor()` for parentheses, the '-' before '(' is consumed by `term()` as unary minus, then `factor()` sees '(' and calls `expression()`. However, the tokenizer rejects '-(3/4)' before parsing even starts, so the parser's capability is untested and the overall function fails on valid input."
+    },
+    {
+     "from": "D",
+     "problem": "The tokenizer requires spaces between all tokens except when previous is '-' and current is a literal. This means '3/4+1/6' (no spaces around '+') is rejected, but the problem statement says 'spaces between tokens' which implies spaces are required. However, the visible examples use spaces, and the hidden tests may include no-space expressions. The draft's strict spacing rule may be too restrictive."
+    },
+    {
+     "from": "D",
+     "problem": "The tokenizer permits no-space adjacency only when previous token is '-' and current is a literal. This means '- 3/4' (with space) is tokenized as ['-', '3/4'] and accepted. But '-3/4' (no space) is also accepted. However, the problem statement says 'a leading minus on a term' which could mean the minus is attached to the term without space. The draft handles this correctly for literals but not for parenthesized expressions."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "A",
+   "accepted": 5,
+   "rejected": 2,
+   "answer": "```python\nimport math\nimport re\n\n\ndef fraction_expr(s: str) -> str:\n    if not isinstance(s, str):\n        raise ValueError(\"expression must be a string\")\n\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]|\\S\")\n    tokens = []\n    for match in token_re.finditer(s):\n        tok = match.group()\n        if tok.isspace():\n            continue\n        if not re.fullmatch(r\"\\d+/\\d+|\\d+|[()+*-]\", tok):\n            raise ValueError(\"malformed expression\")\n        tokens.append(tok)\n    if not tokens:\n        raise ValueError(\"malformed expression\")\n\n    def reduce_fraction(n, d):\n        if d == 0:\n            raise ValueError(\"zero denominator\")\n        if d < 0:\n            n, d = -n, -d\n        g = math.gcd(abs(n), d)\n        if g == 0:\n            return 0, 1\n        return n // g, d // g\n\n    def literal(token):\n        if \"/\" in token:\n            n, d = token.split(\"/\")\n            return reduce_fraction(int(n), int(d))\n        return int(token), 1\n\n    index = 0\n\n    def expression():\n        nonlocal index\n        n, d = term()\n        while index < len(tokens) and tokens[index] in (\"+\", \"-\"):\n            op = tokens[index]\n            index += 1\n            n2, d2 = term()\n            n, d = ((n * d2 + n2 * d) if op == \"+\" else\n                    (n * d2 - n2 * d), d * d2)\n            n, d = reduce_fraction(n, d)\n        return n, d\n\n    def term():\n        nonlocal index\n        negative = index < len(tokens) and tokens[index] == \"-\"\n        if negative:\n            index += 1\n        n, d = factor()\n        if negative:\n            n = -n\n        while index < len(tokens) and tokens[index] == \"*\":\n            index += 1\n            n2, d2 = factor()\n            n, d = reduce_fraction(n * n2, d * d2)\n        return n, d\n\n    def factor():\n        nonlocal index\n        if index >= len(tokens):\n            raise ValueError(\"malformed expression\")\n        if tokens[index] == \"(\":\n            index += 1\n            n, d = expression()\n            if index >= len(tokens) or tokens[index] != \")\":\n                raise ValueError(\"malformed expression\")\n            index += 1\n            return n, d\n        if tokens[index] == \"-\":\n            index += 1\n            n, d = factor()\n            return -n, d\n        token = tokens[index]\n        if not re.fullmatch(r\"\\d+/\\d+|\\d+\", token):\n            raise ValueError(\"malformed expression\")\n        index += 1\n        return literal(token)\n\n    n, d = expression()\n    if index != len(tokens):\n        raise ValueError(\"malformed expression\")\n    n, d = reduce_fraction(n, d)\n    return \"0\" if n == 0 else (str(n) if d == 1 else f\"{n}/{d}\")\n```"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "```python\nimport math\nimport re\n\n\ndef fraction_expr(s: str) -> str:\n    if not isinstance(s, str):\n        raise ValueError(\"expression must be a string\")\n\n    token_re = re.compile(r\"\\d+/\\d+|\\d+|[()+*-]|\\S\")\n    tokens = []\n    for match in token_re.finditer(s):\n        tok = match.group()\n        if tok.isspace():\n            continue\n        if not re.fullmatch(r\"\\d+/\\d+|\\d+|[()+*-]\", tok):\n            raise ValueError(\"malformed expression\")\n        tokens.append(tok)\n    if not tokens:\n        raise ValueError(\"malformed expression\")\n\n    def reduce_fraction(n, d):\n        if d == 0:\n            raise ValueError(\"zero denominator\")\n        if d < 0:\n            n, d = -n, -d\n        g = math.gcd(abs(n), d)\n        if g == 0:\n            return 0, 1\n        return n // g, d // g\n\n    def literal(token):\n        if \"/\" in token:\n            n, d = token.split(\"/\")\n            return reduce_fraction(int(n), int(d))\n        return int(token), 1\n\n    index = 0\n\n    def expression():\n        nonlocal index\n        n, d = term()\n        while index < len(tokens) and tokens[index] in (\"+\", \"-\"):\n            op = tokens[index]\n            index += 1\n            n2, d2 = term()\n            n, d = ((n * d2 + n2 * d) if op == \"+\" else\n                    (n * d2 - n2 * d), d * d2)\n            n, d = reduce_fraction(n, d)\n        return n, d\n\n    def term():\n        nonlocal index\n        negative = index < len(tokens) and tokens[index] == \"-\"\n        if negative:\n            index += 1\n        n, d = factor()\n        if negative:\n            n = -n\n        while index < len(tokens) and tokens[index] == \"*\":\n            index += 1\n            n2, d2 = factor()\n            n, d = reduce_fraction(n * n2, d * d2)\n        return n, d\n\n    def factor():\n        nonlocal index\n        if index >= len(tokens):\n            raise ValueError(\"malformed expression\")\n        if tokens[index] == \"(\":\n            index += 1\n            n, d = expression()\n            if index >= len(tokens) or tokens[index] != \")\":\n                raise ValueError(\"malformed expression\")\n            index += 1\n            return n, d\n        if tokens[index] == \"-\":\n            index += 1\n            n, d = factor()\n            return -n, d\n        token = tokens[index]\n        if not re.fullmatch(r\"\\d+/\\d+|\\d+\", token):\n            raise ValueError(\"malformed expression\")\n        index += 1\n        return literal(token)\n\n    n, d = expression()\n    if index != len(tokens):\n        raise ValueError(\"malformed expression\")\n    n, d = reduce_fraction(n, d)\n    return \"0\" if n == 0 else (str(n) if d == 1 else f\"{n}/{d}\")\n```"
+}

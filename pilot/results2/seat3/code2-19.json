@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-19",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.5,
+ "tokens": 344,
+ "prompt_tokens": 160,
+ "completion_tokens": 184,
+ "cost": 0.00081,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the function to compute the area of the largest rectangle in a histogram using a monotonic stack approach, achieving $O(n)$ time complexity:\n\n```python\ndef largest_rectangle(heights: list[int]) -> int:\n    stack = []\n    max_area = 0\n    # Append a sentinel 0 to pop all remaining elements at the end\n    extended_heights = heights + [0]\n\n    for i, h in enumerate(extended_heights):\n        while stack and extended_heights[stack[-1]] > h:\n            height = extended_heights[stack.pop()]\n            width = i if not stack else i - stack[-1] - 1\n            max_area = max(max_area, height * width)\n        stack.append(i)\n\n    return max_area\n```"
+}

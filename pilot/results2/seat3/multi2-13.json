@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-13",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "ok: got 4885.63, expected 4885.63 | no: got 2889.56, expected 3087.56 | ok: got '2026-06-19', expected '2026-06-19'",
+ "error": null,
+ "seconds": 15.1,
+ "tokens": 3047,
+ "prompt_tokens": 597,
+ "completion_tokens": 2450,
+ "cost": 0.00964,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nTotal units sold: $81 + 52 + 77 + 30 + 89 + 118 = 447$ units.\nUsing FIFO, these units come from:\n- Lot 1: 81 units at $10.17 = $823.77\n- Lot 2: 99 units at $8.53 = $844.47\n- Lot 3: 155 units at $12.65 = $1,960.75\n- Lot 4: 112 units (of 119) at $11.22 = $1,256.64\n\nTotal Cost of Goods Sold = $823.77 + 844.47 + 1960.75 + 1256.64 = 4885.63$\n\n**Part B**\nCategorizing the daily hours into regular ($\\le 8$), $1.5\\times$ overtime ($>8$ and $\\le 12$), and $2\\times$ overtime ($>12$):\n- Regular hours: $8 + 8 + 7.5 + 8 + 8 + 8 + 8 + 6 + 6 + 8 + 7.5 + 8 + 8 + 0 = 91$ hours\n- $1.5\\times$ overtime hours: $0 + 1 + 0 + 4 + 0 + 1.5 + 4 + 0 + 0 + 4 + 0 + 0 + 0 + 0 = 14.5$ hours\n- $2\\times$ overtime hours: $0 + 0 + 0 + 0.5 + 0 + 0 + 0.5 + 0 + 0 + 1 + 0 + 0 + 0 + 0 = 2$ hours\n\nTotal equivalent regular hours = $91 + 14.5 \\times 1.5 + 2 \\times 2 = 116.75$ hours.\nGross pay = $116.75 \\times \\$24.75 = \\$2,889.5625 \\approx \\$2,889.56$.\n\n**Part C**\nStarting after Sunday, 2026-02-15, the first business day is Monday, 2026-02-16.\nAll 6 listed holidays fall on weekdays:\n- 2026-02-26 (Thursday)\n- 2026-03-04 (Wednesday)\n- 2026-03-31 (Tuesday)\n- 2026-04-02 (Thursday)\n- 2026-04-08 (Wednesday)\n- 2026-05-21 (Thursday)\n\nTo reach 84 business days, we need $84 + 6 = 90$ non-holiday weekdays. \n90 weekdays equals exactly 18 full weeks (5 business days per week).\n18 weeks starting Monday, 2026-02-16 concludes on the Friday of the 18th week, which is 2026-06-19.\n\nFINAL: 4885.63; 2889.56; 2026-06-19"
+}

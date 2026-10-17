@@ -1,0 +1,115 @@
+{
+ "task_id": "code2-21",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 63.7,
+ "tokens": 35288,
+ "prompt_tokens": 27083,
+ "completion_tokens": 8205,
+ "cost": 0.03982,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Implement number_to_words",
+     "what": "Write number_to_words(n:int)->str covering 0-999999, lowercase words, hyphen only between tens and units (21-99 except multiples of ten), 'hundred' and 'thousand' inserted as needed with no 'and', zero->'zero', raise ValueError outside [0,999999]; must pass number_to_words(105)=='one hundred five' a"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\nONES = ['zero','one','two','three','four','five','six','seven','eight','nine','ten',\n        'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen']\nTENS = ['', '', 'twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety']\n\ndef _three(n: int) -> str:\n    parts = []\n    if n >= 100:\n        parts.append(ONES[n // 100] + ' hundred')\n        n %= 100\n    if n >= 20:\n        tens_word = TENS[n // 10]\n        if n % 10:\n            tens_word += '-' + ONES[n % 10]\n        parts.append(tens_word)\n    elif n > 0:\n        parts.append(ONES[n])\n    return ' '.join(parts)\n\ndef number_to_words(n: int) -> str:\n    if not (0 <= n <= 999999):\n        raise ValueError('n out of range')\n    if n == 0:\n        return 'zero'\n    thousands, rest = divmod(n, 1000)\n    parts = []\n    if thousands:\n        parts.append(_three(thousands) + ' thousand')\n    if rest:\n        parts.append(_three(rest))\n    return ' '.join(parts)\n```\n\nChecks: number_to_words(105) -> 'one hundred five'; number_to_words(21042) -> 'twenty-one thousand forty-two'; number_to_words(0) -> 'zero'; number_to_words(1000) -> 'one thousand'; number_to_words(999999) -> 'nine hundred ninety-nine thousand nine hundred ninety-nine'; out-of-range values raise ValueError (verify via try/except in a test harness)."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "In Python, `bool` is a subclass of `int` (`isinstance(True, int)` is True, and `0 <= True <= 999999` evaluates to True), so passing `True` or `False` does not raise ValueError and improperly yields 'one' or 'zero'. Moreover, passing non-integer types like `float` (e.g., `105.5`) or non-integral values evaluates without type checks if relying on loose comparison or raises `TypeError` instead of the mandated `ValueError` outside the int specification range."
+    },
+    {
+     "from": "C",
+     "problem": "If callers pass `100.0` or `105.5`, `divmod(105.5, 1000)` executes and indexing `ONES[n // 100]` produces `TypeError: list indices must be integers or slices, not float`, failing to raise `ValueError` as specified for inputs outside the valid range."
+    },
+    {
+     "from": "D",
+     "problem": "The helper _three returns an empty string for n=0, which is fine when called for the 'rest' part, but if thousands=0 and rest=0, number_to_words returns 'zero' explicitly. However, if thousands>0 and rest=0, the code appends only the thousands part, which is correct. The untested edge case is thousands=0 and rest=0, which is handled by the explicit zero check. The real potential issue is that _three(0) returns '', and in number_to_words, if rest=0, no empty string is appended, so no double spaces occur. This seems correct."
+    },
+    {
+     "from": "D",
+     "problem": "The TENS list uses empty strings at indices 0 and 1, and the code only uses TENS[n//10] when n>=20, so indices 2-9 are used. Hyphenation is added only when n%10 != 0. This appears correct but has not been tested for all two-digit numbers 20-99."
+    },
+    {
+     "from": "D",
+     "problem": "The check uses `if not (0 <= n <= 999999)`, which correctly raises for negative numbers, numbers > 999999, and non-integers like 1.5 or '100' (since comparison with string raises TypeError, not ValueError). The requirement says raise ValueError outside the range; for non-integer types, a TypeError may be acceptable, but the spec says 'n: int', so type errors are not tested. However, if a float like 999999.5 is passed, the comparison 999999.5 <= 999999 is False, so ValueError is raised, which is correct for out-of-range. But if a float like 100.0 is passed, it is within range and the code proceeds, but divmod(100.0, 1000) returns floats, and _three uses integer division and modulo, which may produce float results and break string concatenation. This is an untested edge case."
+    },
+    {
+     "from": "D",
+     "problem": "This is fine, but if n=0 is passed to _three, it returns '', which is used correctly. No issue."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 2,
+   "rejected": 4,
+   "answer": "```python\nONES = ['zero','one','two','three','four','five','six','seven','eight','nine','ten',\n        'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen']\nTENS = ['', '', 'twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety']\n\ndef _three(n: int) -> str:\n    parts = []\n    if n >= 100:\n        parts.append(ONES[n // 100] + ' hundred')\n        n %= 100\n    if n >= 20:\n        tens_word = TENS[n // 10]\n        if n % 10:\n            tens_word += '-' + ONES[n % 10]\n        parts.append(tens_word)\n    elif n > 0:\n        parts.append(ONES[n])\n    return ' '.join(parts)\n\ndef number_to_words(n: int) -> str:\n    if isinstance(n, bool) or not isinstance(n, int) or not (0 <= n <= 999999):\n        raise ValueError('n out of range')\n    if n == 0:\n        return 'zero'\n    thousands, rest = divmod(n, 1000)\n    parts = []\n    if thousands:\n        parts.append(_three(thousands) + ' thousand')\n    if rest:\n        parts.append(_three(rest))\n    return ' '.join(parts)\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\nONES = ['zero','one','two','three','four','five','six','seven','eight','nine','ten',\n        'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen']\nTENS = ['', '', 'twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety']\n\ndef _three(n: int) -> str:\n    parts = []\n    if n >= 100:\n        parts.append(ONES[n // 100] + ' hundred')\n        n %= 100\n    if n >= 20:\n        tens_word = TENS[n // 10]\n        if n % 10:\n            tens_word += '-' + ONES[n % 10]\n        parts.append(tens_word)\n    elif n > 0:\n        parts.append(ONES[n])\n    return ' '.join(parts)\n\ndef number_to_words(n: int) -> str:\n    if isinstance(n, bool) or not isinstance(n, int) or not (0 <= n <= 999999):\n        raise ValueError('n out of range')\n    if n == 0:\n        return 'zero'\n    thousands, rest = divmod(n, 1000)\n    parts = []\n    if thousands:\n        parts.append(_three(thousands) + ' thousand')\n    if rest:\n        parts.append(_three(rest))\n    return ' '.join(parts)\n```"
+}

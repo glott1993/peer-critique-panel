@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 7.4,
- "tokens": 1080,
+ "seconds": 2.4,
+ "tokens": 539,
  "prompt_tokens": 293,
- "completion_tokens": 787,
- "cost": 0.00846,
+ "completion_tokens": 246,
+ "cost": 0.00305,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef rle_decode(s: str) -> str:\n    result = []\n    i = 0\n    n = len(s)\n    while i < n:\n        c = s[i]\n        if c == '#':\n            raise ValueError(\"'#' not preceded by a character\")\n        if i + 1 < n and s[i + 1] == '#':\n            j = i + 2\n            if j >= n or not s[j].isdigit():\n                raise ValueError(\"'#' not followed by at least one digit\")\n            k = j\n            while k < n and s[k].isdigit():\n                k += 1\n            count = int(s[j:k])\n            if count < 4:\n                raise ValueError(\"run length below 4\")\n            result.append(c * count)\n            i = k\n        else:\n            result.append(c)\n            i += 1\n    return ''.join(result)\n```"
+ "answer": "```python\ndef rle_decode(s: str) -> str:\n    result = []\n    i = 0\n    n = len(s)\n    while i < n:\n        c = s[i]\n        if c == '#':\n            raise ValueError(\"'#' not preceded by a character\")\n        if i + 1 < n and s[i+1] == '#':\n            j = i + 2\n            k = j\n            while k < n and s[k].isdigit():\n                k += 1\n            if k == j:\n                raise ValueError(\"'#' not followed by at least one digit\")\n            count = int(s[j:k])\n            if count < 4:\n                raise ValueError(\"count below 4\")\n            result.append(c * count)\n            i = k\n        else:\n            result.append(c)\n            i += 1\n    return ''.join(result)\n```"
 }

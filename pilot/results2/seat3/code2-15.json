@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-15",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.5,
+ "tokens": 597,
+ "prompt_tokens": 260,
+ "completion_tokens": 337,
+ "cost": 0.00146,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of `json_pointer`:\n\n```python\ndef json_pointer(doc, pointer: str):\n    if pointer == \"\":\n        return doc\n\n    if not pointer.startswith(\"/\"):\n        raise ValueError(\"Non-empty pointer must start with '/'\")\n\n    # Split by '/' skipping the first empty segment before the leading '/'\n    tokens = pointer.split(\"/\")[1:]\n\n    current = doc\n    for token in tokens:\n        # Decode '~1' before '~0' according to RFC 6901\n        token = token.replace(\"~1\", \"/\").replace(\"~0\", \"~\")\n\n        if isinstance(current, dict):\n            if token not in current:\n                raise ValueError(f\"Key '{token}' not found\")\n            current = current[token]\n        elif isinstance(current, list):\n            # Must be decimal digits without leading '+' or spaces\n            # RFC 6901: index can be \"0\" or digits not starting with '0'\n            if not token.isdigit() or (len(token) > 1 and token.startswith(\"0\")):\n                raise ValueError(f\"Invalid list index: '{token}'\")\n            idx = int(token)\n            if idx < 0 or idx >= len(current):\n                raise ValueError(f\"Index out of range: {idx}\")\n            current = current[idx]\n        else:\n            raise ValueError(f\"Cannot index into non-container type: {type(current).__name__}\")\n\n    return current\n```"
+}

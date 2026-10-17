@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 9.4,
- "tokens": 5443,
- "prompt_tokens": 3814,
- "completion_tokens": 1629,
- "cost": 0.00272,
+ "seconds": 9.0,
+ "tokens": 5800,
+ "prompt_tokens": 3967,
+ "completion_tokens": 1833,
+ "cost": 0.00299,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nimport re\n\n\ndef roman_to_int(s: str) -> int:\n    if not isinstance(s, str) or not s:\n        raise ValueError(\"invalid Roman numeral\")\n\n    if not re.fullmatch(\n        r\"M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\",\n        s,\n    ):\n        raise ValueError(\"invalid Roman numeral\")\n\n    values = {\n        \"I\": 1,\n        \"V\": 5,\n        \"X\": 10,\n        \"L\": 50,\n        \"C\": 100,\n        \"D\": 500,\n        \"M\": 1000,\n    }\n\n    total = 0\n    for i, char in enumerate(s):\n        value = values[char]\n        if i + 1 < len(s) and value < values[s[i + 1]]:\n            total -= value\n        else:\n            total += value\n\n    return total\n```"
+ "answer": "```python\nimport re\n\n\ndef roman_to_int(s: str) -> int:\n    if not isinstance(s, str) or not s:\n        raise ValueError(\"Invalid Roman numeral\")\n\n    canonical = r\"M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})\"\n    if re.fullmatch(canonical, s) is None:\n        raise ValueError(\"Invalid Roman numeral\")\n\n    values = {\n        \"I\": 1,\n        \"V\": 5,\n        \"X\": 10,\n        \"L\": 50,\n        \"C\": 100,\n        \"D\": 500,\n        \"M\": 1000,\n    }\n\n    total = 0\n    for i, symbol in enumerate(s):\n        value = values[symbol]\n        if i + 1 < len(s) and value < values[s[i + 1]]:\n            total -= value\n        else:\n            total += value\n\n    return total\n```"
 }

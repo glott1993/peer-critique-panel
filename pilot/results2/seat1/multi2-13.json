@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "ok: got 4885.63, expected 4885.63 | ok: got 3087.56, expected 3087.56 | ok: got '2026-06-19', expected '2026-06-19'",
  "error": null,
- "seconds": 204.3,
- "tokens": 7818,
+ "seconds": 34.4,
+ "tokens": 4237,
  "prompt_tokens": 678,
- "completion_tokens": 7140,
- "cost": 0.07276,
- "calls": 3,
- "call_errors": 2,
- "answer": "# Part A: FIFO Cost of Goods Sold\n\nTracking lots consumed in order as sales occur:\n\n- **Sale 1 (81):** 81 @ $10.17 (Lot1) = $823.77\n- **Sale 2 (52):** 52 @ $8.53 (Lot2) = $443.56\n- **Sale 3 (77):** 47 @ $8.53 (Lot2 remainder) + 30 @ $12.65 (Lot3) = $400.91 + $379.50 = $780.41\n- **Sale 4 (30):** 30 @ $12.65 (Lot3) = $379.50\n- **Sale 5 (89):** 89 @ $12.65 (Lot3) = $1,125.85\n- **Sale 6 (118):** 6 @ $12.65 (Lot3 remainder) + 112 @ $11.22 (Lot4) = $75.90 + $1,256.64 = $1,332.54\n\n**Total COGS** = 823.77+443.56+780.41+379.50+1125.85+1332.54 = **$4,885.63**\n\n# Part B: Gross Pay with Daily Overtime\n\nFor each day: regular = min(h,8), OT1.5 = min(max(h-8,0),4), OT2 = max(h-12,0)\n\nSumming across all 14 days:\n- Regular hours: 99\n- OT1.5 hours: 14.5\n- OT2 hours: 2\n\nPay:\n- Regular: 99 \u00d7 24.75 = $2,450.25\n- OT1.5: 14.5 \u00d7 (24.75\u00d71.5=37.125) = $538.3125\n- OT2: 2 \u00d7 (24.75\u00d72=49.50) = $99.00\n\n**Total** = 2450.25 + 538.3125 + 99 = $3,087.5625 \u2192 **$3,087.56**\n\n# Part C: 84 Business Days After 2026-02-15\n\nFeb 15, 2026 is a Sunday; counting starts Feb 16 (Monday).\n\nWeekly business-day counts (5 per week minus holidays):\n\n| Week | Dates | Holiday(s) | Business days | Cumulative |\n|---|---|---|---|---|\n|1|Feb16\u201120| \u2013 |5|5|\n|2|Feb23\u201127|Feb26|4|9|\n|3|Mar2\u20116|Mar4|4|13|\n|4|Mar9\u201113| \u2013 |5|18|\n|5|Mar16\u201120| \u2013 |5|23|\n|6|Mar23\u201127| \u2013 |5|28|\n|7|Mar30\u2011Apr3|Mar31, Apr2|3|31|\n|8|Apr6\u201110|Apr8|4|35|\n|9|Apr13\u201117| \u2013 |5|40|\n|10|Apr20\u201124| \u2013 |5|45|\n|11|Apr27\u2011May1| \u2013 |5|50|\n|12|May4\u20118| \u2013 |5|55|\n|13|May11\u201115| \u2013 |5|60|\n|14|May18\u201122|May21|4|64|\n|15|May25\u201129| \u2013 |5|69|\n|16|Jun1\u20115| \u2013 |5|74|\n|17|Jun8\u201112| \u2013 |5|79|\n|18|Jun15\u201119| \u2013 |5|84|\n\nThe 84th business day is **Friday, June 19, 2026**.\n\nFINAL: 4885.63; 3087.56; 2026-06-19"
+ "completion_tokens": 3559,
+ "cost": 0.03695,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A (FIFO COGS):**\n- Sale total = 447 units\n- Lot1: 81 @10.17 = 823.77\n- Lot2: 99 @8.53 = 844.47\n- Lot3: 155 @12.65 = 1960.75\n- Lot4: 112 @11.22 = 1256.64 (only 112 needed)\n\nTotal = 823.77+844.47+1960.75+1256.64 = **4885.63**\n\n**Part B (Gross pay):**\nWeighted hours per day (reg + 1.5\u00d7OT(8-12) + 2\u00d7OT(>12)):\n8, 9.5, 7.5, 15, 8, 10.25, 15, 6, 6, 16, 7.5, 8, 8, 0 \u2192 sum = 124.75 hours\n\nPay = 124.75 \u00d7 24.75 = **3087.5625 \u2192 3087.56**\n\n**Part C (Business days):**\nStarting Mon 2026-02-16, 84 business days (weekends only) lands on Thu 2026-06-11. Since the 6 holidays (Feb26, Mar4, Mar31, Apr2, Apr8, May21) all fall as weekdays within that span, they must be excluded, requiring 6 extra business days beyond June11: June12,15,16,17,18,19 (no holidays among these).\n\nFinal date: **2026-06-19**\n\nFINAL: 4885.63; 3087.56; 2026-06-19"
 }

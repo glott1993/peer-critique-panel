@@ -1,0 +1,267 @@
+{
+ "task_id": "multi4-05",
+ "type": "multi4",
+ "condition": "c2",
+ "correct": false,
+ "detail": "ok: got 18853.91, expected 18853.99 | no: got '2026-08-25', expected '2026-08-24' | ok: got 9860.0, expected 9860.0 | ok: got 2447.5, expected 2447.5",
+ "error": null,
+ "seconds": 701.7,
+ "tokens": 246901,
+ "prompt_tokens": 155870,
+ "completion_tokens": 91031,
+ "cost": 0.77255,
+ "calls": 51,
+ "call_errors": 3,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": true,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "724.1809479*((1.0045^18-1)/0.0045)",
+   "claimed": 13546.026513,
+   "value": 13546.026512586572,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "31200*(1.0045^18) - 724.1809479*((1.0045^18-1)/0.0045) - 750*(1.0045^14) - 600*(1.0045^10)",
+   "claimed": 18853.99,
+   "value": 18853.987891413944,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(8*22+4*33+0.5*44) + (8*22+4*33+1*44)",
+   "claimed": 682.0,
+   "value": 682.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Loan balance after extra principal payments",
+     "what": "Compute the standard monthly payment for the $31,200 loan at a monthly rate of 0.054/12 over 48 payments, apply the $750 and $600 extra principal payments immediately after payments 4 and 8, and calculate the balance immediately after payment 18 without intermediate rounding."
+    },
+    {
+     "id": "c2",
+     "title": "Business-day date calculation",
+     "what": "Starting after 2026-04-26, count 80 Mondays-through-Fridays while excluding the six specified holidays, and report the resulting date in YYYY-MM-DD format."
+    },
+    {
+     "id": "c3",
+     "title": "Income tax with credit phaseout",
+     "what": "Apply the progressive tax brackets to $57,400, calculate the tax credit as $2,400 reduced by 8% of income above $50,000 but not below zero, subtract the credit from tax, and floor the final tax owed at zero."
+    },
+    {
+     "id": "c4",
+     "title": "Gross pay with daily overtime",
+     "what": "For each day's hours, pay the first 8 hours at $22.00, hours from over 8 through 12 at 1.5 times the rate, and hours over 12 at 2 times the rate; sum all 14 days with no weekly overtime and round only the final total to cents."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ],
+    "c2": [
+     "B",
+     "A"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ],
+    "c4": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Part A: Standard payment P = 31200(0.0045)/(1-1.0045^-48) = $724.18. Balance after 18 payments with extra $750 principal at month 4 and $600 at month 8:\nB18 = 31200(1.0045)^18 - P[(1.0045)^18-1]/0.0045 - 750(1.0045)^14 - 600(1.0045)^10\n= 33826.22502 - 13546.02889 - 798.65725 - 627.55336 = $18,853.99\n\nPart B: Starting 2026-04-26, counting weekdays and skipping listed holidays: April contributes 4, May 21, June 20 (22 weekdays minus 2 holidays), July 19 (23 weekdays minus 4 holidays) = 64 total through July 31. Need 16 more in August (no holidays): Aug 3\u20137 (5), 10\u201314 (5), 17\u201321 (5), 24 (1) = 16, landing on 2026-08-24.\n\nPart C: Tax before credit: 10%\u00d712,500=1,250; 22%\u00d739,500=8,690; 32%\u00d75,400=1,728; total=11,668.00. Credit: 2,400 \u2212 8%\u00d7(57,400\u221250,000)=2,400\u2212592=1,808.00. Tax owed = 11,668.00 \u2212 1,808.00 = $9,860.00.\n\nPart D: Daily pay (22/hr up to 8, 33/hr 8\u201312, 44/hr over 12): 209, 352, 0, 176, 330, 176, 132, 0, 209, 176, 132, 0, 225.50, 330. Sum = $2,447.50. Check: regular 84h\u00d722=1,848; OT1 15.5h\u00d733=511.50; OT2 2h\u00d744=88; total=2,447.50.\n\nFINAL: 18853.99; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The payment is rounded to cents before calculating the balance, despite the instruction to round nothing until the end. Additionally, the displayed balance arithmetic is not supported by the stated formula: using r=0.0045, the payment accumulation factor is ((1.0045)^18-1)/0.0045, so the regular-payment subtraction should be recomputed rather than accepted as 13546.02889."
+    },
+    {
+     "from": "D",
+     "problem": "2026-04-26 is a Sunday, so the first business day after it is Monday 2026-04-27. The draft says April contributes 4 days, which counts 4/27, 4/28, 4/29, 4/30 correctly, but the total through July is miscomputed: June has 22 weekdays, minus 2 holidays = 20, not the draft's implied 20? Actually the draft says June 20, which is correct. July has 23 weekdays, minus 4 holidays = 19, correct. Total = 4 + 21 + 20 + 19 = 64, so through July 31 is 64 business days. Need 16 more in August. August 2026 weekdays: Aug 3-7 = 5, 10-14 = 5, 17-21 = 5, total 15, then Aug 24 is the 16th. So 2026-08-24 appears correct."
+    },
+    {
+     "from": "D",
+     "problem": "The extra $750 at month 4 is paid immediately after the regular payment in month 4, so it should reduce the balance for the remaining 14 months, giving a factor of (1.0045)^14. The extra $600 at month 8 should reduce for 10 months, factor (1.0045)^10. The draft uses these exponents. The regular payment P = 31200*0.0045/(1-1.0045^-48) = 724.18 (rounded). Balance without extras: 31200*(1.0045)^18 - P*((1.0045)^18 - 1)/0.0045 = 33826.22502 - 13546.02889 = 20280.19613. Subtract 750*(1.0045)^14 = 750*1.064877 = 798.65775 and 600*(1.0045)^10 = 600*1.045969 = 627.5814. Result = 20280.19613 - 798.65775 - 627.5814 = 18853.95698, which rounds to $18,853.96, not $18,853.99."
+    },
+    {
+     "from": "D",
+     "problem": "Income $57,400: tax before credit = 0.10*12500 + 0.22*(52000-12500) + 0.32*(57400-52000) = 1250 + 8690 + 1728 = 11668. Credit reduction = 8% of (57400-50000) = 0.08*7400 = 592. Credit = 2400 - 592 = 1808. Tax owed = 11668 - 1808 = 9860. The draft is correct."
+    },
+    {
+     "from": "D",
+     "problem": ""
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "Part A: r=0.0045. Unrounded payment P=31200*0.0045/(1-1.0045^-48)=724.1809479. B18=31200(1.0045)^18 - P[(1.0045)^18-1]/0.0045 - 750(1.0045)^14 - 600(1.0045)^10 = 33826.225017 - 13546.026513 - 798.657250 - 627.553363 = 18853.987891, rounded to 18853.99.\n\nPart B: 2026-04-26 is Sunday, so first counted business day is 2026-04-27. Apr 27-30: 4; May: 21; Jun: 22-2=20; Jul: 23-4=19; total 64. Need 16 in Aug: Aug 3-7, 10-14, 17-21 = 15, then Aug 24 is the 16th, so 2026-08-24.\n\nPart C: Tax before credit = 0.10(12500)+0.22(39500)+0.32(5400)=1250+8690+1728=11668. Credit=2400-0.08(7400)=1808. Tax owed=11668-1808=9860.00.\n\nPart D: Daily pay: 209, 352, 0, 176, 330, 176, 132, 0, 209, 176, 132, 0, 225.50, 330. Sum=2447.50.\n\nFINAL: 18853.99; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "In standard banking and loan accounting, amortization payments are established and fixed as a rounded cent value ($724.18) upon loan origination. Using the rounded payment P = $724.18 increases the remaining balance after 18 months because the unrounded payment was ~$724.180948, slightly underpaying principal each month under standard cash schedules."
+    },
+    {
+     "from": "C",
+     "problem": "The prompt explicitly lists six specific dates to skip, but 2026-05-25 (Memorial Day) or 2026-06-19 (Juneteenth) or 2026-07-03 (Independence Day observed) are typical business holidays. If the prompt implies general business days in addition to the explicit list, the count would be off by several days."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "Part A: $r = 0.054 / 12 = 0.0045$. The prompt explicitly states to 'round nothing until the end', so using the exact unrounded monthly payment $P = 31200 \\times 0.0045 / (1 - 1.0045^{-48}) \\approx 724.1809479$ is required. The balance after month 18 is $B_{18} = 31200(1.0045)^{18} - P \\frac{1.0045^{18} - 1}{0.0045} - 750(1.0045)^{14} - 600(1.0045)^{10} = 33826.225017 - 13546.026513 - 798.657250 - 627.553363 = 18853.987891$, which rounds to 18853.99.\n\nPart B: The prompt specifies 'Counting only Mondays through Fridays and skipping these holidays (2026-06-25, 2026-06-26, 2026-07-13, 2026-07-22, 2026-07-23, 2026-07-27)'. Starting after Sunday 2026-04-26:\n- Apr 27\u201330: 4 business days.\n- May 2026: 21 weekdays (no listed holidays) = 21 days (cumulative 25).\n- Jun 2026: 22 weekdays - 2 holidays = 20 days (cumulative 45).\n- Jul 2026: 23 weekdays - 4 holidays = 19 days (cumulative 64).\n- Aug 2026: Need 16 days. 15 weekdays through Friday Aug 21, so day 16 is Monday 2026-08-24.\n\nPart C: Base tax = $0.10(12500) + 0.22(39500) + 0.32(5400) = 1250 + 8690 + 1728 = 11668$. Credit phase-out on excess above $50,000 ($7,400): $2400 - 0.08(7400) = 2400 - 592 = 1808$. Tax owed = $11668 - 1808 = 9860.00$.\n\nPart D: Base rate = $22/hr; 1.5x = $33/hr; 2x = $44/hr.\nDaily earnings:\n- 9h: 8(22)+1(33) = 209\n- 13h: 8(22)+4(33)+1(44) = 352\n- 0h: 0\n- 8h: 176\n- 12.5h: 8(22)+4(33)+0.5(44) = 330\n- 8h: 176\n- 6h: 132\n- 0h: 0\n- 9h: 209\n- 8h: 176\n- 6h: 132\n- 0h: 0\n- 9.5h: 8(22)+1.5(33) = 225.50\n- 12.5h: 330\nTotal gross pay = 2447.50.\n\nFINAL: 18853.99; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "Part A may be using an unrounded payment when the standard practice is to round the payment to the nearest cent before calculating the balance."
+    },
+    {
+     "from": "D",
+     "problem": "No issue found in Part B."
+    },
+    {
+     "from": "D",
+     "problem": "No issue found in Part C."
+    },
+    {
+     "from": "D",
+     "problem": "No issue found in Part D."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 1,
+   "answer": "Part A: r=0.0045, n=48. P = 31200*0.0045/(1-1.0045^-48) \u2248 724.1809479 (kept unrounded per instructions). B18 = 31200(1.0045)^18 - P*((1.0045^18-1)/0.0045) - 750(1.0045)^14 - 600(1.0045)^10 \u2248 33826.225017 - 13546.026513 - 798.657250 - 627.553363 = 18853.99.\n\nPart B: Start 2026-04-26 (Sun). Apr 27-30: 4 biz days (cum 4). May: 21 weekdays, no holidays (cum 25). June: 22 weekdays - 2 holidays(6/25,6/26)=20 (cum 45). July: 23 weekdays - 4 holidays(7/13,7/22,7/23,7/27)=19 (cum 64). Need 16 more in Aug: Aug 3,4,5,6,7,10,11,12,13,14,17,18,19,20,21,24 = 16th day = 2026-08-24.\n\nPart C: Tax = 0.10(12500)+0.22(39500)+0.32(5400)=1250+8690+1728=11668. Credit=2400-0.08*(57400-50000)=2400-592=1808. Owed=11668-1808=9860.00.\n\nPart D: Rates: 22, 33, 44.\n9h:209; 13h:352; 0h:0; 8h:176; 12.5h:330; 8h:176; 6h:132; 0h:0; 9h:209; 8h:176; 6h:132; 0h:0; 9.5h:225.50; 12.5h:330.\nSum=2447.50.\n\nNote on challenge 1: rejected \u2014 the prompt explicitly instructs 'round nothing until the end,' which directs using the unrounded exact payment throughout the amortization schedule rather than rounding to the nearest cent before computing the balance; the alternative calculation assuming a rounded $724.18 payment contradicts this explicit instruction, so the original unrounded approach is correct.\n\nFINAL: 18853.99; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: the record shows two different values for the regular-payment term \u2014 13546.026513 (final answer) and 13546.02889 (Seat D's rejected challenge) \u2014 with the same formula P*((1.0045^18-1)/0.0045). State to at least 8 significant figures the values of 1.0045^18, the annuity factor (1.0045^18-1)/0.0045, and the exact unrounded P, and show which multiplication produces 13546.026513; does the difference between the two figures trace solely to P=724.1809479 vs 724.18?",
+    "Part A: with the unrounded payment the pre-rounding balance is quoted as 18853.99 while Seat D's rounded-payment computation gives 18853.95698 and Seat D's final objection asserts 18854.00 for the rounded payment \u2014 three distinct numbers. What is the unrounded-payment balance to at least 4 decimal places before rounding, and how close is it to the 18853.995 boundary that separates 18853.99 from 18854.00?",
+    "Part D: the day with 12.5 hours is paid 330 in the answer. Itemise that day as (8 at 22) + (4 at 33) + (0.5 at 44) and state the total; and confirm the 13-hour day's split as (8 at 22) + (4 at 33) + (1 at 44). Do these two itemisations match the 330 and 352 used in the sum?"
+   ],
+   "replies": [
+    "1.0045^18 \u2248 1.08417393 (8 sig figs). Annuity factor (1.0045^18-1)/0.0045 \u2248 18.705311. Unrounded P \u2248 724.1809479 (from 31200*0.0045/(1-1.0045^-48), with 1.0045^48\u22481.24050, 1.0045^-48\u22480.806126, denominator\u22480.193874). Multiplying P*18.705311 = 724.1809479*18.705311 \u2248 13546.0265, matching the final answer's 13546.026513. Using 724.18 (rounded) *18.705311 gives \u224813546.00, not 13546.02889 \u2014 so Seat D's rejected figure of 13546.02889 does not correspond to simply substituting the rounded P=724.18; it appears to stem from a slightly different intermediate rounding of the annuity factor or 1.0045^18, not solely from P rounding. The dominant cause is indeed the P value (724.1809479 vs 724.18), but the exact 13546.02889 figure isn't reproduced by a clean 724.18 substitution \u2014 likely compounded by a second small rounding step in D's chain.",
+    "Recomputing with unrounded P=724.1809479: Balance18 = 31200*1.0045^18 - P*18.705311 - 750*1.0045^14 - 600*1.0045^10. 31200*1.08417393=33826.2266. 1.0045^14\u22481.064953\u2192750*=798.7148. 1.0045^10\u22481.045960\u2192600*=627.5760. So Balance18\u224833826.2266-13546.0265-798.7148-627.5760=18853.9093. This is \u224818853.9093, which rounds to 18853.91, not 18853.99 as stated, and is not close to the 18853.995 boundary (difference \u22480.0857). This suggests an arithmetic slip in the original Part A computation \u2014 the components don't sum to 18853.99 as claimed. Correcting: Balance after month 18 \u2248 $18853.91 (unrounded-payment method, nearest cent).",
+    "12.5-hour day: 8\u00d722=176, 4\u00d733=132, 0.5\u00d744=22 \u2192 total 330. Matches value used. 13-hour day: 8\u00d722=176, 4\u00d733=132, 1\u00d744=44 \u2192 total 352. Matches value used. Both itemisations are confirmed correct and consistent with the sum used in Part D."
+   ],
+   "open": [],
+   "corrected": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part B: state the day of week of the start date 2026-04-26 and of each of the six listed holidays, and confirm every holiday is a Mon\u2013Fri lying inside the counting window (i.e. each one actually removes a day); also state the counting convention used (is 2026-04-27 business day 1, with the start date itself not counted?) and confirm 2026-08-24 is itself a non-holiday weekday.",
+    "Part B: give the arithmetic that lands on 2026-08-24 \u2014 e.g. the total number of weekdays that must be traversed (80 plus the number of effective holidays), the week/remainder decomposition, and the resulting calendar-day offset \u2014 and confirm no holiday falls on a weekend or outside the range in a way that would change that count.",
+    "Part C: itemise the bracket tax (10% on the first 12,500; 22% on 12,500\u201352,000; 32% on 52,000\u201357,400) with each sub-total, then the credit reduction (8% of income above 50,000) and the net credit, and show the subtraction that yields 9860.00; confirm the reduction base is income above 50,000 and not above some other threshold, and that neither the credit nor the tax hits its floor."
+   ],
+   "replies": [
+    "4. Start date 2026-04-26 is a Sunday (verified: Jan 1 2026 is a Thursday [known fact], day-of-year for Apr 26 = 116, (116-1) mod 7 = 3, Thu+3=Sunday). So business-day counting begins Monday 2026-04-27 as day 1 (start date itself not counted, consistent with convention used). The six holidays: 06-25-2026=Thursday, 06-26-2026=Friday, 07-13-2026=Monday, 07-22-2026=Wednesday, 07-23-2026=Thursday, 07-27-2026=Monday \u2014 all are Mon-Fri and all fall between 2026-04-27 and the computed endpoint, so each one does remove a counted day.\n\n5. Arithmetic: 80 business days with no holidays = exactly 16 weeks after 2026-04-27 (80/5=16), landing on 2026-08-17 (also a Monday, since 112 days = 16*7). All 6 holidays fall within the window 04-27 to 08-17, so 6 additional weekdays must be added past 08-17: Aug18(Tue), Aug19(Wed), Aug20(Thu), Aug21(Fri), Aug24(Mon), Aug25(Tue) \u2014 none of these additional 6 days coincide with any remaining holiday. Therefore the 80th business day is 2026-08-25, NOT 2026-08-24 as submitted. The submitted answer undercounted by one business day.\n\n6. Part C bracket computation: 10% of first 12,500 = 1,250.00. 22% of (52,000-12,500)=22%*39,500=8,690.00. 32% of (57,400-52,000)=32%*5,400=1,728.00. Sum = 1,250+8,690+1,728 = 11,668.00. Credit reduction = 8% of income above 50,000 = 8%*(57,400-50,000)=8%*7,400=592.00. Net credit = 2,400-592=1,808.00 (not at floor of 0). Tax owed = 11,668.00-1,808.00 = 9,860.00 (not at floor of 0). This confirms the submitted Part C figure of 9860.00 is correct, and the reduction base is correctly income above 50,000 (not 52,000 or another bracket boundary).",
+    "No reply.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": true
+  }
+ ],
+ "answer": "FINAL: 18853.91; 2026-08-25; 9860.00; 2447.50"
+}

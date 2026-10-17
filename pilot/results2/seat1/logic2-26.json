@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'ada', expected 'ada'",
  "error": null,
- "seconds": 20.0,
- "tokens": 2830,
+ "seconds": 9.9,
+ "tokens": 1425,
  "prompt_tokens": 514,
- "completion_tokens": 2316,
- "cost": 0.02419,
+ "completion_tokens": 911,
+ "cost": 0.01014,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Solution walk-through:**\n\n- Clues 5+9+4 \u2192 Cleo owns fish, lives in blue house, drinks water.\n- Clue 6+11 \u2192 Ben drinks tea, lives in house 3.\n- Clue 10 \u2192 Eli is immediately left of Cleo (water drinker). Since Cleo can't be house 1 (needs someone left) or house 3 (Ben's), and house 5 is yellow (clue 2, conflicting with Cleo's blue), Cleo must be house 2, Eli house 1.\n- Remaining Ada, Dev go to houses 4,5. Clue 12 requires Ada immediately left of juice drinker \u2192 Ada=4, juice=house5, Dev=5.\n- Drinks so far: house1=?, house2=water, house3=tea, house4=?, house5=juice \u2192 remaining coffee/milk for houses 1 and 4.\n- Clue 1: coffee drinker adjacent to green house. If coffee=house1, green must be house2, but house2 is blue (contradiction). So coffee=house4, milk=house1.\n- Green must be adjacent to house4 \u2192 house3 (since house5 is yellow). \n- Remaining colors red/white for houses1,4. Testing assignments with clues 3,7,8 confirms: house1=red, house4=white satisfies all pet-color constraints (horse=red=house1, cat=house3, bird=house5, dog=house4).\n\nFinal layout:\n1. Eli \u2013 red \u2013 milk \u2013 horse\n2. Cleo \u2013 blue \u2013 water \u2013 fish\n3. Ben \u2013 green \u2013 tea \u2013 cat\n4. Ada \u2013 white \u2013 coffee \u2013 dog\n5. Dev \u2013 yellow \u2013 juice \u2013 bird\n\nAll 12 clues check out.\n\nFINAL: Ada"
+ "answer": "Coffee is at house 4, occupied by Ada (based on consistent assignment satisfying all clues).\n\nFINAL: Ada"
 }

@@ -2,15 +2,15 @@
  "task_id": "data2-48",
  "type": "data",
  "condition": "seat1",
- "correct": true,
- "detail": "got 55.99, expected 55.99",
+ "correct": false,
+ "detail": "got 53.75, expected 55.99",
  "error": null,
- "seconds": 33.1,
- "tokens": 7455,
+ "seconds": 14.3,
+ "tokens": 4613,
  "prompt_tokens": 2841,
- "completion_tokens": 4614,
- "cost": 0.05182,
+ "completion_tokens": 1772,
+ "cost": 0.0234,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Working:**\n\nFiltered orders with order_date between 2026-05-09 and 2026-06-14 (inclusive), any status, counting exact duplicate rows only once (O2606 appears 3\u00d7 identically \u2192 counted once).\n\nQualifying orders and unit_prices:\n- O2159 (05-09): 5.86\n- O2412 (05-09): 5.02\n- O2606 (05-12): 49.48\n- O2581 (05-12): 90.69\n- O2500 (05-14): 60.26\n- O2561 (05-17): 55.99\n- O2428 (05-19): 137.23\n- O2118 (05-18): 92.20\n- O2464 (05-18): 35.18\n- O2775 (05-16): 87.91\n- O2767 (05-22): 7.34\n- O2473 (05-28): 83.01\n- O2887 (05-28): 51.50\n- O2166 (05-31): 23.10\n- O2652 (05-31): 81.60\n- O2086 (06-02): 36.33\n- O2006 (06-03): 37.21\n- O2588 (06-07): 100.31\n- O2165 (06-07): 19.62\n- O2413 (06-08): 116.84\n- O2178 (06-09): 88.98\n- O2072 (06-13): 119.62\n- O2115 (06-14): 15.96\n\nThat's 22 values (list corrected to include O2178 \u2014 total 22).\n\nSorted values:\n5.02, 5.86, 7.34, 15.96, 19.62, 23.10, 35.18, 36.33, 37.21, 49.48, 51.50, 55.99, 60.26, 81.60, 83.01, 87.91, 88.98, 90.69, 92.20, 100.31, 116.84, 119.62, 137.23\n\nWait, count = 23 with O2178 included (recheck): list length now 23, odd \u2014 median is the 12th value.\n\nLet's recount total: original list of 22 excluded O2178; adding it makes 23. The 12th value in sorted list of 23:\n\n1:5.02 2:5.86 3:7.34 4:15.96 5:19.62 6:23.10 7:35.18 8:36.33 9:37.21 10:49.48 11:51.50 12:55.99 13:60.26 14:81.60 15:83.01 16:87.91 17:88.98 18:90.69 19:92.20 20:100.31 21:116.84 22:119.62 23:137.23\n\nMedian (12th value) = 55.99\n\nFINAL: 55.99"
+ "answer": "Filtering orders with order_date between 2026-05-09 and 2026-06-14 inclusive (deduping exact duplicate rows), I get 20 orders with unit prices:\n\n5.02, 5.86, 7.34, 15.96, 19.62, 23.10, 35.18, 37.21, 49.48, 51.50, 55.99, 60.26, 81.60, 83.01, 87.91, 90.69, 92.20, 100.31, 119.62, 137.23\n\nMedian = average of 10th and 11th values = (51.50 + 55.99)/2 = 53.745 \u2248 53.75\n\nFINAL: 53.75"
 }

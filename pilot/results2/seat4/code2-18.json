@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-18",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 8.3,
+ "tokens": 834,
+ "prompt_tokens": 213,
+ "completion_tokens": 621,
+ "cost": 0.00274,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\nfrom collections import deque\n\ndef sliding_max(xs, w):\n    if w < 1:\n        raise ValueError(\"w must be at least 1\")\n    if w > len(xs):\n        return []\n\n    result = []\n    dq = deque()\n\n    for i, x in enumerate(xs):\n        # Remove indices that are out of the current window\n        if dq and dq[0] < i - w + 1:\n            dq.popleft()\n\n        # Remove indices whose values are less than or equal to current value\n        while dq and xs[dq[-1]] <= x:\n            dq.pop()\n\n        dq.append(i)\n\n        # Once the first window is filled, record the maximum\n        if i >= w - 1:\n            result.append(xs[dq[0]])\n\n    return result\n```"
+}

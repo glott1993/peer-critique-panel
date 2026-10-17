@@ -1,0 +1,175 @@
+{
+ "task_id": "multi2-40",
+ "type": "multi",
+ "condition": "c",
+ "correct": true,
+ "detail": "ok: got 2298.63, expected 2298.62 | ok: got 205.0, expected 205.0 | ok: got 78.0, expected 78.0",
+ "error": null,
+ "seconds": 234.4,
+ "tokens": 102001,
+ "prompt_tokens": 68312,
+ "completion_tokens": 33689,
+ "cost": 0.30551,
+ "calls": 29,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "18.5*(100.5+1.5*14.5+2*1)",
+   "claimed": 2298.625,
+   "value": 2298.625,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(11-8)+(9.5-8)+(12-8)+(10-8)+(10-8)+(10-8)",
+   "claimed": 14.5,
+   "value": 14.5,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "205*208-233*183",
+   "claimed": 1.0,
+   "value": 1.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A payroll calculation",
+     "what": "Compute daily regular/OT1.5/OT2 hours for each of 14 days, multiply by $18.50 and factors, sum to get gross pay to the cent"
+    },
+    {
+     "id": "c2",
+     "title": "Part B modular exponentiation",
+     "what": "Compute 52^799 mod 233 using Fermat's little theorem (233 prime) and fast exponentiation"
+    },
+    {
+     "id": "c3",
+     "title": "Part C big multiplication and digit sum",
+     "what": "Multiply 80228 x 4038 x 514 x 4208 exactly and sum the decimal digits of the result"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Part A:  \nFor each day, pay factor = regular hours + 1.5 \u00d7 (hours over 8 up to 12) + 2 \u00d7 (hours over 12).  \nTotal pay factor = 124.25, so gross pay = 18.50 \u00d7 124.25 = 2298.625, which rounds to 2298.63.\n\nPart B:  \n233 is prime, so by Fermat\u2019s little theorem, 52^232 \u2261 1 mod 233.  \n799 = 3\u00d7232 + 103, so 52^799 \u2261 52^103 mod 233.  \nUsing repeated squaring: 52^2 \u2261 141, 52^4 \u2261 76, 52^32 \u2261 148, 52^64 \u2261 2.  \nThen 52^103 = 52^(64+32+4+2+1) \u2261 2\u00d7148\u00d776\u00d7141\u00d752 \u2261 205 mod 233.\n\nPart C:  \n80228 \u00d7 4038 \u00d7 514 \u00d7 4208 = 700,698,407,693,568.  \nDigit sum = 7+0+0+6+9+8+4+0+7+6+9+3+5+6+8 = 78.\n\nFINAL: 2298.63; 205; 78"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "The equivalent regular hours (pay factor) is miscalculated. Summing the daily breakdowns: Daily regular hours sum to 102.5. Daily overtime (8 to 12 hrs): day 1 (3), day 7 (1.5), day 9 (4), day 11 (2), day 12 (2), day 14 (2), totaling 14.5 hours at 1.5x (= 21.75). Daily double time (>12 hrs): day 9 has 13 hours, so 1 hour at 2x (= 2.0). Total pay factor = 102.5 + 21.75 + 2 = 126.25, not 124.25. Gross pay is 18.50 \u00d7 126.25 = 2335.625, rounding to 2335.63."
+    },
+    {
+     "from": "C",
+     "problem": "52^103 mod 233 is 89, not 205. Specifically, 52^2 = 2704 = 11*233 + 141 \u2261 141. 52^4 = 141^2 = 19881 = 85*233 + 76 \u2261 76. 52^8 = 76^2 = 5776 \u2261 184 \u2261 -49. 52^16 = (-49)^2 = 2401 \u2261 71. 52^32 = 71^2 = 5041 \u2261 148. 52^64 = 148^2 = 21904 \u2261 2. Then 52^103 = 52^64 * 52^32 * 52^4 * 52^2 * 52^1 = 2 * 148 * 76 * 141 * 52 mod 233. 2 * 148 = 296 \u2261 63. 63 * 76 = 4788 \u2261 128. 128 * 141 = 18048 \u2261 107. 107 * 52 = 5564 = 23*233 + 205? Wait, 23 * 233 = 5359; 5564 - 5359 = 205. Wait, 5564 / 233 = 23.8798. 233 * 23 = 5359. 5564 - 5359 = 205! Let's check pow(52, 799, 233): 52^799 mod 233. Legendre symbol (52/233) = (13/233) = (233/13) = (12/13) = -1. Euler criterion: 52^116 = -1 mod 233. 799 mod 116 = 103. 52^103 mod 233 = 52^(-13) * (-1). Is 52^103 equal to 205? 205 * 52^13 mod 233: let's compute directly."
+    },
+    {
+     "from": "C",
+     "problem": "80228 * 4038 * 514 * 4208: last digits: 8 * 8 = 64 (4), 4 * 4 = 16 (6), 6 * 8 = 48 (8). 80228 * 4038 = 323,960,664. 323960664 * 514 = 166,515,781,296. 166515781296 * 4208 = 700,698,407,693,568. Sum of digits: 7+0+0+6+9+8+4+0+7+6+9+3+5+6+8 = 78. Wait, is Part B definitely 205? 52^1 = 52, 52^2 = 141, 52^3 = 141*52 = 7332 = 31*233 + 109. 52^4 = 76."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Part A:\nBreakdown of hours across the 14 days:\n- Regular hours (up to 8/day): 8 + 8 + 7.5 + 7.5 + 8 + 6 + 8 + 7.5 + 8 + 0 + 8 + 8 + 8 + 8 = 100.5 hours.\n- Overtime hours (over 8 up to 12/day): 3 + 0 + 0 + 0 + 0 + 0 + 1.5 + 0 + 4 + 0 + 2 + 2 + 0 + 2 = 14.5 hours.\n- Double-time hours (over 12/day): 1 hour (on day 9).\nTotal equivalent regular hours = 100.5 + 1.5 \u00d7 14.5 + 2 \u00d7 1 = 100.5 + 21.75 + 2 = 124.25 hours.\nGross pay = $18.50 \u00d7 124.25 = $2298.625, which rounds to $2298.63.\n\nPart B:\n233 is prime, so 52^232 \u2261 1 (mod 233).\n799 = 3 \u00d7 232 + 103, so 52^799 \u2261 52^103 (mod 233).\nUsing repeated squaring modulo 233:\n- 52^1 \u2261 52\n- 52^2 = 2704 \u2261 141\n- 52^4 = 141^2 = 19881 \u2261 76\n- 52^8 = 76^2 = 5776 \u2261 184 \u2261 -49\n- 52^16 = (-49)^2 = 2401 \u2261 71\n- 52^32 = 71^2 = 5041 \u2261 148\n- 52^64 = 148^2 = 21904 \u2261 2\nSince 103 = 64 + 32 + 4 + 2 + 1:\n52^103 \u2261 2 \u00d7 148 \u00d7 76 \u00d7 141 \u00d7 52 (mod 233)\n- 2 \u00d7 148 = 296 \u2261 63\n- 63 \u00d7 76 = 4788 \u2261 128\n- 128 \u00d7 141 = 18048 \u2261 107\n- 107 \u00d7 52 = 5564 = 23 \u00d7 233 + 205 \u2261 205 (mod 233).\n\nPart C:\n80228 \u00d7 4038 = 323,960,664\n323,960,664 \u00d7 514 = 166,515,781,296\n166,515,781,296 \u00d7 4208 = 700,698,407,693,568\nSum of decimal digits = 7 + 0 + 0 + 6 + 9 + 8 + 4 + 0 + 7 + 6 + 9 + 3 + 5 + 6 + 8 = 78.\n\nFINAL: 2298.63; 205; 78"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: 18.50 \u00d7 124.25 = 2298.625 falls exactly on a half-cent. What rounding convention are you applying (round-half-up vs round-half-even/banker's), and does the task's 'to the nearest cent' instruction or any stated payroll convention justify 2298.63 rather than 2298.62? Please state the basis.",
+    "Part B: the rejected challenge asserted the Legendre symbol (52/233) = -1 (i.e. 52^116 \u2261 -1 mod 233), which would make 52 a non-residue; the rejection note dismissed the challenge on arithmetic grounds but never resolved that claim. Which is correct: compute 52^116 mod 233 from your own ladder (52^64 \u00b7 52^32 \u00b7 52^16 \u00b7 52^4) and state the value, and confirm it is consistent with 52^799 \u2261 52^103.",
+    "Part B cross-check: if 52^116 \u2261 1, then 52^103 must be the modular inverse of 52^13. What is 52^13 mod 233 from your ladder (52^8 \u00b7 52^4 \u00b7 52), and does your claimed 205 satisfy 205 \u00d7 (that value) \u2261 1 (mod 233)?"
+   ],
+   "replies": [
+    "Standard commercial and math rounding (round-half-up, round half away from zero) rounds .625 up to .63. IRS rules (e.g., Publication 15) and standard state payroll accounting practices dictate rounding half-cents up to the next full cent unless a specific plan document specifies otherwise. Under round-half-even (banker's rounding), 2298.625 would round to 2298.62, but standard financial custom and unqualified 'to the nearest cent' instructions default to round-half-up.",
+    "Computing 52^116 mod 233 from the ladder: 52^116 = 52^64 \u00b7 52^32 \u00b7 52^16 \u00b7 52^4 \u2261 2 \u00b7 148 \u00b7 71 \u00b7 76 (mod 233). We have 2 \u00b7 148 = 296 \u2261 63; 63 \u00b7 71 = 4473 = 19 \u00d7 233 + 46 \u2261 46; and 46 \u00b7 76 = 3496 = 15 \u00d7 233 + 1 \u2261 1 (mod 233). Thus 52^116 \u2261 1 (mod 233), which means the Legendre symbol (52/233) = +1 (52 is a quadratic residue mod 233, since (52/233) = (13/233) = (233/13) = (12/13) = (-1/13) = +1). The challenge's claim that (52/233) = -1 was false. This is fully consistent with 52^799 \u2261 52^103 (mod 233).",
+    "From the ladder, 52^13 = 52^8 \u00b7 52^4 \u00b7 52^1 \u2261 184 \u00b7 76 \u00b7 52 (mod 233). Using 184 \u2261 -49: (-49) \u00b7 76 = -3724 = -16 \u00d7 233 + 4 \u2261 4; then 4 \u00b7 52 = 208 \u2261 -25 (mod 233). Now checking the product: 205 \u00b7 208 \u2261 (-28) \u00b7 (-25) = 700 = 3 \u00d7 233 + 1 \u2261 1 (mod 233). Thus 205 is indeed the modular inverse of 52^13 mod 233, perfectly verifying 52^103 \u2261 205 (mod 233)."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part C: the product chain has not been independently checked. Please verify 80228 x 4038 x 514 x 4208 = 700698407693568 by (a) a casting-out-nines check (digit roots of the four factors multiplied mod 9 vs. 7+0+0+6+9+8+4+0+7+6+9+3+5+6+8 mod 9), (b) a mod-11 or mod-99 check, and (c) confirming the result has exactly 15 digits and that the stated digit list matches the digits of 700698407693568 in order.",
+    "Part C edge case: 4038, 514 and 4208 are all even and 80228 is even, so the product must be divisible by 16 (and by 2^5 given the factorizations). Does 700698407693568 satisfy that divisibility, and does its factorization into 2^k x odd match the combined powers of 2 in 80228, 4038, 514 and 4208?",
+    "Part A: please show the day-by-day table (day, hours, regular, 1.5x, 2x) and confirm two cross-checks: that 100.5 + 14.5 + 1 equals the total hours actually worked (sum of the 14 listed values), and that the 13-hour day splits 8 / 4 / 1 with no hours double-counted."
+   ],
+   "replies": [
+    "(a) Mod 9 check: 80228 \u2261 20 \u2261 2; 4038 \u2261 15 \u2261 6; 514 \u2261 10 \u2261 1; 4208 \u2261 14 \u2261 5. Product: 2 \u00d7 6 \u00d7 1 \u00d7 5 = 60 \u2261 6 (mod 9). For the product 700698407693568, the sum of digits is 78 \u2261 15 \u2261 6 (mod 9). Both equal 6.\n(b) Mod 11 check: 80228 = 8 - 2 + 2 - 0 + 8 = 16 \u2261 5; 4038 = 8 - 3 + 0 - 4 = 1; 514 = 4 - 1 + 5 = 8; 4208 = 8 - 0 + 2 - 4 = 6. Product: 5 \u00d7 1 \u00d7 8 \u00d7 6 = 240 \u2261 9 (mod 11). For 700698407693568, alternating sum (from units digit): 8 - 6 + 5 - 3 + 9 - 6 + 7 - 0 + 4 - 8 + 9 - 6 + 0 - 0 + 7 = 20 \u2261 9 (mod 11). Both equal 9.\n(c) The number 700,698,407,693,568 has exactly 15 digits. The stated list [7, 0, 0, 6, 9, 8, 4, 0, 7, 6, 9, 3, 5, 6, 8] matches the digits in order.",
+    "Prime powers of 2 for each factor:\n- 80228 = 4 \u00d7 20057 (2^2)\n- 4038 = 2 \u00d7 2019 (2^1)\n- 514 = 2 \u00d7 257 (2^1)\n- 4208 = 16 \u00d7 263 (2^4)\nTotal power of 2 in product = 2 + 1 + 1 + 4 = 8 (i.e. divisible by 2^8 = 256, but not 2^9 = 512).\nChecking 700698407693568:\n700698407693568 / 256 = 2,737,103,155,053 (an integer and odd, since it ends in 3). Thus 700698407693568 = 2^8 \u00d7 2737103155053, which perfectly matches the 2-adic valuation.",
+    "Day-by-day table:\nDay 1: 11 hrs -> 8 reg, 3 OT, 0 DT\nDay 2: 8 hrs -> 8 reg, 0 OT, 0 DT\nDay 3: 7.5 hrs -> 7.5 reg, 0 OT, 0 DT\nDay 4: 7.5 hrs -> 7.5 reg, 0 OT, 0 DT\nDay 5: 8 hrs -> 8 reg, 0 OT, 0 DT\nDay 6: 6 hrs -> 6 reg, 0 OT, 0 DT\nDay 7: 9.5 hrs -> 8 reg, 1.5 OT, 0 DT\nDay 8: 7.5 hrs -> 7.5 reg, 0 OT, 0 DT\nDay 9: 13 hrs -> 8 reg, 4 OT, 1 DT\nDay 10: 0 hrs -> 0 reg, 0 OT, 0 DT\nDay 11: 10 hrs -> 8 reg, 2 OT, 0 DT\nDay 12: 10 hrs -> 8 reg, 2 OT, 0 DT\nDay 13: 8 hrs -> 8 reg, 0 OT, 0 DT\nDay 14: 10 hrs -> 8 reg, 2 OT, 0 DT\n\nCross-checks:\n1. Total hours worked = 11 + 8 + 7.5 + 7.5 + 8 + 6 + 9.5 + 7.5 + 13 + 0 + 10 + 10 + 8 + 10 = 116 hours.\nSum of categories = 100.5 (reg) + 14.5 (OT) + 1 (DT) = 116 hours. They match.\n2. Day 9 (13 hours): Regular = 8 (hours 1-8), Overtime = 4 (hours 9-12), Double-time = 1 (hour 13). 8 + 4 + 1 = 13 with no double-counting."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Part A:\nBreakdown of hours across the 14 days:\n- Regular hours (up to 8/day): 8 + 8 + 7.5 + 7.5 + 8 + 6 + 8 + 7.5 + 8 + 0 + 8 + 8 + 8 + 8 = 100.5 hours.\n- Overtime hours (over 8 up to 12/day): 3 + 0 + 0 + 0 + 0 + 0 + 1.5 + 0 + 4 + 0 + 2 + 2 + 0 + 2 = 14.5 hours.\n- Double-time hours (over 12/day): 1 hour (on day 9).\nTotal equivalent regular hours = 100.5 + 1.5 \u00d7 14.5 + 2 \u00d7 1 = 100.5 + 21.75 + 2 = 124.25 hours.\nGross pay = $18.50 \u00d7 124.25 = $2298.625, which rounds to $2298.63.\n\nPart B:\n233 is prime, so 52^232 \u2261 1 (mod 233).\n799 = 3 \u00d7 232 + 103, so 52^799 \u2261 52^103 (mod 233).\nUsing repeated squaring modulo 233:\n- 52^1 \u2261 52\n- 52^2 = 2704 \u2261 141\n- 52^4 = 141^2 = 19881 \u2261 76\n- 52^8 = 76^2 = 5776 \u2261 184 \u2261 -49\n- 52^16 = (-49)^2 = 2401 \u2261 71\n- 52^32 = 71^2 = 5041 \u2261 148\n- 52^64 = 148^2 = 21904 \u2261 2\nSince 103 = 64 + 32 + 4 + 2 + 1:\n52^103 \u2261 2 \u00d7 148 \u00d7 76 \u00d7 141 \u00d7 52 (mod 233)\n- 2 \u00d7 148 = 296 \u2261 63\n- 63 \u00d7 76 = 4788 \u2261 128\n- 128 \u00d7 141 = 18048 \u2261 107\n- 107 \u00d7 52 = 5564 = 23 \u00d7 233 + 205 \u2261 205 (mod 233).\n\nPart C:\n80228 \u00d7 4038 = 323,960,664\n323,960,664 \u00d7 514 = 166,515,781,296\n166,515,781,296 \u00d7 4208 = 700,698,407,693,568\nSum of decimal digits = 7 + 0 + 0 + 6 + 9 + 8 + 4 + 0 + 7 + 6 + 9 + 3 + 5 + 6 + 8 = 78.\n\nFINAL: 2298.63; 205; 78"
+}

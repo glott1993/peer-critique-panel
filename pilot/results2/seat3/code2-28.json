@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-28",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.0,
+ "tokens": 527,
+ "prompt_tokens": 250,
+ "completion_tokens": 277,
+ "cost": 0.00123,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete `isbn_valid` function:\n\n```python\ndef isbn_valid(s: str) -> bool:\n    cleaned = s.replace(\"-\", \"\").replace(\" \", \"\")\n    \n    if len(cleaned) == 10:\n        # First 9 characters must be digits\n        if not cleaned[:9].isdigit():\n            return False\n        \n        # Last character must be a digit or 'X'\n        if cleaned[9].isdigit():\n            last_val = int(cleaned[9])\n        elif cleaned[9] == 'X':\n            last_val = 10\n        else:\n            return False\n        \n        total = sum((i + 1) * int(cleaned[i]) for i in range(9)) + 10 * last_val\n        return total % 11 == 0\n\n    elif len(cleaned) == 13:\n        # All 13 characters must be digits\n        if not cleaned.isdigit():\n            return False\n        \n        total = sum(int(digit) * (1 if i % 2 == 0 else 3) for i, digit in enumerate(cleaned))\n        return total % 10 == 0\n\n    return False\n```"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.9,
+ "tokens": 869,
+ "prompt_tokens": 263,
+ "completion_tokens": 606,
+ "cost": 0.00247,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the implementation of `parse_iso_duration`:\n\n```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    # Pattern strictly matching ISO 8601 duration according to the specifications:\n    # - Starts with 'P'\n    # - Optional date parts: (\\d+Y)?(\\d+M)?(\\d+D)?\n    # - Optional time parts: (?:T(?=\\d+[HMS])(\\d+H)?(\\d+M)?(\\d+S)?)?\n    # - Requires at least one component across date and time\n    # - Values are non-negative integers only (no decimals, signs, lowercase)\n    pattern = (\n        r'^P'\n        r'(?=.)'  # At least something after 'P'\n        r'(?:(?P<Y>\\d+)Y)?'\n        r'(?:(?P<M_date>\\d+)M)?'\n        r'(?:(?P<D>\\d+)D)?'\n        r'(?:T(?=\\d+[HMS])(?:(?P<H>\\d+)H)?(?:(?P<M_time>\\d+)M)?(?:(?P<S>\\d+)S)?)?'\n        r'$'\n    )\n    \n    match = re.match(pattern, s)\n    if not match:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n    \n    groups = match.groupdict()\n    # Ensure at least one component was captured\n    if not any(groups.values()):\n        raise ValueError(f\"Invalid ISO 8601 duration (no components): {s!r}\")\n        \n    years = int(groups['Y'] or 0)\n    months = int(groups['M_date'] or 0)\n    days = int(groups['D'] or 0)\n    hours = int(groups['H'] or 0)\n    minutes = int(groups['M_time'] or 0)\n    seconds = int(groups['S'] or 0)\n    \n    # 1 year = 365 days = 31536000 seconds\n    # 1 month = 30 days = 2592000 seconds\n    # 1 day = 86400 seconds\n    total_seconds = (\n        years * 365 * 86400\n        + months * 30 * 86400\n        + days * 86400\n        + hours * 3600\n        + minutes * 60\n        + seconds\n    )\n    \n    return total_seconds\n```"
+}

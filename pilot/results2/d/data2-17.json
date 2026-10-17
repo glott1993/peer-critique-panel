@@ -1,0 +1,116 @@
+{
+ "task_id": "data2-17",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 2411.23, expected 2411.23",
+ "error": null,
+ "seconds": 176.9,
+ "tokens": 164503,
+ "prompt_tokens": 123811,
+ "completion_tokens": 40692,
+ "cost": 0.22886,
+ "calls": 22,
+ "call_errors": 1,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter and deduplicate eligible orders",
+     "what": "Join orders to customers on customer_id, retain Gold-tier orders with status shipped, and remove exact duplicate rows so each distinct order counts once."
+    },
+    {
+     "id": "c2",
+     "title": "Compute average shipped-order revenue",
+     "what": "For each retained order, calculate revenue as units \u00d7 unit_price, sum those revenues, and divide by the number of retained distinct shipped orders; round to two decimal places."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine the average revenue per shipped order placed by Gold-tier customers:\n\n1. **Identify Gold-Tier Customers**:\n   From the Customers table, the Gold-tier customers are:\n   - `C100` (Emery)\n   - `C101` (Kendall)\n   - `C107` (Blake)\n\n2. **Filter & Deduplicate Shipped Orders**:\n   The prompt specifies counting orders with status `shipped`. Exact duplicate rows (such as `O2867` for `C100`) are counted only once.\n\n   - **C100 (7 orders)**:\n     - `O2191`: 18 \u00d7 23.88 = 429.84\n     - `O2131`: 34 \u00d7 38.17 = 1,297.78\n     - `O2150`: 37 \u00d7 45.97 = 1,700.89\n     - `O2891`: 13 \u00d7 92.90 = 1,207.70\n     - `O2470`: 29 \u00d7 72.26 = 2,095.54\n     - `O2867`: 43 \u00d7 120.75 = 5,192.25 (deduplicated)\n     - `O2163`: 41 \u00d7 135.71 = 5,564.11\n     - *Subtotal = 17,488.11*\n\n   - **C101 (6 orders)**:\n     - `O2218`: 21 \u00d7 138.22 = 2,902.62\n     - `O2165`: 14 \u00d7 124.48 = 1,742.72\n     - `O2817`: 45 \u00d7 136.90 = 6,160.50\n     - `O2738`: 33 \u00d7 86.22 = 2,845.26\n     - `O2422`: 7 \u00d7 91.33 = 639.31\n     - `O2286`: 2 \u00d7 111.46 = 222.92\n     - *Subtotal = 14,513.33*\n\n   - **C107 (8 orders)**:\n     - `O2125`: 27 \u00d7 48.68 = 1,314.36\n     - `O2350`: 36 \u00d7 104.69 = 3,768.84\n     - `O2316`: 45 \u00d7 99.02 = 4,455.90\n     - `O2881`: 15 \u00d7 108.56 = 1,628.40\n     - `O2840`: 45 \u00d7 47.35 = 2,130.75\n     - `O2032`: 32 \u00d7 127.08 = 4,066.56\n     - `O2856`: 30 \u00d7 27.43 = 822.90\n     - `O2674`: 10 \u00d7 44.67 = 446.70\n     - *Subtotal = 18,634.41*\n\n3. **Compute Average Revenue**:\n   - Total Shipped Orders = 7 + 6 + 8 = 21\n   - Total Revenue = 17,488.11 + 14,513.33 + 18,634.41 = 50,635.85\n   - Average Revenue = 50,635.85 / 21 \u2248 2,411.23095...\n\nFINAL: 2411.23"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "O2867 appears twice (duplicate), so it counts once, but the draft still lists 7 orders for C100. Counting the shipped orders for C100 in the Orders table: O2191, O2131, O2150, O2891, O2470, O2867 (once), O2163 = 7 orders. Wait, that is 7. Let me recount: O2191 (shipped), O2131 (shipped), O2150 (shipped), O2891 (shipped), O2470 (shipped), O2867 (shipped, duplicate), O2163 (shipped). That is 7 unique shipped orders. So the count is correct."
+    },
+    {
+     "from": "D",
+     "problem": "Sum of listed C101 revenues: 2,902.62 + 1,742.72 + 6,160.50 + 2,845.26 + 639.31 + 222.92 = 14,513.33. That matches the draft. No arithmetic error."
+    },
+    {
+     "from": "D",
+     "problem": "O2199 is status 'pending', not 'shipped', so it should be excluded. The draft correctly excludes it."
+    },
+    {
+     "from": "D",
+     "problem": "Sum of subtotals: 17,488.11 + 14,513.33 + 18,634.41 = 50,635.85. This is correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 0,
+   "rejected": 4,
+   "answer": "Gold-tier customers: C100, C101, C107. Counting only shipped orders and deduplicating exact repeats:\n\nC100: O2191 429.84, O2131 1297.78, O2150 1700.89, O2891 1207.70, O2470 2095.54, O2867 5192.25 (once), O2163 5564.11; subtotal 17488.11, 7 orders.\nC101: O2218 2902.62, O2165 1742.72, O2817 6160.50, O2738 2845.26, O2422 639.31, O2286 222.92; subtotal 14513.33, 6 orders.\nC107: O2125 1314.36, O2350 3768.84, O2316 4455.90, O2881 1628.40, O2840 2130.75, O2032 4066.56, O2856 822.90, O2674 446.70; subtotal 18634.41, 8 orders.\n\nTotal revenue = 17488.11 + 14513.33 + 18634.41 = 50635.85\nTotal shipped orders = 7 + 6 + 8 = 21\nAverage = 50635.85 / 21 = 2411.23095...\n\nFINAL: 2411.23"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Gold-tier customers: C100, C101, C107. Counting only shipped orders and deduplicating exact repeats:\n\nC100: O2191 429.84, O2131 1297.78, O2150 1700.89, O2891 1207.70, O2470 2095.54, O2867 5192.25 (once), O2163 5564.11; subtotal 17488.11, 7 orders.\nC101: O2218 2902.62, O2165 1742.72, O2817 6160.50, O2738 2845.26, O2422 639.31, O2286 222.92; subtotal 14513.33, 6 orders.\nC107: O2125 1314.36, O2350 3768.84, O2316 4455.90, O2881 1628.40, O2840 2130.75, O2032 4066.56, O2856 822.90, O2674 446.70; subtotal 18634.41, 8 orders.\n\nTotal revenue = 17488.11 + 14513.33 + 18634.41 = 50635.85\nTotal shipped orders = 7 + 6 + 8 = 21\nAverage = 50635.85 / 21 = 2411.23095...\n\nFINAL: 2411.23"
+}

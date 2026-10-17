@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-17",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 89.0, expected 89.0 | ok: got 4166.86, expected 4166.86 | ok: got 4753469.0, expected 4753469.0",
+ "error": null,
+ "seconds": 13.2,
+ "tokens": 2516,
+ "prompt_tokens": 392,
+ "completion_tokens": 2124,
+ "cost": 0.00826,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nBy Fermat's Little Theorem, $46^{100} \\equiv 1 \\pmod{101}$, so $46^{783} \\equiv 46^{83} \\pmod{101}$.\n- $46^2 = 2116 \\equiv -5 \\pmod{101}$\n- $46^4 \\equiv (-5)^2 = 25 \\pmod{101}$\n- $46^8 \\equiv 25^2 = 625 \\equiv 19 \\pmod{101}$\n- $46^{16} \\equiv 19^2 = 361 \\equiv 58 \\pmod{101}$\n- $46^{32} \\equiv 58^2 = 3364 \\equiv 31 \\pmod{101}$\n- $46^{64} \\equiv 31^2 = 961 \\equiv 52 \\pmod{101}$\n\nSince $83 = 64 + 16 + 2 + 1$:\n$46^{83} \\equiv 52 \\times 58 \\times (-5) \\times 46 \\equiv (-14) \\times (-28) = 392 \\equiv 89 \\pmod{101}$.\n\nPart B:\nTotal units sold = $76 + 73 + 52 + 92 + 64 + 57 = 414$ units.\nUsing FIFO:\n- From Lot 1: 159 units at $\\$11.86 = \\$1,885.74$\n- From Lot 2: 128 units at $\\$13.61 = \\$1,742.08$\n- From Lot 3: 120 units at $\\$3.96 = \\$475.20$\n- From Lot 4: $414 - (159 + 128 + 120) = 7$ units at $\\$9.12 = \\$63.84$\n\nTotal COGS = $\\$1,885.74 + \\$1,742.08 + \\$475.20 + \\$63.84 = \\$4,166.86$.\n\nPart C:\nThe required sum is (sum of multiples of 7) minus (sum of multiples of 28) in the interval $[809, 9450]$.\n- Multiples of 7 range from $7 \\times 116 = 812$ to $7 \\times 1350 = 9450$:\n  $\\text{Count} = 1350 - 116 + 1 = 1235$\n  $\\text{Sum}_7 = 1235 \\times \\frac{812 + 9450}{2} = 1235 \\times 5131 = 6,336,785$\n\n- Multiples of 28 range from $28 \\times 29 = 812$ to $28 \\times 337 = 9436$:\n  $\\text{Count} = 337 - 29 + 1 = 309$\n  $\\text{Sum}_{28} = 309 \\times \\frac{812 + 9436}{2} = 309 \\times 5124 = 1,583,316$\n\nTotal sum = $6,336,785 - 1,583,316 = 4,753,469$.\n\nFINAL: 89; 4166.86; 4753469"
+}

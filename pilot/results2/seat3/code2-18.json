@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-18",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.2,
+ "tokens": 452,
+ "prompt_tokens": 216,
+ "completion_tokens": 236,
+ "cost": 0.00105,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the implementation of `sliding_max` using a monotonic deque for $O(n)$ time complexity:\n\n```python\nfrom collections import deque\n\n\ndef sliding_max(xs: list, w: int) -> list:\n    if w < 1:\n        raise ValueError(\"Window size w must be at least 1.\")\n    if w > len(xs):\n        return []\n\n    dq = deque()  # stores indices of elements in the current window, monotonically decreasing by value\n    result = []\n\n    for i, x in enumerate(xs):\n        # Remove indices that are out of the current window\n        while dq and dq[0] <= i - w:\n            dq.popleft()\n\n        # Remove elements smaller than the current element from the back\n        while dq and xs[dq[-1]] <= x:\n            dq.pop()\n\n        dq.append(i)\n\n        # The first window finishes at index w - 1\n        if i >= w - 1:\n            result.append(xs[dq[0]])\n\n    return result\n```"
+}

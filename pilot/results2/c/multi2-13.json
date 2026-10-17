@@ -1,0 +1,182 @@
+{
+ "task_id": "multi2-13",
+ "type": "multi",
+ "condition": "c",
+ "correct": true,
+ "detail": "ok: got 4885.63, expected 4885.63 | ok: got 3087.56, expected 3087.56 | ok: got '2026-06-19', expected '2026-06-19'",
+ "error": null,
+ "seconds": 288.5,
+ "tokens": 121868,
+ "prompt_tokens": 80102,
+ "completion_tokens": 41766,
+ "cost": 0.42901,
+ "calls": 31,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "81*10.17+99*8.53+155*12.65+112*11.22",
+   "claimed": 4885.63,
+   "value": 4885.63,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "99*24.75+14.5*(24.75*1.5)+2*(24.75*2)",
+   "claimed": 3087.5625,
+   "value": 3087.5625,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "(8-8)+(9-8)+(12.5-8-0.5)+(9.5-8)+(12.5-8-0.5)+(13-8-1)",
+   "claimed": 14.5,
+   "value": 14.5,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "FIFO Inventory Costing",
+     "what": "Calculate Part A\u2019s total cost of goods sold by applying FIFO to each sale sequentially."
+    },
+    {
+     "id": "c2",
+     "title": "Daily Overtime Payroll",
+     "what": "Calculate Part B\u2019s gross pay by separating regular, time-and-a-half, and double-time hours for each day."
+    },
+    {
+     "id": "c3",
+     "title": "Business Day Calendar",
+     "what": "Calculate Part C\u2019s date by counting weekdays after the starting date while excluding the listed holidays."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ],
+    "c2": [
+     "D",
+     "B"
+    ],
+    "c3": [
+     "D",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Part A \u2014 FIFO COGS\n\n| Sale | Lots used | Cost |\n|---:|---|---:|\n| 81 | Lot 1: 81 @ 10.17 | 823.77 |\n| 52 | Lot 2: 52 @ 8.53 | 443.56 |\n| 77 | Lot 2: 47 @ 8.53; Lot 3: 30 @ 12.65 | 780.41 |\n| 30 | Lot 3: 30 @ 12.65 | 379.50 |\n| 89 | Lot 3: 89 @ 12.65 | 1125.85 |\n| 118 | Lot 3: 6 @ 12.65; Lot 4: 112 @ 11.22 | 1332.54 |\n\nTotal COGS = 823.77 + 443.56 + 780.41 + 379.50 + 1125.85 + 1332.54 = 4885.63.\n\nPart B \u2014 Daily overtime\n\nRegular hours: 99 \u2192 99 \u00d7 24.75 = 2450.25  \nTime-and-a-half hours: 14.5 \u2192 14.5 \u00d7 37.125 = 538.3125  \nDouble-time hours: 2.0 \u2192 2.0 \u00d7 49.50 = 99.00  \n\nGross pay = 2450.25 + 538.3125 + 99.00 = 3087.5625 \u2192 3087.56.\n\nPart C \u2014 Business days\n\n2026-02-15 is a Sunday, so counting starts Monday 2026-02-16.  \nFrom 2026-02-16 through 2026-06-19 inclusive is 124 calendar days = 17 weeks + 5 days, giving 90 weekdays; subtracting the 6 listed holidays gives 84 business days.  \nSo the date is 2026-06-19.\n\nFINAL: 4885.63; 3087.56; 2026-06-19"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The count is correct only under the standard convention that '84 business days after' excludes the starting date. The draft does not explicitly establish that convention or verify that all six listed holidays fall on counted weekdays."
+    },
+    {
+     "from": "B",
+     "problem": "The totals are correct, but the draft does not show the per-day allocation, making it difficult to verify that the 12.5-hour days assign 0.5 double-time hours each and that the 13-hour day assigns 1 double-time hour."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 2,
+   "rejected": 0,
+   "answer": "Part A \u2014 FIFO COGS\n\n| Sale | Lots used | Cost |\n|---:|---|---:|\n| 81 | Lot1:81@10.17 | 823.77 |\n| 52 | Lot2:52@8.53 | 443.56 |\n| 77 | Lot2:47@8.53;Lot3:30@12.65 | 780.41 |\n| 30 | Lot3:30@12.65 | 379.50 |\n| 89 | Lot3:89@12.65 | 1125.85 |\n| 118 | Lot3:6@12.65;Lot4:112@11.22 | 1332.54 |\n\nTotal = 823.77+443.56+780.41+379.50+1125.85+1332.54 = 4885.63\n\nPart B \u2014 Daily overtime (verified per-day allocation)\n\nDay hours \u2192 (reg,1.5x,2x):\n8\u2192(8,0,0)\n9\u2192(8,1,0)\n7.5\u2192(7.5,0,0)\n12.5\u2192(8,4,0.5)\n8\u2192(8,0,0)\n9.5\u2192(8,1.5,0)\n12.5\u2192(8,4,0.5)\n6\u2192(6,0,0)\n6\u2192(6,0,0)\n13\u2192(8,4,1)\n7.5\u2192(7.5,0,0)\n8\u2192(8,0,0)\n8\u2192(8,0,0)\n0\u2192(0,0,0)\n\nSum reg=99, 1.5x=14.5, 2x=2.0 (matches totals used).\n\nRegular pay = 99\u00d724.75 = 2450.25\n1.5x pay = 14.5\u00d737.125 = 538.3125\n2x pay = 2.0\u00d749.50 = 99.00\n\nGross = 2450.25+538.3125+99.00 = 3087.5625 \u2192 3087.56\n\nPart C \u2014 Business days (verified)\n\n2026-02-15 is a Sunday; counting starts 2026-02-16 (Monday) as day 1, per standard 'N business days after' convention (start date excluded).\nCounting weekdays from 2026-02-16 through 2026-06-19 gives 90 weekdays (17 weeks \u00d75 + 5 = 90).\nAll 6 holidays (2026-02-26 Thu, 2026-03-04 Wed, 2026-03-31 Tue, 2026-04-02 Thu, 2026-04-08 Wed, 2026-05-21 Thu) fall on weekdays within this range, so 90-6=84 business days.\nTherefore the 84th business day after 2026-02-15 is 2026-06-19.\n\nFINAL: 4885.63; 3087.56; 2026-06-19"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: the per-sale table consumes lot 3 across three sales (30 + 30 + 89 = 149) leaving only 6 units for the final sale \u2014 can you confirm the running balance of each lot (lot 1 exhausted, lot 2 exhausted after 52 + 47, lot 3 down to 6) and that total units sold (447) never exceeds cumulative units received, so no sale draws on a later lot than shown?",
+    "Part B: the gross of 3087.5625 falls between cents \u2014 what rounding rule is applied to reach 3087.56, and does that rule match the convention you would use if the half-cent fell the other way (e.g., round-half-up on the third decimal)?"
+   ],
+   "replies": [
+    "Confirmed: Lot1 (81) fully consumed by sale1; Lot2 (99) consumed by 52+47; Lot3 (155) consumed by 30+30+89+6=155, matching sale3-6 partials; Lot4 begins with the remaining 112 units in sale6. Total units sold=81+52+77+30+89+118=447, well under cumulative receipts, so no sale draws from a later lot than shown. Table is correct.",
+    "No special rounding rule needed: 3087.5625 rounded to the nearest cent is 3087.56 because the digit in the thousandths place is 2 (not 5), so standard round-half-up (or round-to-nearest) rounds down regardless of convention. This isn't actually a half-cent tie case, so the convention choice doesn't matter here."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part C: can you independently derive the weekdays and show the inclusive day count \u2014 i.e. state the day of week for 2026-02-15 and 2026-06-19, the total calendar days from 2026-02-16 to 2026-06-19 inclusive (Feb 13 + Mar 31 + Apr 30 + May 31 + Jun 19), and how that decomposes into whole weeks plus remainder to yield exactly 90 weekdays?",
+    "Part C: for each of the six holidays give its day of week and confirm it lies strictly within 2026-02-16..2026-06-19 (none before the start, none after the end, none on a weekend) so that the deduction is exactly 6 and not fewer?",
+    "Part C: check the off-by-one at the end \u2014 is 2026-06-19 itself a counted business day (not a weekend or listed holiday), and what are the dates of business day 83 and business day 85 under your convention, so we can see the 84th lands on 2026-06-19 rather than adjacent?"
+   ],
+   "replies": [
+    "2026-06-19 is a Friday (shown above) and is not one of the six listed holidays, so it IS a valid counted business day \u2014 it correctly serves as business day #84.\n\nBusiness day #83: the business day immediately before, which is Thursday 2026-06-18 (no holiday that week).\nBusiness day #85: the next business day after Friday 2026-06-19; Jun20-21 are a weekend, so business day #85 = Monday 2026-06-22.\n\nThis confirms no off-by-one error: day83=2026-06-18, day84=2026-06-19, day85=2026-06-22, consistent with the claimed answer.",
+    "Holiday weekday check (day-of-year calc, Jan1=Thursday):\n- 2026-02-26 = day57, offset56 mod7=0 \u2192 Thursday\n- 2026-03-04 = day63, offset62 mod7=6 \u2192 Wednesday\n- 2026-03-31 = day90, offset89 mod7=5 \u2192 Tuesday\n- 2026-04-02 = day92, offset91 mod7=0 \u2192 Thursday\n- 2026-04-08 = day98, offset97 mod7=6 \u2192 Wednesday\n- 2026-05-21 = day141, offset140 mod7=0 \u2192 Thursday\n\nAll six are weekdays (none fall on Sat/Sun). All six dates lie strictly between 2026-02-16 and 2026-06-19 (earliest is Feb26, latest is May21, both inside range). None before start, none after end, none on a weekend. So the deduction of exactly 6 from 90 weekdays (=84) is correct.",
+    "2026-06-19 is a Friday (shown above) and is not one of the six listed holidays, so it IS a valid counted business day \u2014 it correctly serves as business day #84.\n\nBusiness day #83: the business day immediately before, which is Thursday 2026-06-18 (no holiday that week).\nBusiness day #85: the next business day after Friday 2026-06-19; Jun20-21 are a weekend, so business day #85 = Monday 2026-06-22.\n\nThis confirms no off-by-one error: day83=2026-06-18, day84=2026-06-19, day85=2026-06-22, consistent with the claimed answer."
+   ],
+   "open": [
+    "The reply to Q3 was a verbatim repeat of the Q5 answer about day 83/84/85 and never supplied the requested independent derivation: no day-of-week stated for 2026-02-15, no calendar-day total for 2026-02-16..2026-06-19 (Feb 13 + Mar 31 + Apr 30 + May 31 + Jun 19), and no decomposition into whole weeks plus remainder. The 90-weekday figure therefore still rests on the original unverified assertion '17 weeks x5 + 5 = 90', which is itself arithmetically odd (17x5=85, not 85+5 explained), so the count could be off."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part C: please give the arithmetic only, with no restatement of the day-83/84/85 result: (a) the day of week of 2026-02-15 and how you derived it; (b) the inclusive calendar-day count from 2026-02-16 through 2026-06-19 as the sum Feb 13 + Mar 31 + Apr 30 + May 31 + Jun 19; (c) that total expressed as (whole weeks x 7) + remainder days, the date and weekday on which the remainder block begins, and how many of those remainder days are weekdays, so the 90 total is reproduced step by step."
+   ],
+   "replies": [
+    "(a) 2026-02-15 is a Sunday. Derivation: 2026 doomsday (per the doomsday algorithm) is Saturday (2024 doomsday=Thursday, 2025=Friday, 2026=Saturday, no leap-day adjustment needed since Feb 2026 hasn't occurred yet). The doomsday for any year falls on Feb 28 in a non-leap year, so 2026-02-28 is a Saturday. 2026-02-15 is 13 days earlier; 13 mod 7 = 6, so Saturday \u2212 6 = Sunday. Thus 2026-02-15 is a Sunday.\n\n(b) Inclusive calendar-day sum from 2026-02-16 through 2026-06-19:\nFeb 16\u201328 = 13 days\nMar = 31 days\nApr = 30 days\nMay = 31 days\nJun 1\u201319 = 19 days\nTotal = 13+31+30+31+19 = 124 calendar days.\n\n(c) 124 = 17\u00d77 + 5, i.e. 17 whole weeks (119 days) + 5 remainder days.\nDay 119 counted from Feb16 (day1) lands on 2026-06-14 (a Sunday, since Feb16 is a Monday and 118 mod 7 = 6, Monday+6=Sunday). So the remainder block begins on day120 = 2026-06-15, which is a Monday.\nThe remainder block is 2026-06-15 through 2026-06-19 (Mon\u2013Fri) = 5 days, all 5 of which are weekdays.\nWeekday count: 17 full weeks \u00d7 5 weekdays/week = 85, plus 5 weekdays in the remainder block = 90 weekdays total \u2014 matching the 90 figure used in the original derivation (90 weekdays \u2212 6 holidays = 84 business days, landing on 2026-06-19).\n\nNo errors found; the original Part C answer of 2026-06-19 stands."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "Part A \u2014 FIFO COGS\n\n| Sale | Lots used | Cost |\n|---:|---|---:|\n| 81 | Lot1:81@10.17 | 823.77 |\n| 52 | Lot2:52@8.53 | 443.56 |\n| 77 | Lot2:47@8.53;Lot3:30@12.65 | 780.41 |\n| 30 | Lot3:30@12.65 | 379.50 |\n| 89 | Lot3:89@12.65 | 1125.85 |\n| 118 | Lot3:6@12.65;Lot4:112@11.22 | 1332.54 |\n\nTotal = 823.77+443.56+780.41+379.50+1125.85+1332.54 = 4885.63\n\nPart B \u2014 Daily overtime (verified per-day allocation)\n\nDay hours \u2192 (reg,1.5x,2x):\n8\u2192(8,0,0)\n9\u2192(8,1,0)\n7.5\u2192(7.5,0,0)\n12.5\u2192(8,4,0.5)\n8\u2192(8,0,0)\n9.5\u2192(8,1.5,0)\n12.5\u2192(8,4,0.5)\n6\u2192(6,0,0)\n6\u2192(6,0,0)\n13\u2192(8,4,1)\n7.5\u2192(7.5,0,0)\n8\u2192(8,0,0)\n8\u2192(8,0,0)\n0\u2192(0,0,0)\n\nSum reg=99, 1.5x=14.5, 2x=2.0 (matches totals used).\n\nRegular pay = 99\u00d724.75 = 2450.25\n1.5x pay = 14.5\u00d737.125 = 538.3125\n2x pay = 2.0\u00d749.50 = 99.00\n\nGross = 2450.25+538.3125+99.00 = 3087.5625 \u2192 3087.56\n\nPart C \u2014 Business days (verified)\n\n2026-02-15 is a Sunday; counting starts 2026-02-16 (Monday) as day 1, per standard 'N business days after' convention (start date excluded).\nCounting weekdays from 2026-02-16 through 2026-06-19 gives 90 weekdays (17 weeks \u00d75 + 5 = 90).\nAll 6 holidays (2026-02-26 Thu, 2026-03-04 Wed, 2026-03-31 Tue, 2026-04-02 Thu, 2026-04-08 Wed, 2026-05-21 Thu) fall on weekdays within this range, so 90-6=84 business days.\nTherefore the 84th business day after 2026-02-15 is 2026-06-19.\n\nFINAL: 4885.63; 3087.56; 2026-06-19"
+}

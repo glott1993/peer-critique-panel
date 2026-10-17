@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-07",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 4.1,
+ "tokens": 784,
+ "prompt_tokens": 319,
+ "completion_tokens": 465,
+ "cost": 0.00198,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete function definition:\n\n```python\ndef _parse_ipv4(ip_str: str) -> int:\n    parts = ip_str.split(\".\")\n    if len(parts) != 4:\n        raise ValueError(\"IPv4 address must contain exactly 4 octets\")\n    \n    val = 0\n    for p in parts:\n        # Check for empty string, leading '+', or non-digit characters\n        if not p or not p.isdigit() or p.startswith(\"+\"):\n            raise ValueError(f\"Invalid octet: {p!r}\")\n        num = int(p)\n        if not (0 <= num <= 255):\n            raise ValueError(f\"Octet outside 0-255: {num}\")\n        val = (val << 8) | num\n    return val\n\n\ndef cidr_contains(cidr: str, ip: str) -> bool:\n    if \"/\" not in cidr:\n        raise ValueError(\"CIDR notation must contain a '/'\")\n    \n    parts = cidr.split(\"/\")\n    if len(parts) != 2:\n        raise ValueError(\"CIDR notation must contain exactly one '/'\")\n    \n    cidr_ip_str, prefix_str = parts\n    if not prefix_str or not prefix_str.isdigit() or prefix_str.startswith(\"+\"):\n        raise ValueError(f\"Invalid prefix length: {prefix_str!r}\")\n    \n    prefix = int(prefix_str)\n    if not (0 <= prefix <= 32):\n        raise ValueError(f\"Prefix length must be between 0 and 32, got {prefix}\")\n    \n    cidr_int = _parse_ipv4(cidr_ip_str)\n    ip_int = _parse_ipv4(ip)\n    \n    if prefix == 0:\n        return True\n    \n    mask = ((1 << 32) - 1) ^ ((1 << (32 - prefix)) - 1)\n    return (cidr_int & mask) == (ip_int & mask)\n```"
+}

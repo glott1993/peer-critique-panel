@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-23",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 17.0, expected 17.0 | ok: got '101/136', expected '101/136' | ok: got 105.01, expected 105.01 | ok: got 15155.87, expected 15155.86",
+ "error": null,
+ "seconds": 11.5,
+ "tokens": 2135,
+ "prompt_tokens": 414,
+ "completion_tokens": 1721,
+ "cost": 0.00676,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\n191 is prime. By Fermat's Little Theorem, $16^{190} \\equiv 1 \\pmod{191}$.\n$468 = 2 \\times 190 + 88$.\nThus, $16^{468} \\equiv 16^{88} = 2^{352} \\pmod{191}$.\n$352 = 190 + 162$, so $2^{352} \\equiv 2^{162} \\pmod{191}$.\nNote that $2^8 = 256 \\equiv 65 \\pmod{191}$.\n$2^7 = 128 \\equiv -63 \\pmod{191}$.\nLet's compute $2^{162} \\pmod{191}$:\n$2^{190} \\equiv 1 \\implies 2^{162} \\equiv 2^{-28} \\pmod{191}$.\n$2^7 = 128 \\equiv -63$.\n$2^{14} \\equiv (-63)^2 = 3969 = 20 \\times 191 + 149 \\equiv -42 \\pmod{191}$.\n$2^{28} \\equiv (-42)^2 = 1764 = 9 \\times 191 + 45 = 1719 + 45 \\equiv 45 \\pmod{191}$.\nWe need $45^{-1} \\pmod{191}$:\n$191 = 4 \\times 45 + 11$\n$45 = 4 \\times 11 + 1 \\implies 1 = 45 - 4(191 - 4 \\times 45) = 17 \\times 45 - 4 \\times 191$.\nSo $45^{-1} \\equiv 17 \\pmod{191}$.\nThus, $16^{468} \\equiv 17 \\pmod{191}$.\n\nPart B:\nTotal marbles = $7 + 6 + 5 = 18$.\nTotal ways to choose 3 marbles: $\\binom{18}{3} = \\frac{18 \\times 17 \\times 16}{6} = 816$.\nThe complement of \"at least two share a color\" is \"all three have different colors\", which means 1 red, 1 green, 1 blue:\nWays to choose 1 of each color: $7 \\times 6 \\times 5 = 210$.\nProbability of all different: $210 / 816 = 35 / 136$.\nProbability of at least two sharing a color: $1 - 35/136 = 101/136$.\n\nPart C:\nMultiplier = $1.18 \\times 1.25 \\times 0.85 \\times 1.12 \\times 1.25$\n$1.18 \\times 1.25 = 1.475$\n$1.475 \\times 0.85 = 1.25375$\n$1.25375 \\times 1.12 = 1.4042$\n$1.4042 \\times 1.25 = 1.75525$\nOriginal price $P = 184.32 / 1.75525 \\approx 105.01068... \\approx 105.01$.\n\nPart D:\nIn each period, the net factor after growth and fee is:\n$(1 + 0.025) \\times (1 - 0.005) = 1.025 \\times 0.995 = 1.019875$.\nStarting balance $B_0 = 8000$.\nContributions:\nPeriod 1: $(8000 + 600) \\times 1.019875 = 8600 \\times 1.019875 = 8770.925$\nPeriod 2: $(8770.925 + 250) \\times 1.019875 = 9020.925 \\times 1.019875 = 9200.21588...$\nPeriod 3: $(9200.21588 + 0) \\times 1.019875 = 9383.07017...$\nPeriod 4: $(9383.07017 + 0) \\times 1.019875 = 9569.5607...$\nPeriod 5: $(9569.5607 + 900) \\times 1.019875 = 10469.5607 \\times 1.019875 = 10677.6433...$\nPeriod 6: $(10677.6433 + 250) \\times 1.019875 = 10927.6433 \\times 1.019875 = 11144.8306...$\nPeriod 7: $(11144.8306 + 600) \\times 1.019875 = 11744.8306 \\times 1.019875 = 11978.2591...$\nPeriod 8: $(11978.2591 + 0) \\times 1.019875 = 12216.3267...$\nPeriod 9: $(12216.3267 + 250) \\times 1.019875 = 12466.3267 \\times 1.019875 = 12714.0991...$\nPeriod 10: $(12714.0991 + 600) \\times 1.019875 = 13314.0991 \\times 1.019875 = 13578.7171...$\nPeriod 11: $(13578.7171 + 600) \\times 1.019875 = 14178.7171 \\times 1.019875 = 14460.5191...$\nPeriod 12: $(14460.5191 + 400) \\times 1.019875 = 14860.5191 \\times 1.019875 = 15155.87...$\nRounding to nearest cent: 15155.87.\n\nFINAL: 17; 101/136; 105.01; 15155.87"
+}

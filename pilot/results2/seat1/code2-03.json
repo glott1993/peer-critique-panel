@@ -6,11 +6,11 @@
  "detail": "all tests passed",
  "error": null,
  "seconds": 3.0,
- "tokens": 660,
+ "tokens": 615,
  "prompt_tokens": 308,
- "completion_tokens": 352,
- "cost": 0.00414,
+ "completion_tokens": 307,
+ "cost": 0.00369,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nimport heapq\n\ndef topo_order(nodes, edges):\n    all_nodes = set(nodes)\n    for a, b in edges:\n        all_nodes.add(a)\n        all_nodes.add(b)\n\n    in_degree = {n: 0 for n in all_nodes}\n    graph = {n: [] for n in all_nodes}\n\n    for a, b in edges:\n        graph[a].append(b)\n        in_degree[b] += 1\n\n    heap = [n for n in all_nodes if in_degree[n] == 0]\n    heapq.heapify(heap)\n\n    result = []\n    while heap:\n        node = heapq.heappop(heap)\n        result.append(node)\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                heapq.heappush(heap, neighbor)\n\n    if len(result) != len(all_nodes):\n        raise ValueError(\"Graph has a cycle\")\n\n    return result\n```"
+ "answer": "```python\nimport heapq\n\ndef topo_order(nodes, edges):\n    all_nodes = set(nodes)\n    for a, b in edges:\n        all_nodes.add(a)\n        all_nodes.add(b)\n\n    indegree = {n: 0 for n in all_nodes}\n    adj = {n: [] for n in all_nodes}\n    for a, b in edges:\n        adj[a].append(b)\n        indegree[b] += 1\n\n    heap = [n for n in all_nodes if indegree[n] == 0]\n    heapq.heapify(heap)\n\n    result = []\n    while heap:\n        n = heapq.heappop(heap)\n        result.append(n)\n        for m in adj[n]:\n            indegree[m] -= 1\n            if indegree[m] == 0:\n                heapq.heappush(heap, m)\n\n    if len(result) != len(all_nodes):\n        raise ValueError(\"Graph has a cycle\")\n\n    return result\n```"
 }

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-36",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 8970742.0, expected 8970742.0 | ok: got 15814.88, expected 15814.88 | ok: got 824.0, expected 824.0 | ok: got '2026-07-22', expected '2026-07-22'",
+ "error": null,
+ "seconds": 17.8,
+ "tokens": 3596,
+ "prompt_tokens": 458,
+ "completion_tokens": 3138,
+ "cost": 0.01211,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\n- Multiples of 11 from 575 to 14,905 run from $53 \\times 11 = 583$ to $1355 \\times 11 = 14,905$ (1,303 terms), with sum:\n  $$\\frac{1303 \\times (583 + 14905)}{2} = 10,090,432$$\n- Multiples of $\\text{lcm}(11, 9) = 99$ run from $6 \\times 99 = 594$ to $150 \\times 99 = 14,850$ (145 terms), with sum:\n  $$\\frac{145 \\times (594 + 14850)}{2} = 1,119,690$$\n- Difference: $10,090,432 - 1,119,690 = 8,970,742$.\n\n**Part B**\nIn each period, the multiplier applied after each contribution is $(1 + 0.02) \\times (1 - 0.005) = 1.0149$. Iterating through the 12 contributions $(\\$0, \\$900, \\$250, \\$0, \\$900, \\$600, \\$0, \\$900, \\$400, \\$0, \\$900, \\$900)$ starting with $\\$8,000$ yields a final balance of $\\$15,814.88$.\n\n**Part C**\n- $x \\equiv 8 \\pmod{16}$ and $x \\equiv 8 \\pmod{17} \\implies x \\equiv 8 \\pmod{272}$, so $x = 272k + 8$.\n- Modulo 9: $272k + 8 \\equiv 2k + 8 \\equiv 5 \\pmod{9} \\implies 2k \\equiv 6 \\pmod{9} \\implies k \\equiv 3 \\pmod{9}$.\n- The smallest positive integer corresponds to $k = 3$:\n  $$x = 272(3) + 8 = 824$$\n\n**Part D**\n2026-03-24 is a Tuesday. All 6 listed holidays fall on weekdays prior to the target date, requiring $80 + 6 = 86$ weekdays. 86 weekdays equals 17 full weeks (85 weekdays) plus 1 weekday. Advancing 17 weeks from Tuesday, March 24, 2026 lands on Tuesday, July 21, 2026, and 1 more weekday gives Wednesday, July 22, 2026.\n\nFINAL: 8970742; 15814.88; 824; 2026-07-22"
+}

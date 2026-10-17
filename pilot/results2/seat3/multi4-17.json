@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-17",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "ok: got 17765.0, expected 17765.0 | no: got 8288.25, expected 8278.5 | ok: got 6027840.0, expected 6027840.0 | ok: got 226.65, expected 226.65",
+ "error": null,
+ "seconds": 9.9,
+ "tokens": 1931,
+ "prompt_tokens": 481,
+ "completion_tokens": 1450,
+ "cost": 0.0058,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\n- Tax on first $12,500 at 8%: $12,500 \\times 0.08 = $1,000.\n- Tax on $12,500 to $52,000 ($39,500) at 20%: $39,500 \\times 0.20 = $7,900.\n- Tax on income above $52,000 ($81,900 - $52,000 = $29,900) at 30%: $29,900 \\times 0.30 = $8,970.\n- Total tax before credit: $1,000 + $7,900 + $8,970 = $17,870.\n- Income above $60,000: $81,900 - $60,000 = $21,900.\n- Credit reduction: 5% of $21,900 = $1,095.\n- Remaining tax credit: $1,200 - $1,095 = $105.\n- Tax owed: $17,870 - $105 = $17,765.00.\n\n**Part B:**\n- Principal $P_0 = 18,500$, monthly interest rate $r = 0.06 / 12 = 0.005$, number of months $n = 36$.\n- Monthly payment $M = P_0 \\frac{r(1+r)^{36}}{(1+r)^{36} - 1} = 18,500 \\times \\frac{0.005 \\times 1.005^{36}}{1.005^{36} - 1} \\approx 562.697416$.\n- Without extra payments, balance at month $t$ is $B_t = P_0(1+r)^t - M \\frac{(1+r)^t - 1}{r}$.\n- Extra payments: $E_{11} = 600$ at month 11, $E_{14} = 750$ at month 14.\n- At month 18, the extra payments reduce the balance by $E_{11}(1+r)^{18-11} + E_{14}(1+r)^{18-14} = 600(1.005)^7 + 750(1.005)^4 \\approx 621.3259 + 765.1130 = 1386.4389$.\n- Base balance at month 18:\n  $B_{18} = 18,500(1.005)^{18} - 562.697416 \\times \\frac{1.005^{18} - 1}{0.005} \\approx 20,237.9546 - 10,563.2687 = 9,674.6859$.\n- Remaining balance after month 18: $9,674.6859 - 1,386.4389 = 8,288.247 \\approx 8,288.25$.\n\n**Part C:**\n- Integers divisible by 7: from $\\lceil 311/7 \\rceil = 45$ to $\\lfloor 10,613/7 \\rfloor = 1516$.\n  - First term: $45 \\times 7 = 315$, last term: $1516 \\times 7 = 10,612$.\n  - Number of terms: $1516 - 45 + 1 = 1472$.\n  - Sum $S_7 = 1472 \\times \\frac{315 + 10612}{2} = 1472 \\times 5463.5 = 8,042,272$.\n- Integers divisible by 28 (both 7 and 4): from $\\lceil 311/28 \\rceil = 12$ to $\\lfloor 10,613/28 \\rfloor = 379$.\n  - First term: $12 \\times 28 = 336$, last term: $379 \\times 28 = 10,612$.\n  - Number of terms: $379 - 12 + 1 = 368$.\n  - Sum $S_{28} = 368 \\times \\frac{336 + 10612}{2} = 368 \\times 5474 = 2,014,432$.\n- Desired sum: $S_7 - S_{28} = 8,042,272 - 2,014,432 = 6,027,840$.\n\n**Part D:**\n- Multiplier: $1.18 \\times 0.85 \\times 1.12 \\times 1.20 \\times 0.85$.\n  - $1.18 \\times 0.85 = 1.003$\n  - $1.003 \\times 1.12 = 1.12336$\n  - $1.12336 \\times 1.20 = 1.348032$\n  - $1.348032 \\times 0.85 = 1.1458272$\n- Original price: $259.70 / 1.1458272 \\approx 226.6485 \\approx 226.65$.\n\nFINAL: 17765.00; 8288.25; 6027840; 226.65"
+}

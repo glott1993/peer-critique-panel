@@ -1,0 +1,126 @@
+{
+ "task_id": "data2-45",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 1541.67, expected 1541.67",
+ "error": null,
+ "seconds": 119.9,
+ "tokens": 190063,
+ "prompt_tokens": 155671,
+ "completion_tokens": 34392,
+ "cost": 0.18178,
+ "calls": 27,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Deduplicate orders",
+     "what": "Remove exact duplicate rows: O2441 (C107, Bolt) appears twice and O2786 (C104, Flange) appears twice; each counts once."
+    },
+    {
+     "id": "c2",
+     "title": "Filter Gold-tier shipped orders",
+     "what": "Keep only orders with status 'shipped' for Gold customers C100, C103, C104, C107. Exclude pending, cancelled, and returned orders."
+    },
+    {
+     "id": "c3",
+     "title": "Compute revenue per order and total",
+     "what": "Revenue = units x unit_price. C100: O2034 42x24.43=1026.06, O2394 32x116.65=3732.80; total 4758.86 (2 orders). C103: O2447 710.06, O2584 2779.92, O2472 2891.04, O2872 204.06, O2052 3219.65; total 9804.73 (5 orders). C104: O2291 1126.16, O2077 1903.32, O2647 3805.62, O2691 3867.84, O2187 180.12, O204"
+    },
+    {
+     "id": "c4",
+     "title": "Calculate average",
+     "what": "Average revenue per shipped Gold order = 29291.81 / 19 = 1541.6742... -> 1541.67."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ],
+    "c4": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Gold-tier customers are C100, C103, C104, C107. Duplicate rows O2441, O2786, and O2102 are pending/cancelled, so they do not affect shipped orders.\n\nShipped Gold orders by customer:\n- C100: O2034 1026.06, O2394 3732.80 \u2192 2 orders, 4758.86\n- C103: O2447 710.06, O2584 2779.92, O2472 2891.04, O2872 204.06, O2052 3219.65 \u2192 5 orders, 9804.73\n- C104: O2291 1126.16, O2077 1903.32, O2647 3805.62, O2691 3867.84, O2187 180.12, O2046 405.24, O2013 142.27 \u2192 7 orders, 11430.57\n- C107: O2563 1609.44, O2737 791.82, O2642 144.00, O2465 294.00, O2325 458.39 \u2192 5 orders, 3297.65\n\nTotal shipped Gold orders = 19; total revenue = 29291.81; average = 29291.81 / 19 = 1541.67.\n\nFINAL: 1541.67"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Recomputing every listed shipped Gold order gives the same subtotals and total: 4,758.86 + 9,804.73 + 11,430.57 + 3,297.65 = 29,291.81 across 19 orders."
+    },
+    {
+     "from": "B",
+     "problem": "The duplicate O2441 is pending, O2786 is pending, and O2102 is cancelled; none qualifies as shipped, so deduplication cannot change this answer."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "Gold-tier customers: C100, C103, C104, C107.\n\nShipped Gold orders:\n- C100: O2034 1026.06, O2394 3732.80 \u2192 4758.86 (2 orders)\n- C103: O2447 710.06, O2584 2779.92, O2472 2891.04, O2872 204.06, O2052 3219.65 \u2192 9804.73 (5 orders)\n- C104: O2291 1126.16, O2077 1903.32, O2647 3805.62, O2691 3867.84, O2187 180.12, O2046 405.24, O2013 142.27 \u2192 11430.57 (7 orders)\n- C107: O2563 1609.44, O2737 791.82, O2642 144.00, O2465 294.00, O2325 458.39 \u2192 3297.65 (5 orders)\n\nDuplicate rows (O2441, O2786, O2102) are pending/cancelled, so they don't affect shipped totals.\n\nTotal = 4758.86+9804.73+11430.57+3297.65 = 29291.81 across 19 shipped orders.\n\nAverage = 29291.81 / 19 = 1541.67.\n\nFINAL: 1541.67"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Gold-tier customers: C100, C103, C104, C107.\n\nShipped Gold orders:\n- C100: O2034 1026.06, O2394 3732.80 \u2192 4758.86 (2 orders)\n- C103: O2447 710.06, O2584 2779.92, O2472 2891.04, O2872 204.06, O2052 3219.65 \u2192 9804.73 (5 orders)\n- C104: O2291 1126.16, O2077 1903.32, O2647 3805.62, O2691 3867.84, O2187 180.12, O2046 405.24, O2013 142.27 \u2192 11430.57 (7 orders)\n- C107: O2563 1609.44, O2737 791.82, O2642 144.00, O2465 294.00, O2325 458.39 \u2192 3297.65 (5 orders)\n\nDuplicate rows (O2441, O2786, O2102) are pending/cancelled, so they don't affect shipped totals.\n\nTotal = 4758.86+9804.73+11430.57+3297.65 = 29291.81 across 19 shipped orders.\n\nAverage = 29291.81 / 19 = 1541.67.\n\nFINAL: 1541.67"
+}

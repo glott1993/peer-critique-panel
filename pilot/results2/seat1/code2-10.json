@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 4.0,
- "tokens": 752,
+ "seconds": 2.3,
+ "tokens": 537,
  "prompt_tokens": 318,
- "completion_tokens": 434,
- "cost": 0.00498,
+ "completion_tokens": 219,
+ "cost": 0.00283,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nimport calendar\nfrom datetime import date\n\ndef nth_weekday(year: int, month: int, weekday: int, n: int) -> str:\n    if not (0 <= weekday <= 6):\n        raise ValueError(\"weekday must be 0 (Monday) through 6 (Sunday)\")\n    if n == 0 or n < -1 or n > 5:\n        raise ValueError(\"n must be 1-5 or -1\")\n\n    days_in_month = calendar.monthrange(year, month)[1]\n    matching_days = [\n        day for day in range(1, days_in_month + 1)\n        if date(year, month, day).weekday() == weekday\n    ]\n\n    if n == -1:\n        if not matching_days:\n            raise ValueError(\"No such weekday occurrence in this month\")\n        chosen_day = matching_days[-1]\n    else:\n        if n > len(matching_days):\n            raise ValueError(\"No such weekday occurrence in this month\")\n        chosen_day = matching_days[n - 1]\n\n    return date(year, month, chosen_day).isoformat()\n\n\nassert nth_weekday(2026, 9, 3, 3) == '2026-09-17'\nassert nth_weekday(2026, 9, 4, -1) == '2026-09-25'\n```"
+ "answer": "```python\nfrom calendar import monthrange\nfrom datetime import date\n\ndef nth_weekday(year, month, weekday, n):\n    days_in_month = monthrange(year, month)[1]\n    matches = [d for d in range(1, days_in_month + 1)\n               if date(year, month, d).weekday() == weekday]\n    if n == -1:\n        if not matches:\n            raise ValueError(\"No such weekday in month\")\n        chosen = matches[-1]\n    else:\n        if n < 1 or n > len(matches):\n            raise ValueError(\"No such occurrence in month\")\n        chosen = matches[n - 1]\n    return date(year, month, chosen).isoformat()\n```"
 }

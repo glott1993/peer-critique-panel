@@ -1,0 +1,138 @@
+{
+ "task_id": "multi4-32",
+ "type": "multi4",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got 9.0, expected 9.0 | ok: got 3233.81, expected 3233.81 | ok: got 2953.28, expected 2953.28 | ok: got 7435.67, expected 7435.65",
+ "error": null,
+ "seconds": 208.0,
+ "tokens": 112307,
+ "prompt_tokens": 76089,
+ "completion_tokens": 36218,
+ "cost": 0.1264,
+ "calls": 27,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "C",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A modular exponentiation",
+     "what": "Compute 45^363 mod 151 using Fermat's little theorem and fast exponentiation"
+    },
+    {
+     "id": "c2",
+     "title": "Part B tiered pricing with discount and tax",
+     "what": "Compute subtotal for 651 units with tiered pricing, apply 8% discount if over $2500, then add 6.5% tax"
+    },
+    {
+     "id": "c3",
+     "title": "Part C FIFO cost of goods sold",
+     "what": "Track inventory lots in order and compute FIFO cost for the sequence of sales totaling 436 units"
+    },
+    {
+     "id": "c4",
+     "title": "Part D loan amortization with extra payments",
+     "what": "Compute monthly amortization schedule for $12000 at 7.8% APR over 5 years with extra principal payments in months 2 and 13, find balance after month 18"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "D",
+     "A"
+    ],
+    "c2": [
+     "D",
+     "A"
+    ],
+    "c3": [
+     "B",
+     "C"
+    ],
+    "c4": [
+     "D",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Part A: 151 is prime, so by Fermat's little theorem 45^150\u22611 (mod 151), and 363=2\u00b7150+63, so 45^363\u226145^63 (mod 151). Using square-and-multiply mod 151: 45^2=62, 45^4=69, 45^8=80, 45^16=58, 45^32=42. Then 45^63=45^32\u00b745^16\u00b745^8\u00b745^4\u00b745^2\u00b745^1 mod 151, computed stepwise to give 9.\n\nPart B: Tiered cost: 100\u00d76.40=640.00; 200\u00d75.44=1088.00; 351\u00d74.48=1572.48. Subtotal=3300.48, exceeds $2,500 so 8% discount: 3300.48\u00d70.92=3036.4416. Add 6.5% tax: 3036.4416\u00d71.065=3233.810304 \u2192 $3233.81.\n\nPart C: Total units sold = 60+81+65+114+50+66=436. FIFO consumption: Lot1 64@4.26=272.64; Lot2 61@9.65=588.65; Lot3 139@4.48=622.72; Lot4 40@5.08=203.20; Lot5 61@10.92=666.12; Lot6 71@8.45=599.95 (64+61+139+40+61+71=436). Sum=272.64+588.65+622.72+203.20+666.12+599.95=2953.28.\n\nPart D: Monthly rate r=0.078/12=0.0065, n=60. Standard payment M=12000r/(1-(1+r)^-60)=242.16975. Balance after 18 months, including extra principal payments of $600 in month 2 and $750 in month 13:\nB18 = 12000(1+r)^18 \u2212 M[(1+r)^18\u22121]/r \u2212 600(1+r)^16 \u2212 750(1+r)^5 = 7435.64.\n\nFINAL: 9; 3233.81; 2953.28; 7435.64"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Using r=0.0065, the exact payment is approximately 242.16974, (1+r)^18\u22481.12369316, (1+r)^16\u22481.10922635, and (1+r)^5\u22481.03292009. Substitution gives B18\u22487435.67043, which rounds to 7435.67, not 7435.64."
+    },
+    {
+     "from": "D",
+     "problem": "The square-and-multiply result is asserted without showing the stepwise computation, and the exponent reduction 45^363 \u2261 45^63 is correct but the final residue 9 is unsupported and likely wrong."
+    },
+    {
+     "from": "D",
+     "problem": "The tier boundary is stated as 'beyond 300', so for 651 units the third tier should be 651 - 300 = 351 units. This is correct, but the draft does not explicitly justify why 351 is used rather than 651 - 100 - 200 = 351. This is a minor omission, not an error."
+    },
+    {
+     "from": "D",
+     "problem": "The draft asserts that Lot6 contributes 71 units at $8.45, but the total units sold is 436 and the cumulative units before Lot6 are 64+61+139+40+61 = 365, so the remaining needed is 436-365 = 71. This is correct. However, the sum of the listed costs is not shown step-by-step, and the final sum 2953.28 is asserted without intermediate addition. This is a minor omission, not an error."
+    },
+    {
+     "from": "D",
+     "problem": "The formula for remaining balance with extra principal payments is correct in structure, but the numerical result 7435.64 is asserted without showing the computed values of M, (1+r)^18, or the intermediate terms. The result is likely correct but unverifiable as written."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "Part A: Since 151 is prime, by Fermat's Little Theorem 45^150 \u2261 1 (mod 151). Thus, 45^363 \u2261 45^(363 mod 150) \u2261 45^63 (mod 151). Computing powers: 45^2 \u2261 62, 45^4 \u2261 69, 45^8 \u2261 80, 45^16 \u2261 58, 45^32 \u2261 42. Multiplying stepwise: 42\u00d758 \u2261 20, 20\u00d780 \u2261 90, 90\u00d769 \u2261 19, 19\u00d762 \u2261 121, 121\u00d745 = 5445 \u2261 9 (mod 151).\n\nPart B: Tiered pricing for 651 units: 100 \u00d7 $6.40 = $640.00; 200 \u00d7 $5.44 = $1088.00; (651 - 300) = 351 \u00d7 $4.48 = $1572.48. Subtotal = $3300.48. Since subtotal > $2,500, apply 8% discount: $3300.48 \u00d7 0.92 = $3036.4416. Adding 6.5% sales tax: $3036.4416 \u00d7 1.065 = $3233.8103... which rounds to $3233.81.\n\nPart C: Total units sold = 60 + 81 + 65 + 114 + 50 + 66 = 436 units. Using FIFO:\n- Lot 1: 64 @ $4.26 = $272.64\n- Lot 2: 61 @ $9.65 = $588.65\n- Lot 3: 139 @ $4.48 = $622.72\n- Lot 4: 40 @ $5.08 = $203.20\n- Lot 5: 61 @ $10.92 = $666.12\n- Lot 6: 71 @ $8.45 = $599.95\nTotal COGS = 272.64 + 588.65 + 622.72 + 203.20 + 666.12 + 599.95 = $2953.28.\n\nPart D: r = 0.078 / 12 = 0.0065. Monthly payment M = 12000 * 0.0065 / (1 - 1.0065^-60) \u2248 242.169746. Balance at month 18 without extra payments is 12000(1.0065)^18 - M((1.0065)^18 - 1)/0.0065 \u2248 8875.8755. Subtracting extra principal compounded to month 18: 600(1.0065)^16 \u2248 665.5358 and 750(1.0065)^5 \u2248 774.6901. Remaining balance = 8875.8755 - 665.5358 - 774.6901 = 7435.6704, rounding to $7435.67.\n\nFINAL: 9; 3233.81; 2953.28; 7435.67"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Part A: Since 151 is prime, by Fermat's Little Theorem 45^150 \u2261 1 (mod 151). Thus, 45^363 \u2261 45^(363 mod 150) \u2261 45^63 (mod 151). Computing powers: 45^2 \u2261 62, 45^4 \u2261 69, 45^8 \u2261 80, 45^16 \u2261 58, 45^32 \u2261 42. Multiplying stepwise: 42\u00d758 \u2261 20, 20\u00d780 \u2261 90, 90\u00d769 \u2261 19, 19\u00d762 \u2261 121, 121\u00d745 = 5445 \u2261 9 (mod 151).\n\nPart B: Tiered pricing for 651 units: 100 \u00d7 $6.40 = $640.00; 200 \u00d7 $5.44 = $1088.00; (651 - 300) = 351 \u00d7 $4.48 = $1572.48. Subtotal = $3300.48. Since subtotal > $2,500, apply 8% discount: $3300.48 \u00d7 0.92 = $3036.4416. Adding 6.5% sales tax: $3036.4416 \u00d7 1.065 = $3233.8103... which rounds to $3233.81.\n\nPart C: Total units sold = 60 + 81 + 65 + 114 + 50 + 66 = 436 units. Using FIFO:\n- Lot 1: 64 @ $4.26 = $272.64\n- Lot 2: 61 @ $9.65 = $588.65\n- Lot 3: 139 @ $4.48 = $622.72\n- Lot 4: 40 @ $5.08 = $203.20\n- Lot 5: 61 @ $10.92 = $666.12\n- Lot 6: 71 @ $8.45 = $599.95\nTotal COGS = 272.64 + 588.65 + 622.72 + 203.20 + 666.12 + 599.95 = $2953.28.\n\nPart D: r = 0.078 / 12 = 0.0065. Monthly payment M = 12000 * 0.0065 / (1 - 1.0065^-60) \u2248 242.169746. Balance at month 18 without extra payments is 12000(1.0065)^18 - M((1.0065)^18 - 1)/0.0065 \u2248 8875.8755. Subtracting extra principal compounded to month 18: 600(1.0065)^16 \u2248 665.5358 and 750(1.0065)^5 \u2248 774.6901. Remaining balance = 8875.8755 - 665.5358 - 774.6901 = 7435.6704, rounding to $7435.67.\n\nFINAL: 9; 3233.81; 2953.28; 7435.67"
+}

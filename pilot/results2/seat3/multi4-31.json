@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-31",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 130.8, expected 130.8 | ok: got '137/165', expected '137/165' | ok: got 16234.71, expected 16233.34 | ok: got 118.0, expected 118.0",
+ "error": null,
+ "seconds": 24.4,
+ "tokens": 4195,
+ "prompt_tokens": 396,
+ "completion_tokens": 3799,
+ "cost": 0.01454,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nLet the original price be $P$. Applying the successive percentage changes:\n$$P \\times (1 - 0.15) \\times (1 + 0.18) \\times (1 + 0.12)^3 = 184.32$$\n$$P \\times 0.85 \\times 1.18 \\times 1.404928 = 184.32$$\n$$P \\times 1.409142784 = 184.32 \\implies P \\approx 130.80$$\n\n**Part B**\nThe total number of ways to choose 3 marbles from 11 is $\\binom{11}{3} = 165$.\nThe only way no two marbles share a color is if exactly one marble of each color (Red, Green, Blue) is drawn, which can happen in $7 \\times 2 \\times 2 = 28$ ways.\nThe probability that at least two share a color is:\n$$1 - \\frac{28}{165} = \\frac{137}{165}$$\n\n**Part C**\nThe monthly interest rate is $r = \\frac{0.069}{12} = 0.00575$, with $n = 60$ months.\nThe regular monthly payment is:\n$$M = \\frac{24000 \\cdot r}{1 - (1+r)^{-60}} \\approx 474.08867$$\nThe remaining balance after month 18, accounting for the scheduled amortization and the extra principal payments compounded to month 18, is:\n$$B_{18} = 24000(1+r)^{18} - M\\frac{(1+r)^{18}-1}{r} - 600(1+r)^{16} - 750(1+r)^{1}$$\n$$B_{18} \\approx 17646.67 - 657.65 - 754.31 = 16234.71$$\n\n**Part D**\nSince 257 is prime, by Fermat's Little Theorem, $69^{256} \\equiv 1 \\pmod{257}$.\nThus, $69^{606} \\equiv 69^{606 \\bmod 256} \\equiv 69^{94} \\pmod{257}$.\nComputing powers modulo 257:\n- $69^2 = 4761 \\equiv 135 \\equiv -122 \\pmod{257}$\n- $69^4 \\equiv (-122)^2 = 14884 \\equiv -22 \\pmod{257}$\n- $69^8 \\equiv (-22)^2 = 484 \\equiv -30 \\pmod{257}$\n- $69^{16} \\equiv (-30)^2 = 900 \\equiv 129 \\equiv -128 = -2^7 \\pmod{257}$\n- $69^{32} \\equiv (-2^7)^2 = 2^{14} \\equiv -2^6 = -64 \\pmod{257}$ (since $2^8 \\equiv -1$)\n- $69^{64} \\equiv (-64)^2 = 2^{12} \\equiv -2^4 = -16 \\pmod{257}$\n\nCombining powers for $94 = 64 + 16 + 8 + 4 + 2$:\n- $69^{80} \\equiv (-16) \\times (-128) = 2^{11} \\equiv -8 \\pmod{257}$\n- $69^{88} \\equiv (-8) \\times (-30) = 240 \\equiv -17 \\pmod{257}$\n- $69^{92} \\equiv (-17) \\times (-22) = 374 \\equiv 117 \\pmod{257}$\n- $69^{94} \\equiv 117 \\times 135 = 15795 \\equiv 118 \\pmod{257}$\n\nFINAL: 130.80; 137/165; 16234.71; 118"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "logic2-35",
+ "type": "logic",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "got 'juice', expected 'juice'",
+ "error": null,
+ "seconds": 25.7,
+ "tokens": 10722,
+ "prompt_tokens": 6414,
+ "completion_tokens": 4308,
+ "cost": 0.00645,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Let the yellow house be position y. Since Ada is in yellow and Eli is immediately left of yellow, Eli is at y\u22121. Ben is next to the cat owner, and the cat owner is in yellow; because Eli occupies y\u22121, Ben must be at y+1.\n\nTesting possible positions:\n\n- y=3 fails because Cleo must be in position 1, forcing green at 2 and tea at 1, which would place blue at 2 as well.\n- y=4 fails because Ben would be in position 5, leaving no position for the fish owner immediately to his right.\n- Thus y=2: Eli is in house 1, Ada in 2, Ben in 3, Cleo in 4, and the horse/green house is 5. Tea is in house 3, coffee in house 2, and juice must be in the red house, which is house 1.\n\nFINAL: juice"
+}

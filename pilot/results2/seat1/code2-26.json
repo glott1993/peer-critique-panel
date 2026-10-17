@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 14.1,
- "tokens": 2018,
+ "seconds": 3.0,
+ "tokens": 666,
  "prompt_tokens": 340,
- "completion_tokens": 1678,
- "cost": 0.01746,
+ "completion_tokens": 326,
+ "cost": 0.00394,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nimport re\n\n_HEXDIGITS = set('0123456789abcdefABCDEF')\n\n\ndef _decode_component(s: str) -> str:\n    \"\"\"Decode a single query-string component: '+' -> space, %XX -> byte,\n    then interpret resulting bytes as UTF-8.\"\"\"\n    # First replace '+' with space (literal '+' characters, not part of %XX)\n    s = s.replace('+', ' ')\n\n    result = bytearray()\n    i = 0\n    n = len(s)\n    while i < n:\n        c = s[i]\n        if c == '%':\n            # need two more characters for hex digits\n            if i + 2 >= n:\n                raise ValueError(f\"Malformed percent-escape in query string: {s!r}\")\n            h1, h2 = s[i + 1], s[i + 2]\n            if h1 not in _HEXDIGITS or h2 not in _HEXDIGITS:\n                raise ValueError(f\"Malformed percent-escape in query string: {s!r}\")\n            result.append(int(h1 + h2, 16))\n            i += 3\n        else:\n            result.extend(c.encode('utf-8'))\n            i += 1\n\n    try:\n        return bytes(result).decode('utf-8')\n    except UnicodeDecodeError as e:\n        raise ValueError(f\"Invalid UTF-8 sequence in query string: {s!r}\") from e\n\n\ndef parse_query(qs: str) -> dict:\n    result: dict[str, list[str]] = {}\n\n    for pair in qs.split('&'):\n        if pair == '':\n            continue  # ignore empty pairs from '&&' or trailing '&'\n\n        if '=' in pair:\n            raw_key, raw_value = pair.split('=', 1)\n        else:\n            raw_key, raw_value = pair, ''\n\n        key = _decode_component(raw_key)\n        value = _decode_component(raw_value)\n\n        result.setdefault(key, []).append(value)\n\n    return result\n\n\n# --- visible example checks ---\nassert parse_query('a=1&b=2&a=3') == {'a': ['1', '3'], 'b': ['2']}\nassert parse_query('q=hello+world') == {'q': ['hello world']}\n```"
+ "answer": "```python\ndef parse_query(qs: str) -> dict:\n    def decode(s):\n        s = s.replace('+', ' ')\n        result = []\n        i = 0\n        n = len(s)\n        while i < n:\n            c = s[i]\n            if c == '%':\n                if i + 2 >= n or not all(ch in '0123456789abcdefABCDEF' for ch in s[i+1:i+3]):\n                    raise ValueError('Malformed percent-escape')\n                result.append(chr(int(s[i+1:i+3], 16)))\n                i += 3\n            else:\n                result.append(c)\n                i += 1\n        return ''.join(result)\n\n    result = {}\n    for pair in qs.split('&'):\n        if not pair:\n            continue\n        if '=' in pair:\n            k, v = pair.split('=', 1)\n        else:\n            k, v = pair, ''\n        k = decode(k)\n        v = decode(v)\n        result.setdefault(k, []).append(v)\n    return result\n```"
 }

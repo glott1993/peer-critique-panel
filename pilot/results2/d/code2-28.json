@@ -1,0 +1,111 @@
+{
+ "task_id": "code2-28",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 82.2,
+ "tokens": 32088,
+ "prompt_tokens": 22824,
+ "completion_tokens": 9264,
+ "cost": 0.0414,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "ISBN validation function",
+     "what": "Implement isbn_valid handling both 10-digit and 13-digit ISBN checksum rules."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "```python\ndef isbn_valid(s: str) -> bool:\n    t = s.replace('-', '').replace(' ', '')\n    if len(t) == 10:\n        if not t[:9].isdigit():\n            return False\n        if not (t[9].isdigit() or t[9] == 'X'):\n            return False\n        total = 0\n        for i, ch in enumerate(t):\n            val = 10 if ch == 'X' else int(ch)\n            total += (i + 1) * val\n        return total % 11 == 0\n    elif len(t) == 13:\n        if not t.isdigit():\n            return False\n        total = 0\n        for i, ch in enumerate(t):\n            weight = 1 if i % 2 == 0 else 3\n            total += weight * int(ch)\n        return total % 10 == 0\n    else:\n        return False\n```\n\nChecks:\n- `isbn_valid('0-306-40615-2')` \u2192 digits \"0306406152\", weighted sum = 1*0+2*3+3*0+4*6+5*4+6*0+7*6+8*1+9*5+10*2 = 0+6+0+24+20+0+42+8+45+20=165, 165%11=0 \u2192 True.\n- `isbn_valid('978-0-306-40615-7')` \u2192 digits \"9780306406157\", alternating 1,3 weights sum divisible by 10 (standard EAN-13 check digit algorithm, verifiable via ISBN-13 spec, e.g. Wikipedia \"International Standard Book Number\").\n- Lowercase 'x' fails the `t[9] == 'X'` check, correctly invalid."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "`str.isdigit()` accepts some non-ASCII characters, and certain accepted characters such as `'\u00b2'` cannot be passed to `int()`, so inputs like `'00000000\u00b20'` can raise `ValueError` instead of returning `False`. Other Unicode digits may also be accepted even though ISBNs use ASCII digits."
+    },
+    {
+     "from": "D",
+     "problem": "The draft does not handle empty strings or strings with only hyphens/spaces. For example, isbn_valid('') returns False, which is correct per spec, but isbn_valid('---') also returns False. However, the spec says 'Remove hyphens and spaces' first, so '---' becomes '' and should be invalid. The draft does this correctly, but a hidden test might check that removing hyphens/spaces from a string like '0-306-40615-2 ' (trailing space) works. The draft does handle this because replace(' ', '') removes all spaces. So this is not a real issue."
+    },
+    {
+     "from": "D",
+     "problem": "The draft rejects lowercase 'x' in the last position of a 10-character ISBN, as required. However, the spec says 'the last is a digit or 'X' (worth 10)'. It does not explicitly say that 'X' is only allowed in the last position. The draft only checks t[9] for 'X'. If a 10-character string has 'X' in positions 0-8, t[:9].isdigit() returns False, so it is rejected. This is correct because the first nine must be digits. So no bug."
+    },
+    {
+     "from": "D",
+     "problem": "The draft uses weights 1 and 3 starting with 1 for position 0 (i=0). The spec says 'weighted alternately 1 and 3, starting with 1'. This is standard for ISBN-13. The visible example '978-0-306-40615-7' passes. However, the spec does not explicitly say that the check digit is the last digit, but the standard algorithm implies that. The draft computes total over all 13 digits and checks divisibility by 10. This is correct. No bug."
+    },
+    {
+     "from": "D",
+     "problem": "The draft returns False for lengths other than 10 or 13 after removing hyphens and spaces. This is correct per spec 'Anything else is invalid.' However, the spec says 'A 10-character ISBN' and 'A 13-character ISBN'. What about a string that becomes 10 or 13 characters after removing hyphens and spaces but originally had other characters like tabs or newlines? The spec only says remove hyphens and spaces, not tabs or newlines. So '0\t306\t40615\t2' would not have tabs removed, length would be >10, and return False. This is correct because tabs are not hyphens or spaces. No bug."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    t = s.replace('-', '').replace(' ', '')\n    if len(t) == 10:\n        if not all('0' <= c <= '9' for c in t[:9]):\n            return False\n        if not (('0' <= t[9] <= '9') or t[9] == 'X'):\n            return False\n        total = 0\n        for i, ch in enumerate(t):\n            val = 10 if ch == 'X' else int(ch)\n            total += (i + 1) * val\n        return total % 11 == 0\n    elif len(t) == 13:\n        if not all('0' <= c <= '9' for c in t):\n            return False\n        total = 0\n        for i, ch in enumerate(t):\n            weight = 1 if i % 2 == 0 else 3\n            total += weight * int(ch)\n        return total % 10 == 0\n    else:\n        return False\n```\n\nThis revision replaces `str.isdigit()` with explicit ASCII digit checks, so Unicode digits or superscripts cannot cause exceptions or false acceptance."
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    t = s.replace('-', '').replace(' ', '')\n    if len(t) == 10:\n        if not all('0' <= c <= '9' for c in t[:9]):\n            return False\n        if not (('0' <= t[9] <= '9') or t[9] == 'X'):\n            return False\n        total = 0\n        for i, ch in enumerate(t):\n            val = 10 if ch == 'X' else int(ch)\n            total += (i + 1) * val\n        return total % 11 == 0\n    elif len(t) == 13:\n        if not all('0' <= c <= '9' for c in t):\n            return False\n        total = 0\n        for i, ch in enumerate(t):\n            weight = 1 if i % 2 == 0 else 3\n            total += weight * int(ch)\n        return total % 10 == 0\n    else:\n        return False\n```\n\nThis revision replaces `str.isdigit()` with explicit ASCII digit checks, so Unicode digits or superscripts cannot cause exceptions or false acceptance."
+}

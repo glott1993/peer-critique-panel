@@ -1,0 +1,115 @@
+{
+ "task_id": "code2-23",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 68.0,
+ "tokens": 43814,
+ "prompt_tokens": 31718,
+ "completion_tokens": 12096,
+ "cost": 0.06588,
+ "calls": 17,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Parse and validate ISO 8601 duration",
+     "what": "Implement parse_iso_duration with regex validation and component extraction, then convert to seconds."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    pattern = re.compile(\n        r'^P'\n        r'(?:(?P<years>\\d+)Y)?'\n        r'(?:(?P<months>\\d+)M)?'\n        r'(?:(?P<days>\\d+)D)?'\n        r'(?:T'\n        r'(?:(?P<hours>\\d+)H)?'\n        r'(?:(?P<minutes>\\d+)M)?'\n        r'(?:(?P<seconds>\\d+)S)?'\n        r')?$'\n    )\n    match = pattern.fullmatch(s)\n    if not match:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    groups = match.groupdict()\n    values = {k: int(v) if v is not None else 0 for k, v in groups.items()}\n\n    has_date = any(groups[k] is not None for k in ('years', 'months', 'days'))\n    has_time = any(groups[k] is not None for k in ('hours', 'minutes', 'seconds'))\n\n    if not has_date and not has_time:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n    if 'T' in s and not has_time:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    total_seconds = (\n        values['years'] * 365 * 86400 +\n        values['months'] * 30 * 86400 +\n        values['days'] * 86400 +\n        values['hours'] * 3600 +\n        values['minutes'] * 60 +\n        values['seconds']\n    )\n    return total_seconds\n```\n\nThe regex uses `fullmatch` and named groups to enforce uppercase, integer-only values, and the required `Y M D T H M S` order. The explicit checks reject `P`, `PT`, and any `T` without a following time component."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Named groups 'hours' and 'minutes' collide with date group names... actually 'minutes' is fine, but note regex reuses group name 'months' vs 'minutes' - check for duplicate group name errors; more critically, re module raises error if two groups share the same name, which they don't here, but verify 'M' appears twice as literal (months, minutes) which is fine since names differ - but this needs actual execution to confirm no re.error."
+    },
+    {
+     "from": "A",
+     "problem": "For input 'PT' the regex will actually fail to fullmatch at the 'T' empty-time stage only if T group is optional and empty time components allowed - but regex allows T with zero sub-matches, so 'PT' matches regex with all groups None, then has_date=False, has_time=False, correctly raises. But 'P' alone: does the regex fullmatch success with all groups None, triggering the same check? Yes, should work. But what about input 'T1H' missing leading P - regex requires literal P first so fullmatch fails correctly. Seems fine, but the 'T' in s check for has_time is fragile: a malformed string like 'P1YT' would match regex (T with no time groups), has_date=True, has_time=False, and 'T' in s is True -> raises correctly. But what about numeral T edge: nothing broken here."
+    },
+    {
+     "from": "A",
+     "problem": "Regex \\d+ won't match decimal points, so '1.5H' fails regex entirely producing ValueError - correct. But no test for negative sign: '-1' won't match \\d+ so fine. However, the regex does not anchor against trailing garbage after seconds, e.g. 'P1DT1H1' (missing unit) - does fullmatch correctly reject trailing '1'? pattern ends with $ after optional seconds group, so trailing unmatched digits like extra characters would fail fullmatch - good, but needs testing."
+    },
+    {
+     "from": "A",
+     "problem": "This substring check conflates the T uppercase designator with any character; also fails for inputs where group 'T' exists but with content, e."
+    },
+    {
+     "from": "B",
+     "problem": "The `\\d` character class also matches Unicode decimal digits, so inputs such as `P\u0661D` or `PT\uff11S` can be accepted, despite ISO duration syntax conventionally requiring ASCII digits. The draft's explanation that it enforces the intended integer format is therefore too broad."
+    },
+    {
+     "from": "B",
+     "problem": "If hidden tests pass a non-string (for example `None` or `123`), `re.Pattern.fullmatch` raises `TypeError`, not `ValueError`. The request annotates `s` as `str`, so this is only an issue if \u201cotherwise\u201d includes wrong input types."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 4,
+   "rejected": 2,
+   "answer": "```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    pattern = re.compile(\n        r'^P'\n        r'(?:(?P<years>[0-9]+)Y)?'\n        r'(?:(?P<months>[0-9]+)M)?'\n        r'(?:(?P<days>[0-9]+)D)?'\n        r'(?P<T>T'\n        r'(?:(?P<hours>[0-9]+)H)?'\n        r'(?:(?P<minutes>[0-9]+)M)?'\n        r'(?:(?P<seconds>[0-9]+)S)?'\n        r')?$'\n    )\n    match = pattern.fullmatch(s)\n    if not match:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    groups = match.groupdict()\n    values = {k: int(v) if v is not None else 0 for k, v in groups.items() if k != 'T'}\n\n    has_date = any(groups[k] is not None for k in ('years', 'months', 'days'))\n    has_time = any(groups[k] is not None for k in ('hours', 'minutes', 'seconds'))\n\n    if not has_date and not has_time:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n    if groups['T'] is not None and not has_time:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    total_seconds = (\n        values['years'] * 365 * 86400 +\n        values['months'] * 30 * 86400 +\n        values['days'] * 86400 +\n        values['hours'] * 3600 +\n        values['minutes'] * 60 +\n        values['seconds']\n    )\n    return total_seconds\n```\nFixed the `T` detection to use the matched group instead of a substring check, and restricted digits to `[0-9]+` to reject Unicode digit variants. Added an `isinstance` check so non-string inputs raise `ValueError` instead of `TypeError`. The regex still correctly rejects trailing garbage via `fullmatch` and `$` anchor, and duplicate group names ('months'/'minutes') are not an issue since Python only forbids identical names, which these aren't."
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\nimport re\n\ndef parse_iso_duration(s: str) -> int:\n    if not isinstance(s, str):\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    pattern = re.compile(\n        r'^P'\n        r'(?:(?P<years>[0-9]+)Y)?'\n        r'(?:(?P<months>[0-9]+)M)?'\n        r'(?:(?P<days>[0-9]+)D)?'\n        r'(?P<T>T'\n        r'(?:(?P<hours>[0-9]+)H)?'\n        r'(?:(?P<minutes>[0-9]+)M)?'\n        r'(?:(?P<seconds>[0-9]+)S)?'\n        r')?$'\n    )\n    match = pattern.fullmatch(s)\n    if not match:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    groups = match.groupdict()\n    values = {k: int(v) if v is not None else 0 for k, v in groups.items() if k != 'T'}\n\n    has_date = any(groups[k] is not None for k in ('years', 'months', 'days'))\n    has_time = any(groups[k] is not None for k in ('hours', 'minutes', 'seconds'))\n\n    if not has_date and not has_time:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n    if groups['T'] is not None and not has_time:\n        raise ValueError(f\"Invalid ISO 8601 duration: {s!r}\")\n\n    total_seconds = (\n        values['years'] * 365 * 86400 +\n        values['months'] * 30 * 86400 +\n        values['days'] * 86400 +\n        values['hours'] * 3600 +\n        values['minutes'] * 60 +\n        values['seconds']\n    )\n    return total_seconds\n```\nFixed the `T` detection to use the matched group instead of a substring check, and restricted digits to `[0-9]+` to reject Unicode digit variants. Added an `isinstance` check so non-string inputs raise `ValueError` instead of `TypeError`. The regex still correctly rejects trailing garbage via `fullmatch` and `$` anchor, and duplicate group names ('months'/'minutes') are not an issue since Python only forbids identical names, which these aren't."
+}

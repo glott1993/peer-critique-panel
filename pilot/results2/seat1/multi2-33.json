@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "ok: got '19/28', expected '19/28' | ok: got 6575.43, expected 6575.43 | ok: got '2026-11-27', expected '2026-11-27'",
  "error": null,
- "seconds": 44.9,
- "tokens": 6560,
+ "seconds": 23.9,
+ "tokens": 3596,
  "prompt_tokens": 593,
- "completion_tokens": 5967,
- "cost": 0.06086,
+ "completion_tokens": 3003,
+ "cost": 0.03122,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Part A\n\nTotal marbles = 8, choose 3: C(8,3) = 56\n\nP(all different colors) = need one of each color: 3 red \u00d7 3 green \u00d7 2 blue = 18 ways\nP(all different) = 18/56 = 9/28\n\nP(at least two share a color) = 1 \u2212 9/28 = **19/28**\n\n# Part B\n\nStarting balance: $2500.00. Each month: apply transaction \u2192 check <$1000 (no fee needed, since balance never drops below $1000) \u2192 add 0.4% interest (rounded to cent).\n\n| Month | Txn | After Txn | Interest | New Balance |\n|---|---|---|---|---|\n|1|+700|3200.00|12.80|3212.80|\n|2|+700|3912.80|15.65|3928.45|\n|3|+300|4228.45|16.91|4245.36|\n|4|\u2212900|3345.36|13.38|3358.74|\n|5|+700|4058.74|16.23|4074.97|\n|6|+700|4774.97|19.10|4794.07|\n|7|+300|5094.07|20.38|5114.45|\n|8|+1100|6214.45|24.86|6239.31|\n|9|+300|6539.31|26.16|6565.47|\n|10|\u2212250|6315.47|25.26|6340.73|\n|11|+300|6640.73|26.56|6667.29|\n|12|+300|6967.29|27.87|6995.16|\n|13|\u2212400|6595.16|26.38|6621.54|\n|14|+300|6921.54|27.69|6949.23|\n|15|\u2212400|6549.23|26.20|6575.43|\n\nFinal balance: **$6575.43**\n\n# Part C\n\n2026-07-19 is a Sunday (verified via day-count from 2026-01-01, a Thursday).\nSo 2026-07-20 is Monday \u2014 but it's a holiday, skipped.\n\nCounting business days (Mon\u2013Fri, skipping holidays) week by week from 2026-07-20:\n\n- Jul20\u201324 (holiday Jul20): 4 \u2192 cum 4\n- Jul27\u201331: 5 \u2192 cum 9\n- Aug3\u20137 (holiday Aug7): 4 \u2192 cum 13\n- Aug10\u201314: 5 \u2192 cum 18\n- Aug17\u201321: 5 \u2192 cum 23\n- Aug24\u201328 (holiday Aug25): 4 \u2192 cum 27\n- Aug31\u2013Sep4: 5 \u2192 cum 32\n- Sep7\u201311: 5 \u2192 cum 37\n- Sep14\u201318 (holiday Sep16): 4 \u2192 cum 41\n- Sep21\u201325: 5 \u2192 cum 46\n- Sep28\u2013Oct2: 5 \u2192 cum 51\n- Oct5\u20139: 5 \u2192 cum 56\n- Oct12\u201316: 5 \u2192 cum 61\n- Oct19\u201323: 5 \u2192 cum 66\n- Oct26\u201330 (holiday Oct28): 4 \u2192 cum 70\n- Nov2\u20136: 5 \u2192 cum 75\n- Nov9\u201313 (holiday Nov11): 4 \u2192 cum 79\n- Nov16\u201320: 5 \u2192 cum 84\n- Nov23\u201327: 5 \u2192 cum 89 \u2713 (Nov27 = 89th business day, a Friday)\n\nResult: **2026-11-27**\n\nFINAL: 19/28; 6575.43; 2026-11-27"
+ "answer": "Part A: C(8,3)=56 total; all-distinct-color = 3\u00b73\u00b72=18; P(at least two same)=1-18/56=19/28.\n\nPart B: Stepping month by month (deposit/withdraw, then fee if <1000, then +0.4% interest, rounding to cent):\nM1:3212.80 M2:3928.45 M3:4245.36 M4:3358.74 M5:4074.97 M6:4794.07 M7:5114.45 M8:6239.31 M9:6565.47 M10:6340.73 M11:6667.29 M12:6995.16 M13:6621.54 M14:6949.23 M15:6575.43\n\nPart C: Counting forward from 2026-07-19, skipping weekends and holidays, the 89th business day lands on 2026-11-27.\n\nFINAL: 19/28; 6575.43; 2026-11-27"
 }

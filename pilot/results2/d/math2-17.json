@@ -1,0 +1,121 @@
+{
+ "task_id": "math2-17",
+ "type": "math",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 2617.31, expected 2617.31",
+ "error": null,
+ "seconds": 78.2,
+ "tokens": 65242,
+ "prompt_tokens": 48504,
+ "completion_tokens": 16738,
+ "cost": 0.08761,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Classify daily hours into reg/OT/DT",
+     "what": "For each day split hours into regular (\u22648), 1.5x (8-12), and 2x (>12) categories."
+    },
+    {
+     "id": "c2",
+     "title": "Sum hours by pay category",
+     "what": "Total regular hours=80, 1.5x hours=16.5, 2x hours=0.5 across the 14 days."
+    },
+    {
+     "id": "c3",
+     "title": "Compute and round gross pay",
+     "what": "Multiply each category by rate ($24.75, $37.125, $49.50), sum to get 2617.3125, and round to nearest cent ($2617.31)."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "C",
+     "B"
+    ],
+    "c2": [
+     "C",
+     "B"
+    ],
+    "c3": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "To determine the gross pay, we break down daily hours into three tiers:\n- **Regular (1.0\u00d7):** up to 8 hours per day\n- **Overtime (1.5\u00d7):** hours over 8 up to 12\n- **Double Time (2.0\u00d7):** hours over 12\n\nNote: c1 miscounted the working days as 9 instead of 10 (resulting in 72 regular hours and an incorrect sum of 89 hours). As c2 and c3 correctly show, there are 10 working days, each contributing 8 regular hours, for a total of 97 hours ($12.5 + 11 + 9 + 8 + 11 + 10 + 9 + 9 + 9.5 + 8 = 97$).\n\n**Daily Breakdown:**\n- Day 1 (0h): 0 reg, 0 OT, 0 DT\n- Day 2 (12.5h): 8 reg, 4 OT, 0.5 DT\n- Day 3 (11h): 8 reg, 3 OT, 0 DT\n- Day 4 (9h): 8 reg, 1 OT, 0 DT\n- Day 5 (8h): 8 reg, 0 OT, 0 DT\n- Day 6 (0h): 0 reg, 0 OT, 0 DT\n- Day 7 (0h): 0 reg, 0 OT, 0 DT\n- Day 8 (11h): 8 reg, 3 OT, 0 DT\n- Day 9 (10h): 8 reg, 2 OT, 0 DT\n- Day 10 (9h): 8 reg, 1 OT, 0 DT\n- Day 11 (9h): 8 reg, 1 OT, 0 DT\n- Day 12 (9.5h): 8 reg, 1.5 OT, 0 DT\n- Day 13 (0h): 0 reg, 0 OT, 0 DT\n- Day 14 (8h): 8 reg, 0 OT, 0 DT\n\n**Category Totals:**\n- Regular (1.0\u00d7): $10 \\text{ days} \\times 8 = 80\\text{ hours}$\n- Overtime (1.5\u00d7): $4 + 3 + 1 + 3 + 2 + 1 + 1 + 1.5 = 16.5\\text{ hours}$\n- Double time (2.0\u00d7): $0.5\\text{ hours}$\n- Sum check: $80 + 16.5 + 0.5 = 97\\text{ hours}$\n\n**Gross Pay Computation:**\n- Regular: $80 \\times 24.75 = 1980.00$\n- Overtime: $16.5 \\times (1.5 \\times 24.75) = 16.5 \\times 37.125 = 612.5625$\n- Double time: $0.5 \\times (2.0 \\times 24.75) = 0.5 \\times 49.50 = 24.75$\n\nTotal = $1980.00 + 612.5625 + 24.75 = 2617.3125$, which rounds to 2617.31.\n\nFINAL: 2617.31"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The draft's own listed daily breakdown and category totals are internally inconsistent: the breakdown lists Day 2 (12.5h) as 8 reg, 4 OT, 0.5 DT, but the category totals sum OT as 16.5 hours. Recomputing OT from the breakdown gives 4+3+1+3+2+1+1+1.5 = 16.5, which is correct, but the double-time entry of 0.5 hours is omitted from the 'Sum check' equation shown as 80 + 16.5 + 0.5 = 97; that equation is arithmetically correct (97), so no error there. However, the draft's stated 'Sum check' is fine. The real issue is elsewhere."
+    },
+    {
+     "from": "D",
+     "problem": "The draft's arithmetic for the final total is wrong. The draft computes Regular = 80 \u00d7 24.75 = 1980.00, Overtime = 16.5 \u00d7 37.125 = 612.5625, Double time = 0.5 \u00d7 49.50 = 24.75, and then states Total = 1980.00 + 612.5625 + 24.75 = 2617.3125, which rounds to 2617.31. But 1980.00 + 612.5625 + 24.75 = 2617.3125 is correct. No arithmetic error there."
+    },
+    {
+     "from": "D",
+     "problem": "The draft's final answer is correct, and all internal arithmetic checks out. There is no substantive error in the draft's computation. The only possible issue is that the draft's note about 'c1 miscounted' and 'c2 and c3 correctly show' is irrelevant meta-commentary, but it does not affect the answer."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 2,
+   "answer": "Breaking hours into tiers: Regular \u22648/day, OT 1.5\u00d7 for hours over 8 up to 12, DT 2\u00d7 for hours over 12.\n\nDaily breakdown (reg, OT, DT):\n0h:0,0,0 | 12.5h:8,4,0.5 | 11h:8,3,0 | 9h:8,1,0 | 8h:8,0,0 | 0h:0,0,0 | 0h:0,0,0 | 11h:8,3,0 | 10h:8,2,0 | 9h:8,1,0 | 9h:8,1,0 | 9.5h:8,1.5,0 | 0h:0,0,0 | 8h:8,0,0\n\nTotals: Regular = 10 days \u00d7 8 = 80h. OT = 4+3+1+3+2+1+1+1.5 = 16.5h. DT = 0.5h. Check: 80+16.5+0.5=97, matches sum of hours (0+12.5+11+9+8+0+0+11+10+9+9+9.5+0+8=97).\n\nPay: Regular = 80\u00d724.75 = 1980.00\nOT = 16.5\u00d737.125 = 612.5625\nDT = 0.5\u00d749.50 = 24.75\n\nTotal = 1980.00+612.5625+24.75 = 2617.3125 \u2192 2617.31\n\nFINAL: 2617.31"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Breaking hours into tiers: Regular \u22648/day, OT 1.5\u00d7 for hours over 8 up to 12, DT 2\u00d7 for hours over 12.\n\nDaily breakdown (reg, OT, DT):\n0h:0,0,0 | 12.5h:8,4,0.5 | 11h:8,3,0 | 9h:8,1,0 | 8h:8,0,0 | 0h:0,0,0 | 0h:0,0,0 | 11h:8,3,0 | 10h:8,2,0 | 9h:8,1,0 | 9h:8,1,0 | 9.5h:8,1.5,0 | 0h:0,0,0 | 8h:8,0,0\n\nTotals: Regular = 10 days \u00d7 8 = 80h. OT = 4+3+1+3+2+1+1+1.5 = 16.5h. DT = 0.5h. Check: 80+16.5+0.5=97, matches sum of hours (0+12.5+11+9+8+0+0+11+10+9+9+9.5+0+8=97).\n\nPay: Regular = 80\u00d724.75 = 1980.00\nOT = 16.5\u00d737.125 = 612.5625\nDT = 0.5\u00d749.50 = 24.75\n\nTotal = 1980.00+612.5625+24.75 = 2617.3125 \u2192 2617.31\n\nFINAL: 2617.31"
+}

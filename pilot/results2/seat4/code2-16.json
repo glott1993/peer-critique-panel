@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-16",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 986.4,
+ "tokens": 72015,
+ "prompt_tokens": 628,
+ "completion_tokens": 71387,
+ "cost": 0.35709,
+ "calls": 2,
+ "call_errors": 1,
+ "answer": "```python\ndef satisfies(version: str, spec: str) -> bool:\n    def parse_version(v: str):\n        if not isinstance(v, str):\n            raise ValueError(\"malformed version\")\n        parts = v.split('.')\n        if len(parts) != 3:\n            raise ValueError(\"malformed version\")\n        nums = []\n        for p in parts:\n            if not p or any(ch not in '0123456789' for ch in p):\n                raise ValueError(\"malformed version\")\n            if len(p) > 1 and p[0] == '0':\n                raise ValueError(\"malformed version\")\n            nums.append(int(p))\n        return tuple(nums)\n\n    def parse_comparator(token: str):\n        for op in ('>=', '<=', '>', '<', '='):\n            if token.startswith(op):\n                base = parse_version(token[len(op):])\n                return op, base\n        raise ValueError(\"malformed spec\")\n\n    def cmp_op(v, op, base):\n        if op == '>=':\n            return v >= base\n        if op == '>':\n            return v > base\n        if op == '<=':\n            return v <= base\n        if op == '<':\n            return v < base\n        if op == '=':\n            return v == base\n        raise ValueError(\"malformed spec\")\n\n    ver = parse_version(version)\n    spec = spec.strip()\n    if not spec:\n        raise ValueError(\"malformed spec\")\n\n    # caret or tilde range\n    if spec[0] in '^~':\n        if ' ' in spec:\n            raise ValueError(\"malformed spec\")\n        base = parse_version(spec[1:])\n        if spec[0] == '^':\n            if base[0] > 0:\n                upper = (base[0] + 1, 0, 0)\n            elif base[1] > 0:\n                upper = (0, base[1] + 1, 0)\n            else:\n                return ver == base\n            return base <= ver < upper\n        else:  # tilde\n            upper = (base[0], base[1] + 1, 0)\n            return base <= ver < upper\n\n    # space-separated conjunction of comparators\n    if ' ' in spec:\n        tokens = spec.split()\n        for token in tokens:\n            op, base = parse_comparator(token)\n            if not cmp_op(ver, op, base):\n                return False\n        return True\n\n    # single comparator or exact version\n    for op in ('>=', '<=', '>', '<', '='):\n        if spec.startswith(op):\n            base = parse_version(spec[len(op):])\n            return cmp_op(ver, op, base)\n\n    # exact version\n    base = parse_version(spec)\n    return ver == base\n```"
+}

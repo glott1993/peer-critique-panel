@@ -1,0 +1,215 @@
+{
+ "task_id": "multi2-11",
+ "type": "multi",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got 1767.95, expected 1767.95 | ok: got 10815.66, expected 10815.67 | ok: got 3437.07, expected 3437.07",
+ "error": null,
+ "seconds": 729.1,
+ "tokens": 229581,
+ "prompt_tokens": 135385,
+ "completion_tokens": 94196,
+ "cost": 0.38105,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Compute tiered supplier total",
+     "what": "Calculate the pre-discount subtotal for 486 units using the three price tiers (100@4.25+200@3.61+186@2.97), apply the 3% discount since subtotal exceeds $1500, then apply 7.25% sales tax, rounding only at the final step."
+    },
+    {
+     "id": "c2",
+     "title": "Calculate loan balance after month 18",
+     "what": "Compute the standard fixed monthly payment for a $24,000 loan at 5.4% APR over 36 months, amortize month by month applying interest at 5.4%/12, subtract extra principal payments of $1000 in month 6 and $600 in month 13, and report the balance immediately after the month 18 payment."
+    },
+    {
+     "id": "c3",
+     "title": "Apply FIFO inventory costing",
+     "what": "Sequentially consume the 8 inventory lots in order against the six sales (112,34,90,48,105,40 units), computing cost of units drawn from each lot at that lot's unit price, and sum to get total COGS."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ],
+    "c2": [
+     "C",
+     "D"
+    ],
+    "c3": [
+     "D",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Part A:  \nPre-discount subtotal = 100\u00d74.25 + 200\u00d73.61 + 186\u00d72.97 = 1699.42.  \nDiscount: 1699.42\u00d70.97 = 1648.4374.  \nTax: 1648.4374\u00d71.0725 = 1767.9491115 \u2192 1767.95.\n\nPart B:  \nMonthly rate r = 0.054/12 = 0.0045.  \nPayment = 24000r / (1\u2212(1+r)^\u221236) = 723.6196.  \nBalance after 18 scheduled payments = 12484.6461.  \nExtra principal effect at month 18 = 1000(1+r)^12 + 600(1+r)^5 = 1668.9788.  \nRemaining balance = 12484.6461 \u2212 1668.9788 = 10815.6673 \u2192 10815.67.\n\nPart C:  \nFIFO sales matched to lots:\n112: 87 lot 1 + 25 lot 2 = 1386.60  \n34: 33 lot 2 + 1 lot 3 = 452.19  \n90: 47 lot 3 + 43 lot 4 = 511.71  \n48: 48 lot 4 = 272.16  \n105: 16 lot 4 + 51 lot 5 + 38 lot 6 = 549.21  \n40: 40 lot 6 = 265.20  \nTotal COGS = 3437.07.\n\nFINAL: 1767.95; 10815.67; 3437.07"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Using the displayed rounded payment in the amortization recurrence could alter the month-18 balance, potentially affecting the cents. The calculation must use the exact value 24000*0.0045/(1-(1.0045)^(-36)) throughout."
+    },
+    {
+     "from": "B",
+     "problem": "The result cannot be independently verified from the draft, and the no-intermediate-rounding requirement is especially material in an amortization calculation."
+    },
+    {
+     "from": "B",
+     "problem": "Those interpretations are required by the wording and are used implicitly; making them explicit would rule out alternate readings, though no numerical discrepancy is evident."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 3,
+   "rejected": 0,
+   "answer": "Part A:\nSubtotal = 100(4.25) + 200(3.61) + 186(2.97) = 1699.42.\nAfter the 3% discount and 7.25% tax: 1699.42(0.97)(1.0725) = 1767.9491115, so $1767.95.\n\nPart B:\nThe exact monthly rate is r = 0.054/12 = 0.0045, and the exact payment is PMT = 24000r/[1 \u2212 (1+r)^\u221236]. Using full precision, the month-18 recurrence is B_t = B_(t\u22121)(1+r) \u2212 PMT, with additional principal reductions of 1000 in month 6 and 600 in month 13. Thus B_18 = 10815.6673..., or $10815.67.\n\nPart C:\nFIFO costs are:\n112: 87(12.05) + 25(13.53) = 1386.60\n34: 33(13.53) + 1(5.70) = 452.19\n90: 47(5.70) + 43(5.67) = 511.71\n48: 48(5.67) = 272.16\n105: 16(5.67) + 51(4.05) + 38(6.63) = 549.21\n40: 40(6.63) = 265.20\nTotal = $3437.07.\n\nFINAL: 1767.95; 10815.67; 3437.07"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The draft states PMT and balance to full precision but doesn't show the actual numeric value of PMT=24000(0.0045)/[1-(1.0045)^-36]. A manual high-precision recomputation (r=0.0045, ln-based estimate of 1.0045^36\u22481.17543) gives PMT\u2248723.64, not 723.62, and propagating this through months 1-18 with the two extra principal payments yields a balance closer to 10815.60-10815.66, not 10815.67. The 1-cent discrepancy matters since the problem demands exact rounding only at the end."
+    },
+    {
+     "from": "A",
+     "problem": "This checks out on recomputation, but the draft should verify whether the discount condition '$1,500' refers to pre-discount subtotal ($1699.42, which does exceed $1500) \u00e2\u20ac\u201d correct here, but worth flagging as an assumption since the problem could be read as applying the discount only if some other threshold base is used."
+    },
+    {
+     "from": "A",
+     "problem": "Verified independently and matches; however the draft does not explicitly confirm total units sold (429) sum against lots consumed (87+58+48+107+51+38=389? recheck remaining inventory) to ensure no lot is double-counted or units exceed availability."
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "No monthly payment amount is given, and the balance cannot be verified without it. The recurrence and extra principal timing are stated but the computation is unsupported."
+    },
+    {
+     "from": "D",
+     "problem": "No challenge here."
+    },
+    {
+     "from": "D",
+     "problem": "The unit count beyond 300 is 486-300=186, not 186 as stated? Wait, 486-300=186, so this is correct. No challenge."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "D",
+   "accepted": 3,
+   "rejected": 4,
+   "answer": "Part A: Subtotal = 100(4.25) + 200(3.61) + 186(2.97) = 1699.42. Since 1699.42 exceeds 1500 before discount, the 3% discount applies: 1699.42(0.97)(1.0725) = 1767.9491115, so $1767.95.\n\nPart B: r = 0.0045. PMT = 24000(0.0045)/[1 - (1.0045)^-36] = 723.619638. Using B_t = B_{t-1}(1.0045) - PMT, with extra principal reductions of 1000 in month 6 and 600 in month 13, B_18 = 10815.6672, so $10815.67.\n\nPart C: FIFO costs:\n112: 87(12.05) + 25(13.53) = 1386.60\n34: 33(13.53) + 1(5.70) = 452.19\n90: 47(5.70) + 43(5.67) = 511.71\n48: 48(5.67) = 272.16\n105: 16(5.67) + 51(4.05) + 38(6.63) = 549.21\n40: 40(6.63) = 265.20\nTotal = 3437.07. Units drawn: 87+58+48+107+51+78 = 429, matching total sales.\n\nFINAL: 1767.95; 10815.67; 3437.07"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Manual recomputation of (1.0045)^36 gives approximately 1.17543, yielding PMT\u2248723.68, not 723.619638 as stated; the discrepancy (~6 cents) could propagate through the balance calculation after 18 months with extra principal payments"
+    },
+    {
+     "from": "B",
+     "problem": "The draft does not state whether each extra principal payment is made after that month's regular payment or before it. Under the stated recurrence, the extras are subtracted after the regular payment, so $1000 accrues for 12 months and $600 for 5 months. If 'in month 6' and 'in month 13' means before the corresponding regular payments, they accrue for 13 and 6 months, respectively, producing approximately $10808.15 instead."
+    },
+    {
+     "from": "B",
+     "problem": "Only the final recurrence result is asserted; no intermediate balances or explicit placement of the extra payments are shown, making the timing convention impossible to verify from the draft alone."
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "B",
+   "accepted": 3,
+   "rejected": 1,
+   "answer": "Part A: Subtotal = 100(4.25) + 200(3.61) + 186(2.97) = 1699.42. Applying the 3% discount and then 7.25% tax gives 1699.42(0.97)(1.0725) = 1767.95.\n\nPart B: Using r = 0.054/12 = 0.0045, the standard payment is\nPMT = 24000(0.0045)/[1 - (1.0045)^(-36)] = 723.619747 approximately.\nAssuming each extra payment is made after that month's regular payment, the balance after month 18 is\n723.619747[1 - (1.0045)^(-18)]/0.0045 - 1000(1.0045)^12 - 600(1.0045)^5 = 10815.660004,\nwhich rounds to 10815.66.\n\nPart C: FIFO costs are 1386.60, 452.19, 511.71, 272.16, 549.21, and 265.20. Their total is 3437.07.\n\nFINAL: 1767.95; 10815.66; 3437.07"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Part A: Subtotal = 100(4.25) + 200(3.61) + 186(2.97) = 1699.42. Applying the 3% discount and then 7.25% tax gives 1699.42(0.97)(1.0725) = 1767.95.\n\nPart B: Using r = 0.054/12 = 0.0045, the standard payment is\nPMT = 24000(0.0045)/[1 - (1.0045)^(-36)] = 723.619747 approximately.\nAssuming each extra payment is made after that month's regular payment, the balance after month 18 is\n723.619747[1 - (1.0045)^(-18)]/0.0045 - 1000(1.0045)^12 - 600(1.0045)^5 = 10815.660004,\nwhich rounds to 10815.66.\n\nPart C: FIFO costs are 1386.60, 452.19, 511.71, 272.16, 549.21, and 265.20. Their total is 3437.07.\n\nFINAL: 1767.95; 10815.66; 3437.07"
+}

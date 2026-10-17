@@ -1,0 +1,224 @@
+{
+ "task_id": "multi4-05",
+ "type": "multi4",
+ "condition": "d",
+ "correct": true,
+ "detail": "ok: got 18853.99, expected 18853.99 | ok: got '2026-08-24', expected '2026-08-24' | ok: got 9860.0, expected 9860.0 | ok: got 2447.5, expected 2447.5",
+ "error": null,
+ "seconds": 390.3,
+ "tokens": 215444,
+ "prompt_tokens": 138665,
+ "completion_tokens": 76779,
+ "cost": 0.39505,
+ "calls": 43,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Loan Balance Calculation",
+     "what": "Calculate the standard monthly payment, apply the extra principal payments in months 4 and 8, and determine the balance after month 18."
+    },
+    {
+     "id": "c2",
+     "title": "Business Day Counting",
+     "what": "Count 80 weekdays after 2026-04-26 while excluding the specified holidays to find the resulting date."
+    },
+    {
+     "id": "c3",
+     "title": "Progressive Tax Calculation",
+     "what": "Compute the tiered tax on $57,400, apply the income-based credit reduction, and determine the final tax owed."
+    },
+    {
+     "id": "c4",
+     "title": "Overtime Gross Pay",
+     "what": "Apply the daily overtime rates to each day's hours and sum the resulting wages for the 14-day period."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "C",
+     "A"
+    ],
+    "c3": [
+     "D",
+     "B"
+    ],
+    "c4": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Part A: Monthly rate \\(i=0.054/12=0.0045\\), \\(n=48\\).  \nStandard payment:\n\\[\nM=\\frac{31200(0.0045)}{1-(1.0045)^{-48}}\\approx 724.1808707\n\\]\nRegular balance after 18 payments:\n\\[\n31200(1.0045)^{18}-724.1808707\\frac{(1.0045)^{18}-1}{0.0045}\\approx 20280.200538\n\\]\nExtra principal effect:\n\\[\n750(1.0045)^{14}+600(1.0045)^{10}\\approx 1426.210612\n\\]\nRemaining balance:\n\\[\n20280.200538-1426.210612\\approx 18853.99\n\\]\n\nPart B: Starting after Sunday 2026-04-26, count weekdays excluding the six holidays. April: 4 business days; May: 21; June: 20; July: 19; total 64. Need 16 more in August: Aug 3\u20137, 10\u201314, 17\u201321 give 15, so the 80th business day is 2026-08-24.\n\nPart C: Gross tax:\n\\[\n0.10(12500)+0.22(52000-12500)+0.32(57400-52000)=11668\n\\]\nCredit reduction:\n\\[\n0.08(57400-50000)=592\n\\]\nCredit:\n\\[\n2400-592=1808\n\\]\nTax owed:\n\\[\n11668-1808=9860.00\n\\]\n\nPart D: Daily pay using \\(22\\min(h,8)+33\\min(\\max(h-8,0),4)+44\\max(h-12,0)\\):\n\\[\n209+352+0+176+330+176+132+0+209+176+132+0+225.50+330=2447.50\n\\]\n\nFINAL: 18853.99; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "The intermediate values (M\u2248724.1808707, regular balance\u224820280.200538, compounded extras\u22481426.210612) are stated to high precision without shown computation of (1.0045)^18, (1.0045)^48, (1.0045)^14, (1.0045)^10. A rough manual check using ln-based approximation gives balance after 18 regular payments closer to ~20285 rather than 20280.20, a ~$5 discrepancy that propagates to the final answer."
+    },
+    {
+     "from": "A",
+     "problem": "Only a subset of daily computations were shown explicitly in the draft's final list (209,352,0,...); it's not verified that each of the 14 numbers in the sum actually corresponds correctly to the input hours (9,13,0,8,12.5,8,6,0,9,8,6,0,9.5,12.5) in order."
+    },
+    {
+     "from": "A",
+     "problem": "The holiday 2026-06-25 and 2026-06-26 fall on Thursday/Friday per the draft's weekday assignment, and 2026-07-13,22,23,27 are claimed Mon/Wed/Thu/Mon \u2014 but these weekday assignments depend on an unverified anchor (Jan 1 2026 = Thursday). If the anchor is wrong, the entire date arithmetic shifts."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Part A: Using i=0.054/12=0.0045 and the exact 48-month payment, M=724.1808707. After 18 regular payments, the balance is 20280.1944. The month-4 and month-8 extra payments reduce this by 750(1.0045)^14+600(1.0045)^10=1426.2106, leaving 18853.98.\n\nPart B: Weekdays from 2026-04-27 through 2026-07-31 total 64 after excluding the listed holidays. The next 16 eligible weekdays end on 2026-08-24.\n\nPart C: Gross tax is 1250+0.22(39500)+0.32(5400)=11668. The credit is 2400-0.08(7400)=1808, so tax owed is 9860.00.\n\nPart D: Daily pay values are 209, 352, 0, 176, 330, 176, 132, 0, 209, 176, 132, 0, 225.50, and 330. Their total is 2447.50.\n\nFINAL: 18853.98; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Recomputation using standard amortization balance formula B18=P(1+i)^18 - M[(1+i)^18-1]/i gives Base_B18\u224820280.45 (vs draft's 20280.1944), and after subtracting extra payments compounded forward (750*(1.0045)^14+600*(1.0045)^10\u22481426.20) the result is \u224818854.25, not 18853.98. The discrepancy (~$0.27) suggests a rounding/precision error in the draft's intermediate values for M or (1+i)^18."
+    },
+    {
+     "from": "C",
+     "problem": "The draft miscalculated the standard monthly payment M. Using PV = 31200, i = 0.054/12 = 0.0045, n = 48: M = 31200 * 0.0045 / (1 - 1.0045^-48) = 140.4 / (1 - 0.8061480807) = 724.256037, not 724.1808707. This corrupts the regular balance after 18 months and the final remaining balance."
+    },
+    {
+     "from": "D",
+     "problem": "The extra payment in month 4 reduces the balance for 14 months (months 4 through 18), but the extra payment in month 8 reduces the balance for only 10 months (months 8 through 18). However, the regular payment schedule is not adjusted after extra principal payments\u2014the standard amortization payment remains the same, but the balance after month 18 depends on the exact timing of extra payments. The formula 750(1.0045)^14 assumes the extra payment accrues interest for 14 months, but if the extra payment is made in month 4, it should reduce the balance immediately after month 4's payment, and then interest accrues on the reduced balance for months 5 through 18 (14 months). This is correct. But the regular payment amount M=724.1808707 is computed for a 48-month loan, and after 18 regular payments the balance is 20280.1944. The extra payments reduce this by the future value of the extra payments at month 18. The calculation 750(1.0045)^14 + 600(1.0045)^10 = 1426.2106 is correct if the extra payments are made at the end of months 4 and 8 respectively. However, the problem states 'in month 4' and 'in month 8', which is ambiguous\u2014does the extra payment occur at the beginning or end of the month? If at the beginning, the exponent would be 15 and 11 respectively. The draft assumes end-of-month, which is standard for loan payments, but this should be verified."
+    },
+    {
+     "from": "D",
+     "problem": "The count of weekdays from 2026-04-27 through 2026-07-31 is not verified. The listed holidays are 2026-06-25, 2026-06-26, 2026-07-13, 2026-07-22, 2026-07-23, 2026-07-27. The draft claims 64 weekdays after excluding holidays, but this number is not derived from a calendar. Also, the starting date is 2026-04-26, and the first business day after that is 2026-04-27 (Monday). The draft counts from 2026-04-27, which is correct. However, the total number of weekdays from 2026-04-27 to 2026-07-31 inclusive is 69 (April 27-30: 4 days, May: 21 weekdays, June: 22 weekdays, July: 23 weekdays, total 4+21+22+23=70, but July 31 is a Friday, so 70 weekdays). Excluding 6 holidays gives 64. Then 80 - 64 = 16 more weekdays needed. Starting from 2026-08-03 (Monday), 16 weekdays later: August 3-7 (5), 10-14 (5), 17-21 (5), 24 (1) = 16, so 2026-08-24. This seems correct, but the draft does not show the calendar verification."
+    },
+    {
+     "from": "D",
+     "problem": "The tax credit reduction is 8% of income above $50,000. Income is $57,400, so income above $50,000 is $7,400. 8% of $7,400 is $592. The credit is $2,400 - $592 = $1,808. This is correct. However, the tax owed cannot go below zero, and the credit cannot go below zero. The credit is positive, so no issue. The gross tax calculation: first $12,500 at 10% = $1,250. From $12,500 to $52,000 is $39,500 at 22% = $8,690. Above $52,000 is $5,400 at 32% = $1,728. Total gross tax = $1,250 + $8,690 + $1,728 = $11,668. This is correct. The draft's calculation is correct, but the problem statement says 'the credit is reduced by 8% of any income above $50,000', which is $592, not $7400. The draft correctly computes 0.08(7400) = 592, but writes '2400 - 0.08(7400) = 1808', which is correct. No error found."
+    },
+    {
+     "from": "D",
+     "problem": "The daily pay calculation for hours over 8 and over 12 needs verification. For 9 hours: 8*22 + 1*33 = 176 + 33 = 209. For 13 hours: 8*22 + 4*33 + 1*44 = 176 + 132 + 44 = 352. For 12.5 hours: 8*22 + 4*33 + 0.5*44 = 176 + 132 + 22 = 330. For 9.5 hours: 8*22 + 1.5*33 = 176 + 49.5 = 225.5. The draft's values are correct. However, the total sum needs to be verified: 209 + 352 + 0 + 176 + 330 + 176 + 132 + 0 + 209 + 176 + 132 + 0 + 225.5 + 330 = 2447.5. This is correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "C",
+   "accepted": 1,
+   "rejected": 5,
+   "answer": "Part A: With loan $31,200, i = 0.054/12 = 0.0045, n = 48, the monthly payment is M = 31200 * 0.0045 / (1 - 1.0045^-48) \u2248 724.256037. After 18 regular payments, the balance is 31200*(1.0045)^18 - M*((1.0045)^18 - 1)/0.0045 \u2248 20277.893. The extra payments compounded forward to month 18 equal 750*(1.0045)^14 + 600*(1.0045)^10 \u2248 1426.211. Subtracting gives 20277.893 - 1426.211 = 18851.68.\n\nPart B: 2026-04-26 is Sunday. Business days: April 27\u201330 has 4; May has 21; June has 22 - 2 holidays (Jun 25, 26) = 20; July has 23 - 4 holidays (Jul 13, 22, 23, 27) = 19. Total through July 31 is 4 + 21 + 20 + 19 = 64 business days. Needing 16 more days: 3 full weeks (Aug 3\u201321) gives 15 days, and the 16th business day is Monday, 2026-08-24.\n\nPart C: Gross tax = 0.10(12500) + 0.22(39500) + 0.32(5400) = 1250 + 8690 + 1728 = 11668. The credit reduction is 0.08 * (57400 - 50000) = 592, leaving a credit of 2400 - 592 = 1808. Net tax owed is 11668 - 1808 = 9860.00.\n\nPart D: Base rate is $22/hr, 1.5x is $33/hr, 2x is $44/hr. Pay per day: 9h -> 209; 13h -> 352; 0h -> 0; 8h -> 176; 12.5h -> 330; 8h -> 176; 6h -> 132; 0h -> 0; 9h -> 209; 8h -> 176; 6h -> 132; 0h -> 0; 9.5h -> 225.50; 12.5h -> 330. Total = 2447.50.\n\nFINAL: 18851.68; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The payment calculation is numerically inconsistent with M = 31200(0.0045)/(1 - 1.0045^-48). Evaluating that expression gives approximately 724.181, not 724.256037; therefore the month-18 balance and final answer are also wrong."
+    },
+    {
+     "from": "D",
+     "problem": "The extra principal payments are applied immediately in months 4 and 8, so they reduce the balance and therefore reduce the interest accrued in subsequent months. The draft compounds the extra payments forward as if they were removed at month 18, which overstates the remaining balance. The correct method is to apply the extra payments to the balance at months 4 and 8 and then continue the amortization with the regular payment."
+    },
+    {
+     "from": "D",
+     "problem": "The draft counts business days through July 31 as 64, but the holiday list includes 2026-07-27, which is a Monday. The draft's July count of 23 weekdays minus 4 holidays = 19 is correct only if July 2026 has 23 weekdays. July 2026 has 23 weekdays (July 1 is Wednesday, July 31 is Friday), so the count through July 31 is 4 + 21 + 20 + 19 = 64. However, the draft then says 3 full weeks (Aug 3\u201321) gives 15 days, but August 3 is a Monday, so 3 full weeks from Aug 3 to Aug 21 inclusive is 15 business days, and the 16th business day is Monday, Aug 24. This appears correct, but the date should be verified against a calendar because the starting date 2026-04-26 is a Sunday, and the first business day is Monday, April 27."
+    },
+    {
+     "from": "D",
+     "problem": "The credit reduction is 8% of income above $50,000, which is 0.08 * 7400 = 592, leaving a credit of 1808. The gross tax is 11668. The net tax is 11668 - 1808 = 9860. This appears correct, but the problem states the credit cannot go below zero and the tax owed cannot go below zero. Since the credit is positive and the net tax is positive, these constraints are satisfied. No error found."
+    },
+    {
+     "from": "D",
+     "problem": "The daily pay calculations appear correct: 9h -> 8*22 + 1*33 = 209; 13h -> 8*22 + 4*33 + 1*44 = 352; 12.5h -> 8*22 + 4*33 + 0.5*44 = 330; 9.5h -> 8*22 + 1.5*33 = 225.50. The total is 2447.50. No error found."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 4,
+   "answer": "Part A: i=0.054/12=0.0045, n=48. Precise computation (Decimal) gives M=31200*0.0045/(1-1.0045^-48)\u2248724.18 (not 724.256 as in the earlier draft). Since the balance recursion B_k=B_{k-1}(1+i)-payment_k is linear, the closed-form B18 = 31200(1.0045)^18 - M*((1.0045)^18-1)/0.0045 - 750*(1.0045)^14 - 600*(1.0045)^10 is mathematically equivalent to applying the extra payments month-by-month (Challenge 2's objection is incorrect \u2014 the formula already accounts for the extra payments reducing principal at months 4 and 8, since compounding forward a payment made at month k by (1+i)^(18-k) is exactly how linear amortization recursion works). Using the corrected precise M, high-precision computation gives balance \u2248 18853.99.\n\nPart B: Recounted: Apr 27-30 =4; May=21; June=22-2=20; July=23-4=19; total through July 31 =64. Need 16 more: Aug3(Mon) through Aug24 gives 16 business days (Aug3,4,5,6,7,10,11,12,13,14,17,18,19,20,21,24). Result confirmed: 2026-08-24.\n\nPart C: Gross tax = 1250+8690+1728=11668. Credit reduction=0.08*(57400-50000)=592, credit=2400-592=1808 (positive, no floor needed). Net tax=11668-1808=9860.00. Confirmed correct.\n\nPart D: Daily pay: 9h->209;13h->352;0;8h->176;12.5h->330;8h->176;6h->132;0;9h->209;8h->176;6h->132;0;9.5h->225.50;12.5h->330. Sum=2447.50. Confirmed correct.\n\nFINAL: 18853.99; 2026-08-24; 9860.00; 2447.50"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Part A: i=0.054/12=0.0045, n=48. Precise computation (Decimal) gives M=31200*0.0045/(1-1.0045^-48)\u2248724.18 (not 724.256 as in the earlier draft). Since the balance recursion B_k=B_{k-1}(1+i)-payment_k is linear, the closed-form B18 = 31200(1.0045)^18 - M*((1.0045)^18-1)/0.0045 - 750*(1.0045)^14 - 600*(1.0045)^10 is mathematically equivalent to applying the extra payments month-by-month (Challenge 2's objection is incorrect \u2014 the formula already accounts for the extra payments reducing principal at months 4 and 8, since compounding forward a payment made at month k by (1+i)^(18-k) is exactly how linear amortization recursion works). Using the corrected precise M, high-precision computation gives balance \u2248 18853.99.\n\nPart B: Recounted: Apr 27-30 =4; May=21; June=22-2=20; July=23-4=19; total through July 31 =64. Need 16 more: Aug3(Mon) through Aug24 gives 16 business days (Aug3,4,5,6,7,10,11,12,13,14,17,18,19,20,21,24). Result confirmed: 2026-08-24.\n\nPart C: Gross tax = 1250+8690+1728=11668. Credit reduction=0.08*(57400-50000)=592, credit=2400-592=1808 (positive, no floor needed). Net tax=11668-1808=9860.00. Confirmed correct.\n\nPart D: Daily pay: 9h->209;13h->352;0;8h->176;12.5h->330;8h->176;6h->132;0;9h->209;8h->176;6h->132;0;9.5h->225.50;12.5h->330. Sum=2447.50. Confirmed correct.\n\nFINAL: 18853.99; 2026-08-24; 9860.00; 2447.50"
+}

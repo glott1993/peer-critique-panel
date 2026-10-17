@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-01",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 7.0,
+ "tokens": 526,
+ "prompt_tokens": 202,
+ "completion_tokens": 324,
+ "cost": 0.0005,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef top_k_by_score(items, k):\n    \"\"\"\n    Return the k highest-scoring names from items, sorted by score descending\n    and name ascending for ties. If k > len(items), return all names in that order.\n    \"\"\"\n    sorted_items = sorted(items, key=lambda item: (-item[1], item[0]))\n    return [name for name, _ in sorted_items[:k]]\n```"
+}

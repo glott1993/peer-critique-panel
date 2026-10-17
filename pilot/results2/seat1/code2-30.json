@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 4.6,
- "tokens": 787,
+ "seconds": 2.7,
+ "tokens": 515,
  "prompt_tokens": 236,
- "completion_tokens": 551,
- "cost": 0.00598,
+ "completion_tokens": 279,
+ "cost": 0.00326,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef wildcard_match(pattern: str, text: str) -> bool:\n    m, n = len(pattern), len(text)\n    dp = [[False] * (n + 1) for _ in range(m + 1)]\n    dp[0][0] = True\n\n    for i in range(1, m + 1):\n        if pattern[i - 1] == '*':\n            dp[i][0] = dp[i - 1][0]\n\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            pc = pattern[i - 1]\n            if pc == '*':\n                dp[i][j] = dp[i - 1][j] or dp[i][j - 1]\n            elif pc == '?' or pc == text[j - 1]:\n                dp[i][j] = dp[i - 1][j - 1]\n            else:\n                dp[i][j] = False\n\n    return dp[m][n]\n```\n\nThis uses classic dynamic programming: `dp[i][j]` is `True` if the first `i` characters of `pattern` match the first `j` characters of `text`. A `*` can either match zero characters (`dp[i-1][j]`... wait, actually `dp[i][j-1]`) or extend to match one more character of `text` (`dp[i][j-1]`), while a literal or `?` requires the previous state `dp[i-1][j-1]` to hold along with a matching character.\n\n- `wildcard_match('a*c', 'abbbc')` \u2192 `True` (the `*` matches `\"bbb\"`).\n- `wildcard_match('a?c', 'ac')` \u2192 `False` (the `?` requires exactly one character, but there is none between `a` and `c`)."
+ "answer": "```python\ndef wildcard_match(pattern: str, text: str) -> bool:\n    n, m = len(pattern), len(text)\n    dp = [[False] * (m + 1) for _ in range(n + 1)]\n    dp[0][0] = True\n    for i in range(1, n + 1):\n        if pattern[i - 1] == '*':\n            dp[i][0] = dp[i - 1][0]\n    for i in range(1, n + 1):\n        for j in range(1, m + 1):\n            if pattern[i - 1] == '*':\n                dp[i][j] = dp[i - 1][j] or dp[i][j - 1]\n            elif pattern[i - 1] == '?' or pattern[i - 1] == text[j - 1]:\n                dp[i][j] = dp[i - 1][j - 1]\n    return dp[n][m]\n```"
 }

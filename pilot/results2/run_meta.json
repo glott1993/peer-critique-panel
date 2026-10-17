@@ -1,5 +1,5 @@
 {
- "started": "2026-09-06T01:19:22Z",
+ "started": "2026-10-17T07:20:20Z",
  "config": {
   "tier": "mid",
   "seats": [
@@ -44,15 +44,24 @@
   "baseline_alt": "openai/gpt-6-astra",
   "max_k_dollars": 16,
   "sample_workers": 3,
-  "answer_tokens": 8000
+  "answer_tokens": 16000,
+  "json_tokens": 5000,
+  "reasoning": {
+   "default": {
+    "effort": "low"
+   },
+   "anthropic/claude-opus-5": null
+  },
+  "reasoning_json": {
+   "deepseek/": {
+    "effort": "none"
+   }
+  }
  },
  "tasks_file": "tasks/pilot2_tasks.json",
- "n_tasks": 240,
+ "n_tasks": 104,
  "conditions": [
-  "seat1",
-  "seat2",
-  "seat3",
-  "seat4"
+  "d"
  ],
  "mock": false
 }

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-09",
+ "type": "multi",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "ok: got 260.0, expected 260.0 | ok: got 16250.74, expected 16250.74 | ok: got 429.64, expected 429.64",
+ "error": null,
+ "seconds": 99.7,
+ "tokens": 7497,
+ "prompt_tokens": 334,
+ "completion_tokens": 7163,
+ "cost": 0.02881,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A: Solve the congruences:\n- \\(x\\equiv 0 \\pmod 5\\)\n- \\(x\\equiv 8 \\pmod 9\\)\n- \\(x\\equiv 4 \\pmod {16}\\)\n\nLet \\(x=5k\\). Then \\(5k\\equiv 8\\pmod 9\\), so \\(k\\equiv 7\\pmod 9\\), giving \\(x=45t+35\\).  \nThen \\(45t+35\\equiv 4\\pmod{16}\\), so \\(13t\\equiv 1\\pmod{16}\\), hence \\(t\\equiv 5\\pmod{16}\\).  \nThus \\(x=720s+260\\), so the smallest positive value is \\(260\\).\n\nPart B: The per-period factor is \\(1.025(0.995)=1.019875\\). Applying the recurrence with the given contributions gives:\n\\[\nB_{12}=16250.7405\\ldots\n\\]\nSo the balance is \\(16250.74\\).\n\nPart C: The net price multiplier is\n\\[\n0.90\\cdot 1.25\\cdot 1.18\\cdot 0.85\\cdot 0.85=0.95911875.\n\\]\nOriginal price:\n\\[\n\\frac{412.08}{0.95911875}=429.6444\\ldots\n\\]\nSo the original price was \\(429.64\\).\n\nFINAL: 260; 16250.74; 429.64"
+}

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-34",
+ "type": "multi4",
+ "condition": "seat2",
+ "correct": true,
+ "detail": "ok: got 2555.0, expected 2555.0 | ok: got 70.0, expected 70.0 | ok: got 67.97, expected 67.97 | ok: got 1177.0, expected 1177.0",
+ "error": null,
+ "seconds": 23.5,
+ "tokens": 10141,
+ "prompt_tokens": 6214,
+ "completion_tokens": 3927,
+ "cost": 0.00596,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\nBy inclusion-exclusion, the count divisible by at least one of 3, 5, or 7 is\n1666 + 1000 + 714 - 333 - 238 - 142 + 47 = 2714.\nAmong multiples of 17, the corresponding count is\n98 + 58 + 42 - 19 - 14 - 8 + 2 = 159.\nThus, A = 2714 - 159 = 2555.\n\nPart B:\nUsing modular exponentiation:\n85^2 \u2261 51, 85^4 \u2261 69, 85^8 \u2261 119, 85^16 \u2261 24, 85^256 \u2261 -2 (mod 211).\nSince 542 = 512 + 16 + 8 + 4 + 2, the product of the corresponding residues gives\n85^542 \u2261 70 (mod 211).\n\nPart C:\nThe total multiplier is\n(1.25)(1.25)(0.85)(0.90)(1.20) = 1.434375.\nThus the original price was\n97.50 / 1.434375 \u2248 67.97.\n\nPart D:\nLet x = 1 + 7k. Solving x \u2261 7 (mod 13) gives k \u2261 12 (mod 13), so x = 85 + 91t.\nThen x \u2261 18 (mod 19) gives t \u2261 12 (mod 19), yielding x = 1177.\n\nFINAL: 2555; 70; 67.97; 1177"
+}

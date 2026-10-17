@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-26",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 87.6,
+ "tokens": 5709,
+ "prompt_tokens": 243,
+ "completion_tokens": 5466,
+ "cost": 0.00563,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef parse_query(qs: str) -> dict:\n    def _decode(s: str) -> str:\n        # Replace '+' with space\n        s = s.replace('+', ' ')\n        out = bytearray()\n        i = 0\n        hexdigits = '0123456789abcdefABCDEF'\n        while i < len(s):\n            c = s[i]\n            if c == '%':\n                if i + 2 >= len(s):\n                    raise ValueError(\"malformed percent-escape\")\n                h = s[i+1:i+3]\n                if not all(ch in hexdigits for ch in h):\n                    raise ValueError(\"malformed percent-escape\")\n                out.append(int(h, 16))\n                i += 3\n            else:\n                out.extend(c.encode('utf-8'))\n                i += 1\n        try:\n            return out.decode('utf-8')\n        except UnicodeDecodeError as exc:\n            raise ValueError(\"malformed percent-escape or invalid UTF-8\") from exc\n\n    result = {}\n    for pair in qs.split('&'):\n        if pair == '':\n            continue\n        if '=' in pair:\n            key, val = pair.split('=', 1)\n        else:\n            key, val = pair, ''\n        key = _decode(key)\n        val = _decode(val)\n        result.setdefault(key, []).append(val)\n    return result\n```"
+}

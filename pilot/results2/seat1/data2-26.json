@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 390.0, expected 390.0",
  "error": null,
- "seconds": 7.6,
- "tokens": 3763,
+ "seconds": 6.7,
+ "tokens": 3528,
  "prompt_tokens": 2787,
- "completion_tokens": 976,
- "cost": 0.01533,
+ "completion_tokens": 741,
+ "cost": 0.01298,
  "calls": 1,
  "call_errors": 0,
- "answer": "Working:\n\nFiltering all orders with status = returned (removing exact duplicates like O2289 which appears twice):\n\n- O2513 Anvil 19\n- O2516 Flange 10\n- O2437 Crate 11\n- O2876 Anvil 17\n- O2256 Dowel 9\n- O2289 Bolt 33 (duplicate row, count once)\n- O2759 Flange 18\n- O2637 Crate 43\n- O2397 Easel 42\n- O2293 Anvil 7\n- O2119 Easel 30\n- O2804 Crate 45\n- O2555 Easel 37\n- O2781 Crate 7\n- O2878 Dowel 20\n- O2175 Dowel 42\n\nSum: 19+10+11+17+9+33+18+43+42+7+30+45+37+7+20+42 = 390\n\nFINAL: 390"
+ "answer": "Returned orders (deduped, O2289 counted once despite duplicate):\n\nO2513:19, O2516:10, O2437:11, O2876:17, O2256:9, O2289:33, O2759:18, O2637:43, O2293:7, O2119:30, O2804:45, O2555:37, O2781:7, O2878:20, O2175:42, O2397:42\n\nSum = 390\n\nFINAL: 390"
 }

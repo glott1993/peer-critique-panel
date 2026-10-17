@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-34",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got -1856.35, expected -1856.35 | ok: got 4022.55, expected 4022.55 | ok: got 19389.37, expected 19389.44",
+ "error": null,
+ "seconds": 24.0,
+ "tokens": 5084,
+ "prompt_tokens": 643,
+ "completion_tokens": 4441,
+ "cost": 0.01714,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "To solve each part:\n\n**Part A:**\nStarting with $2,500.00, each month we apply the transaction, subtract an $8.00 fee if the balance is under $1,000, and then apply 0.5% interest (multiplying by 1.005):\n- Month 1: $(2500 - 650) \\times 1.005 = 1859.25$\n- Month 2: $(1859.25 - 650) \\times 1.005 = 1215.30$\n- Month 3: $(1215.296 - 0 + 1100) \\times 1.005 = 2326.87$\n- Month 4: $(2326.873 - 900) \\times 1.005 = 1434.01$\n- Month 5: $(1434.007 - 250) \\times 1.005 = 1189.93$\n- Month 6: $(1189.927 - 250 - 8) \\times 1.005 = 936.59$\n- Month 7: $(936.587 - 900 - 8) \\times 1.005 = 28.73$\n- Month 8: $(28.730 - 650 - 8) \\times 1.005 = -632.42$\n- Month 9: $(-632.417 - 650 - 8) \\times 1.005 = -1296.87$\n- Month 10: $(-1296.869 - 400 - 8) \\times 1.005 = -1713.39$\n- Month 11: $(-1713.393 - 400 - 8) \\times 1.005 = -2132.00$\n- Month 12: $(-2132.000 + 300 - 8) \\times 1.005 = -1849.20$\n- Month 13: $(-1849.200 - 400 - 8) \\times 1.005 = -2268.49$\n- Month 14: $(-2268.486 - 250 - 8) \\times 1.005 = -2539.12$\n- Month 15: $(-2539.118 + 700 - 8) \\times 1.005 = -1856.35$\n\n**Part B:**\nTotal units sold: $89 + 67 + 81 + 91 + 96 + 72 = 496$ units.\nUsing FIFO:\n- Lot 1: 151 units @ $11.31 = $1,707.81\n- Lot 2: 128 units @ $5.24 = $670.72\n- Lot 3: 113 units @ $4.02 = $454.26\n- Lot 4: $496 - (151 + 128 + 113) = 104$ units @ $11.44 = $1,189.76\nTotal COGS = $1707.81 + 670.72 + 454.26 + 1189.76 = $4,022.55\n\n**Part C:**\n- Monthly interest rate $r = \\frac{0.069}{12} = 0.00575$\n- Term $n = 48$ months\n- Monthly payment: $\\text{PMT} = 31200 \\times \\frac{0.00575}{1 - (1 + 0.00575)^{-48}} \\approx 745.636473$\n- Balance after month 18 without prepayments:\n  $B_{18} = 31200(1+r)^{18} - \\text{PMT} \\frac{(1+r)^{18} - 1}{r} \\approx 34592.1990 - 14099.0306 = 20493.1684$\n- Accounting for the extra payments compounded to month 18:\n  $750(1+r)^{18-9} + 300(1+r)^{18-10} = 750(1.00575)^9 + 300(1.00575)^8 \\approx 789.7199 + 314.0820 = 1103.8019$\n- Remaining balance: $20493.1684 - 1103.8019 \\approx 19389.37$\n\nFINAL: -1856.35; 4022.55; 19389.37"
+}

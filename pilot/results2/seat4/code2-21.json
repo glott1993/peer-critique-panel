@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-21",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 250.3,
+ "tokens": 17454,
+ "prompt_tokens": 406,
+ "completion_tokens": 17048,
+ "cost": 0.0171,
+ "calls": 2,
+ "call_errors": 1,
+ "answer": "```python\ndef number_to_words(n: int) -> str:\n    if not 0 <= n <= 999999:\n        raise ValueError(\"number out of range\")\n\n    if n == 0:\n        return \"zero\"\n\n    ones = [\n        \"\", \"one\", \"two\", \"three\", \"four\", \"five\",\n        \"six\", \"seven\", \"eight\", \"nine\"\n    ]\n    teens = [\n        \"ten\", \"eleven\", \"twelve\", \"thirteen\", \"fourteen\",\n        \"fifteen\", \"sixteen\", \"seventeen\", \"eighteen\", \"nineteen\"\n    ]\n    tens = [\n        \"\", \"\", \"twenty\", \"thirty\", \"forty\", \"fifty\",\n        \"sixty\", \"seventy\", \"eighty\", \"ninety\"\n    ]\n\n    def under_100(num: int) -> str:\n        if num < 10:\n            return ones[num]\n        if num < 20:\n            return teens[num - 10]\n        t, o = divmod(num, 10)\n        if o == 0:\n            return tens[t]\n        return f\"{tens[t]}-{ones[o]}\"\n\n    def under_1000(num: int) -> str:\n        h, rem = divmod(num, 100)\n        parts = []\n        if h:\n            parts.append(f\"{ones[h]} hundred\")\n        if rem:\n            parts.append(under_100(rem))\n        return \" \".join(parts)\n\n    thousands, rem = divmod(n, 1000)\n    parts = []\n    if thousands:\n        parts.append(f\"{under_1000(thousands)} thousand\")\n    if rem:\n        parts.append(under_1000(rem))\n\n    return \" \".join(parts)\n```"
+}

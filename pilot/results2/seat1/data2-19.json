@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'anvil', expected 'anvil'",
  "error": null,
- "seconds": 19.7,
- "tokens": 5535,
+ "seconds": 9.3,
+ "tokens": 3984,
  "prompt_tokens": 2844,
- "completion_tokens": 2691,
- "cost": 0.0326,
+ "completion_tokens": 1140,
+ "cost": 0.01709,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Working:**\n\nGold-tier customers: C100 (Sawyer), C101 (Emery), C104 (Harper), C105 (Morgan), C106 (Parker).\n\nCollecting all their orders (all statuses), removing the one exact duplicate (O2588,C106,Dowel,35... appears twice identically), and summing units by product:\n\n- Crate: 15+5+9+21+31+29+25 = 135\n- Easel: 21+18+20+34+44 = 137\n- Bolt: 35+22+43 = 100\n- Anvil: 37+30+14+43+32+41+7 = 204\n- Dowel: 26+35+13+18+20+7+14+42 = 175\n- Flange: 7+8+40+45 = 100\n\nAnvil has the highest total units (204).\n\nFINAL: Anvil"
+ "answer": "Gold customers: C100, C101, C104, C105, C106. Summed units per product across all their orders (dedup O2588 duplicate):\n\n- Anvil: 37+14+43+32+41+7 = 174\n- Dowel: 26+35+13+18+20+7+14 = 133\n- Easel: 21+18+34+44+20 = 137\n- Crate: 15+9+5+31+29+25 = 114\n- Flange: 7+40+45 = 92\n- Bolt: 35+22 = 57\n\nAnvil has the highest total.\n\nFINAL: Anvil"
 }

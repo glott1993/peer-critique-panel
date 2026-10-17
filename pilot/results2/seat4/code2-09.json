@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-09",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 425.4,
+ "tokens": 34770,
+ "prompt_tokens": 576,
+ "completion_tokens": 34194,
+ "cost": 0.0341,
+ "calls": 3,
+ "call_errors": 2,
+ "answer": "```python\ndef brackets_balanced(s: str) -> bool:\n    stack = []\n    in_string = False\n    i = 0\n    n = len(s)\n    pairs = {')': '(', ']': '[', '}': '{'}\n\n    while i < n:\n        c = s[i]\n\n        if in_string:\n            if c == '\\\\':\n                # Escaped character inside string\n                if i + 1 >= n:\n                    return False  # Unterminated string\n                i += 2\n                continue\n            elif c == '\"':\n                in_string = False\n            # Ignore all other characters inside string\n            i += 1\n        else:\n            if c == '\"':\n                in_string = True\n            elif c in '([{':\n                stack.append(c)\n            elif c in ')]}':\n                if not stack or stack[-1] != pairs[c]:\n                    return False\n                stack.pop()\n            # Ignore all other characters outside string\n            i += 1\n\n    return not in_string and not stack\n```"
+}

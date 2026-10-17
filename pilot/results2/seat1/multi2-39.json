@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "ok: got 81.0, expected 81.0 | ok: got 12631.45, expected 12631.45 | ok: got 12772.5, expected 12772.5",
  "error": null,
- "seconds": 195.3,
- "tokens": 7823,
+ "seconds": 22.2,
+ "tokens": 3000,
  "prompt_tokens": 490,
- "completion_tokens": 7333,
- "cost": 0.07431,
- "calls": 3,
- "call_errors": 2,
- "answer": "# Part A: Compute 69579 \u00d7 7997 \u00d7 656 \u00d7 2473\n\n**Step 1:** 69579 \u00d7 7997 = 69579 \u00d7 (8000 \u2212 3) = 556,632,000 \u2212 208,737 = **556,423,263**\n\n**Step 2:** 656 \u00d7 2473 = 656\u00d72000 + 656\u00d7473 = 1,312,000 + 310,288 = **1,622,288**\n\n**Step 3:** 556,423,263 \u00d7 1,622,288\n\nBreaking down:\n- 556,423,263 \u00d7 1,622,000 = 902,518,532,586,000\n- 556,423,263 \u00d7 288 = 160,249,899,744\n- Sum = **902,678,782,485,744**\n\n**Digit sum:** 9+0+2+6+7+8+7+8+2+4+8+5+7+4+4 = **81**\n\n# Part B: Investment Balance\n\nSince each period applies \u00d71.015 then \u00d70.995, combine into a single factor:\n1.015 \u00d7 0.995 = **1.009925**\n\nEach period: Balance = (Previous Balance + Contribution) \u00d7 1.009925\n\n| Period | Contribution | Balance after |\n|--------|-------------|---------------|\n| 1 | 400 | 8,483.37 |\n| 2 | 0 | 8,567.5674 |\n| 3 | 0 | 8,652.6006 |\n| 4 | 0 | 8,738.4776 |\n| 5 | 250 | 9,077.6883 |\n| 6 | 250 | 9,420.2656 |\n| 7 | 0 | 9,513.7617 |\n| 8 | 600 | 10,214.1408 |\n| 9 | 900 | 11,224.4481 |\n| 10 | 250 | 11,588.3320 |\n| 11 | 400 | 12,107.3162 |\n| 12 | 400 | 12,631.4513 |\n\n**Final balance \u2248 $12,631.45**\n\n# Part C: Tax Calculation\n\n**Bracket tax on $68,250:**\n- 10% \u00d7 14,000 = 1,400.00\n- 22% \u00d7 (60,000\u221214,000) = 22% \u00d7 46,000 = 10,120.00\n- 32% \u00d7 (68,250\u221260,000) = 32% \u00d7 8,250 = 2,640.00\n- **Total bracket tax = 1,400 + 10,120 + 2,640 = 14,160.00**\n\n**Credit calculation:**\n- Base credit = $1,800\n- Reduction = 5% \u00d7 (68,250 \u2212 60,000) = 5% \u00d7 8,250 = $412.50\n- Adjusted credit = 1,800 \u2212 412.50 = **$1,387.50** (above zero, so valid)\n\n**Tax owed:**\n14,160.00 \u2212 1,387.50 = **$12,772.50**\n\nFINAL: 81; 12631.45; 12772.50"
+ "completion_tokens": 2510,
+ "cost": 0.02608,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\n69579\u00d77997=556,423,263\n656\u00d72473=1,622,288\n556,423,263\u00d71,622,288=902,678,782,485,744\nDigit sum: 9+0+2+6+7+8+7+8+2+4+8+5+7+4+4=81\n\n**Part B:**\nEach period: add contribution, then multiply by 1.015\u00d70.995=1.009925\nTracking balance through all 12 periods gives final balance \u2248 $12,631.45\n\n**Part C:**\nTax before credit: \n- 10%\u00d714,000=1,400\n- 22%\u00d746,000=10,120\n- 32%\u00d78,250=2,640\nTotal=14,160\n\nCredit reduction: 5%\u00d7(68,250\u221260,000)=412.50\nCredit=1,800\u2212412.50=1,387.50\n\nTax owed=14,160\u22121,387.50=12,772.50\n\nFINAL: 81; 12631.45; 12772.50"
 }

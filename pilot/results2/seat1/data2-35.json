@@ -2,15 +2,15 @@
  "task_id": "data2-35",
  "type": "data",
  "condition": "seat1",
- "correct": false,
- "detail": "got 19.1, expected 19.0",
+ "correct": true,
+ "detail": "got 19.0, expected 19.0",
  "error": null,
- "seconds": 47.9,
- "tokens": 9449,
+ "seconds": 21.0,
+ "tokens": 5406,
  "prompt_tokens": 2818,
- "completion_tokens": 6631,
- "cost": 0.07195,
+ "completion_tokens": 2588,
+ "cost": 0.03152,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Working\n\n**Step 1: Identify duplicate orders (exact repeats) to remove double-counting**\n\nScanning the orders table, three order_ids appear twice with identical data:\n- O2394 (C106, Dowel, cancelled) \u2014 doesn't affect revenue anyway\n- O2507 (C107, Dowel, returned) \u2014 doesn't affect revenue anyway\n- O2559 (C106, Crate, shipped) \u2014 **counted once**, not twice\n\n**Step 2: Compute revenue per customer (shipped/pending orders only)**\n\n*C100:* 1518.69+3402.14+948.60+1813.00+2368.92 = **10,051.35**\n\n*C101:* 128.49+4231.08+984.86+830.88+648.90+491.13+601.44+845.90+3492.00+4619.55 = **16,874.23**\n\n*C102:* 1350.75+700.80+161.68+1371.20+1213.59+105.60+2884.50 = **7,788.12**\n\n*C103:* 1246.37+1351.13+4473.60+194.25 = **7,265.35**\n\n*C104:* 1743.84+4997.59+2583.70+599.97+643.77 = **10,568.87**\n\n*C105:* 3509.94+337.44+16.23+1863.00 = **5,726.61**\n\n*C106:* 1260.80+1179.36+4823.35+5775.44+1961.44+1427.40 = **16,427.79**\n\n*C107:* 1525.70+184.46+1172.49+410.19+3355.80+2762.91+194.04+968.76+3129.30 = **13,703.65**\n\n**Step 3: Total revenue**\n\n10,051.35+16,874.23+7,788.12+7,265.35+10,568.87+5,726.61+16,427.79+13,703.65 = **88,405.97**\n\n**Step 4: Identify highest-revenue customer**\n\nC101 = 16,874.23 (highest, slightly above C106 = 16,427.79)\n\n**Step 5: Percentage**\n\n16,874.23 / 88,405.97 \u00d7 100 \u2248 19.087%\n\nFINAL: 19.1"
+ "answer": "C101 (Blake) has highest revenue: 16874.23\nTotal revenue across all customers: 88583.57\n\n16874.23/88583.57 \u2248 19.05% \u2192 rounds to 19.0%\n\nFINAL: 19.0"
 }

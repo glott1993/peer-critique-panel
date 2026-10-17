@@ -1,0 +1,174 @@
+{
+ "task_id": "data2-37",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'logan', expected 'logan'",
+ "error": null,
+ "seconds": 83.8,
+ "tokens": 189972,
+ "prompt_tokens": 169688,
+ "completion_tokens": 20284,
+ "cost": 0.19197,
+ "calls": 32,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Deduplicate orders",
+     "what": "Remove exact duplicate order rows (same order_id and all fields) counting each once"
+    },
+    {
+     "id": "c2",
+     "title": "Count orders per customer",
+     "what": "Tally number of distinct orders per customer_id regardless of status"
+    },
+    {
+     "id": "c3",
+     "title": "Identify max and map name",
+     "what": "Find the customer_id with highest order count and map to their name"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "B",
+     "A"
+    ],
+    "c3": [
+     "C",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Deduplicating exact repeat rows (same order_id and all fields): O2795 (C101), O2537 (C104), and O2800 (C103) each appear twice and count once.\n\nCounting distinct orders per customer:\n- C100 (Sawyer): 14\n- C101 (Emery): 10\n- C102 (Jordan): 3\n- C103 (Rowan): 10\n- C104 (Logan): 15\n- C105 (Avery): 10\n- C106 (Casey): 9\n- C107 (Devon): 9\n\nC104 (Logan) has the most distinct orders with 15.\n\nFINAL: Logan"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The count for C100 may be wrong. A manual recount of rows with customer_id C100 shows: O2128, O2315, O2284, O2469, O2198, O2790, O2169, O2769, O2500, O2380, O2791, O2875, O2546, O2894 = 14 rows. This appears correct, so the count is not the issue."
+    },
+    {
+     "from": "D",
+     "problem": "Manual recount of C104 rows: O2249, O2537, O2178, O2387, O2530, O2394, O2310, O2497, O2180, O2425, O2594, O2183, O2025, O2498, O2096 = 15 rows. O2537 is duplicated, so distinct count is 14, not 15. The draft says O2537 is deduplicated, but the count of 15 for C104 appears to include the duplicate O2537 twice. If distinct orders are counted, C104 has 14, not 15."
+    },
+    {
+     "from": "D",
+     "problem": "If C104 actually has 14 distinct orders (due to O2537 duplicate), then C100 also has 14 distinct orders. The question asks for the customer who placed the most orders; if there is a tie between C100 and C104, the answer 'Logan' is not uniquely supported. The draft's conclusion depends entirely on the C104 count being 15, which is likely an error from not deduplicating O2537."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "C",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "Let us count the distinct orders for each customer after removing exact duplicate rows (O2795, O2537, O2800 each appear twice):\n\nListing distinct order IDs by customer:\n- C100 (Sawyer): O2128, O2315, O2284, O2469, O2198, O2790, O2169, O2769, O2500, O2380, O2791, O2875, O2546, O2894 -> 14 orders\n- C101 (Emery): O2726, O2402, O2299, O2511, O2521, O2005, O2771, O2795, O2131, O2711 -> 10 orders\n- C102 (Jordan): O2646, O2888, O2313 -> 3 orders\n- C103 (Rowan): O2862, O2554, O2889, O2225, O2087, O2800, O2345, O2851, O2499, O2185 -> 10 orders\n- C104 (Logan): O2249, O2537, O2178, O2387, O2530, O2394, O2310, O2497, O2180, O2425, O2594, O2183, O2025, O2498, O2096 -> 15 distinct orders (16 total rows including duplicate O2537)\n- C105 (Avery): O2690, O2063, O2341, O2864, O2738, O2158, O2841, O2165, O2611, O2828 -> 10 orders\n- C106 (Casey): O2820, O2312, O2526, O2400, O2461, O2788, O2682, O2532, O2309 -> 9 orders\n- C107 (Devon): O2008, O2191, O2358, O2614, O2635, O2691, O2670, O2619, O2007 -> 9 orders\n\nC104 has 16 rows minus 1 duplicate = 15 distinct orders, which is strictly greater than C100's 14 orders.\n\nFINAL: Logan"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "List shows 14 items but should recount: O2128,O2315,O2284,O2469,O2198,O2790,O2169,O2769,O2500,O2380,O2791,O2875,O2546,O2894 - that is 14 distinct order IDs, none repeated in source, so count seems consistent but should verify no C100 order was missed in the original data (e.g. scanning all rows with customer_id C100)"
+    },
+    {
+     "from": "A",
+     "problem": "Need to verify O2537 is the only duplicate for C104 and that all 16 listed rows are correctly attributed to C104 (unsupported inference without explicit grep)"
+    },
+    {
+     "from": "B",
+     "problem": "This conclusion appears correct, but it should be independently checked against every raw row because the draft relies on manually listed IDs. C104 has 16 rows including the repeated O2537, while C100 has 14 and all others have at most 10 distinct IDs."
+    },
+    {
+     "from": "B",
+     "problem": "The deduplication is correct if these are indeed the only repeated full rows; the draft does not show a systematic verification of that premise."
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "omission"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 7,
+   "rejected": 0,
+   "answer": "Deduplicating exact repeat rows (O2795, O2537, O2800 each listed twice), count distinct order_ids per customer:\n\n- C100 (Sawyer): O2128, O2315, O2284, O2469, O2198, O2790, O2169, O2769, O2500, O2380, O2791, O2875, O2546, O2894 = 14\n- C101 (Emery): O2726, O2402, O2299, O2511, O2521, O2005, O2771, O2795, O2131, O2711 = 10\n- C102 (Jordan): O2646, O2888, O2313 = 3\n- C103 (Rowan): O2862, O2554, O2889, O2225, O2087, O2800, O2345, O2851, O2499, O2185 = 10\n- C104 (Logan): O2249, O2537, O2178, O2387, O2530, O2394, O2310, O2497, O2180, O2425, O2594, O2183, O2025, O2498, O2096 = 15 distinct (16 raw rows, one duplicate)\n- C105 (Avery): O2690, O2063, O2341, O2864, O2738, O2158, O2841, O2165, O2611, O2828 = 10\n- C106 (Casey): O2820, O2312, O2526, O2400, O2461, O2788, O2682, O2532, O2309 = 9\n- C107 (Devon): O2008, O2191, O2358, O2614, O2635, O2691, O2670, O2619, O2007 = 9\n\nMax is C104 (Logan) with 15 distinct orders, ahead of C100's 14 and all others at 10 or fewer. The duplicate-row premise holds: only O2795, O2537, O2800 appear twice in the raw list; no other full-row repeats exist on inspection.\n\nFINAL: Logan"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Deduplicating exact repeat rows (O2795, O2537, O2800 each listed twice), count distinct order_ids per customer:\n\n- C100 (Sawyer): O2128, O2315, O2284, O2469, O2198, O2790, O2169, O2769, O2500, O2380, O2791, O2875, O2546, O2894 = 14\n- C101 (Emery): O2726, O2402, O2299, O2511, O2521, O2005, O2771, O2795, O2131, O2711 = 10\n- C102 (Jordan): O2646, O2888, O2313 = 3\n- C103 (Rowan): O2862, O2554, O2889, O2225, O2087, O2800, O2345, O2851, O2499, O2185 = 10\n- C104 (Logan): O2249, O2537, O2178, O2387, O2530, O2394, O2310, O2497, O2180, O2425, O2594, O2183, O2025, O2498, O2096 = 15 distinct (16 raw rows, one duplicate)\n- C105 (Avery): O2690, O2063, O2341, O2864, O2738, O2158, O2841, O2165, O2611, O2828 = 10\n- C106 (Casey): O2820, O2312, O2526, O2400, O2461, O2788, O2682, O2532, O2309 = 9\n- C107 (Devon): O2008, O2191, O2358, O2614, O2635, O2691, O2670, O2619, O2007 = 9\n\nMax is C104 (Logan) with 15 distinct orders, ahead of C100's 14 and all others at 10 or fewer. The duplicate-row premise holds: only O2795, O2537, O2800 appear twice in the raw list; no other full-row repeats exist on inspection.\n\nFINAL: Logan"
+}

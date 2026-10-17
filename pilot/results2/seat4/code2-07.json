@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-07",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 50.6,
+ "tokens": 3857,
+ "prompt_tokens": 293,
+ "completion_tokens": 3564,
+ "cost": 0.00725,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef cidr_contains(cidr: str, ip: str) -> bool:\n    def parse_ipv4(s: str) -> int:\n        if \"/\" in s:\n            raise ValueError\n        parts = s.split(\".\")\n        if len(parts) != 4:\n            raise ValueError\n\n        value = 0\n        for part in parts:\n            if not part or any(ch < \"0\" or ch > \"9\" for ch in part):\n                raise ValueError\n            octet = int(part)\n            if octet > 255:\n                raise ValueError\n            value = (value << 8) | octet\n        return value\n\n    def parse_cidr(s: str):\n        if \"/\" not in s:\n            raise ValueError\n        addr, prefix_str = s.split(\"/\", 1)\n\n        addr_int = parse_ipv4(addr)\n\n        if not prefix_str or any(ch < \"0\" or ch > \"9\" for ch in prefix_str):\n            raise ValueError\n        prefix = int(prefix_str)\n        if prefix > 32:\n            raise ValueError\n\n        return addr_int, prefix\n\n    ip_int = parse_ipv4(ip)\n    cidr_int, prefix = parse_cidr(cidr)\n\n    if prefix == 0:\n        return True\n\n    mask = (0xFFFFFFFF << (32 - prefix)) & 0xFFFFFFFF\n    network = cidr_int & mask\n\n    return (ip_int & mask) == network\n```"
+}

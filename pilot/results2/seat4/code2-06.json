@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-06",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 551.8,
+ "tokens": 51661,
+ "prompt_tokens": 860,
+ "completion_tokens": 50801,
+ "cost": 0.05061,
+ "calls": 4,
+ "call_errors": 3,
+ "answer": "```python\nimport re\n\n_ROMAN_RE = re.compile(\n    r'M{0,3}(CM|CD|D?C{0,3})?(XC|XL|L?X{0,3})?(IX|IV|V?I{0,3})?'\n)\n\ndef roman_to_int(s: str) -> int:\n    if not isinstance(s, str) or not s:\n        raise ValueError(\"Invalid Roman numeral\")\n\n    if _ROMAN_RE.fullmatch(s) is None:\n        raise ValueError(\"Invalid Roman numeral\")\n\n    values = {\n        'I': 1,\n        'V': 5,\n        'X': 10,\n        'L': 50,\n        'C': 100,\n        'D': 500,\n        'M': 1000,\n    }\n\n    total = 0\n    prev = 0\n\n    for ch in reversed(s):\n        cur = values[ch]\n        if cur < prev:\n            total -= cur\n        else:\n            total += cur\n        prev = cur\n\n    return total\n```"
+}

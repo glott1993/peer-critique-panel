@@ -2,15 +2,15 @@
  "task_id": "math2-31",
  "type": "math",
  "condition": "seat1",
- "correct": true,
- "detail": "got 4323.16, expected 4323.16",
+ "correct": false,
+ "detail": "got 4104.92, expected 4323.16",
  "error": null,
- "seconds": 5.7,
- "tokens": 1065,
+ "seconds": 8.7,
+ "tokens": 1201,
  "prompt_tokens": 364,
- "completion_tokens": 701,
- "cost": 0.00774,
+ "completion_tokens": 837,
+ "cost": 0.0091,
  "calls": 1,
  "call_errors": 0,
- "answer": "Total units sold = 78+67+103+115+113+32 = 508\n\nFIFO consumption order:\n- Lot1: 97 units @ $8.47 = $821.59 (97 used, cumulative 97)\n- Lot2: 128 units @ $6.07 = $776.96 (128 used, cumulative 225)\n- Lot3: 72 units @ $8.77 = $631.44 (72 used, cumulative 297)\n- Lot4: 147 units @ $11.27 = $1656.69 (147 used, cumulative 444)\n- Lot5: remaining 508-444=64 units @ $6.82 = $436.48\n\nSum: 821.59+776.96+631.44+1656.69+436.48 = 4323.16\n\nFINAL: 4323.16"
+ "answer": "FIFO allocation:\n- Sale1 (78): lot1 \u219278\u00d78.47\n- Sale2 (67): lot1 remaining19 + lot2 48\n- Sale3 (103): lot2 80 + lot3 23\n- Sale4 (115): lot3 49 + lot4 66\n- Sale5 (113): lot4 81 + lot5 32\n- Sale6 (32): lot5 32\n\nTotals used: lot1:97@8.47=821.59; lot2:128@6.07=776.96; lot3:72@8.77=631.44; lot4:147@11.27=1656.69; lot5:32@6.82=218.24\n\nSum = 821.59+776.96+631.44+1656.69+218.24 = 4104.92\n\nFINAL: 4104.92"
 }

@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-07",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "no: got 7647.8, expected 7645.45 | ok: got 75.01, expected 75.01 | ok: got 6836.0, expected 6836.0",
+ "error": null,
+ "seconds": 9.0,
+ "tokens": 1776,
+ "prompt_tokens": 347,
+ "completion_tokens": 1429,
+ "cost": 0.00562,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\n- Principal $P = 12000$\n- Monthly interest rate $r = 0.069 / 12 = 0.00575$\n- Total months $n = 60$\n- Standard monthly payment $M = P \\frac{r(1+r)^n}{(1+r)^n - 1}$:\n  $M = 12000 \\times \\frac{0.00575(1.00575)^{60}}{(1.00575)^{60} - 1} \\approx 237.070659$\n- Let $B_k$ be the balance after month $k$. Without extra payments, $B_k = P(1+r)^k - M \\frac{(1+r)^k - 1}{r}$.\n- With extra payments of $E_4 = 500$ at month 4 and $E_8 = 600$ at month 8:\n  Balance at month 18:\n  $B_{18} = P(1+r)^{18} - M \\frac{(1+r)^{18}-1}{r} - E_4(1+r)^{14} - E_8(1+r)^{10}$\n  - $(1+r) = 1.00575$\n  - $(1+r)^{18} \\approx 1.10862025$\n  - Regular balance at month 18: $12000 \\times (1.00575)^{18} - 237.070659 \\times \\frac{(1.00575)^{18} - 1}{0.00575} \\approx 13303.443 - 4478.471 = 8824.972$\n  - Extra payment deductions:\n    $500 \\times (1.00575)^{14} \\approx 500 \\times 1.0835339 = 541.7669$\n    $600 \\times (1.00575)^{10} \\approx 600 \\times 1.0590059 = 635.4035$\n  - Remaining balance: $8824.972 - 541.767 - 635.404 \\approx 7647.8016 \\approx 7647.80$\n\nPart B:\n- Let the original price be $P_0$.\n- Sequence of multipliers:\n  $P_0 \\times (1 - 0.10) \\times (1 + 0.20) \\times (1 - 0.15) \\times (1 + 0.20) \\times (1 + 0.18) = 97.50$\n  $P_0 \\times 0.9 \\times 1.2 \\times 0.85 \\times 1.2 \\times 1.18 = 97.50$\n  $0.9 \\times 1.2 = 1.08$\n  $1.08 \\times 0.85 = 0.918$\n  $0.918 \\times 1.2 = 1.1016$\n  $1.1016 \\times 1.18 = 1.299888$\n  $P_0 = 97.50 / 1.299888 \\approx 75.00646 \\approx 75.01$\n\nPart C:\n- System of congruences:\n  $x \\equiv 15 \\pmod{19} \\implies x \\equiv -4 \\pmod{19}$\n  $x \\equiv 5 \\pmod{23}$\n  $x \\equiv 2 \\pmod{17}$\n- From $x \\equiv 5 \\pmod{23}$: $x = 23k + 5$\n- Modulo 19:\n  $23k + 5 \\equiv 4k + 5 \\equiv 15 \\implies 4k \\equiv 10 \\equiv 29 \\equiv 48 \\implies k \\equiv 12 \\pmod{19}$\n  $x = 23(19m + 12) + 5 = 437m + 281$\n- Modulo 17:\n  $437 \\equiv 12 \\pmod{17}$\n  $281 \\equiv 9 \\pmod{17}$\n  $12m + 9 \\equiv 2 \\pmod{17} \\implies 12m \\equiv -7 \\equiv 10 \\pmod{17}$\n  Multiply by $12^{-1} \\equiv 7 \\pmod{17}$ (since $12 \\times 7 = 84 \\equiv -1 \\implies 12^{-1} = 10$):\n  $12 \\times 10 = 120 = 7 \\times 17 + 1 \\implies 12^{-1} \\equiv 10$.\n  $m \\equiv 10 \\times 10 = 100 \\equiv 15 \\pmod{17}$.\n- Smallest positive integer corresponds to $m = 15$:\n  $x = 437 \\times 15 + 281 = 6555 + 281 = 6836$.\n  Check:\n  $6836 = 19 \\times 359 + 15$ (remainder 15)\n  $6836 = 23 \\times 297 + 5$ (remainder 5)\n  $6836 = 17 \\times 402 + 2$ (remainder 2)\n\nFINAL: 7647.80; 75.01; 6836"
+}

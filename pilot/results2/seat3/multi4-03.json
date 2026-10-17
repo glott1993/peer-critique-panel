@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-03",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "ok: got 4391.2, expected 4391.2 | ok: got 2717.0, expected 2717.0 | ok: got '23/35', expected '23/35' | ok: got 11845946.0, expected 11845946.0",
+ "error": null,
+ "seconds": 26.5,
+ "tokens": 5008,
+ "prompt_tokens": 578,
+ "completion_tokens": 4430,
+ "cost": 0.01705,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A**\nStarting with $2,500.00, we apply each transaction, check if the balance is below $1,500 (none of the monthly balances drop below $1,500, with the lowest being $1,519.18 after month 4's withdrawal, so no fee is ever assessed), and add 0.25% interest each month:\n- Month 1: $(2500 + 450) \\times 1.0025 = 2957.375$\n- Month 2: $(2957.375 - 400) \\times 1.0025 \\approx 2563.768$\n- Month 3: $(2563.768 - 400) \\times 1.0025 \\approx 2169.178$\n- Month 4: $(2169.178 - 650) \\times 1.0025 \\approx 1522.976$\n- Month 5: $(1522.976 + 700) \\times 1.0025 \\approx 2228.533$\n- Month 6: $(2228.533 + 450) \\times 1.0025 \\approx 2685.230$\n- Month 7: $(2685.230 - 650) \\times 1.0025 \\approx 2040.318$\n- Month 8: $(2040.318 + 1100) \\times 1.0025 \\approx 3148.168$\n- Month 9: $(3148.168 + 700) \\times 1.0025 \\approx 3857.789$\n- Month 10: $(3857.789 + 1100) \\times 1.0025 \\approx 4970.183$\n- Month 11: $(4970.183 + 1100) \\times 1.0025 \\approx 6085.359$\n- Month 12: $(6085.359 + 700) \\times 1.0025 \\approx 6802.322$\n- Month 13: $(6802.322 - 900) \\times 1.0025 \\approx 5917.078$\n- Month 14: $(5917.078 - 650) \\times 1.0025 \\approx 5280.246$\n- Month 15: $(5280.246 - 900) \\times 1.0025 \\approx 4391.20$\n\n**Part B**\nHourly rate is $22.00, overtime rate (hours 8\u201312) is $33.00, and double-time rate (hours > 12) is $44.00.\nComputing daily earnings:\n- 12.5 hrs: $8(22) + 4(33) + 0.5(44) = 330.00$\n- 13 hrs: $8(22) + 4(33) + 1(44) = 352.00$\n- 0 hrs: $0.00$\n- 0 hrs: $0.00$\n- 9.5 hrs: $8(22) + 1.5(33) = 225.50$\n- 8 hrs: $8(22) = 176.00$\n- 12.5 hrs: $330.00$\n- 6 hrs: $6(22) = 132.00$\n- 10 hrs: $8(22) + 2(33) = 242.00$\n- 13 hrs: $352.00$\n- 9.5 hrs: $225.50$\n- 8 hrs: $176.00$\n- 8 hrs: $176.00$\n- 0 hrs: $0.00$\n\nTotal gross pay = $330 + 352 + 0 + 0 + 225.5 + 176 + 330 + 132 + 242 + 352 + 225.5 + 176 + 176 + 0 = 2717.00$\n\n**Part C**\nTotal ways to choose 3 marbles from 7 is $\\binom{7}{3} = 35$.\nThe complement event is drawing three marbles of completely distinct colors (1 Red, 1 Green, 1 Blue), which can happen in $3 \\times 2 \\times 2 = 12$ ways.\nThus, the number of ways at least two share a color is $35 - 12 = 23$.\nThe probability is $23/35$.\n\n**Part D**\nMultiples of 7 from 365 to 14,115 range from $53 \\times 7 = 371$ to $2016 \\times 7 = 14112$:\n- Count = $2016 - 53 + 1 = 1964$\n- Sum = $\\frac{1964}{2} \\times (371 + 14112) = 982 \\times 14483 = 14,222,306$\n\nMultiples of $\\text{lcm}(7, 6) = 42$ range from $9 \\times 42 = 378$ to $336 \\times 42 = 14112$:\n- Count = $336 - 9 + 1 = 328$\n- Sum = $\\frac{328}{2} \\times (378 + 14112) = 164 \\times 14490 = 2,376,360$\n\nSubtracting the multiples of 42:\n$14,222,306 - 2,376,360 = 11,845,946$\n\nFINAL: 4391.20; 2717.00; 23/35; 11845946"
+}

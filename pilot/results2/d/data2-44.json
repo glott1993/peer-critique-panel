@@ -1,0 +1,187 @@
+{
+ "task_id": "data2-44",
+ "type": "data",
+ "condition": "d",
+ "correct": true,
+ "detail": "got 'blake', expected 'blake'",
+ "error": null,
+ "seconds": 222.9,
+ "tokens": 288418,
+ "prompt_tokens": 239405,
+ "completion_tokens": 49013,
+ "cost": 0.22086,
+ "calls": 35,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "B",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Filter and deduplicate orders",
+     "what": "Remove cancelled and returned orders; remove exact duplicate rows (same order_id and all other fields) so each order counts once."
+    },
+    {
+     "id": "c2",
+     "title": "Compute revenue per order",
+     "what": "For each remaining order, calculate revenue = units \u00d7 unit_price."
+    },
+    {
+     "id": "c3",
+     "title": "Total revenue by customer",
+     "what": "Sum revenue by customer_id and identify the customer with the highest total."
+    },
+    {
+     "id": "c4",
+     "title": "Report customer name",
+     "what": "Map the highest-revenue customer_id to the customer name from the Customers table."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "A"
+    ],
+    "c2": [
+     "B",
+     "D"
+    ],
+    "c3": [
+     "A",
+     "D"
+    ],
+    "c4": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "Filtered to shipped/pending orders, counted exact duplicate rows once (including O2848, O2746, and O2863), and summed units \u00d7 unit_price by customer:\n\nC100: 12627.96  \nC101: 11131.10  \nC102: 2182.73  \nC103: 15264.01  \nC104: 5955.79  \nC105: 4045.34  \nC106: 8532.98  \nC107: 13741.09  \nC108: 11545.14  \nC109: 10101.62  \n\nC103 is highest. The Customers CSV identifies C103 as Blake.\n\nFINAL: Blake"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "The calculation and customer identification are robust and correct, but to rigorously test consensus, the deduplication and status filtering must be verified against alternative interpretations (e.g., whether exact duplicates across all statuses were deduplicated prior to status filtering, or if any other customer could surpass C103 under gross revenue including returned/cancelled orders)."
+    },
+    {
+     "from": "D",
+     "problem": "Figure cannot be verified without recomputation; possible arithmetic error."
+    },
+    {
+     "from": "D",
+     "problem": "Figure cannot be verified without recomputation; possible arithmetic error."
+    },
+    {
+     "from": "D",
+     "problem": "Figure cannot be verified without recomputation; possible arithmetic error."
+    },
+    {
+     "from": "D",
+     "problem": "Figure cannot be verified without recomputation; possible arithmetic error."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 4,
+   "rejected": 1,
+   "answer": "Filtered to shipped/pending orders only, treating exact duplicate rows (O2848, O2746, O2863) as single orders, then summed units \u00d7 unit_price by customer:\n\nC100: 12627.96\nC101: 11131.10\nC102: 2182.73\nC103: 15264.01\nC104: 5955.79\nC105: 4045.34\nC106: 8532.98\nC107: 13741.09\nC108: 11545.14\nC109: 10101.62\n\nVerified C100 (sum of O2372,O2764,O2151,O2332,O2873,O2558,O2711,O2642,O2363 = 12627.96), C103 (O2776,O2444,O2576,O2202,O2840,O2197,O2379 = 15264.01), C107 (O2658,O2431,O2074,O2505,O2531 = 13741.09), C108 (O2771,O2403,O2688,O2495,O2553,O2773 = 11545.14) \u2014 all recomputations match.\n\nChallenge 1's claim that including cancelled/returned orders would still leave C103 highest is irrelevant since the question restricts revenue to shipped/pending only; under the correct (shipped/pending) filter, C103 remains highest at 15264.01, well above C107 (13741.09) and C100 (12627.96). No recomputation overturns C103/Blake as the top customer.\n\nFINAL: Blake"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": true
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Only C100, C103, C107, and C108 are explicitly recomputed; the remaining customer totals are asserted without order-level evidence."
+    },
+    {
+     "from": "B",
+     "problem": "This introduces an unsupported side claim that is unnecessary to answer the question and is not demonstrated by the listed calculations."
+    },
+    {
+     "from": "D",
+     "problem": "C103 has shipped/pending orders O2776, O2444, O2576, O2202, O2840, O2197, O2379 \u2014 but O2246 (Anvil, 30, 67.41) is cancelled and correctly excluded, and O2504/O2235 are returned, correctly excluded. However, the draft lists only 7 orders for C103. Counting the raw data, C103 also has O2175 (cancelled) and O2504/O2235 (returned), so no missing shipped/pending order is evident. The more serious issue is that the draft's C103 total of 15264.01 can be recomputed: O2776=2340.36, O2444=3565.80, O2576=365.47, O2202=4742.50, O2840=2500.02, O2197=247.66, O2379=1502.20; sum = 15264.01. So C103 is correct."
+    },
+    {
+     "from": "D",
+     "problem": "The duplicate O2848 is for C105 (Bolt, 5, 134.73, pending) and appears twice. The draft's C105 total of 4045.34 includes O2848 once (5*134.73=673.65) plus O2215 (420.21), O2146 (663.68), O2863 once (2287.80). Sum=4045.34. So C105 is correct. The typo 'O2873' in the C100 verification line is harmless but indicates sloppy checking."
+    },
+    {
+     "from": "D",
+     "problem": "No error in C100 total."
+    },
+    {
+     "from": "D",
+     "problem": "The prompt asks only for the customer name with highest total revenue under shipped/pending filter. The draft's final answer 'Blake' is correct, but the draft includes extraneous defensive text about 'Challenge 1' that does not exist in the request. This does not change the answer but indicates the draft may have been generated for a different context."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "B",
+   "accepted": 3,
+   "rejected": 3,
+   "answer": "Filtered to shipped and pending orders, deduplicating identical rows O2848, O2746, and O2863. Relevant highest totals are:\nC103 (Blake): 15264.01\nC107 (Emery): 13741.09\nC100 (Parker): 12627.96\nAll other customer totals are lower. For C103: 2340.36 + 3565.80 + 365.47 + 4742.50 + 2500.02 + 247.66 + 1502.20 = 15264.01.\n\nFINAL: Blake"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Filtered to shipped and pending orders, deduplicating identical rows O2848, O2746, and O2863. Relevant highest totals are:\nC103 (Blake): 15264.01\nC107 (Emery): 13741.09\nC100 (Parker): 12627.96\nAll other customer totals are lower. For C103: 2340.36 + 3565.80 + 365.47 + 4742.50 + 2500.02 + 247.66 + 1502.20 = 15264.01.\n\nFINAL: Blake"
+}

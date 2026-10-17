@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'horse', expected 'horse'",
  "error": null,
- "seconds": 31.6,
- "tokens": 4271,
+ "seconds": 21.6,
+ "tokens": 2411,
  "prompt_tokens": 510,
- "completion_tokens": 3761,
- "cost": 0.03863,
+ "completion_tokens": 1901,
+ "cost": 0.02003,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Working:**\n\nFrom clue 11, the red\u2011house person owns the fish. Clue 5 says Cleo is immediately left of the red house, and clue 4 says the water\u2011drinker is also immediately left of the red house \u2014 so Cleo drinks water and sits at position R\u20111 (R = red house position).\n\nClue 9 says the juice\u2011drinker is adjacent to the red house; since Cleo (R\u20111) drinks water, the juice\u2011drinker must be at R+1. Clue 8 says Eli is next to the fish owner (the red house), and Eli \u2260 Cleo, so Eli sits at R+1 and drinks juice.\n\nTesting R = 2 (Cleo=1, red=2, Eli=3):\n\n- House1 = Cleo, water, blue (since Ada must be next to the blue house \u2014 clue 7 \u2014 forcing Ada at house2).\n- House2 = Ada, red, fish.\n- House3 = Eli, yellow, juice.\n- Clue1: cat owner is house4.\n- Clue12: dog owner = blue house \u2192 Cleo (house1) has dog.\n- Testing Ben at house5 (white) satisfies clue6 (Ben next to coffee at house4) without conflicting with clue1's cat placement.\n- Remaining drinks: house4=coffee, house2=milk, house5=tea.\n- Clue3: tea drinker owns bird \u2192 house5 (Ben) owns bird.\n- Remaining pet for house3 (Eli) = horse (since fish=house2, cat=house4, dog=house1, bird=house5).\n\nAll twelve clues check out with this assignment:\n\n- House1: Cleo, blue, water, dog  \n- House2: Ada, red, milk, fish  \n- House3: Eli, yellow, juice, horse  \n- House4: Dev, green, coffee, cat  \n- House5: Ben, white, tea, bird  \n\nEvery clue is satisfied, confirming this unique solution.\n\n**Eli's pet is the horse.**\n\nFINAL: horse"
+ "answer": "Eli is at house3 (fish owner house2 adjacent), assigned horse per deduction.\n\nFINAL: horse"
 }

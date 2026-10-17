@@ -1,0 +1,107 @@
+{
+ "task_id": "logic2-01",
+ "type": "logic",
+ "condition": "d",
+ "correct": false,
+ "detail": "no FINAL value",
+ "error": null,
+ "seconds": 244.1,
+ "tokens": 76738,
+ "prompt_tokens": 41888,
+ "completion_tokens": 34850,
+ "cost": 0.21012,
+ "calls": 18,
+ "call_errors": 1,
+ "pre_hub_correct": false,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Whole request",
+     "what": "Five houses stand in a row, numbered 1 to 5 from left to right. Each house has exactly one resident (Ada, Ben, Cleo, Dev, Eli), one drink (tea, coffee, milk, juice, water), and one pet (cat, dog, fish, bird, horse), and one color (red, blue, green, white, yellow); no value is shared between houses. "
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "D",
+   "draft": "Working: Ben is in house 4, and the cat is in house 3. Eli immediately left of dog gives either Eli=1/dog=2 or Eli=3/dog=4.\n\nIf Eli=3/dog=4, Cleo would have to be 1 or 2; both branches conflict with milk/green or juice/tea/horse. So Eli=1 and dog=2.\n\nCleo cannot be 1, 4, or 5. If Cleo=2, then yellow=3 and milk/green=1; this forces coffee=3, white=4, juice=4, horse=5, and tea=4, a conflict. Thus Cleo=3, yellow=4, and milk/green=2.\n\nAda owns the bird, so Ada cannot be house 2 (dog), house 3 (cat), or house 4 (Ben). Thus Ada is in house 5. Then horse=4, juice=3, tea=5, coffee=4, white=5, and blue=3. The colors become: 1 red, 2 green, 3 blue, 4 yellow, 5 white.\n\nFINAL: white"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "Unsupported inference and wrong deduction: a valid assignment exists with milk/green=1, juice=3, coffee=4, white=5, horse=4, and tea=5. The draft incorrectly concludes that tea must be 4 and juice must be 4."
+    },
+    {
+     "from": "B",
+     "problem": "The omitted Cleo=2 branch is consistent, so the stated uniqueness is false. The draft's elimination of that branch is invalid."
+    },
+    {
+     "from": "C",
+     "problem": "The draft skips house 1 without justification when placing Ada, only later implying Eli occupies house 1."
+    },
+    {
+     "from": "C",
+     "problem": "Dismisses the Eli=3 branch with handwaving rather than demonstrating the exact impossibility: Cleo=1 forces Yellow=2, which blocks Milk/Green from being house 2 (the only neighbor to Cleo), leaving no valid house for Milk/Green."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 2,
+   "rejected": 2,
+   "answer": "Working: Ben=4, cat=3. Clue 11 (Eli immediately left of dog) gives Eli=1,dog=2 or Eli=3,dog=4.\n\nCheck Eli=3,dog=4: Cleo\u22604(Ben),\u22603(Eli). Clue6 forbids Cleo=5. So Cleo=1 or 2.\n- Cleo=1: yellow=2 (clue6). Clue5 forces milk=2, but clue9 needs milk=green, conflicting with yellow=2. Contradiction.\n- Cleo=2: yellow=3. Clue5 milk\u2208{1,3}; milk=3 conflicts yellow=3, so milk=1,green=1. Clue10: Ben(4) next to blue \u21d2 blue=5 (3 is yellow). Remaining red/white for 2,4. Horse must be in {1,2,5} (3=cat,4=dog); testing white=4,coffee=3: juice must be immediately left of horse; only horse=5,juice=4 possible, but then tea must be adjacent to horse(5)\u21d2tea=4, clashing with juice=4. White=2,coffee=1 clashes with milk=1. All fail.\nSo Eli=3 branch is fully contradictory; thus Eli=1, dog=2.\n\nNow place Cleo: Cleo\u22601(Eli),4(Ben). Cleo=2,3,or5, but clue6 forbids Cleo=5.\n- Cleo=2: yellow=3, milk/green\u2208{1,3}. Testing milk=1,green=1: similar analysis as above (same houses, dog still 2) \u2014 clue1/7/4 lead to the same tea/juice/horse clash (juice=4,horse=5,tea=4 conflict). milk=3 conflicts yellow=3. So Cleo=2 fails.\n- Thus Cleo=3, yellow=4, milk/green\u2208{2,4}; green=4 conflicts yellow=4, so milk=2,green=2.\n\nAda owns bird (clue3), so Ada\u22602(dog),3(cat),4(Ben). Since Eli=1, Ada\u22601. So Ada=5.\nThen horse must be adjacent to remaining pet slots {1,4,5}; dog=2,cat=3,bird=5, leaving fish,horse for 1,4. Clue7 juice immediately left horse: if horse=4, juice=3; if horse=1, no house to its left, impossible. So horse=4, juice=3, fish=1.\nClue4: tea adjacent horse(4): tea=3 or5; juice=3 so tea=5.\nClue1: coffee immediately left white. Remaining drinks: milk=2,juice=3,tea=5; water,coffee for 1,4. If coffee=4,white=5. If coffee=1,white=2 but milk/green=2 conflict. So coffee=4,white=5,water=1.\nColors: 2=green,4=yellow; remaining red,blue,white for1,3,5; white=5. Clue10: Ben(4) next blue \u21d2 blue=3 or5; 5=white, so blue=3. Remaining red=1.\nFinal colors: 1 red,2 green,3 blue,4 yellow,5 white. Ada(house5)=white."
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "Working: Ben=4, cat=3. Clue 11 (Eli immediately left of dog) gives Eli=1,dog=2 or Eli=3,dog=4.\n\nCheck Eli=3,dog=4: Cleo\u22604(Ben),\u22603(Eli). Clue6 forbids Cleo=5. So Cleo=1 or 2.\n- Cleo=1: yellow=2 (clue6). Clue5 forces milk=2, but clue9 needs milk=green, conflicting with yellow=2. Contradiction.\n- Cleo=2: yellow=3. Clue5 milk\u2208{1,3}; milk=3 conflicts yellow=3, so milk=1,green=1. Clue10: Ben(4) next to blue \u21d2 blue=5 (3 is yellow). Remaining red/white for 2,4. Horse must be in {1,2,5} (3=cat,4=dog); testing white=4,coffee=3: juice must be immediately left of horse; only horse=5,juice=4 possible, but then tea must be adjacent to horse(5)\u21d2tea=4, clashing with juice=4. White=2,coffee=1 clashes with milk=1. All fail.\nSo Eli=3 branch is fully contradictory; thus Eli=1, dog=2.\n\nNow place Cleo: Cleo\u22601(Eli),4(Ben). Cleo=2,3,or5, but clue6 forbids Cleo=5.\n- Cleo=2: yellow=3, milk/green\u2208{1,3}. Testing milk=1,green=1: similar analysis as above (same houses, dog still 2) \u2014 clue1/7/4 lead to the same tea/juice/horse clash (juice=4,horse=5,tea=4 conflict). milk=3 conflicts yellow=3. So Cleo=2 fails.\n- Thus Cleo=3, yellow=4, milk/green\u2208{2,4}; green=4 conflicts yellow=4, so milk=2,green=2.\n\nAda owns bird (clue3), so Ada\u22602(dog),3(cat),4(Ben). Since Eli=1, Ada\u22601. So Ada=5.\nThen horse must be adjacent to remaining pet slots {1,4,5}; dog=2,cat=3,bird=5, leaving fish,horse for 1,4. Clue7 juice immediately left horse: if horse=4, juice=3; if horse=1, no house to its left, impossible. So horse=4, juice=3, fish=1.\nClue4: tea adjacent horse(4): tea=3 or5; juice=3 so tea=5.\nClue1: coffee immediately left white. Remaining drinks: milk=2,juice=3,tea=5; water,coffee for 1,4. If coffee=4,white=5. If coffee=1,white=2 but milk/green=2 conflict. So coffee=4,white=5,water=1.\nColors: 2=green,4=yellow; remaining red,blue,white for1,3,5; white=5. Clue10: Ben(4) next blue \u21d2 blue=3 or5; 5=white, so blue=3. Remaining red=1.\nFinal colors: 1 red,2 green,3 blue,4 yellow,5 white. Ada(house5)=white."
+}

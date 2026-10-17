@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 6.9,
- "tokens": 4254,
- "prompt_tokens": 3111,
- "completion_tokens": 1143,
- "cost": 0.00199,
+ "seconds": 3.9,
+ "tokens": 3316,
+ "prompt_tokens": 2695,
+ "completion_tokens": 621,
+ "cost": 0.00128,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef wildcard_match(pattern: str, text: str) -> bool:\n    pattern_index = 0\n    text_index = 0\n    last_star = -1\n    star_match_index = 0\n\n    while text_index < len(text):\n        if (\n            pattern_index < len(pattern)\n            and (\n                pattern[pattern_index] == \"?\"\n                or pattern[pattern_index] == text[text_index]\n            )\n        ):\n            pattern_index += 1\n            text_index += 1\n        elif pattern_index < len(pattern) and pattern[pattern_index] == \"*\":\n            last_star = pattern_index\n            star_match_index = text_index\n            pattern_index += 1\n        elif last_star != -1:\n            pattern_index = last_star + 1\n            star_match_index += 1\n            text_index = star_match_index\n        else:\n            return False\n\n    while pattern_index < len(pattern) and pattern[pattern_index] == \"*\":\n        pattern_index += 1\n\n    return pattern_index == len(pattern)\n```"
+ "answer": "```python\ndef wildcard_match(pattern: str, text: str) -> bool:\n    \"\"\"Return whether the entire text matches the wildcard pattern.\"\"\"\n    p = t = 0\n    star = -1\n    match = 0\n\n    while t < len(text):\n        if p < len(pattern) and (pattern[p] == \"?\" or pattern[p] == text[t]):\n            p += 1\n            t += 1\n        elif p < len(pattern) and pattern[p] == \"*\":\n            star = p\n            match = t\n            p += 1\n        elif star != -1:\n            p = star + 1\n            match += 1\n            t = match\n        else:\n            return False\n\n    while p < len(pattern) and pattern[p] == \"*\":\n        p += 1\n\n    return p == len(pattern)\n```"
 }

@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'dev', expected 'dev'",
  "error": null,
- "seconds": 44.7,
- "tokens": 5360,
+ "seconds": 43.6,
+ "tokens": 4981,
  "prompt_tokens": 501,
- "completion_tokens": 4859,
- "cost": 0.04959,
+ "completion_tokens": 4480,
+ "cost": 0.0458,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Working:**\n\n- From clue 10, juice is in house 2. Testing water positions with clues 2 & 7 forces water in house 3 (other options create contradictions).\n- Ada (red, clue 5) must be adjacent to the water house (clue 2). Testing Ada=2 leads to a contradiction later (Dev would need to own both dog and fish). So Ada = house 4.\n- Then green must be house 2 (clue 7), and using clues 11 & 4 for white/blue placement: white = house 3 (Eli house 2), blue = house 5, yellow = house 1.\n- Bird owner is immediately left of blue \u2192 house 4 (Ada) owns bird.\n- Ben must be adjacent to bird owner (clue 6) and drink coffee (clue 8); combined with remaining drink slots, Ben = house 5.\n- Dev drinks milk (clue 9); the only remaining slot is house 1, so Dev = house 1, Cleo = house 3.\n- Pets: dog=Dev(1), bird=Ada(4), fish=white house=Cleo(3). Remaining cat/horse for houses 2,5; clue 1 forbids cat in house 2, so cat=Ben(5), horse=Eli(2).\n\nAll 12 clues check out with this assignment:\n\nHouse1: Dev \u2013 yellow \u2013 milk \u2013 dog  \nHouse2: Eli \u2013 green \u2013 juice \u2013 horse  \nHouse3: Cleo \u2013 white \u2013 water \u2013 fish  \nHouse4: Ada \u2013 red \u2013 tea \u2013 bird  \nHouse5: Ben \u2013 blue \u2013 coffee \u2013 cat  \n\nThe yellow house belongs to **Dev**.\n\nFINAL: Dev"
+ "answer": "Working: Solved grid: h1=yellow(Dev,milk,dog), h2=green(Eli,juice,horse), h3=white(Cleo,water,fish), h4=red(Ada,tea,bird), h5=blue(Ben,coffee,cat). All clues verified consistent.\n\nFINAL: Dev"
 }

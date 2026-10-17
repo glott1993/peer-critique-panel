@@ -2,15 +2,15 @@
  "task_id": "multi2-15",
  "type": "multi",
  "condition": "seat1",
- "correct": false,
- "detail": "no: got 4619318.0, expected 4617998.0 | ok: got 14624.42, expected 14624.42 | ok: got 1034.91, expected 1034.91",
+ "correct": true,
+ "detail": "ok: got 4617998.0, expected 4617998.0 | ok: got 14624.91, expected 14624.42 | ok: got 1035.01, expected 1034.91",
  "error": null,
- "seconds": 38.3,
- "tokens": 4827,
+ "seconds": 14.9,
+ "tokens": 1815,
  "prompt_tokens": 469,
- "completion_tokens": 4358,
- "cost": 0.04452,
+ "completion_tokens": 1346,
+ "cost": 0.0144,
  "calls": 1,
  "call_errors": 0,
- "answer": "# Part A: Sum of integers 860\u201311070 divisible by 11 but not by 6\n\n**Multiples of 11:**\n- First: 869 (11\u00d779), Last: 11066 (11\u00d71006)\n- Count = 1006 \u2212 79 + 1 = 928\n- Sum = 11 \u00d7 (79+1006)\u00d7928/2 = 11 \u00d7 503,560 = **5,539,160**\n\n**Multiples of 66 (divisible by both 11 and 6):**\n- First: 924 (66\u00d714), Last: 11022 (66\u00d7167)\n- Count = 167 \u2212 14 + 1 = 154\n- Sum = 66 \u00d7 (14+167)\u00d7154/2 = 66 \u00d7 13,937 = **919,842**\n\n**Result:** 5,539,160 \u2212 919,842 = **4,619,318**\n\n# Part B: Investment account balance after 12 periods\n\nEach period: B \u2192 (B + contribution) \u00d7 1.02 \u00d7 0.995\n\n| Period | Contribution | Balance after growth & fee |\n|---|---|---|\n|1|0|8119.20000|\n|2|0|8240.17608|\n|3|600|8971.89470|\n|4|900|10018.98593|\n|5|900|11081.67883|\n|6|0|11246.79584|\n|7|250|11668.09810|\n|8|900|12755.36276|\n|9|400|13351.37766|\n|10|250|13804.03819|\n|11|0|14009.71836|\n|12|400|14624.42316|\n\n**Result:** $14,624.42\n\n# Part C: Order total for 211 units\n\n**Tiered pricing:**\n- First 100 units @ $5.00 = $500.00\n- Next 111 units (101\u2013211) @ $4.25 = $471.75\n- (No units beyond 300)\n\n**Subtotal:** $500.00 + $471.75 = $971.75\n\nSince $971.75 does **not** exceed $2,500, no discount applies.\n\n**Sales tax (6.5%):** 971.75 \u00d7 0.065 = $63.16375\n\n**Total:** 971.75 + 63.16375 = $1034.91375 \u2192 rounds to **$1,034.91**\n\nFINAL: 4619318; 14624.42; 1034.91"
+ "answer": "**Part A:**\nSum of multiples of 11 in [860,11070]: 79*11=869 to 1006*11=11066, count=928, sum=5,537,840\nSum of multiples of 66 in range: 14*66=924 to 167*66=11022, count=154, sum=919,842\nResult = 5,537,840 \u2212 919,842 = **4,617,998**\n\n**Part B:**\nIterating contribution\u2192+2%\u2192\u22120.5% through 12 periods starting at 8000 gives final balance \u2248 **14,624.91**\n\n**Part C:**\n211 units: 100@$5.00=$500, 111@$4.25=$471.75 \u2192 subtotal $971.75 (no discount, <2500)\nTax 6.5%: 971.75*1.065 = **1035.01**\n\nFINAL: 4617998; 14624.91; 1035.01"
 }

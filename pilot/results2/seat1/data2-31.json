@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 1704.41, expected 1704.41",
  "error": null,
- "seconds": 10.6,
- "tokens": 4221,
+ "seconds": 5.9,
+ "tokens": 3544,
  "prompt_tokens": 2858,
- "completion_tokens": 1363,
- "cost": 0.01935,
+ "completion_tokens": 686,
+ "cost": 0.01258,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Step 1: Identify Gold-tier customers**\n- C105 (Jordan), C106 (Parker), C107 (Logan)\n\n**Step 2: Find their shipped orders (dedupe exact repeats)**\n\n- O2277, C105, Crate, 17\u00d757.12 = 971.04\n- O2068, C106, Dowel, 31\u00d7136.97 = 4246.07\n- O2292, C106, Crate, 15\u00d7116.68 = 1750.20\n- O2520, C106, Bolt, 19\u00d7100.15 = 1902.85\n- O2451, C106, Flange, 37\u00d733.07 = 1223.59\n- O2427, C107, Crate, 1\u00d7132.73 = 132.73\n\n(No duplicates found among these order IDs; all other Gold-customer orders were cancelled, returned, or pending.)\n\n**Step 3: Compute average**\n\nTotal revenue = 971.04+4246.07+1750.20+1902.85+1223.59+132.73 = 10226.48\nNumber of shipped orders = 6\n\nAverage = 10226.48 / 6 = 1704.4133...\n\nFINAL: 1704.41"
+ "answer": "Gold customers: C105 (Jordan), C106 (Parker), C107 (Logan).\n\nShipped orders for these customers:\n- C105: O2277 Crate 17\u00d757.12=971.04\n- C106: O2068 Dowel 31\u00d7136.97=4246.07\n- C106: O2292 Crate 15\u00d7116.68=1750.20\n- C106: O2520 Bolt 19\u00d7100.15=1902.85\n- C106: O2451 Flange 37\u00d733.07=1223.59\n- C107: O2427 Crate 1\u00d7132.73=132.73\n\nSum = 971.04+4246.07+1750.20+1902.85+1223.59+132.73 = 10226.48\nCount = 6\nAverage = 10226.48/6 = 1704.4133...\n\nFINAL: 1704.41"
 }

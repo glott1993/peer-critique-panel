@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 5.8,
- "tokens": 3851,
- "prompt_tokens": 3008,
- "completion_tokens": 843,
- "cost": 0.00161,
+ "seconds": 5.4,
+ "tokens": 3397,
+ "prompt_tokens": 2827,
+ "completion_tokens": 570,
+ "cost": 0.00125,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nfrom collections import deque\n\n\ndef sliding_max(xs, w):\n    if w < 1:\n        raise ValueError(\"window size must be at least 1\")\n    if w > len(xs):\n        return []\n\n    result = []\n    candidates = deque()\n\n    for i, value in enumerate(xs):\n        while candidates and candidates[0] <= i - w:\n            candidates.popleft()\n\n        while candidates and xs[candidates[-1]] <= value:\n            candidates.pop()\n\n        candidates.append(i)\n\n        if i >= w - 1:\n            result.append(xs[candidates[0]])\n\n    return result\n```"
+ "answer": "```python\nfrom collections import deque\n\ndef sliding_max(xs, w):\n    if w < 1:\n        raise ValueError(\"window width must be at least 1\")\n    if w > len(xs):\n        return []\n\n    result = []\n    candidates = deque()\n\n    for i, value in enumerate(xs):\n        while candidates and candidates[0] <= i - w:\n            candidates.popleft()\n\n        while candidates and xs[candidates[-1]] <= value:\n            candidates.pop()\n\n        candidates.append(i)\n\n        if i >= w - 1:\n            result.append(xs[candidates[0]])\n\n    return result\n```"
 }

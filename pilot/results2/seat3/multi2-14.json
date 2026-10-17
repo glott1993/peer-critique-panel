@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-14",
+ "type": "multi",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "no: got 2937.0, expected 2893.0 | ok: got 26485.0, expected 26485.0 | ok: got '25/33', expected '25/33'",
+ "error": null,
+ "seconds": 6.8,
+ "tokens": 1558,
+ "prompt_tokens": 480,
+ "completion_tokens": 1078,
+ "cost": 0.0044,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "**Part A:**\nRegular hourly rate = $22.00.\nOvertime rate (>8 to 12 hrs) = 1.5 \u00d7 $22.00 = $33.00.\nDouble time rate (>12 hrs) = 2.0 \u00d7 $22.00 = $44.00.\n\nHours worked per day:\n- 9.5: 8 reg, 1.5 OT\n- 9.5: 8 reg, 1.5 OT\n- 8: 8 reg\n- 6: 6 reg\n- 8: 8 reg\n- 0: 0\n- 12.5: 8 reg, 4 OT, 0.5 DT\n- 10: 8 reg, 2 OT\n- 10: 8 reg, 2 OT\n- 7.5: 7.5 reg\n- 10: 8 reg, 2 OT\n- 12.5: 8 reg, 4 OT, 0.5 DT\n- 11: 8 reg, 3 OT\n- 6: 6 reg\n\nTotals:\nRegular hours: 8 + 8 + 8 + 6 + 8 + 0 + 8 + 8 + 8 + 7.5 + 8 + 8 + 8 + 6 = 101.5 hours\nOvertime hours (1.5x): 1.5 + 1.5 + 0 + 0 + 0 + 0 + 4 + 2 + 2 + 0 + 2 + 4 + 3 + 0 = 20 hours\nDouble time hours (2x): 0.5 + 0.5 = 1 hour\n\nGross pay:\n101.5 \u00d7 $22.00 = $2,233.00\n20 \u00d7 $33.00 = $660.00\n1 \u00d7 $44.00 = $44.00\nTotal = $2,233.00 + $660.00 + $44.00 = $2,937.00\n\n**Part B:**\nIncome = $96,300.\nTax brackets:\n- 12% on first $12,500 = 0.12 \u00d7 12,500 = $1,500.00\n- 24% from $12,500 to $52,000 (i.e., on $39,500) = 0.24 \u00d7 39,500 = $9,480.00\n- 35% above $52,000 (i.e., on $96,300 - $52,000 = $44,300) = 0.35 \u00d7 44,300 = $15,505.00\nTotal tax before credit = 1,500 + 9,480 + 15,505 = $26,485.00\n\nTax credit:\nBase credit = $2,400.\nIncome above $50,000 = $96,300 - $50,000 = $46,300.\nCredit reduction = 8% of $46,300 = 0.08 \u00d7 46,300 = $3,704.00.\nSince reduction ($3,704) > base credit ($2,400), the credit is reduced to $0.\nTotal tax owed = $26,485.00 - $0 = $26,485.00.\n\n**Part C:**\nTotal marbles = 4 + 2 + 5 = 11.\nTotal ways to choose 3 marbles from 11:\nC(11, 3) = (11 \u00d7 10 \u00d7 9) / (3 \u00d7 2 \u00d7 1) = 165.\nThe complement of \"at least two share a color\" is \"all three marbles have different colors\" (i.e., exactly one red, one green, one blue).\nWays to choose 1 of each color:\n4 \u00d7 2 \u00d7 5 = 40.\nProbability of all different:\n40 / 165 = 8 / 33.\nProbability that at least two share a color:\n1 - 8/33 = 25/33.\n\nFINAL: 2937.00; 26485.00; 25/33"
+}

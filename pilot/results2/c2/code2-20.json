@@ -1,0 +1,199 @@
+{
+ "task_id": "code2-20",
+ "type": "code",
+ "condition": "c2",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 161.5,
+ "tokens": 75074,
+ "prompt_tokens": 55487,
+ "completion_tokens": 19587,
+ "cost": 0.23032,
+ "calls": 31,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "13-(1+1+1)",
+   "claimed": 10.0,
+   "value": 10.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "10-(3*3)",
+   "claimed": 1.0,
+   "value": 1.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Greedy line packing",
+     "what": "Iterate through words, adding each to the current line if it fits with at least one space between words; otherwise finalize the current line and start a new one."
+    },
+    {
+     "id": "c2",
+     "title": "Middle-line justification",
+     "what": "For non-final lines with more than one word, distribute extra spaces evenly across gaps, giving extra spaces to leftmost gaps first."
+    },
+    {
+     "id": "c3",
+     "title": "Final and single-word line formatting",
+     "what": "Left-justify the last line and any line with a single word, padding with trailing spaces to reach the target width."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "A",
+     "B"
+    ],
+    "c3": [
+     "B",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\nfrom typing import List\n\n\ndef justify(words: List[str], width: int) -> List[str]:\n    lines: List[List[str]] = []\n    current: List[str] = []\n    current_length = 0\n\n    for word in words:\n        if not current:\n            current = [word]\n            current_length = len(word)\n        elif current_length + 1 + len(word) <= width:\n            current.append(word)\n            current_length += 1 + len(word)\n        else:\n            lines.append(current)\n            current = [word]\n            current_length = len(word)\n\n    if current:\n        lines.append(current)\n\n    result: List[str] = []\n    for line_number, line_words in enumerate(lines):\n        is_last = line_number == len(lines) - 1\n\n        if is_last or len(line_words) == 1:\n            result.append(\" \".join(line_words).ljust(width))\n            continue\n\n        gaps = len(line_words) - 1\n        total_spaces = width - sum(len(word) for word in line_words)\n        base_spaces, extra_spaces = divmod(total_spaces, gaps)\n\n        line = \"\"\n        for index, word in enumerate(line_words[:-1]):\n            spaces = base_spaces + (1 if index < extra_spaces else 0)\n            line += word + \" \" * spaces\n        line += line_words[-1]\n        result.append(line)\n\n    return result\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Spec says every word is <= width, but if hidden tests feed width<=0 or a word exactly equal to width alone, divmod by gaps could raise ZeroDivisionError only avoided by single-word branch; however no check guards against width being smaller than a word causing negative total_spaces, which would silently produce wrong (negative) spacing."
+    },
+    {
+     "from": "A",
+     "problem": "ljust pads with single spaces already present from ' '.join, but if the last line's natural joined length exceeds width due to miscomputed packing (e.g., off-by-one in current_length+1+len(word)<=width), ljust would silently produce a line longer than width, not catch the bug."
+    },
+    {
+     "from": "A",
+     "problem": "The code relies on 'if current' being falsy to append nothing, and loop not running, giving lines=[] then result=[]; this is correct but untested explicitly in code comments\u2014should add explicit test."
+    },
+    {
+     "from": "D",
+     "problem": "Untested code path: the function is not shown being tested with an empty list, and the visible examples do not include it. The logic appears to return [] because no lines are built, but this is not verified."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses `index < extra_spaces` to add one extra space to the first `extra_spaces` gaps, which matches the requirement, but this is only tested on the visible example with width 16. No hidden test covers a case where `extra_spaces` is greater than 0 and multiple gaps exist with uneven distribution."
+    },
+    {
+     "from": "D",
+     "problem": "The code uses `ljust(width)` on the joined last line, which should add trailing spaces, but the visible example only shows a last line with two trailing spaces. No test covers a last line that is already exactly width or longer than width (though the latter is impossible per constraints)."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "A",
+   "accepted": 4,
+   "rejected": 2,
+   "answer": "```python\nfrom typing import List\n\n\ndef justify(words: List[str], width: int) -> List[str]:\n    lines: List[List[str]] = []\n    current: List[str] = []\n    current_length = 0\n\n    for word in words:\n        if not current:\n            current = [word]\n            current_length = len(word)\n        elif current_length + 1 + len(word) <= width:\n            current.append(word)\n            current_length += 1 + len(word)\n        else:\n            lines.append(current)\n            current = [word]\n            current_length = len(word)\n\n    if current:\n        lines.append(current)\n\n    result: List[str] = []\n    for line_number, line_words in enumerate(lines):\n        is_last = line_number == len(lines) - 1\n\n        if is_last or len(line_words) == 1:\n            result.append(\" \".join(line_words).ljust(width))\n            continue\n\n        gaps = len(line_words) - 1\n        total_spaces = width - sum(len(word) for word in line_words)\n        base_spaces, extra_spaces = divmod(total_spaces, gaps)\n\n        line = \"\"\n        for index, word in enumerate(line_words[:-1]):\n            spaces = base_spaces + (1 if index < extra_spaces else 0)\n            line += word + \" \" * spaces\n        line += line_words[-1]\n        result.append(line)\n\n    return result\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "The record notes that uneven space distribution with multiple gaps is untested. Trace justify(['a','b','c','d'], 13) by hand through the code: what are gaps, total_spaces, base_spaces, extra_spaces, and the exact output string (show spaces explicitly as counts per gap)? Is this line treated as last-line left-justified or fully justified, and why?",
+    "The greedy packing condition is current_length + 1 + len(word) <= width. For words=['aaa','bb'] with width=6, does 'bb' join the first line or start a new one, and what is the full returned list? State each line's exact length.",
+    "The record says the empty-input path is unverified. What exactly does justify([], 5) return, and separately what does justify(['abc'], 3) return \u2014 is the single word padded, and does len() equal width in both cases? Also, does any hidden-test-plausible input reach the divmod call with gaps == 0?"
+   ],
+   "replies": [
+    "Trace justify(['a','b','c','d'],13): current_length starts 0. 'a': current=['a'], len=1. 'b': 1+1+1=3<=13 -> current=['a','b'], len=3. 'c': 3+1+1=5<=13 -> current=['a','b','c'], len=5. 'd': 5+1+1=7<=13 -> current=['a','b','c','d'], len=7. Loop ends, current appended -> lines=[['a','b','c','d']], only one line total. So line_number=0 == len(lines)-1=0 -> is_last=True. The function takes the ljust branch, NOT the gaps/divmod branch \u2014 gaps, total_spaces, base_spaces, extra_spaces are never computed because the code short-circuits on 'is_last or len==1'. Output: ' '.join(['a','b','c','d']).ljust(13) = 'a b c d' (7 chars) + 6 trailing spaces = 'a b c d      ', length 13. This is correctly the last-line (and only-line) left-justified case per spec.",
+    "words=['aaa','bb'], width=6: current=['aaa'], current_length=3. Check 'bb': 3+1+2=6<=6 -> True, so 'bb' JOINS the first line (not a new line). current=['aaa','bb'], length=6. Loop ends, lines=[['aaa','bb']]. Single line -> is_last=True -> ljust(6) on 'aaa bb' which is already length 6. Full returned list: ['aaa bb']. Line length = 6, matches width exactly, no trailing padding needed.",
+    "justify([],5): words loop never executes, current stays [], 'if current' is False so nothing appended, lines=[]; result loop over empty lines produces result=[]. Returns []. justify(['abc'],3): current=['abc'], loop ends, lines=[['abc']]; single line so is_last True (also len(line_words)==1) -> ' '.join(['abc']).ljust(3) = 'abc' (already length 3, no padding chars added but ljust is still applied). Returns ['abc'], len('abc')==3==width, same for empty case trivially (no lines to check). Regarding gaps==0: the divmod(total_spaces, gaps) line is only reached in the else branch, which requires NOT(is_last or len(line_words)==1) \u2014 meaning line_words has >=2 words AND is not the last line. Since len(line_words)>=2, gaps=len(line_words)-1>=1 always in that branch. So gaps==0 can never reach divmod for any valid input (words all <=width guaranteed by spec). No ZeroDivisionError possible. No source needed beyond the code logic itself \u2014 this is a direct code trace, not an empirical claim."
+   ],
+   "open": [
+    "The reply is a correct trace but the input chosen (['a','b','c','d'], 13) collapses to a single line and short-circuits on is_last, so the divmod/extra-spaces branch was never executed. The original concern \u2014 uneven space distribution across multiple gaps on a fully justified non-last line \u2014 remains unverified beyond the one visible example."
+   ],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Trace an input that actually reaches the else branch with a non-zero remainder: justify(['a','b','c','d','e','f','g'], 11). State how the greedy packing splits the words into lines, and for the first (non-last) line give gaps, total_spaces, base_spaces, extra_spaces, the exact per-gap space counts left to right, the literal output string, and its len(). Confirm the extra spaces land in the leftmost gaps.",
+    "Does a single-word line that is NOT the last line get left-justified with trailing spaces as the spec requires? Trace justify(['aa','bbb','c'], 3): show the lines list after packing, which branch each line takes, the exact three output strings, and each string's len()."
+   ],
+   "replies": [
+    "Q4: Trace justify(['a','b','c','d','e','f','g'], 11).\nPacking: start current=['a'] len1; add 'b'\u21921+1+1=3; add 'c'\u21925; add 'd'\u21927; add 'e'\u21929; add 'f'\u21929+1+1=11 (<=11, fits); add 'g'\u219211+1+1=13>11 \u2192 push current, start new current=['g'].\nResult lines = [['a','b','c','d','e','f'], ['g']].\nFirst line (non-last): words=['a','b','c','d','e','f'], 6 words.\ngaps = 6-1 = 5\ntotal_spaces = 11 - sum(len)=11-6=5\nbase_spaces, extra_spaces = divmod(5,5) = (1,0)\nper-gap spaces left to right: [1,1,1,1,1] (since extra_spaces=0, no gap gets an extra space)\noutput string: 'a'+' '+'b'+' '+'c'+' '+'d'+' '+'e'+' '+'f' = 'a b c d e f'\nlen('a b c d e f') = 11 \u2713 matches width.\nBecause extra_spaces=0 here, this example does NOT actually exercise the 'extra spaces go to leftmost gaps' logic (all gaps equal). The claim that extra spaces land leftmost is correct by code construction (index < extra_spaces) but this particular trace has extra_spaces=0 so it doesn't demonstrate it. No error in code, just note the example is degenerate for that purpose.\n\nQ5: Trace justify(['aa','bbb','c'], 3).\nPacking: current=['aa'] len2. Try add 'bbb': 2+1+3=6>3 \u2192 push ['aa'], start current=['bbb'] len3. Try add 'c': 3+1+1=5>3 \u2192 push ['bbb'], start current=['c']. End: push ['c'].\nlines = [['aa'], ['bbb'], ['c']].\nline_number=0 ['aa']: is_last=False, len(line_words)==1 \u2192 True \u2192 branch: ' '.join(['aa']).ljust(3) = 'aa '.ljust(3) = 'aa ' (len 3).\nline_number=1 ['bbb']: is_last=False, len==1 \u2192 True \u2192 ' '.join(['bbb']).ljust(3) = 'bbb' (len 3).\nline_number=2 ['c']: is_last=True \u2192 'c'.ljust(3) = 'c  ' (len 3).\nFinal output: ['aa ', 'bbb', 'c  '], each len=3.\nYes \u2014 the code checks 'is_last or len(line_words)==1', so single-word lines are left-justified with trailing spaces even when not the last line, as required by spec. No bug found; confirmed correct.",
+    "No reply."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Trace justify(['a','b','c','ddddd'], 8) through the code: give the lines list after packing, and for the first (non-last) line state gaps, total_spaces, base_spaces, extra_spaces, the per-gap space counts left to right, the literal output string with len(); then state the exact return value of justify([], 5) and of justify(['abcde','x'], 5) with each string's len()."
+   ],
+   "replies": [
+    "Trace for justify(['a','b','c','ddddd'],8):\n\nPacking: start current=[]. 'a'->current=['a'],len=1. 'b': 1+1+1=3<=8 -> current=['a','b'],len=3. 'c': 3+1+1=5<=8 -> current=['a','b','c'],len=5. 'ddddd': 5+1+5=11>8, so flush current, start new current=['ddddd']. End of loop, flush. lines = [['a','b','c'], ['ddddd']].\n\nFirst (non-last) line ['a','b','c']: gaps=len(line_words)-1=2. total_spaces=width-sum(word lens)=8-(1+1+1)=5. base_spaces, extra_spaces = divmod(5,2) = (2,1). Per-gap space counts left to right: index0 -> base+1=3 (since 0<extra_spaces=1), index1 -> base+0=2. So output built as 'a'+'   '(3 spaces)+'b'+'  '(2 spaces)+'c' = 'a   b  c', len('a   b  c')=8 \u2014 matches width, correct.\n\nSecond line ['ddddd'] is last AND single word -> ' '.join(['ddddd']).ljust(8) = 'ddddd   ' (5 letters + 3 trailing spaces), len=8.\n\nSo justify(['a','b','c','ddddd'],8) == ['a   b  c', 'ddddd   '].\n\njustify([],5): words loop doesn't execute, lines=[] (current stays empty), result loop doesn't execute -> returns []. len of result list is 0 (no strings).\n\njustify(['abcde','x'],5): 'abcde' len5 -> current=['abcde'],current_length=5. 'x': 5+1+1=7>5 -> flush, new current=['x']. End flush. lines=[['abcde'],['x']].\nLine 0 ['abcde']: not last, but len(line_words)==1 -> triggers the 'is_last or single word' branch -> ' '.join(['abcde']).ljust(5) = 'abcde' (len=5, no padding needed since already width).\nLine 1 ['x'] is last -> ' '.join(['x']).ljust(5) = 'x    ' (1 char + 4 spaces), len=5.\nReturn value: ['abcde', 'x    '], lens: len('abcde')=5, len('x    ')=5.\n\nI traced the code as submitted; all branches match the stated algorithm (single-word lines and last lines are left-justified via ljust, non-last multi-word lines distribute extra spaces to leftmost gaps). No discrepancies found \u2014 no correction needed."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "```python\nfrom typing import List\n\n\ndef justify(words: List[str], width: int) -> List[str]:\n    lines: List[List[str]] = []\n    current: List[str] = []\n    current_length = 0\n\n    for word in words:\n        if not current:\n            current = [word]\n            current_length = len(word)\n        elif current_length + 1 + len(word) <= width:\n            current.append(word)\n            current_length += 1 + len(word)\n        else:\n            lines.append(current)\n            current = [word]\n            current_length = len(word)\n\n    if current:\n        lines.append(current)\n\n    result: List[str] = []\n    for line_number, line_words in enumerate(lines):\n        is_last = line_number == len(lines) - 1\n\n        if is_last or len(line_words) == 1:\n            result.append(\" \".join(line_words).ljust(width))\n            continue\n\n        gaps = len(line_words) - 1\n        total_spaces = width - sum(len(word) for word in line_words)\n        base_spaces, extra_spaces = divmod(total_spaces, gaps)\n\n        line = \"\"\n        for index, word in enumerate(line_words[:-1]):\n            spaces = base_spaces + (1 if index < extra_spaces else 0)\n            line += word + \" \" * spaces\n        line += line_words[-1]\n        result.append(line)\n\n    return result\n```"
+}

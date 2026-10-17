@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 'crate', expected 'crate'",
  "error": null,
- "seconds": 14.2,
- "tokens": 4699,
+ "seconds": 9.4,
+ "tokens": 3915,
  "prompt_tokens": 2805,
- "completion_tokens": 1894,
- "cost": 0.02455,
+ "completion_tokens": 1110,
+ "cost": 0.01671,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Bronze-tier customers:** C100 (Jordan), C101 (Quinn), C103 (Harper), C104 (Devon), C105 (Emery)\n\nI pulled every order (all statuses) for these customers, removed exact duplicate rows (O2276 for C100 and O2413 for C105 each appeared twice with identical data), then summed units by product:\n\n- **Crate:** C100(20+15+24+31=90) + C101(41) + C104(30) + C105(44+40+20+23=127) = **288**\n- **Anvil:** C100(94) + C101(88) + C103(2) + C104(30) + C105(33) = 247\n- **Dowel:** C100(20) + C101(78) + C103(41) + C104(54) + C105(67) = 260\n- **Flange:** C100(43) + C103(37) + C104(72) + C105(53) = 205\n- **Bolt:** C100(43) = 43\n- **Easel:** C101(58) + C104(11) = 69\n\nCrate has the highest total units (288) among Bronze-tier customers.\n\nFINAL: Crate"
+ "answer": "Bronze customers: C100, C101, C103, C104, C105.\n\nSumming units by product (deduping exact duplicate rows O2276 and O2413):\n\n- Crate: 288\n- Anvil: 247\n- Dowel: 260\n- Flange: 205\n- Bolt: 43\n- Easel: 69\n\nCrate has the highest total.\n\nFINAL: Crate"
 }

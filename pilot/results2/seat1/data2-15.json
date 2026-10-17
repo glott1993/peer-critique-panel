@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 9013.37, expected 9013.37",
  "error": null,
- "seconds": 8.2,
- "tokens": 3796,
+ "seconds": 7.2,
+ "tokens": 3680,
  "prompt_tokens": 2835,
- "completion_tokens": 961,
- "cost": 0.01528,
+ "completion_tokens": 845,
+ "cost": 0.01412,
  "calls": 1,
  "call_errors": 0,
- "answer": "**Step 1: Identify East+Silver customers**\nOnly C101 (Reese) matches East region and Silver tier.\n\n**Step 2: List C101's orders (dedupe exact duplicate O2253), keep only shipped/pending**\n\n- O2253, Anvil, 23\u00d7112.01=2576.23, shipped \u2713 (duplicate ignored)\n- O2815, Bolt, 26\u00d713.62=354.12, pending \u2713\n- O2058, Bolt, 36\u00d779.99=2879.64, pending \u2713\n- O2747, Dowel, 12\u00d721.52=258.24, shipped \u2713\n- O2207, Anvil, returned \u2717\n- O2866, Easel, returned \u2717\n- O2181, Flange, 43\u00d766.56=2862.08, pending \u2713\n- O2003, Dowel, 1\u00d783.06=83.06, pending \u2713\n\n**Step 3: Sum revenue**\n2576.23+354.12+2879.64+258.24+2862.08+83.06 = 9013.37\n\nFINAL: 9013.37"
+ "answer": "East+Silver customer: C101 (Reese) only.\n\nC101 shipped/pending orders (dedup):\n- O2253 Anvil 23\u00d7112.01=2576.23\n- O2815 Bolt 26\u00d713.62=354.12\n- O2058 Bolt 36\u00d779.99=2879.64\n- O2747 Dowel 12\u00d721.52=258.24\n- O2181 Flange 43\u00d766.56=2862.08\n- O2003 Dowel 1\u00d783.06=83.06\n\nSum = 9013.37\n\nFINAL: 9013.37"
 }

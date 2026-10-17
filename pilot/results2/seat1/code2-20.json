@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 17.2,
- "tokens": 812,
+ "seconds": 3.3,
+ "tokens": 677,
  "prompt_tokens": 313,
- "completion_tokens": 499,
- "cost": 0.00562,
- "calls": 4,
- "call_errors": 3,
- "answer": "```python\ndef justify(words, width):\n    if not words:\n        return []\n    \n    lines = []\n    current_line = []\n    current_len = 0\n    \n    for word in words:\n        # length if we add this word: current words + spaces (1 between each) + new word\n        needed = current_len + len(current_line) + len(word) if current_line else len(word)\n        if current_line and needed > width:\n            lines.append(current_line)\n            current_line = [word]\n            current_len = len(word)\n        else:\n            current_line.append(word)\n            current_len += len(word)\n    \n    if current_line:\n        lines.append(current_line)\n    \n    result = []\n    for i, line in enumerate(lines):\n        is_last = (i == len(lines) - 1)\n        total_chars = sum(len(w) for w in line)\n        total_spaces = width - total_chars\n        \n        if is_last or len(line) == 1:\n            # left justify\n            text = ' '.join(line)\n            text += ' ' * (width - len(text))\n            result.append(text)\n        else:\n            gaps = len(line) - 1\n            base_space, extra = divmod(total_spaces, gaps)\n            line_str = ''\n            for j, word in enumerate(line):\n                line_str += word\n                if j < gaps:\n                    space_count = base_space + (1 if j < extra else 0)\n                    line_str += ' ' * space_count\n            result.append(line_str)\n    \n    return result\n```"
+ "completion_tokens": 364,
+ "cost": 0.00427,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef justify(words, width):\n    if not words:\n        return []\n    lines = []\n    cur = []\n    cur_len = 0\n    for w in words:\n        if cur and cur_len + len(cur) + len(w) > width:\n            lines.append(cur)\n            cur = []\n            cur_len = 0\n        cur.append(w)\n        cur_len += len(w)\n    if cur:\n        lines.append(cur)\n\n    result = []\n    for i, line in enumerate(lines):\n        if i == len(lines) - 1 or len(line) == 1:\n            s = ' '.join(line)\n            s += ' ' * (width - len(s))\n            result.append(s)\n        else:\n            total_chars = sum(len(w) for w in line)\n            total_spaces = width - total_chars\n            gaps = len(line) - 1\n            base = total_spaces // gaps\n            extra = total_spaces % gaps\n            s = ''\n            for j in range(gaps):\n                s += line[j]\n                s += ' ' * (base + (1 if j < extra else 0))\n            s += line[-1]\n            result.append(s)\n    return result\n```"
 }

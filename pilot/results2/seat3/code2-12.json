@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-12",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.8,
+ "tokens": 371,
+ "prompt_tokens": 148,
+ "completion_tokens": 223,
+ "cost": 0.00095,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "An efficient implementation of `lcs_length` uses dynamic programming with space optimization ($O(\\min(|a|, |b|))$ space):\n\n```python\ndef lcs_length(a: str, b: str) -> int:\n    \"\"\"Return the length of the longest common subsequence of two strings.\"\"\"\n    # Ensure b is the shorter string to optimize space complexity\n    if len(a) < len(b):\n        a, b = b, a\n\n    dp = [0] * (len(b) + 1)\n\n    for char_a in a:\n        prev = 0\n        for j, char_b in enumerate(b):\n            temp = dp[j + 1]\n            if char_a == char_b:\n                dp[j + 1] = prev + 1\n            else:\n                dp[j + 1] = max(dp[j + 1], dp[j])\n            prev = temp\n\n    return dp[len(b)]\n```"
+}

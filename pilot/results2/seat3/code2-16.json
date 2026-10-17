@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-16",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 5.0,
+ "tokens": 937,
+ "prompt_tokens": 305,
+ "completion_tokens": 632,
+ "cost": 0.0026,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete implementation of `satisfies`:\n\n```python\nimport re\n\ndef _parse_version(v_str: str) -> tuple[int, int, int]:\n    if not isinstance(v_str, str):\n        raise ValueError(\"Version must be a string\")\n    parts = v_str.split('.')\n    if len(parts) != 3:\n        raise ValueError(f\"Invalid semver: '{v_str}'\")\n    parsed = []\n    for p in parts:\n        if not p.isdigit():\n            raise ValueError(f\"Invalid semver component: '{p}'\")\n        parsed.append(int(p))\n    return tuple(parsed)\n\ndef _compare(v: tuple[int, int, int], op: str, target: tuple[int, int, int]) -> bool:\n    if op == '=':\n        return v == target\n    elif op == '>=':\n        return v >= target\n    elif op == '<=':\n        return v <= target\n    elif op == '>':\n        return v > target\n    elif op == '<':\n        return v < target\n    else:\n        raise ValueError(f\"Unknown operator: '{op}'\")\n\ndef satisfies(version: str, spec: str) -> bool:\n    v = _parse_version(version)\n    if not isinstance(spec, str) or not spec.strip():\n        raise ValueError(\"Spec must be a non-empty string\")\n\n    spec = spec.strip()\n\n    if spec.startswith('^'):\n        target = _parse_version(spec[1:])\n        maj, min_, pat = target\n        if maj != 0:\n            upper = (maj + 1, 0, 0)\n        elif min_ != 0:\n            upper = (0, min_ + 1, 0)\n        else:\n            return v == target\n        return v >= target and v < upper\n\n    if spec.startswith('~'):\n        target = _parse_version(spec[1:])\n        maj, min_, pat = target\n        upper = (maj, min_ + 1, 0)\n        return v >= target and v < upper\n\n    # Otherwise, space-separated conjunction of comparators or an exact version\n    tokens = spec.split()\n    for token in tokens:\n        match = re.match(r'^(>=|<=|>|<|=)?(\\d+\\.\\d+\\.\\d+)$', token)\n        if not match:\n            raise ValueError(f\"Invalid comparator or version in spec: '{token}'\")\n        op, target_str = match.groups()\n        target = _parse_version(target_str)\n        op = op if op else '='\n        if not _compare(v, op, target):\n            return False\n\n    return True\n```"
+}

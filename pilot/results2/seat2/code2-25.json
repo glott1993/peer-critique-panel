@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 18.6,
- "tokens": 6878,
- "prompt_tokens": 4395,
- "completion_tokens": 2483,
- "cost": 0.00386,
+ "seconds": 11.3,
+ "tokens": 5904,
+ "prompt_tokens": 4079,
+ "completion_tokens": 1825,
+ "cost": 0.00301,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nimport heapq\n\n\ndef stable_matching(proposers, receivers):\n    receiver_rank = {\n        receiver: {proposer: rank for rank, proposer in enumerate(preferences)}\n        for receiver, preferences in receivers.items()\n    }\n\n    next_choice = {proposer: 0 for proposer in proposers}\n    free_proposers = list(proposers)\n    heapq.heapify(free_proposers)\n\n    receiver_matches = {}\n    proposer_matches = {}\n\n    while free_proposers:\n        proposer = heapq.heappop(free_proposers)\n        receiver = proposers[proposer][next_choice[proposer]]\n        next_choice[proposer] += 1\n\n        current = receiver_matches.get(receiver)\n\n        if current is None:\n            receiver_matches[receiver] = proposer\n            proposer_matches[proposer] = receiver\n        elif receiver_rank[receiver][proposer] < receiver_rank[receiver][current]:\n            receiver_matches[receiver] = proposer\n            proposer_matches[proposer] = receiver\n            del proposer_matches[current]\n            heapq.heappush(free_proposers, current)\n        else:\n            heapq.heappush(free_proposers, proposer)\n\n    return proposer_matches\n```"
+ "answer": "```python\nimport heapq\n\n\ndef stable_matching(proposers, receivers):\n    receiver_rank = {\n        receiver: {proposer: rank for rank, proposer in enumerate(preferences)}\n        for receiver, preferences in receivers.items()\n    }\n\n    next_choice = {proposer: 0 for proposer in proposers}\n    proposer_match = {}\n    receiver_match = {}\n\n    free = list(proposers)\n    heapq.heapify(free)\n\n    while free:\n        proposer = heapq.heappop(free)\n        preferences = proposers[proposer]\n\n        receiver = preferences[next_choice[proposer]]\n        next_choice[proposer] += 1\n\n        current = receiver_match.get(receiver)\n\n        if current is None:\n            receiver_match[receiver] = proposer\n            proposer_match[proposer] = receiver\n        elif receiver_rank[receiver][proposer] < receiver_rank[receiver][current]:\n            receiver_match[receiver] = proposer\n            proposer_match[proposer] = receiver\n            del proposer_match[current]\n            heapq.heappush(free, current)\n        else:\n            heapq.heappush(free, proposer)\n\n    return proposer_match\n```"
 }

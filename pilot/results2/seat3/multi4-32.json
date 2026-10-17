@@ -1,0 +1,16 @@
+{
+ "task_id": "multi4-32",
+ "type": "multi4",
+ "condition": "seat3",
+ "correct": false,
+ "detail": "ok: got 9.0, expected 9.0 | ok: got 3233.81, expected 3233.81 | ok: got 2953.38, expected 2953.28 | no: got 7427.81, expected 7435.65",
+ "error": null,
+ "seconds": 11.3,
+ "tokens": 2200,
+ "prompt_tokens": 575,
+ "completion_tokens": 1625,
+ "cost": 0.00653,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A:\n151 is a prime number. By Fermat's Little Theorem, $45^{150} \\equiv 1 \\pmod{151}$.\n$363 = 2 \\times 150 + 63$, so $45^{363} \\equiv 45^{63} \\pmod{151}$.\n$45^2 = 2025 \\equiv 62 \\pmod{151}$\n$45^3 = 45 \\times 62 = 2790 \\equiv 72 \\pmod{151}$\n$45^4 = 62^2 = 3844 \\equiv 69 \\pmod{151}$\n$45^7 = 45^3 \\times 45^4 \\equiv 72 \\times 69 = 4968 \\equiv 136 \\equiv -15 \\pmod{151}$\n$45^9 = 45^7 \\times 45^2 \\equiv -15 \\times 62 = -930 \\equiv -24 \\equiv 127 \\pmod{151}$\n$45^{63} = (45^9)^7 \\equiv (-24)^7 \\pmod{151}$\n$(-24)^2 = 576 \\equiv 123 \\equiv -28 \\pmod{151}$\n$(-24)^3 \\equiv -28 \\times (-24) = 672 \\equiv 68 \\pmod{151}$\n$(-24)^6 \\equiv 68^2 = 4624 \\equiv 94 \\equiv -57 \\pmod{151}$\n$(-24)^7 \\equiv -57 \\times (-24) = 1368 \\equiv 9 \\pmod{151}$.\nSo the remainder is 9.\n\nPart B:\nOrder of 651 units:\n- First 100 units: $100 \\times 6.40 = 640$\n- Next 200 units: $200 \\times 5.44 = 1088$\n- Remaining 351 units: $351 \\times 4.48 = 1572.48$\nSubtotal = $640 + 1088 + 1572.48 = 3300.48$.\nSince subtotal > $2,500$, apply 8% discount:\nDiscounted subtotal = $3300.48 \\times (1 - 0.08) = 3300.48 \\times 0.92 = 3036.4416$.\nSales tax of 6.5%:\nTotal = $3036.4416 \\times 1.065 = 3233.810304 \\approx 3233.81$.\n\nPart C:\nTotal units sold = $60 + 81 + 65 + 114 + 50 + 66 = 436$ units.\nUsing FIFO, we deplete inventory in order:\n- Lot 1: 64 units at $4.26 = 272.64$ (cumulative units: 64)\n- Lot 2: 61 units at $9.65 = 588.65$ (cumulative units: 125)\n- Lot 3: 139 units at $4.48 = 622.72$ (cumulative units: 264)\n- Lot 4: 40 units at $5.08 = 203.20$ (cumulative units: 304)\n- Lot 5: 61 units at $10.92 = 666.12$ (cumulative units: 365)\n- Lot 6: Needs $436 - 365 = 71$ units at $8.45 = 600.05$ (cumulative units: 436).\nTotal COGS = $272.64 + 588.65 + 622.72 + 203.20 + 666.12 + 600.05 = 2953.38$.\n\nPart D:\n$P = 12000$, monthly interest rate $r = 0.078 / 12 = 0.0065$.\n$n = 60$ months.\nRegular monthly payment:\n$M = P \\frac{r(1+r)^{60}}{(1+r)^{60} - 1} = 12000 \\frac{0.0065(1.0065)^{60}}{(1.0065)^{60} - 1} \\approx 242.106883$.\nBalance after month $k$, with standard formula $B_k = B_{k-1}(1+r) - M - E_k$:\nUsing $B_k = P(1+r)^k - M \\frac{(1+r)^k - 1}{r} - \\sum E_j (1+r)^{k-j}$:\nAt month 18:\n$k = 18$.\nBase balance without extra payments:\n$12000(1.0065)^{18} - M \\frac{(1.0065)^{18} - 1}{0.0065} \\approx 13481.56475 - 4613.56586 = 8867.99889$.\nEffect of extra payment at month 2 ($E_2 = 600$), compounded for $18 - 2 = 16$ months:\n$600 \\times (1.0065)^{16} \\approx 600 \\times 1.10915655 = 665.49393$.\nEffect of extra payment at month 13 ($E_{13} = 750$), compounded for $18 - 13 = 5$ months:\n$750 \\times (1.0065)^5 \\approx 750 \\times 1.03292417 = 774.69313$.\nRemaining balance at month 18:\n$B_{18} = 8867.99889 - 665.49393 - 774.69313 = 7427.81183 \\approx 7427.81$.\n\nFINAL: 9; 3233.81; 2953.38; 7427.81"
+}

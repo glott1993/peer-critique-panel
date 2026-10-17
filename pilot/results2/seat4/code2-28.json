@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-28",
+ "type": "code",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 14.6,
+ "tokens": 1386,
+ "prompt_tokens": 231,
+ "completion_tokens": 1155,
+ "cost": 0.00488,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    # Remove hyphens and spaces\n    s = s.replace('-', '').replace(' ', '')\n    \n    if len(s) == 10:\n        # First nine must be digits\n        if not all('0' <= c <= '9' for c in s[:9]):\n            return False\n        # Last must be digit or uppercase X\n        last = s[9]\n        if not ('0' <= last <= '9' or last == 'X'):\n            return False\n        \n        total = 0\n        for i, ch in enumerate(s, start=1):\n            if ch == 'X':\n                value = 10\n            else:\n                value = int(ch)\n            total += i * value\n        return total % 11 == 0\n    \n    elif len(s) == 13:\n        # All characters must be digits\n        if not all('0' <= c <= '9' for c in s):\n            return False\n        \n        total = 0\n        for i, ch in enumerate(s, start=1):\n            digit = int(ch)\n            weight = 1 if i % 2 == 1 else 3\n            total += weight * digit\n        return total % 10 == 0\n    \n    return False\n```"
+}

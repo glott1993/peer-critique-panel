@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 9.9,
- "tokens": 1603,
+ "seconds": 3.5,
+ "tokens": 701,
  "prompt_tokens": 367,
- "completion_tokens": 1236,
- "cost": 0.01309,
+ "completion_tokens": 334,
+ "cost": 0.00407,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\ndef stable_matching(proposers, receivers):\n    # Track next proposal index for each proposer\n    next_idx = {p: 0 for p in proposers}\n    \n    # Precompute receiver preference ranks for quick comparison\n    receiver_rank = {r: {p: i for i, p in enumerate(prefs)} for r, prefs in receivers.items()}\n    \n    # Current match for receivers: receiver -> proposer\n    receiver_match = {}\n    \n    # Set of currently free proposers\n    free = set(proposers.keys())\n    \n    while free:\n        p = min(free)  # process free proposers in plain string order\n        prefs = proposers[p]\n        \n        if next_idx[p] >= len(prefs):\n            # No more receivers to propose to (shouldn't happen with equal-size valid input)\n            free.remove(p)\n            continue\n        \n        r = prefs[next_idx[p]]\n        next_idx[p] += 1\n        \n        if r not in receiver_match:\n            receiver_match[r] = p\n            free.remove(p)\n        else:\n            current = receiver_match[r]\n            if receiver_rank[r][p] < receiver_rank[r][current]:\n                receiver_match[r] = p\n                free.remove(p)\n                free.add(current)\n            # else p stays free, will propose to next receiver on next iteration\n    \n    return {p: r for r, p in receiver_match.items()}\n```"
+ "answer": "```python\ndef stable_matching(proposers, receivers):\n    next_index = {p: 0 for p in proposers}\n    engaged = {}  # receiver -> proposer\n    free = set(proposers.keys())\n    receiver_rank = {r: {p: i for i, p in enumerate(prefs)} for r, prefs in receivers.items()}\n\n    while free:\n        p = min(free)\n        free.remove(p)\n        prefs = proposers[p]\n        if next_index[p] >= len(prefs):\n            continue\n        r = prefs[next_index[p]]\n        next_index[p] += 1\n\n        if r not in engaged:\n            engaged[r] = p\n        else:\n            current = engaged[r]\n            if receiver_rank[r][p] < receiver_rank[r][current]:\n                engaged[r] = p\n                free.add(current)\n                free.add(p)  # p stays, remove below\n                free.discard(p)\n            else:\n                free.add(p)\n\n    return {p: r for r, p in engaged.items()}\n```"
 }

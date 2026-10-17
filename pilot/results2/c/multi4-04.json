@@ -1,0 +1,221 @@
+{
+ "task_id": "multi4-04",
+ "type": "multi4",
+ "condition": "c",
+ "correct": true,
+ "detail": "ok: got 2559.53, expected 2559.53 | ok: got 3736369.0, expected 3736369.0 | ok: got 2904.0, expected 2904.0 | ok: got '2027-02-11', expected '2027-02-11'",
+ "error": null,
+ "seconds": 334.0,
+ "tokens": 153611,
+ "prompt_tokens": 106312,
+ "completion_tokens": 47299,
+ "cost": 0.46497,
+ "calls": 40,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 6,
+ "hub_open": 0,
+ "hub_sent_back": true,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "arithmetic",
+   "expr": "(100*4.25+200*3.61+423*2.97)*1.065",
+   "claimed": 2559.53,
+   "value": 2559.5251500000004,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "845*(403+11375)/2 - 211*(416+11336)/2",
+   "claimed": 3736369.0,
+   "value": 3736369.0,
+   "valid": true,
+   "ok": true
+  },
+  {
+   "kind": "arithmetic",
+   "expr": "2*(8*22+1.5*33)+(8*22+4*33+0.5*44)+(8*22+2*33)+4*(8*22)+(8*22+4*33+1*44)+3*(8*22+3*33)",
+   "claimed": 2904.0,
+   "value": 2904.0,
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "D",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A pricing",
+     "what": "Compute tiered subtotal for 723 units (100@4.25+200@3.61+423@2.97), check if subtotal exceeds $2500 for discount eligibility, apply 6.5% tax, round to nearest cent."
+    },
+    {
+     "id": "c2",
+     "title": "Part B sum",
+     "what": "Sum all integers from 395 to 11383 divisible by 13 but not by 4 (i.e., not divisible by 52), using arithmetic series formulas for multiples of 13 minus multiples of 52 in range."
+    },
+    {
+     "id": "c3",
+     "title": "Part C gross pay",
+     "what": "For each of 14 days, split hours into regular (\u22648), 1.5x (8-12), and 2x (>12) tiers, sum pay across all days."
+    },
+    {
+     "id": "c4",
+     "title": "Part D business date",
+     "what": "Starting 2026-10-06, count forward 86 weekdays (Mon-Fri), skipping the six listed holidays, to find the resulting date."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "C"
+    ],
+    "c3": [
+     "C",
+     "B"
+    ],
+    "c4": [
+     "A",
+     "C"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "C",
+   "draft": "**Part A:**\n- First 100 units: $100 \\times 4.25 = 425.00$\n- Next 200 units: $200 \\times 3.61 = 722.00$\n- Remaining 423 units: $423 \\times 2.97 = 1256.31$\n- Subtotal: $425.00 + 722.00 + 1256.31 = 2403.31$\nSince $\\$2403.31 \\le \\$2500$, no discount applies.\n- Total with 6.5% tax: $2403.31 \\times 1.065 = 2559.52515$, which rounds to $2559.53$.\n\n**Part B:**\n- Multiples of 13 in $[395, 11383]$: from $31 \\times 13 = 403$ to $875 \\times 13 = 11375$ (845 numbers).\n  $\\text{Sum}_{13} = \\frac{845}{2}(403 + 11375) = 4,976,205$\n- Multiples of $\\text{lcm}(13, 4) = 52$: from $8 \\times 52 = 416$ to $218 \\times 52 = 11336$ (211 numbers).\n  $\\text{Sum}_{52} = \\frac{211}{2}(416 + 11336) = 1,239,836$\n- Required sum: $4,976,205 - 1,239,836 = 3,736,369$.\n\n**Part C:**\nRates: Regular = $\\$22.00$, $1.5\\times$ (hours $>8$ to $12$) = $\\$33.00$, $2\\times$ (hours $>12$) = $\\$44.00$.\n- 9.5 hrs (2 days): $2 \\times (176 + 1.5 \\times 33) = 451.00$\n- 12.5 hrs (1 day): $176 + 4 \\times 33 + 0.5 \\times 44 = 330.00$\n- 10 hrs (1 day): $176 + 2 \\times 33 = 242.00$\n- 8 hrs (4 days): $4 \\times 176 = 704.00$\n- 13 hrs (1 day): $176 + 4 \\times 33 + 1 \\times 44 = 352.00$\n- 11 hrs (3 days): $3 \\times (176 + 3 \\times 33) = 825.00$\n- 0 hrs (2 days): $0.00$\nTotal gross pay: $451 + 330 + 242 + 704 + 352 + 825 = 2904.00$.\n\n**Part D:**\nCounting weekdays excluding the 6 listed holidays after 2026-10-06:\n- Oct 2026: 18 weekdays $- 1\\text{ holiday (Oct 12)} = 17$ days (total 17)\n- Nov 2026: 21 weekdays $- 1\\text{ holiday (Nov 25)} = 20$ days (total 37)\n- Dec 2026: 23 weekdays $- 2\\text{ holidays (Dec 3, 31)} = 21$ days (total 58)\n- Jan 2027: 21 weekdays $- 2\\text{ holidays (Jan 19, 28)} = 19$ days (total 77)\n- Feb 2027: Need $86 - 77 = 9$ business days $\\rightarrow$ Feb 11, 2027.\n\nFINAL: 2559.53; 3736369; 2904.00; 2027-02-11"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "The arithmetic is wrong: 1.5 overtime hours at $33/hr = $49.50, so one 9.5-hour day = 176 + 49.50 = 225.50; two days = 451.00. That part is correct, but the draft's expression '1.5 \u00d7 33' is fine. However, the draft omits the 9.5-hour days from the final sum? It lists 451.00 in the total, so no error there. This challenge is withdrawn\u2014no problem."
+    },
+    {
+     "from": "D",
+     "problem": "The draft double-counts or misclassifies the 11-hour days. There are three 11-hour days listed: positions 8, 9, 14. Each 11-hour day = 8\u00d722 + 3\u00d733 = 176 + 99 = 275. Three days = 825. That is included. The 9.5-hour days are positions 1 and 6: each = 176 + 1.5\u00d733 = 225.50; two = 451. The 12.5-hour day is position 3: 176 + 4\u00d733 + 0.5\u00d744 = 330. The 10-hour day is position 4: 176 + 2\u00d733 = 242. The 13-hour day is position 7: 176 + 4\u00d733 + 1\u00d744 = 352. The 8-hour days are positions 5, 11, 12, 13: 4\u00d7176 = 704. Sum = 451+330+242+704+352+825 = 2904. Correct."
+    },
+    {
+     "from": "D",
+     "problem": "The count of business days from Oct 7, 2026 through Jan 31, 2027 is not 77. Oct 2026 after Oct 6 has 18 weekdays (Oct 7-9, 13-16, 19-23, 26-30) minus Oct 12 = 17. Nov 2026 has 21 weekdays minus Nov 25 = 20 (total 37). Dec 2026 has 23 weekdays minus Dec 3 and Dec 31 = 21 (total 58). Jan 2027 has 21 weekdays minus Jan 19 and Jan 28 = 19 (total 77). That is correct. Then 9 business days into Feb 2027: Feb 1,2,3,4,5,8,9,10,11 = Feb 11. Correct."
+    },
+    {
+     "from": "D",
+     "problem": "The sum of multiples of 13 from 403 to 11375 inclusive is computed as (845/2)(403+11375) = 4,976,205. But the number of terms from 31\u00d713 to 875\u00d713 is 875 - 31 + 1 = 845, correct. The sum of multiples of 52 from 416 to 11336 is (211/2)(416+11336) = 1,239,836, with 218 - 8 + 1 = 211 terms, correct. Subtraction gives 3,736,369. Correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 0,
+   "rejected": 4,
+   "answer": "**Part A:**\n- First 100: 100 \u00d7 4.25 = 425.00\n- Next 200: 200 \u00d7 3.61 = 722.00\n- Remaining 423: 423 \u00d7 2.97 = 1256.31\n- Subtotal = 425.00 + 722.00 + 1256.31 = 2403.31, so no 5% discount.\n- Total = 2403.31 \u00d7 1.065 = 2559.53.\n\n**Part B:**\n- Multiples of 13: 403 to 11375, with 845 terms.\n  Sum = 845/2 \u00d7 (403 + 11375) = 4,976,205.\n- Multiples of 52: 416 to 11336, with 211 terms.\n  Sum = 211/2 \u00d7 (416 + 11336) = 1,239,836.\n- Required sum = 4,976,205 \u2212 1,239,836 = 3,736,369.\n\n**Part C:**\n- 9.5-hour days \u00d72: 2 \u00d7 (176 + 1.5 \u00d7 33) = 451.00\n- 12.5-hour day \u00d71: 176 + 4 \u00d7 33 + 0.5 \u00d7 44 = 330.00\n- 10-hour day \u00d71: 176 + 2 \u00d7 33 = 242.00\n- 8-hour days \u00d74: 4 \u00d7 176 = 704.00\n- 13-hour day \u00d71: 176 + 4 \u00d7 33 + 1 \u00d7 44 = 352.00\n- 11-hour days \u00d73: 3 \u00d7 (176 + 3 \u00d7 33) = 825.00\n- Total = 451.00 + 330.00 + 242.00 + 704.00 + 352.00 + 825.00 = 2904.00.\n\n**Part D:**\nBusiness days after 2026-10-06 through 2027-01-31:\nOct 2026: 17; Nov 2026: 20; Dec 2026: 21; Jan 2027: 19; total = 77.\nRemaining = 86 \u2212 77 = 9 business days in Feb 2027: Feb 1-5 and Feb 8-11 \u2192 2027-02-11.\n\nFINAL: 2559.53; 3736369; 2904.00; 2027-02-11"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "Counting 9 business days starting from Monday Feb 1, 2027: Days 1-5 are Feb 1, 2, 3, 4, 5 (Mon-Fri). Days 6-9 are Feb 8, 9, 10, 11 (Mon-Thu). That equals 4 days in week 2, making 5 + 4 = 9 business days ending on Thursday Feb 11. But wait, let's recount October business days after 2026-10-06: 2026-10-06 is Tuesday. Weekdays remaining in Oct: Oct 7, 8, 9 (3 days); Oct 12-16 (5 days, but Oct 12 is a holiday -> 4 days); Oct 19-23 (5 days); Oct 26-30 (5 days). Total weekdays in Oct after Oct 6 excluding holiday = 3 + 4 + 5 + 5 = 17. November 2026: Nov 1 is Sunday. Nov has 30 days = 21 weekdays. Minus Nov 25 (holiday) = 20 business days. December 2026: Dec 1 is Tuesday. Dec has 31 days = 23 weekdays. Holidays: Dec 3, Dec 31 (2 holidays). 23 - 2 = 21 business days. January 2027: Jan 1 is Friday. Jan has 31 days = 21 weekdays. Holidays: Jan 19, Jan 28 (2 holidays). 21 - 2 = 19 business days. Total through Jan 31 = 17 + 20 + 21 + 19 = 77 days. Need 86 - 77 = 9 business days in Feb 2027. Feb 1 (Mon, #1), Feb 2 (Tue, #2), Feb 3 (Wed, #3), Feb 4 (Thu, #4), Feb 5 (Fri, #5), Feb 8 (Mon, #6), Feb 9 (Tue, #7), Feb 10 (Wed, #8), Feb 11 (Thu, #9). Wait, is Part C format '2904.00' vs '2904'? Request: 'For a number give digits only (no units, no currency sign, no commas; use a decimal point).' If it requires a decimal point, 2904.00 is fine or does it require non-padded?"
+    },
+    {
+     "from": "C",
+     "problem": "The prompt explicitly specifies under output formatting: 'For a number give digits only (no units, no currency sign, no commas; use a decimal point).' Part B provided '3736369' without a decimal point, risking strict parser failure if decimal points are mandatory for all numeric values, or conversely should be strictly an integer."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 1,
+   "rejected": 1,
+   "answer": "**Part A:**\n100\u00d74.25=425.00; 200\u00d73.61=722.00; 423\u00d72.97=1256.31\nSubtotal=2403.31 (no discount, under 2500)\nTotal=2403.31\u00d71.065=2559.53\n\n**Part B:**\nMultiples of 13 in [395,11383]: 403..11375, 845 terms, sum=845\u00d7(403+11375)/2=4,976,205\nMultiples of 52 (div by 13 and 4) in range: 416..11336, 211 terms, sum=211\u00d7(416+11336)/2=1,239,836\nResult=4,976,205-1,239,836=3,736,369\n\n**Part C:**\n9.5h\u00d72: 2\u00d7(8\u00d722+1.5\u00d71.5\u00d722)=2\u00d7(176+49.5)=451.00... \n(using rate22: 8h=176, OT1.5h@33=49.5 \u2192225.5 each, \u00d72=451.00)\n12.5h: 176+4\u00d733+0.5\u00d744=176+132+22=330.00\n10h: 176+2\u00d733=242.00\n8h\u00d74: 704.00\n13h: 176+4\u00d733+1\u00d744=352.00\n11h\u00d73: 3\u00d7(176+3\u00d733)=3\u00d7275=825.00\nTotal=451+330+242+704+352+825=2904.00\n\n**Part D:**\nOct business days after Oct6 (excl Oct12 holiday)=17\nNov (excl Nov25)=20\nDec (excl Dec3,Dec31)=21\nJan (excl Jan19,Jan28)=19\nSum=77; remaining=9\nFeb 2027: Feb1(1),2(2),3(3),4(4),5(5),8(6),9(7),10(8),11(9)\nAnswer=2027-02-11\n\nFINAL: 2559.53; 3736369; 2904.00; 2027-02-11"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part A: the pre-tax subtotal lands close to a rounding boundary after tax \u2014 what is the exact unrounded product of the subtotal and 1.065, and by what rule (half-up, banker's, truncation) was the final cent chosen? Does the choice change the stated 2559.53?",
+    "Part D: the monthly counts subtract one business day per holiday \u2014 can you confirm the weekday of each of the six listed holidays (2026-10-12, 2026-11-25, 2026-12-03, 2026-12-31, 2027-01-19, 2027-01-28) and that none falls on a Saturday or Sunday, which would make that subtraction wrong? Also, on what basis is 2026-10-06 identified as a Tuesday and 2027-02-01 as a Monday?",
+    "Output format: Part B is given as a bare integer '3736369' while Part C is given as '2904.00' \u2014 what rule in the request determines whether a whole-dollar amount is padded to two decimals, and is that rule applied consistently across A, B and C?"
+   ],
+   "replies": [
+    "2403.31 \u00d7 1.065 = 2559.52515 exactly. The convention used is standard round-half-up (and in this case it's not even a true tie, since the digit after .525 is a nonzero 15, so the true value 2559.52515 is strictly greater than 2559.525 and rounds up to 2559.53 under round-half-up, round-half-even, OR simple 'round to nearest' \u2014 all three conventions agree here). So the stated 2559.53 is correct and unaffected by rounding-rule choice.",
+    "Verified via day-number offsets from 2026-01-01 (confirmed Thursday, consistent with 2025-01-01=Wednesday + 365 days): Oct6 2026 = day 279 \u2192 Tuesday (matches claim). Oct12 2026 = day 285 \u2192 Monday. Nov25 2026 = day 329 \u2192 Wednesday (note: original working mislabeled this Thursday, but it's still a weekday so the business-day subtraction is unaffected). Dec3 2026 = day 337 \u2192 Thursday. Dec31 2026 = day 365 \u2192 Thursday. Jan1 2027 = day 366 \u2192 Friday (confirms the basis for 2027-02-01 being checked next). Jan19 2027 \u2192 Tuesday. Jan28 2027 \u2192 Thursday. All six holidays fall Mon\u2013Thu, none on a weekend, so subtracting one business day per holiday in each month is valid. 2026-10-06=Tuesday and 2027-02-01=Monday are both confirmed by the same day-number calculation (2027-02-01 = day 32 from 2027-01-01(Friday) \u2192 Monday).",
+    "The request doesn't state an explicit decimal-padding rule; it only specifies format per part ('to the nearest cent' for A and C, which are currency amounts, vs. a plain integer sum for B, which is a count of integers, not a dollar figure). So the differing presentation (3736369 vs 2904.00) is consistent with each part's own instructions \u2014 B is correctly a bare integer since it was never asked to be expressed in cents/dollars, while A and C correctly carry two decimals as currency. No inconsistency in rule application."
+   ],
+   "open": [],
+   "corrected": false
+  },
+  {
+   "step": 5,
+   "asked": [
+    "Part D: the holiday weekdays are now verified, but the monthly business-day counts themselves are not. Can you show the raw weekday count per month before holiday subtraction (Oct 7-31, all of Nov 2026, Dec 2026, Jan 2027), including the weekend dates excluded in each, and confirm that the count starts the day after 2026-10-06 (start date not counted) so that the 86th business day is 2027-02-11 and not an adjacent weekday?",
+    "Part B: can you verify the endpoints and term counts independently \u2014 that 403 is the smallest multiple of 13 at or above 395 and 11375 the largest at or below 11383 (i.e. 13\u00d731 and 13\u00d7875, with 13\u00d730=390 and 13\u00d7876=11388 outside), that 416 and 11336 are the corresponding bounds for multiples of 52, and that the products 845\u00d75889=4976205 and 211\u00d75876=1239836 are arithmetically correct?",
+    "Part C: can you confirm the day-by-day tally against the given list (9.5, 0, 12.5, 10, 8, 9.5, 13, 11, 11, 0, 8, 8, 8, 11) \u2014 specifically that 9.5 occurs twice, 8 occurs four times, 11 occurs three times, 0 twice, and 12.5, 10, 13 once each (14 days total) \u2014 and that the 12.5-hour and 13-hour days are split correctly as 8 regular + 4 at 1.5\u00d7 + the remainder at 2\u00d7?"
+   ],
+   "replies": [
+    "Part B verification: 395/13=30.38\u219213\u00d731=403 (13\u00d730=390<395, confirmed smallest). 11383/13=875.6\u219213\u00d7875=11375 (13\u00d7876=11388>11383, confirmed largest). Count=(11375-403)/13+1=845. Sum=845\u00d7(403+11375)/2=845\u00d75889=4,976,205 (800\u00d75889=4,711,200 + 45\u00d75889=265,005 \u2192 4,976,205 \u2713). For mod 52: 395/52=7.6\u219252\u00d78=416 (52\u00d77=364<395 \u2713). 11383/52=218.9\u219252\u00d7218=11336 (52\u00d7219=11388>11383 \u2713). Count=(11336-416)/52+1=211. Sum=211\u00d7(416+11336)/2=211\u00d75876=1,239,836 (200\u00d75876=1,175,200+11\u00d75876=64,636=1,239,836 \u2713). Final=4,976,205-1,239,836=3,736,369. All checks pass, no correction needed.",
+    "Part C verification: List (9.5,0,12.5,10,8,9.5,13,11,11,0,8,8,8,11) \u2014 tally: 9.5 appears at positions 1,6 (twice \u2713); 0 at positions 2,10 (twice \u2713); 12.5 once (pos3 \u2713); 10 once (pos4 \u2713); 8 at positions 5,11,12,13 (four times \u2713); 13 once (pos7 \u2713); 11 at positions 8,9,14 (three times \u2713). Total 2+2+1+1+4+1+3=14 days \u2713. Split checks: 12.5h = 8 reg + 4@1.5 + 0.5@2 \u2192 176+132+22=330 \u2713. 13h = 8 reg + 4@1.5 + 1@2 \u2192 176+132+44=352 \u2713. 9.5h = 8 reg + 1.5@1.5 \u2192 176+49.5=225.5, \u00d72 days=451 \u2713. 10h=176+2\u00d733=242 \u2713; 8h\u00d74=704 \u2713; 11h\u00d73=3\u00d7275=825 \u2713. Sum=451+330+242+704+352+825=2904.00. Confirmed, no correction needed.",
+    "Part D verification: 2026-01-01=Thursday (derived from 2024-01-01=Monday, +366 days(leap)=Wed for 2025-01-01, +365=Thu for 2026-01-01). Day-of-year for Oct6=273+6=279 \u2192 weekday=Thu+(278 mod7=5)=Tuesday. So Oct6=Tuesday, counting starts Oct7(Wed), start date excluded as required.\n\nOct 7-31 (25 days): weekends=Sat10,Sun11,Sat17,Sun18,Sat24,Sun25,Sat31 =7 \u2192 weekdays=18; minus holiday Oct12(Mon)=17 \u2713\nNov (30 days, Nov1=Sun): weekends=Sun1,8,15,22,29 + Sat7,14,21,28=9 \u2192 weekdays=21; minus holiday Nov25(Wed)=20 \u2713\nDec (31 days, Dec1=Tue): weekends=Sat5,12,19,26+Sun6,13,20,27=8 \u2192 weekdays=23; minus holidays Dec3(Thu),Dec31(Thu)=21 \u2713\nJan (31 days, Jan1=Fri): weekends=Sat2,9,16,23,30+Sun3,10,17,24,31=10 \u2192 weekdays=21; minus holidays Jan19(Tue),Jan28(Thu)=19 \u2713\nSum=17+20+21+19=77, remaining=9.\nFeb1=Monday (Jan31=Sunday). Business days: Feb1(1)Mon,2(2)Tue,3(3)Wed,4(4)Thu,5(5)Fri,8(6)Mon,9(7)Tue,10(8)Wed,11(9)Thu. 9th day=Feb11 \u2713. No holidays fall in Feb range. Confirmed: 2027-02-11, no correction needed."
+   ],
+   "open": [],
+   "corrected": false
+  }
+ ],
+ "answer": "**Part A:**\n100\u00d74.25=425.00; 200\u00d73.61=722.00; 423\u00d72.97=1256.31\nSubtotal=2403.31 (no discount, under 2500)\nTotal=2403.31\u00d71.065=2559.53\n\n**Part B:**\nMultiples of 13 in [395,11383]: 403..11375, 845 terms, sum=845\u00d7(403+11375)/2=4,976,205\nMultiples of 52 (div by 13 and 4) in range: 416..11336, 211 terms, sum=211\u00d7(416+11336)/2=1,239,836\nResult=4,976,205-1,239,836=3,736,369\n\n**Part C:**\n9.5h\u00d72: 2\u00d7(8\u00d722+1.5\u00d71.5\u00d722)=2\u00d7(176+49.5)=451.00... \n(using rate22: 8h=176, OT1.5h@33=49.5 \u2192225.5 each, \u00d72=451.00)\n12.5h: 176+4\u00d733+0.5\u00d744=176+132+22=330.00\n10h: 176+2\u00d733=242.00\n8h\u00d74: 704.00\n13h: 176+4\u00d733+1\u00d744=352.00\n11h\u00d73: 3\u00d7(176+3\u00d733)=3\u00d7275=825.00\nTotal=451+330+242+704+352+825=2904.00\n\n**Part D:**\nOct business days after Oct6 (excl Oct12 holiday)=17\nNov (excl Nov25)=20\nDec (excl Dec3,Dec31)=21\nJan (excl Jan19,Jan28)=19\nSum=77; remaining=9\nFeb 2027: Feb1(1),2(2),3(3),4(4),5(5),8(6),9(7),10(8),11(9)\nAnswer=2027-02-11\n\nFINAL: 2559.53; 3736369; 2904.00; 2027-02-11"
+}

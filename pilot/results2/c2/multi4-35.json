@@ -1,0 +1,244 @@
+{
+ "task_id": "multi4-35",
+ "type": "multi4",
+ "condition": "c2",
+ "correct": false,
+ "detail": "ok: got 2506.0, expected 2506.0 | no: got 14639.96, expected 14660.8 | ok: got '2026-07-13', expected '2026-07-13' | ok: got 74.0, expected 74.0",
+ "error": null,
+ "seconds": 395.5,
+ "tokens": 214479,
+ "prompt_tokens": 137345,
+ "completion_tokens": 77134,
+ "cost": 0.42642,
+ "calls": 45,
+ "call_errors": 1,
+ "pre_hub_correct": false,
+ "pre_critique_correct": false,
+ "agreed": false,
+ "rounds_used": 3,
+ "gates": {
+  "agreed": false,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": false,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "B",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "C",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Part A - inclusion-exclusion count 1-5000",
+     "what": "Count integers in [1,5000] divisible by 3, 5, or 7, then subtract those also divisible by 13, using inclusion-exclusion on {3,5,7} and {3,5,7}\u222913. Verify via floor-division arithmetic, not estimation."
+    },
+    {
+     "id": "c2",
+     "title": "Part B - amortization schedule with extra principal payments",
+     "what": "Compute monthly rate 7.8%/12, standard payment for $24,000 over 48 months, then simulate month-by-month balance including extra $600 principal in month 4 and extra $500 in month 5, reporting balance after month 18 payment. Recompute payment formula and verify rounding only at the end."
+    },
+    {
+     "id": "c3",
+     "title": "Part C - business day count with holiday exclusions",
+     "what": "Starting 2026-03-15, count forward 81 business days (Mon-Fri), skipping the five listed holidays, and report the resulting date. Verify by explicit day-by-day or week-block calculation, double-checking holiday dates fall on weekdays."
+    },
+    {
+     "id": "c4",
+     "title": "Part D - large product digit sum",
+     "what": "Compute 44701 \u00d7 6928 \u00d7 832 \u00d7 8288 exactly (big-integer multiplication) and sum the decimal digits of the result. Verify via independent recomputation or modular check (e.g., digit sum mod 9 vs product mod 9)."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "D"
+    ],
+    "c2": [
+     "C",
+     "A"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ],
+    "c4": [
+     "B",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "Part A: Inclusion-exclusion over multiples of 3,5,7 (count 2714) minus those also divisible by 13 (208) gives 2714 \u2212 208 = 2506.\n\nPart B: Standard payment M = 24000\u00b7r(1+r)^48/((1+r)^48\u22121) with r=0.0065 gives M \u2248 584.09503378. Balance after 18 months without extras: B18 = 24000(1.0065)^18 \u2212 M\u00b7((1.0065)^18\u22121)/0.0065 \u2248 15860.1408. Subtract compounded extra payments: 600(1.0065)^14 \u2248 656.9354 and 500(1.0065)^13 \u2248 543.9108. Final balance \u2248 15860.1408 \u2212 656.9354 \u2212 543.9108 = 14659.29.\n\nPart C: Starting 2026-03-15 (Sunday), counting weekdays and skipping the 5 holidays, tallying week-by-week yields 80 business days by 2026-07-10 (holiday, skipped), with the 81st business day landing on Monday 2026-07-13.\n\nPart D: 44701\u00d76928 = 309,688,528; \u00d7832 = 257,660,855,296; \u00d78288 = 2,135,493,168,693,248. Digit sum = 74, confirmed via mod-9 check (product \u22612 mod 9, 74\u22612 mod 9).\n\nFINAL: 2506; 14659.29; 2026-07-13; 74"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The payment computation is incorrect. Using r=0.0065 and (1+r)^48\u22481.366087 gives M=24000\u00b7r(1+r)^48/((1+r)^48\u22121)\u2248582.128, not 584.095. Therefore the stated balance and final amount are also wrong."
+    },
+    {
+     "from": "D",
+     "problem": "The draft computes 2714 \u2212 208, but 208 is the count of numbers divisible by at least one of 3,5,7 AND by 13. Inclusion-exclusion for numbers divisible by 13 and at least one of 3,5,7 is not simply the count divisible by 13 among the union; it requires counting multiples of lcm(3,13), lcm(5,13), lcm(7,13) with overlaps. The draft's 208 appears to be a single subtraction without the proper inclusion-exclusion structure for the intersection with 13."
+    },
+    {
+     "from": "D",
+     "problem": "The draft computes the balance without extras after 18 months as 15860.1408, then subtracts 600(1.0065)^14 and 500(1.0065)^13. But the extra payments occur in months 4 and 5; after the month-4 extra payment, there are 14 months remaining until month 18 (months 5 through 18), so the exponent should be 14 for the month-4 extra. For the month-5 extra, there are 13 months remaining (months 6 through 18), exponent 13. This is correct. However, the draft's B18 without extras uses the formula 24000(1.0065)^18 \u2212 M\u00b7((1.0065)^18\u22121)/0.0065. The standard balance formula after n payments is P(1+r)^n \u2212 M\u00b7((1+r)^n \u2212 1)/r. That is correct. The subtraction of compounded extras from the no-extra balance is equivalent to reducing principal at the time of the extra payment, so the method is valid. The final value 14659.29 needs verification to the cent."
+    },
+    {
+     "from": "D",
+     "problem": "The draft states starting 2026-03-15 is a Sunday. 2026-03-15 is actually a Sunday (check: 2026-01-01 is Thursday, so March 15 is Sunday). Counting weekdays only and skipping the 5 holidays, the draft says 80 business days by 2026-07-10 and the 81st is Monday 2026-07-13. However, 2026-07-10 is listed as a holiday and is a Friday. If 80 business days are completed by 2026-07-10 and that day is skipped as a holiday, then the 80th business day would be 2026-07-09 (Thursday), and the 81st would be 2026-07-13 (Monday). This seems correct. But the draft's tally '80 business days by 2026-07-10' is ambiguous: if 2026-07-10 is skipped, it cannot be the 80th business day. The count needs explicit verification."
+    },
+    {
+     "from": "D",
+     "problem": "The draft computes the product as 2,135,493,168,693,248 and digit sum 74. The mod-9 check is consistent. However, the multiplication chain needs verification: 44701\u00d76928 = 309,688,528. Then \u00d7832 = 257,660,855,296. Then \u00d78288 = 2,135,493,168,693,248. Digit sum: 2+1+3+5+4+9+3+1+6+8+6+9+3+2+4+8 = 74. This appears correct."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "B",
+   "accepted": 1,
+   "rejected": 3,
+   "answer": "Part A: By inclusion-exclusion, |A\u222aB\u222aC| = 1666+1000+714\u2212333\u2212238\u2212142+47 = 2714. The intersection with multiples of 13 is 128+76+54\u221225\u221218\u221210+3 = 208, so the result is 2506.\n\nPart B: With r=0.0065, the monthly payment is M=24000r(1+r)^48/((1+r)^48\u22121)\u2248582.8928. Thus the balance after 18 regular payments is approximately 15840.87. Accounting for the extra payments compounded through month 18 gives 15840.87\u2212600(1.0065)^14\u2212500(1.0065)^13=14639.96.\n\nPart C: Counting weekdays after 2026-03-15 and omitting the five listed holidays gives the 81st business day as 2026-07-13.\n\nPart D: The product is 2135493168693248, whose decimal digit sum is 74.\n\nFINAL: 2506; 14639.96; 2026-07-13; 74"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "A",
+     "problem": "Independent calculation of (1.0065)^48 via repeated squaring gives \u22481.36477 (1.0065^2=1.01304225, ^4=1.026254, ^8=1.053197, ^16=1.109224, ^32=1.230378, ^48=1.230378*1.109224\u22481.364771), yielding M=24000*0.0065*1.364771/0.364771\u2248583.6, not 582.89. A ~$0.7+ error in the monthly payment compounds over 18 months and directly changes the final balance."
+    },
+    {
+     "from": "A",
+     "problem": "Since M itself appears miscalculated, the balance-after-18-payments formula P(1+r)^18 - M[(1+r)^18-1]/r and the subsequent subtraction of compounded extra payments (600*(1.0065)^14 + 500*(1.0065)^13) both depend on the corrected M; the whole Part B answer needs to be redone with the verified M before trusting 14639.96."
+    },
+    {
+     "from": "A",
+     "problem": "No day-by-day or week-by-week breakdown is shown; 81 business days is roughly 16 weeks plus 1 day (16*5=80, +1=81), i.e. about 113 calendar days from 2026-03-15, landing near 2026-07-06, not accounting yet for the 5 holiday skips (which would push it a few days later). The draft provides no verifiable calendar trace, so 2026-07-13 should be independently recomputed."
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure"
+    },
+    {
+     "from": "D",
+     "problem": "The inclusion-exclusion calculation for multiples of 13 may be wrong. The numbers 128, 76, 54, 25, 18, 10, 3 need verification: e.g., multiples of both 3 and 13 up to 5000 are floor(5000/39)=128, but multiples of 5 and 13 are floor(5000/65)=76, and multiples of 7 and 13 are floor(5000/91)=54. The triple intersections with 13 are floor(5000/195)=25, floor(5000/273)=18, floor(5000/455)=10, and floor(5000/1365)=3. These appear correct, but the final subtraction 2714 - 208 = 2506 needs checking against a direct count."
+    },
+    {
+     "from": "D",
+     "problem": "The method subtracts extra payments compounded forward from the balance after 18 regular payments, but the balance after 18 regular payments (15840.87) is not shown with enough precision and the compounding of extra payments may use wrong exponents. Extra $600 in month 4 should compound for 14 months (months 5 through 18 inclusive), and extra $500 in month 5 for 13 months, which matches, but the regular balance after 18 payments needs exact recalculation."
+    },
+    {
+     "from": "D",
+     "problem": "The count of business days may be off by one. 2026-03-15 is a Sunday. Counting starts 2026-03-16 (Monday). The listed holidays are 2026-03-17, 2026-03-18, 2026-03-26, 2026-05-20, 2026-07-10. The 81st business day needs verification of weekday count and holiday exclusion."
+    },
+    {
+     "from": "D",
+     "problem": "The product 44701 x 6928 x 832 x 8288 is stated as 2135493168693248 with digit sum 74, but this needs independent verification because a single arithmetic error would change the digit sum."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 3,
+   "rejected": 5,
+   "answer": "Part A: Inclusion\u2013exclusion for 3,5,7 up to 5000: 1666+1000+714\u2212333\u2212238\u2212142+47=2714. Subtract those divisible by 13 and at least one of 3,5,7: 128+76+54\u221225\u221218\u221210+3=208. Result = 2714\u2212208=2506. (Verified, stands.)\n\nPart B: r=0.0065, n=48. Precise computation of (1.0065)^48 via repeated squaring gives \u22481.364761, so M=24000\u00b70.0065/(1\u22121/1.364761)=156/0.267271\u2248583.68 (not 582.89 as originally stated \u2014 accepted correction). Using (1.0065)^18\u22481.123692, balance after 18 regular payments = 24000\u00b71.123692 \u2212 M\u00b7(1.123692\u22121)/0.0065 \u2248 26968.61 \u2212 11106.76 = 15861.85. Subtracting compounded extra payments: 600\u00b7(1.0065)^14 + 500\u00b7(1.0065)^13 \u2248 656.97+543.93=1200.90. Final balance \u2248 15861.85 \u2212 1200.90 = 14660.81.\n\nPart C: Re-traced day-by-day from 2026-03-16 (Mon), skipping weekends and the five holidays. Weekly counts: wk1=3(d1-3, skip 3/17,3/18), wk2=4(d4-7, skip3/26), wk3-9 each 5 (reaching d42 by May15), wk10=4(d43-46, skip5/20), wk11-16 each5 (reaching d76 by Jul3), wk17: Jul6-9 =4 days(d77-80, skip Jul10 holiday). Day81 = next business day = 2026-07-13. Confirmed correct.\n\nPart D: Stepwise multiplication: 44701\u00d76928=309,688,528; \u00d7832=257,660,855,296; \u00d78288=2,135,493,168,693,248. Digit sum: 2+1+3+5+4+9+3+1+6+8+6+9+3+2+4+8=74. Confirmed correct.\n\nFINAL: 2506; 14660.81; 2026-07-13; 74"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "The annuity subtraction is arithmetically inconsistent with the draft's own figures: (1.123692\u22121)/0.0065 = 19.029538..., and 19.029538...\u00d7583.68 \u2248 11107.16, not 11106.76. The draft therefore understates the balance before extras by about $0.40, and the rounded powers/payment may introduce additional error."
+    },
+    {
+     "from": "C",
+     "problem": "wrong figure: Intermediate rounding of M and compounding factors caused a 1-cent discrepancy. Exactly: r = 0.078/12 = 0.0065, n = 48, M = 24000 * 0.0065 / (1 - 1.0065^(-48)) = 156 / (1 - 1.0065^(-48)) \u2248 583.6775685. Balance without extra payments after month 18 = 24000 * 1.0065^18 - M * (1.0065^18 - 1) / 0.0065 = 15861.9048. Future value of extra payments at month 18 = 600 * 1.0065^14 + 500 * 1.0065^13 = 656.9749 + 543.9317 = 1200.9066. Remaining balance = 15861.9048 - 1200.9066 = 14660.9982, which rounds to 14661.00, not 14660.81."
+    },
+    {
+     "from": "D",
+     "problem": "The payment figure is not independently verified. The draft says 'precise computation' but shows no source or code for (1.0065)^48 or the resulting M. A small error in M propagates to the final balance."
+    },
+    {
+     "from": "D",
+     "problem": "The balance formula uses (1.0065)^18 \u2248 1.123692, but this value is not derived or sourced. If (1.0065)^18 is slightly off, the balance changes by several dollars."
+    },
+    {
+     "from": "D",
+     "problem": "The exponents 14 and 13 are asserted without justification. Extra principal paid in month 4 should compound for 18\u22124 = 14 months, and month 5 for 18\u22125 = 13 months. This is plausible but not shown. Also, the extra payments reduce principal immediately, so the regular-payment balance formula should account for the reduced principal in subsequent months' interest, not just subtract compounded extras at the end."
+    },
+    {
+     "from": "D",
+     "problem": "The weekly count is hand-traced and not independently verified. The draft lists wk1=3 days (d1-3, skip 3/17,3/18), but 2026-03-16 is Monday, 3/17 Tuesday, 3/18 Wednesday, 3/19 Thursday, 3/20 Friday. Skipping 3/17 and 3/18 leaves 3/16, 3/19, 3/20 = 3 days. This matches. However, the count of holidays and weekdays is not cross-checked with a calendar or code."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "reviser": "B",
+   "accepted": 0,
+   "rejected": 6,
+   "answer": "Part A: Inclusion\u2013exclusion gives 2714 divisible by at least one of 3, 5, 7. Among these, 208 are also divisible by 13, so A = 2714 \u2212 208 = 2506.\n\nPart B: With r = 0.0065, the payment is M = 24000r/[1 \u2212 (1+r)^\u221248] \u2248 582.8927. After 18 payments, including the extra principal payments compounded to month 18,\nB = M[1 \u2212 (1+r)^\u221230]/r \u2212 600(1+r)^14 \u2212 500(1+r)^13 \u2248 14639.96.\n\nPart C: Counting weekdays after 2026-03-15 and excluding the five listed holidays, the 81st business day is 2026-07-13.\n\nPart D: 44701 \u00d7 6928 \u00d7 832 \u00d7 8288 = 2135493168693248, whose digit sum is 74.\n\nFINAL: 2506; 14639.96; 2026-07-13; 74"
+  },
+  {
+   "step": 4,
+   "round": 3,
+   "votes": {
+    "A": false,
+    "B": false,
+    "C": false,
+    "D": false
+   },
+   "agreed": false
+  }
+ ],
+ "answer": "Part A: Inclusion\u2013exclusion gives 2714 divisible by at least one of 3, 5, 7. Among these, 208 are also divisible by 13, so A = 2714 \u2212 208 = 2506.\n\nPart B: With r = 0.0065, the payment is M = 24000r/[1 \u2212 (1+r)^\u221248] \u2248 582.8927. After 18 payments, including the extra principal payments compounded to month 18,\nB = M[1 \u2212 (1+r)^\u221230]/r \u2212 600(1+r)^14 \u2212 500(1+r)^13 \u2248 14639.96.\n\nPart C: Counting weekdays after 2026-03-15 and excluding the five listed holidays, the 81st business day is 2026-07-13.\n\nPart D: 44701 \u00d7 6928 \u00d7 832 \u00d7 8288 = 2135493168693248, whose digit sum is 74.\n\nFINAL: 2506; 14639.96; 2026-07-13; 74"
+}

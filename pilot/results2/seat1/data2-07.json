@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "got 24.4, expected 24.4",
  "error": null,
- "seconds": 41.4,
- "tokens": 8739,
+ "seconds": 25.2,
+ "tokens": 6247,
  "prompt_tokens": 2850,
- "completion_tokens": 5889,
- "cost": 0.06459,
+ "completion_tokens": 3397,
+ "cost": 0.03967,
  "calls": 1,
  "call_errors": 0,
- "answer": "## Working\n\n**Step 1: Remove exact duplicate rows**\nThree orders appear twice with identical data and are counted once each:\n- O2764 (C106, Bolt, shipped)\n- O2366 (C105, Bolt, shipped)\n- O2448 (C107, Bolt, pending)\n\n**Step 2: Keep only shipped/pending orders, compute revenue = units \u00d7 unit_price, sum by customer**\n\n| Customer | Revenue |\n|---|---|\n| C100 | 16,215.36 |\n| C101 | 13,854.30 |\n| C102 | 313.76 |\n| C103 | 5,317.92 |\n| C104 | 6,722.89 |\n| C105 | 1,716.75 |\n| C106 | 3,155.25 |\n| C107 | 4,125.71 |\n| C108 | 8,696.89 |\n| C109 | 6,441.95 |\n\n**Step 3: Total revenue**\nSum = 66,560.78\n\n**Step 4: Highest-revenue customer**\nC100 with 16,215.36 (highest)\n\n**Step 5: Percentage**\n16,215.36 / 66,560.78 \u00d7 100 \u2248 24.362% \u2192 rounds to 24.4%\n\nFINAL: 24.4"
+ "answer": "Working:\n- Deduplicated exact duplicate orders (O2764, O2366, O2448).\n- Filtered to shipped/pending orders only.\n- Computed revenue per customer (units \u00d7 unit_price summed).\n\nCustomer revenue totals:\n- C100: 16215.36\n- C101: 13854.30\n- C102: 313.76\n- C103: 5317.92\n- C104: 6722.89\n- C105: 1716.75\n- C106: 3155.25\n- C107: 4125.71\n- C108: 8696.89\n- C109: 6441.95\n\nTotal revenue = 66,560.78\n\nHighest customer: C100 with 16,215.36\n\nPercentage = 16215.36 / 66560.78 \u00d7 100 \u2248 24.4%\n\nFINAL: 24.4"
 }

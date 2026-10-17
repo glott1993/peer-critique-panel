@@ -5,12 +5,12 @@
  "correct": true,
  "detail": "all tests passed",
  "error": null,
- "seconds": 3.9,
- "tokens": 740,
+ "seconds": 2.8,
+ "tokens": 584,
  "prompt_tokens": 309,
- "completion_tokens": 431,
- "cost": 0.00493,
+ "completion_tokens": 275,
+ "cost": 0.00337,
  "calls": 1,
  "call_errors": 0,
- "answer": "```python\nimport re\n\ndef roman_to_int(s: str) -> int:\n    if not isinstance(s, str) or s == \"\":\n        raise ValueError(\"Invalid Roman numeral\")\n\n    pattern = re.compile(\n        r'^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$'\n    )\n    if not pattern.match(s):\n        raise ValueError(\"Invalid Roman numeral\")\n\n    values = {'I': 1, 'V': 5, 'X': 10, 'L': 50,\n              'C': 100, 'D': 500, 'M': 1000}\n\n    total = 0\n    prev_value = 0\n    for ch in reversed(s):\n        val = values[ch]\n        if val < prev_value:\n            total -= val\n        else:\n            total += val\n            prev_value = val\n\n    return total\n```"
+ "answer": "```python\nimport re\n\ndef roman_to_int(s: str) -> int:\n    pattern = (\n        r'^M{0,3}'\n        r'(CM|CD|D?C{0,3})'\n        r'(XC|XL|L?X{0,3})'\n        r'(IX|IV|V?I{0,3})$'\n    )\n    if not s or not re.match(pattern, s):\n        raise ValueError(f\"Invalid Roman numeral: {s}\")\n    \n    values = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n    total = 0\n    prev = 0\n    for ch in reversed(s):\n        val = values[ch]\n        if val < prev:\n            total -= val\n        else:\n            total += val\n            prev = val\n    return total\n```"
 }

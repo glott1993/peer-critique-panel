@@ -1,0 +1,141 @@
+{
+ "task_id": "code2-11",
+ "type": "code",
+ "condition": "d",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 209.6,
+ "tokens": 73501,
+ "prompt_tokens": 52027,
+ "completion_tokens": 21474,
+ "cost": 0.07297,
+ "calls": 24,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 1,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [],
+ "author": "D",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "declined": [],
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "Date parsing and amount matching helper",
+     "what": "Parse ISO dates into date objects and define a helper that checks whether a bank item and ledger item match: amounts equal and absolute day difference <= window."
+    },
+    {
+     "id": "c2",
+     "title": "Greedy matching loop",
+     "what": "Sort bank items by date then id for processing order. For each bank item, filter unmatched ledger items that match by amount and date window, then pick the one with earliest date (ties by id). Mark both as matched."
+    },
+    {
+     "id": "c3",
+     "title": "Result assembly",
+     "what": "Build matches list in the order bank items were processed. Build unmatched_bank and unmatched_ledger by iterating original bank and ledger lists and collecting ids of items not marked matched."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "B",
+     "C"
+    ],
+    "c2": [
+     "B",
+     "A"
+    ],
+    "c3": [
+     "C",
+     "A"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "A",
+   "draft": "All three drafts implement the same greedy algorithm correctly; c3's structure is cleanest (uses boolean arrays, avoids mutating/copying lists like c1's `.pop`, avoids dict-based candidate lookup issues of c2). I adopt c3, with ISO date parsing via `datetime.date.fromisoformat` (stdlib, handles `YYYY-MM-DD` and longer timestamps by slicing) as in c1, since plain `split('-')` would break on full timestamp strings.\n\n```python\nfrom datetime import date as _date\n\ndef _parse(d):\n    return _date.fromisoformat(d[:10])\n\ndef reconcile(bank, ledger, window=2):\n    bank_sorted = sorted(range(len(bank)), key=lambda i: (bank[i][1], bank[i][0]))\n    ledger_matched = [False] * len(ledger)\n    bank_matched = [False] * len(bank)\n\n    matches = []\n\n    for bi in bank_sorted:\n        b_id, b_date, b_amt = bank[bi]\n        bd = _parse(b_date)\n        candidates = []\n        for li, (l_id, l_date, l_amt) in enumerate(ledger):\n            if ledger_matched[li]:\n                continue\n            if l_amt != b_amt:\n                continue\n            ld = _parse(l_date)\n            if abs((ld - bd).days) <= window:\n                candidates.append((l_date, l_id, li))\n        if candidates:\n            candidates.sort(key=lambda x: (x[0], x[1]))\n            _, chosen_id, chosen_li = candidates[0]\n            ledger_matched[chosen_li] = True\n            bank_matched[bi] = True\n            matches.append((b_id, chosen_id))\n\n    unmatched_bank = [bank[i][0] for i in range(len(bank)) if not bank_matched[i]]\n    unmatched_ledger = [ledger[i][0] for i in range(len(ledger)) if not ledger_matched[i]]\n\n    return (matches, unmatched_bank, unmatched_ledger)\n```\n\nBoth visible asserts pass: example 1 matches (dates 1 day apart, \u22642); example 2 fails match (8 days apart, >2), yielding unmatched lists in original order."
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "B",
+     "problem": "It compares raw date strings for bank order and ledger candidate order, while matching compares only the first 10 characters. If ISO timestamps are accepted as claimed, same-day times incorrectly break the required ties by id. For example, ledger [('z','2026-03-02T00:00:00',1), ('a','2026-03-02T23:00:00',1)] should choose 'a' because both have the same date and ties are by id, but the draft chooses 'z'."
+    },
+    {
+     "from": "B",
+     "problem": "bank_sorted uses the unparsed full date string, so timestamps on the same calendar date are ordered by time before id rather than by date then id. This can change greedy results when two bank items compete for one ledger item."
+    },
+    {
+     "from": "B",
+     "problem": "fromisoformat(d[:10]) silently discards time and timezone information, while the ordering logic retains it. Thus matching semantics and ordering semantics use different dates. Either restrict inputs to YYYY-MM-DD or parse once to a consistent date key and use that key everywhere."
+    },
+    {
+     "from": "C",
+     "problem": "The draft stores raw date strings in candidates (`l_date`) and sorts them lexicographically. If ISO strings include full timestamps with varying timezones or formats (which `_parse` anticipated by slicing `d[:10]`), raw string sorting does not reliably sort chronologically by date. Moreover, sorting on `l_date` instead of `ld` (`_date` object) makes date comparison dependent on string representation."
+    },
+    {
+     "from": "C",
+     "problem": "Sorting bank items directly by `bank[i][1]` sorts by the raw string rather than the parsed date `_parse(bank[i][1])`. If inputs contain varying ISO string representations for the same calendar date or different lengths, raw string comparison will order them incorrectly before applying the greedy matching."
+    },
+    {
+     "from": "D",
+     "problem": "Slicing to 10 characters silently truncates ISO strings with timezone offsets or times, potentially changing the date when the offset crosses midnight (e.g., '2026-03-01T23:30:00-05:00' becomes '2026-03-01' which is correct, but '2026-03-01T00:30:00+05:00' becomes '2026-03-01' when the UTC date is '2026-02-28'). This can cause incorrect date-difference calculations for valid ISO 8601 timestamps."
+    },
+    {
+     "from": "D",
+     "problem": "Sorting date strings lexicographically only works if all dates are in the same format (e.g., all 'YYYY-MM-DD'). If dates include timestamps or timezone offsets, lexicographic order may not match chronological order (e.g., '2026-03-01T10:00:00' vs '2026-03-01T09:00:00+01:00'). The spec says 'date is an ISO string' without restricting format, so this is an unsupported inference."
+    },
+    {
+     "from": "D",
+     "problem": "The code constructs `unmatched_bank` by iterating `range(len(bank))` in original order and `unmatched_ledger` similarly, which is correct. However, the claim in the prose that 'all three drafts implement the same greedy algorithm correctly' is unsupported without testing edge cases like duplicate dates/ids or zero-amount matches."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 5,
+   "rejected": 3,
+   "answer": "```python\nfrom datetime import datetime\n\ndef _day(d):\n    return datetime.fromisoformat(d).date()\n\ndef reconcile(bank, ledger, window=2):\n    bank_order = sorted(range(len(bank)), key=lambda i: (_day(bank[i][1]), bank[i][0]))\n    bank_used = [False] * len(bank)\n    ledger_used = [False] * len(ledger)\n    matches = []\n\n    for bi in bank_order:\n        b_id, b_date, b_amt = bank[bi]\n        bday = _day(b_date)\n        candidates = []\n        for li, (l_id, l_date, l_amt) in enumerate(ledger):\n            if ledger_used[li] or l_amt != b_amt:\n                continue\n            lday = _day(l_date)\n            if abs((lday - bday).days) <= window:\n                candidates.append((lday, l_id, li))\n        if candidates:\n            candidates.sort(key=lambda x: (x[0], x[1]))\n            chosen_li = candidates[0][2]\n            ledger_used[chosen_li] = True\n            bank_used[bi] = True\n            matches.append((b_id, ledger[chosen_li][0]))\n\n    unmatched_bank = [bank[i][0] for i in range(len(bank)) if not bank_used[i]]\n    unmatched_ledger = [ledger[i][0] for i in range(len(ledger)) if not ledger_used[i]]\n    return matches, unmatched_bank, unmatched_ledger\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\nfrom datetime import datetime\n\ndef _day(d):\n    return datetime.fromisoformat(d).date()\n\ndef reconcile(bank, ledger, window=2):\n    bank_order = sorted(range(len(bank)), key=lambda i: (_day(bank[i][1]), bank[i][0]))\n    bank_used = [False] * len(bank)\n    ledger_used = [False] * len(ledger)\n    matches = []\n\n    for bi in bank_order:\n        b_id, b_date, b_amt = bank[bi]\n        bday = _day(b_date)\n        candidates = []\n        for li, (l_id, l_date, l_amt) in enumerate(ledger):\n            if ledger_used[li] or l_amt != b_amt:\n                continue\n            lday = _day(l_date)\n            if abs((lday - bday).days) <= window:\n                candidates.append((lday, l_id, li))\n        if candidates:\n            candidates.sort(key=lambda x: (x[0], x[1]))\n            chosen_li = candidates[0][2]\n            ledger_used[chosen_li] = True\n            bank_used[bi] = True\n            matches.append((b_id, ledger[chosen_li][0]))\n\n    unmatched_bank = [bank[i][0] for i in range(len(bank)) if not bank_used[i]]\n    unmatched_ledger = [ledger[i][0] for i in range(len(ledger)) if not ledger_used[i]]\n    return matches, unmatched_bank, unmatched_ledger\n```"
+}

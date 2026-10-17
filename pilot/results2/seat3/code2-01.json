@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-01",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 2.5,
+ "tokens": 420,
+ "prompt_tokens": 210,
+ "completion_tokens": 210,
+ "cost": 0.00094,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete function definition:\n\n```python\ndef top_k_by_score(items: list[tuple[str, int | float]], k: int) -> list[str]:\n    if k <= 0:\n        return []\n    sorted_items = sorted(items, key=lambda x: (-x[1], x[0]))\n    return [name for name, _ in sorted_items[:k]]\n```"
+}

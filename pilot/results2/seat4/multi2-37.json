@@ -1,0 +1,16 @@
+{
+ "task_id": "multi2-37",
+ "type": "multi",
+ "condition": "seat4",
+ "correct": true,
+ "detail": "ok: got 548.0, expected 548.0 | ok: got 17765.0, expected 17765.0 | ok: got 4255.0, expected 4255.0",
+ "error": null,
+ "seconds": 65.4,
+ "tokens": 2845,
+ "prompt_tokens": 325,
+ "completion_tokens": 2520,
+ "cost": 0.0075,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Part A: Solve CRT:\n- \\(n=4+16k\\)\n- \\(4+16k\\equiv2\\pmod7\\Rightarrow k\\equiv6\\pmod7\\)\n- \\(n=100+112t\\)\n- \\(100+112t\\equiv9\\pmod{11}\\Rightarrow t\\equiv4\\pmod{11}\\)\n- \\(n=548+1232s\\), so smallest is \\(548\\).\n\nPart B:\n- First $12,500: \\(0.08(12500)=1000\\)\n- $12,500 to $52,000: \\(0.20(39500)=7900\\)\n- Above $52,000: \\(0.30(81900-52000)=8970\\)\n- Gross tax: \\(17870\\)\n- Credit reduction: \\(0.05(81900-60000)=1095\\)\n- Credit: \\(1200-1095=105\\)\n- Tax owed: \\(17870-105=17765.00\\)\n\nPart C:\nCount divisible by at least one of 5, 7, 11:\n\\[\n2400+1714+1090-342-218-155+31=4520\n\\]\nSubtract those also divisible by 17:\n\\[\n141+100+64-20-12-9+1=265\n\\]\nTotal:\n\\[\n4520-265=4255\n\\]\n\nFINAL: 548; 17765.00; 4255"
+}

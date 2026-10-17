@@ -1,0 +1,16 @@
+{
+ "task_id": "code2-17",
+ "type": "code",
+ "condition": "seat3",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 3.3,
+ "tokens": 580,
+ "prompt_tokens": 235,
+ "completion_tokens": 345,
+ "cost": 0.00147,
+ "calls": 1,
+ "call_errors": 0,
+ "answer": "Here is the complete function definition:\n\n```python\ndef sudoku_valid(board: list[list[int]]) -> bool:\n    # Validate dimensions\n    if not isinstance(board, list) or len(board) != 9:\n        raise ValueError(\"Board must be a 9x9 list.\")\n    \n    for row in board:\n        if not isinstance(row, list) or len(row) != 9:\n            raise ValueError(\"Board must be a 9x9 list.\")\n        for val in row:\n            if not isinstance(val, int) or isinstance(val, bool) or val < 0 or val > 9:\n                raise ValueError(\"All values must be integers between 0 and 9.\")\n\n    # Check rows, columns, and 3x3 boxes\n    rows = [set() for _ in range(9)]\n    cols = [set() for _ in range(9)]\n    boxes = [set() for _ in range(9)]\n\n    for r in range(9):\n        for c in range(9):\n            val = board[r][c]\n            if val == 0:\n                continue\n\n            box_idx = (r // 3) * 3 + (c // 3)\n\n            if val in rows[r] or val in cols[c] or val in boxes[box_idx]:\n                return False\n\n            rows[r].add(val)\n            cols[c].add(val)\n            boxes[box_idx].add(val)\n\n    return True\n```"
+}

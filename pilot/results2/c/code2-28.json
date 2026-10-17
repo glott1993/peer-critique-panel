@@ -1,0 +1,162 @@
+{
+ "task_id": "code2-28",
+ "type": "code",
+ "condition": "c",
+ "correct": true,
+ "detail": "all tests passed",
+ "error": null,
+ "seconds": 107.7,
+ "tokens": 72243,
+ "prompt_tokens": 57209,
+ "completion_tokens": 15034,
+ "cost": 0.10027,
+ "calls": 33,
+ "call_errors": 0,
+ "pre_hub_correct": true,
+ "pre_critique_correct": true,
+ "agreed": true,
+ "rounds_used": 2,
+ "gates": {
+  "agreed": true,
+  "hub_clear": true,
+  "checks_ok": true
+ },
+ "shipped": true,
+ "hub_questions": 0,
+ "hub_open": 0,
+ "hub_sent_back": false,
+ "hub_corrected": false,
+ "checks": [
+  {
+   "kind": "code",
+   "expr": "run visible examples",
+   "claimed": "pass",
+   "value": "all tests passed",
+   "valid": true,
+   "ok": true
+  }
+ ],
+ "author": "A",
+ "seats": {
+  "A": "anthropic/claude-sonnet-5",
+  "B": "openai/gpt-5.6-luna-pro",
+  "C": "google/gemini-3.8-flash",
+  "D": "deepseek/deepseek-v4-pro-0813"
+ },
+ "log": [
+  {
+   "step": 1,
+   "who": "A",
+   "components": [
+    {
+     "id": "c1",
+     "title": "ISBN-10 validation",
+     "what": "Check 10-char format with digits, trailing X allowed, weighted sum divisible by 11."
+    },
+    {
+     "id": "c2",
+     "title": "ISBN-13 validation",
+     "what": "Check 13-char all-digit format with alternating 1/3 weighted sum divisible by 10."
+    },
+    {
+     "id": "c3",
+     "title": "Input cleanup",
+     "what": "Strip hyphens and spaces before validating length and content."
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "bids": {
+    "c1": [
+     "A",
+     "D"
+    ],
+    "c2": [
+     "B",
+     "A"
+    ],
+    "c3": [
+     "C",
+     "B"
+    ]
+   }
+  },
+  {
+   "step": 3,
+   "author": "B",
+   "draft": "```python\ndef isbn_valid(s: str) -> bool:\n    # Remove hyphens and spaces as required.\n    if not isinstance(s, str):\n        return False\n    s = s.replace(\"-\", \"\").replace(\" \", \"\")\n\n    if len(s) == 10:\n        if not all(ch in \"0123456789\" for ch in s[:9]):\n            return False\n        if s[9] not in \"0123456789X\":\n            return False\n\n        values = [int(ch) for ch in s[:9]]\n        values.append(10 if s[9] == \"X\" else int(s[9]))\n        return sum((i + 1) * value for i, value in enumerate(values)) % 11 == 0\n\n    if len(s) == 13:\n        if not all(ch in \"0123456789\" for ch in s):\n            return False\n        return sum(\n            int(ch) * (1 if i % 2 == 0 else 3)\n            for i, ch in enumerate(s)\n        ) % 10 == 0\n\n    return False\n```"
+  },
+  {
+   "step": 3,
+   "round": 1,
+   "challenges": [
+    {
+     "from": "D",
+     "problem": "If the hidden tests interpret 'starting with 1' as starting from the rightmost character (the check digit), the draft still passes because 13 is odd. However, if any hidden test uses a 13-character string where the pattern should be verified differently (e.g., a non-standard interpretation), the draft's implicit assumption could fail. More importantly, the draft's code does not make the rightmost-weight-1 convention explicit, leaving ambiguity."
+    },
+    {
+     "from": "D",
+     "problem": "If hidden tests include inputs with tabs or other whitespace, the draft will reject them because `replace(' ', '')` only removes ASCII space, not `\t`, `\n`, etc. The spec says 'spaces' which typically means ASCII space, but could be interpreted as all whitespace. The draft's behavior is consistent with a narrow reading but could fail if the test expects broader whitespace removal."
+    },
+    {
+     "from": "D",
+     "problem": "The type check does not affect string inputs, so it cannot cause a hidden test failure unless the test expects a specific behavior for non-strings (e.g., raising TypeError). The spec does not mention non-string inputs, so returning False is a reasonable default. This is not a strong challenge."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "reviser": "D",
+   "accepted": 0,
+   "rejected": 3,
+   "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    \"\"\"Return True if s is a valid ISBN-10 or ISBN-13 after removing hyphens and spaces.\"\"\"\n    if not isinstance(s, str):\n        return False\n    s = s.replace('-', '').replace(' ', '')\n\n    if len(s) == 10:\n        if not all(ch in '0123456789' for ch in s[:9]):\n            return False\n        if s[9] not in '0123456789X':\n            return False\n\n        values = [int(ch) for ch in s[:9]]\n        values.append(10 if s[9] == 'X' else int(s[9]))\n        return sum((i + 1) * value for i, value in enumerate(values)) % 11 == 0\n\n    if len(s) == 13:\n        if not all(ch in '0123456789' for ch in s):\n            return False\n        return sum(\n            int(ch) * (1 if i % 2 == 0 else 3)\n            for i, ch in enumerate(s)\n        ) % 10 == 0\n\n    return False\n```"
+  },
+  {
+   "step": 4,
+   "round": 1,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": false
+   },
+   "agreed": false
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "challenges": [
+    {
+     "from": "C",
+     "problem": "ISBN-10 verification formulas in literature often weight descending (10 - i) instead of ascending (i + 1), though mathematically both are equivalent modulo 11 if the checksum matches the formula. However, if a test suite evaluates standard ISBN-10 check digits using standard weights, any mismatch in definition (e.g. sum(w_i * d_i) == 0 mod 11 vs sum(i * d_i) mod 11) must be strictly confirmed against the prompt's explicit rule: 'sum of (position i from 1 to 10) times (digit i) is divisible by 11'. Here, 0-306-40615-2 gives sum_descending = 10*0 + 9*3 + 8*0 + 7*6 + 6*4 + 5*0 + 4*6 + 3*1 + 2*5 + 1*2 = 0+27+0+42+24+0+24+3+10+2 = 132 (132 % 11 == 0), whereas sum_ascending = 1*0 + 2*3 + 3*0 + 4*6 + 5*4 + 6*0 + 7*6 + 8*1 + 9*5 + 10*2 = 0+6+0+24+20+0+42+8+45+20 = 165 (165 % 11 == 0). Because sum_desc + sum_asc = 11 * sum(d_i) = 0 mod 11, the ascending formula matches standard ISBN-10 if and only if standard ISBN-10 is divisible by 11."
+    },
+    {
+     "from": "C",
+     "problem": "replace(' ', '') only strips standard space ASCII 0x20 and misses other whitespace characters (such as tabs '\\t' or non-breaking spaces) if 'spaces' in the specification is interpreted broadly as whitespace."
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "reviser": "A",
+   "accepted": 0,
+   "rejected": 2,
+   "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    \"\"\"Return True if s is a valid ISBN-10 or ISBN-13 after removing hyphens and spaces.\"\"\"\n    if not isinstance(s, str):\n        return False\n    s = s.replace('-', '').replace(' ', '')\n\n    if len(s) == 10:\n        if not all(ch in '0123456789' for ch in s[:9]):\n            return False\n        if s[9] not in '0123456789X':\n            return False\n\n        values = [int(ch) for ch in s[:9]]\n        values.append(10 if s[9] == 'X' else int(s[9]))\n        return sum((i + 1) * value for i, value in enumerate(values)) % 11 == 0\n\n    if len(s) == 13:\n        if not all(ch in '0123456789' for ch in s):\n            return False\n        return sum(\n            int(ch) * (1 if i % 2 == 0 else 3)\n            for i, ch in enumerate(s)\n        ) % 10 == 0\n\n    return False\n```"
+  },
+  {
+   "step": 4,
+   "round": 2,
+   "votes": {
+    "A": true,
+    "B": true,
+    "C": true,
+    "D": true
+   },
+   "agreed": true
+  }
+ ],
+ "answer": "```python\ndef isbn_valid(s: str) -> bool:\n    \"\"\"Return True if s is a valid ISBN-10 or ISBN-13 after removing hyphens and spaces.\"\"\"\n    if not isinstance(s, str):\n        return False\n    s = s.replace('-', '').replace(' ', '')\n\n    if len(s) == 10:\n        if not all(ch in '0123456789' for ch in s[:9]):\n            return False\n        if s[9] not in '0123456789X':\n            return False\n\n        values = [int(ch) for ch in s[:9]]\n        values.append(10 if s[9] == 'X' else int(s[9]))\n        return sum((i + 1) * value for i, value in enumerate(values)) % 11 == 0\n\n    if len(s) == 13:\n        if not all(ch in '0123456789' for ch in s):\n            return False\n        return sum(\n            int(ch) * (1 if i % 2 == 0 else 3)\n            for i, ch in enumerate(s)\n        ) % 10 == 0\n\n    return False\n```"
+}
