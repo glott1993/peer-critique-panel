@@ -2,7 +2,7 @@
 
 **Nothing picks a model. Nothing assigns the work. The hub never writes.**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444219.svg)](https://doi.org/10.5281/zenodo.23444219)  v1.2: [10.5281/zenodo.22357227](https://doi.org/10.5281/zenodo.22357227), v1.1: [10.5281/zenodo.22325883](https://doi.org/10.5281/zenodo.22325883)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23444219.svg)](https://doi.org/10.5281/zenodo.23444219)  v1.2: [10.5281/zenodo.22357227](https://doi.org/10.5281/zenodo.22357227), v1.1: [10.5281/zenodo.22325883](https://doi.org/10.5281/zenodo.22325883), all versions: [10.5281/zenodo.22325882](https://doi.org/10.5281/zenodo.22325882). Code and records, archived from the v1.3 release: [10.5281/zenodo.23444492](https://doi.org/10.5281/zenodo.23444492).
 
 A working draft proposing what should happen *after* a panel of AI models is convened: the answer has to earn its release. Version 1.2 added the results of the preregistered pilot; version 1.3 adds a second, harder pilot. The current models from every major lab, grouped into class-matched tiers, decompose a request, bid on its parts, critique each other's drafts under seat anonymity with evidence required, and revise until they agree. A dedicated hub that never writes an answer interrogates the result within a question budget and enforces verifiable checks. Nothing ships until the panel agrees, the hub has no open questions, and every check passes. A persistent, version-stamped catalogue records who was challenged, corrected, and later shown wrong, and feeds the hub's questions.
 
