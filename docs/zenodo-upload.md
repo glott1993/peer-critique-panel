@@ -55,3 +55,7 @@ Drafted with the assistance of Claude (Anthropic). A browser prototype of the pr
 4. Set Version to 1.2, publication date to the day you publish, and update the description's last sentence: "Version 1.2 adds the results of the preregistered pilot: on 64 checkable tasks neither test was passed at this sample size; every answered item was right in every condition, and the conditions separated only on whether an answer arrived at all."
 5. Publish. The concept DOI on the record always resolves to the latest version; the v1.1 DOI keeps resolving to v1.1.
 6. On GitHub, create release `v1.2` with the new PDF attached.
+
+## Version 1.3 (second pilot), October 2026
+
+Done October 17, 2026, by the same route as 1.2: New version on the 1.2 record, PDF swapped, DOI reserved (10.5281/zenodo.23444219) and put into the paper, README and CITATION.cff before publishing, Version 1.3, publication date the day of publishing, the description's last paragraph extended for the second pilot, the additional description updated. Zenodo's GitHub integration was switched on for the repository the same day, so the `v1.3` GitHub release is archived automatically with a software DOI of its own; the paper record above is the one to cite.
